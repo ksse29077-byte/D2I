@@ -1,0 +1,19 @@
+[package]
+name = "d2i-compiler"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+d2i-core = { path = "../d2i-core" }
+d2i-eval = { path = "../d2i-eval" }
+d2i-schema = { path = "../d2i-schema" }
+planus.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+sha2.workspace = true
+
+[lints]
+workspace = true

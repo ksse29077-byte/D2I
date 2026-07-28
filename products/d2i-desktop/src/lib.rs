@@ -1,0 +1,269 @@
+//! Policy-gated contracts and adapters for auditable desktop autonomy.
+
+mod adapter;
+mod approval;
+mod audit;
+mod cognitive;
+mod contract;
+mod executor;
+mod policy;
+mod windows_activation;
+mod windows_adapters;
+mod windows_attestation;
+mod windows_binding;
+mod windows_deployment_audit;
+mod windows_egress;
+mod windows_keys;
+mod windows_webdriver;
+mod windows_wfp_self_test;
+mod windows_worker;
+
+pub use adapter::{
+    ActionOutcome, ActionOutcomeStatus, AdapterExecution, DesktopAdapter, DesktopAdapterDescriptor,
+    LocalReadOnlyDesktopAdapter, OfflineConformanceDesktopAdapter, PreparedAction,
+    UnavailableDesktopAdapter,
+};
+pub use approval::{sign_approval, ExecutionPermit, HumanApproval};
+pub use audit::{
+    initialize_audit_ledger, replay_audit, verify_audit_ledger, AuditEvent, AuditEventKind,
+    AuditLedger, AuditReplayExpectation, AuditReplayReport, AuditVerification,
+};
+pub use cognitive::{
+    ActionCandidateProvider, ActionExecution, ActionExecutor, ActionPolicyEvaluator,
+    ActionProposal, ActivationGate, AuditOutcome, CapabilityDescriptor, CapabilityRegistry,
+    CognitiveAuditEvent, CognitiveAuditSink, CognitiveExecutor, CognitiveExecutorConfig,
+    CognitiveIrBundle, CognitiveRecoveryKind, CognitiveRiskClass, CognitiveTiming, ComparisonOp,
+    ConfirmationPolicy, ConfirmationRequirement, ExecutionStatus, GoalProgress, GoalSpec,
+    ObservableElement, ObservationProvider, ObservationSnapshot, ObservationSourceKind, PlanEdge,
+    PlanEdgeKind, PlanGraph, PlanNode, PlanNodeKind, Postcondition, PostconditionResult,
+    PostconditionVerifier, Provenance, RecoveryDecision, RecoveryPolicy, RedactionMetadata,
+    Reversibility, TrustLabel, VerificationResult, WorkReport, WorldFact, WorldFactKind,
+    WorldState, WorldStateReducer,
+};
+pub use contract::{
+    BrowserInteraction, DesktopActionIntent, DesktopCapability, DesktopOperation, RiskClass,
+    UiInteraction, WindowIdentity,
+};
+pub use executor::{DesktopActionPreparation, DesktopExecutor};
+pub use policy::{
+    evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,
+    PolicyDecisionStatus,
+};
+pub use windows_activation::{
+    activate_certified_windows_binding, initialize_windows_activation_ledger,
+    verify_windows_activation_ledger, ActivatedWindowsBinding, WindowsActivationAdmission,
+    WindowsActivationLedgerPolicy, WindowsActivationLedgerVerification, WindowsActivationRecord,
+};
+pub use windows_adapters::{
+    WindowsFileWriteAdapter, WindowsProcessAdapter, WindowsUiAutomationAdapter,
+    WindowsWebDriverAdapter,
+};
+pub use windows_attestation::{
+    create_windows_wfp_functional_attestation_v2,
+    verify_windows_wfp_functional_attestation_context_v2,
+    verify_windows_wfp_functional_attestation_v2, SignedWindowsWfpFunctionalAttestationV2,
+    WindowsWfpFunctionalAttestationInputV2, WindowsWfpIpv6EgressResult,
+    WINDOWS_WFP_REPORT_MAX_AGE_SECONDS,
+};
+pub use windows_binding::{
+    certify_windows_binding, create_windows_binding_evidence,
+    create_windows_browser_egress_evidence, current_windows_host_binding,
+    verify_signed_windows_certification, ConcreteWindowsRuntimeBindingProbe,
+    SignedWindowsBrowserEgressEvidence, SignedWindowsCertification, WindowsAdapterConfiguration,
+    WindowsAdapterKind, WindowsBindingCertification, WindowsBindingEvidence, WindowsBindingInput,
+    WindowsBrowserEgressInput, WindowsBrowserEgressRequirement, WindowsCapabilityObservation,
+    WindowsCertificationIssue, WindowsCertificationReport, WindowsHostBinding,
+    WindowsProcessIsolation, WindowsRuntimeBindingProbe, WindowsRuntimeManifest,
+    WindowsWfpBrowserEgressPolicy,
+};
+pub use windows_deployment_audit::{
+    initialize_windows_deployment_audit, verify_windows_deployment_audit,
+    WindowsDeploymentAuditEvent, WindowsDeploymentAuditEventKind, WindowsDeploymentAuditLedger,
+    WindowsDeploymentAuditStatus, WindowsDeploymentAuditVerification,
+};
+pub use windows_egress::{
+    attest_windows_wfp_browser_egress, create_windows_wfp_browser_egress_policy,
+    install_windows_wfp_browser_egress, remove_windows_wfp_browser_egress,
+    run_windows_wfp_verifier_worker, verify_windows_wfp_browser_egress,
+    verify_windows_wfp_browser_egress_runtime, WindowsWfpBrowserEgressObservation,
+};
+pub use windows_keys::{
+    protect_windows_signing_key, unprotect_windows_signing_key, WindowsProtectedSigningKey,
+    WindowsSigningKeyPurpose,
+};
+pub use windows_webdriver::{create_windows_edge_driver_pin, WindowsEdgeDriverPin};
+pub use windows_wfp_self_test::{
+    run_windows_wfp_browser_egress_self_test, WindowsWfpBrowserEgressSelfTestReport,
+    WindowsWfpConnectionEvent, WindowsWfpConnectionOutcome, WindowsWfpNetworkProbe,
+    WindowsWfpProbeDisposition, WindowsWfpProbeServerTelemetry, WindowsWfpSelfTestCleanup,
+};
+
+use sha2::{Digest, Sha256};
+use std::error::Error;
+use std::fmt::{self, Display, Formatter};
+use std::path::Path;
+
+const MAX_JSON_BYTES: usize = 2 * 1024 * 1024;
+const MAX_ACTION_PAYLOAD_BYTES: usize = 8 * 1024 * 1024;
+
+/// Structured desktop-autonomy failure.
+#[derive(Debug)]
+pub enum DesktopError {
+    Invalid(String),
+    Integrity(String),
+    AccessDenied(String),
+    Approval(String),
+    AdapterUnavailable(String),
+    Precondition(String),
+    Replay(String),
+    Json(String),
+    Io { path: String, message: String },
+}
+
+impl Display for DesktopError {
+    fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Invalid(message) => write!(formatter, "invalid desktop artifact: {message}"),
+            Self::Integrity(message) => write!(formatter, "integrity failure: {message}"),
+            Self::AccessDenied(message) => write!(formatter, "access denied: {message}"),
+            Self::Approval(message) => write!(formatter, "approval failure: {message}"),
+            Self::AdapterUnavailable(message) => {
+                write!(formatter, "adapter unavailable: {message}")
+            }
+            Self::Precondition(message) => write!(formatter, "precondition failure: {message}"),
+            Self::Replay(message) => write!(formatter, "replay failure: {message}"),
+            Self::Json(message) => write!(formatter, "JSON failure: {message}"),
+            Self::Io { path, message } => write!(formatter, "I/O failure at {path}: {message}"),
+        }
+    }
+}
+
+impl Error for DesktopError {}
+
+fn json_bytes<T: serde::Serialize>(value: &T) -> Result<Vec<u8>, DesktopError> {
+    let bytes = serde_json::to_vec(value).map_err(|error| DesktopError::Json(error.to_string()))?;
+    if bytes.len() > MAX_JSON_BYTES {
+        return Err(DesktopError::Invalid(format!(
+            "serialized artifact exceeds {MAX_JSON_BYTES} bytes"
+        )));
+    }
+    Ok(bytes)
+}
+
+fn pretty_json_bytes<T: serde::Serialize>(value: &T) -> Result<Vec<u8>, DesktopError> {
+    let mut bytes =
+        serde_json::to_vec_pretty(value).map_err(|error| DesktopError::Json(error.to_string()))?;
+    bytes.push(b'\n');
+    if bytes.len() > MAX_JSON_BYTES {
+        return Err(DesktopError::Invalid(format!(
+            "serialized artifact exceeds {MAX_JSON_BYTES} bytes"
+        )));
+    }
+    Ok(bytes)
+}
+
+fn sha256_bytes(bytes: &[u8]) -> String {
+    format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+fn hash_value<T: serde::Serialize>(value: &T) -> Result<String, DesktopError> {
+    Ok(sha256_bytes(&json_bytes(value)?))
+}
+
+fn validate_text(value: &str, field: &str) -> Result<(), DesktopError> {
+    if value.is_empty() || value.len() > 4096 || value.contains('\0') {
+        return Err(DesktopError::Invalid(format!(
+            "{field} is empty, contains NUL, or exceeds bounds"
+        )));
+    }
+    Ok(())
+}
+
+fn validate_token(value: &str, field: &str) -> Result<(), DesktopError> {
+    validate_text(value, field)?;
+    if !value.bytes().all(|byte| {
+        byte.is_ascii_alphanumeric() || matches!(byte, b'-' | b'_' | b'.' | b':' | b'/')
+    }) {
+        return Err(DesktopError::Invalid(format!(
+            "{field} contains unsupported characters"
+        )));
+    }
+    Ok(())
+}
+
+fn validate_hash(value: &str, field: &str) -> Result<(), DesktopError> {
+    let Some(hex) = value.strip_prefix("sha256:") else {
+        return Err(DesktopError::Invalid(format!(
+            "{field} must use sha256:<hex>"
+        )));
+    };
+    if hex.len() != 64 || !hex.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return Err(DesktopError::Invalid(format!(
+            "{field} has invalid SHA-256 syntax"
+        )));
+    }
+    Ok(())
+}
+
+fn read_bounded(path: &Path, maximum: u64) -> Result<Vec<u8>, DesktopError> {
+    let metadata = std::fs::symlink_metadata(path).map_err(|error| DesktopError::Io {
+        path: path.display().to_string(),
+        message: error.to_string(),
+    })?;
+    if metadata.file_type().is_symlink() || !metadata.is_file() || metadata.len() > maximum {
+        return Err(DesktopError::Integrity(
+            "artifact must be a bounded regular file".to_owned(),
+        ));
+    }
+    std::fs::read(path).map_err(|error| DesktopError::Io {
+        path: path.display().to_string(),
+        message: error.to_string(),
+    })
+}
+
+fn write_new(path: &Path, bytes: &[u8]) -> Result<(), DesktopError> {
+    use std::io::Write;
+
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(path)
+        .map_err(|error| DesktopError::Io {
+            path: path.display().to_string(),
+            message: error.to_string(),
+        })?;
+    file.write_all(bytes)
+        .and_then(|()| file.sync_all())
+        .map_err(|error| DesktopError::Io {
+            path: path.display().to_string(),
+            message: error.to_string(),
+        })
+}
+
+fn hex_encode(bytes: &[u8]) -> String {
+    bytes.iter().map(|byte| format!("{byte:02x}")).collect()
+}
+
+fn hex_decode_array<const N: usize>(value: &str) -> Result<[u8; N], DesktopError> {
+    if value.len() != N * 2 || !value.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return Err(DesktopError::Approval(
+            "hex signature or key length is invalid".to_owned(),
+        ));
+    }
+    let mut output = [0_u8; N];
+    for (index, slot) in output.iter_mut().enumerate() {
+        let offset = index * 2;
+        *slot = u8::from_str_radix(&value[offset..offset + 2], 16)
+            .map_err(|error| DesktopError::Approval(error.to_string()))?;
+    }
+    Ok(output)
+}
+
+/// Runs the private framed-protocol worker used by certified Windows adapters.
+///
+/// This is exposed only so the package binary can enter worker mode. It is not
+/// a stable integration API and accepts no command-line or network requests.
+#[doc(hidden)]
+pub fn run_windows_adapter_worker() -> Result<(), DesktopError> {
+    windows_worker::run_windows_worker_stdio()
+}

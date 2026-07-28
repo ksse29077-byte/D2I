@@ -1,0 +1,17 @@
+[package]
+name = "d2i-runtime-adapter"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-compiler = { path = "../d2i-compiler" }
+d2i-core = { path = "../d2i-core" }
+d2i-eval = { path = "../d2i-eval" }
+d2i-runtime-api = { path = "../d2i-runtime-api" }
+d2i-runtime-ref = { path = "../d2i-runtime-ref" }
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

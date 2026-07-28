@@ -1,0 +1,36 @@
+d2i_version: "0.1"
+domain:
+  id: "malicious-traversal"
+  version: "0.1.0"
+  name: "Malicious Traversal"
+  languages: ["en"]
+target:
+  os: "linux"
+  arch: "x86_64"
+  network_policy: "deny"
+  max_memory_mb: 256
+  preferred_device: "cpu"
+objectives:
+  min_task_success_rate: 0.9
+  max_critical_error_rate: 0.01
+  target_p95_latency_ms: 50
+  deterministic: true
+sources:
+  - path: "../outside.txt"
+    kind: "knowledge"
+    trust: "untrusted"
+skills:
+  - id: "answer"
+    version: "1"
+    input_schema: "missing-request.schema.json"
+    output_schema: "missing-result.schema.json"
+    criticality: "high"
+    fallback: "human_review"
+    evidence_required: true
+evaluation:
+  dataset: "missing.jsonl"
+  thresholds: "missing.yaml"
+package:
+  signing: "required"
+  include_source_data: false
+  include_eval_data: false

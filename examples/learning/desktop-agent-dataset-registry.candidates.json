@@ -1,0 +1,409 @@
+{
+  "schema_version": 2,
+  "registry_id": "desktop-agent-learning-datasets-v1",
+  "owner": "d2i-learning-review-board",
+  "reviewed_at_unix_seconds": 1785110400,
+  "maximum_total_bytes": 107374182400,
+  "datasets": [
+    {
+      "priority": 1,
+      "dataset_id": "osworld",
+      "display_name": "OSWorld",
+      "purpose": "desktop_interaction",
+      "source_url": "https://github.com/xlang-ai/OSWorld",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "Apache-2.0",
+        "scope": "component_specific",
+        "evidence_url": "https://github.com/xlang-ai/OSWorld/blob/main/LICENSE",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": false,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": true,
+        "contains_third_party_content": true,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "The repository and benchmark tasks are Apache-2.0, but VM images, downloaded task files, office documents, websites, application assets, account tasks, and recorded trajectories require component-level inventory. OSWorld is primarily an evaluation environment; training use must identify a separately released trajectory artifact."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 2,
+      "dataset_id": "android-control",
+      "display_name": "AndroidControl",
+      "purpose": "mobile_interaction",
+      "source_url": "https://github.com/google-research/google-research/tree/master/android_control",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "CC-BY-4.0",
+        "scope": "component_specific",
+        "evidence_url": "https://github.com/google-research/google-research#license",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": true,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": false,
+        "contains_third_party_content": true,
+        "contains_executable_content": false,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "Google Research states that datasets in the repository are CC-BY-4.0 while source files are Apache-2.0. Human instructions, screenshots, accessibility trees, and third-party app UI require privacy, session-redaction, and component-rights review."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 3,
+      "dataset_id": "android-in-the-wild",
+      "display_name": "Android in the Wild",
+      "purpose": "mobile_interaction",
+      "source_url": "https://github.com/google-research/google-research/tree/master/android_in_the_wild",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "CC-BY-4.0",
+        "scope": "component_specific",
+        "evidence_url": "https://github.com/google-research/google-research#license",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": true,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": false,
+        "contains_third_party_content": true,
+        "contains_executable_content": false,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "AITW contains large-scale human Android demonstrations, natural-language instructions, screens, and precise gestures. Google Research applies CC-BY-4.0 to repository datasets, not Apache-2.0; embedded app content and screen/session material still require separate review."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 4,
+      "dataset_id": "mind2web",
+      "display_name": "Mind2Web",
+      "purpose": "web_automation",
+      "source_url": "https://github.com/OSU-NLP-Group/Mind2Web",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "CC-BY-4.0",
+        "scope": "component_specific",
+        "evidence_url": "https://github.com/OSU-NLP-Group/Mind2Web#licensing-information",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": true,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": false,
+        "contains_third_party_content": true,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "Mind2Web data is CC-BY-4.0; only repository code is MIT. Crowdsourced actions span third-party sites, and raw dumps may include DOM snapshots, MHTML, HAR, storage state, screenshots, and videos. Benchmark test splits must remain evaluation-only and out of training corpora."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 5,
+      "dataset_id": "mind2web-2",
+      "display_name": "Mind2Web 2",
+      "purpose": "web_automation",
+      "source_url": "https://github.com/OSU-NLP-Group/Mind2Web-2",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation"],
+      "license": {
+        "declared_spdx_expression": "NOASSERTION",
+        "scope": "unresolved",
+        "evidence_url": "https://github.com/OSU-NLP-Group/Mind2Web-2/blob/main/LICENSE",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": true,
+        "contains_model_generated_content": true,
+        "generation_system": "Agent answers and agent-as-a-judge outputs from multiple evaluated systems; exact generation provenance unresolved",
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": false,
+        "contains_third_party_content": true,
+        "contains_executable_content": false,
+        "contains_credentials_or_session_data": false,
+        "source_notes": "The public repository is MIT, but dataset-wide coverage and third-party search-result content require a pinned data-card review. This benchmark is evaluation-only until contamination and judge-output provenance are resolved."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 6,
+      "dataset_id": "webarena",
+      "display_name": "WebArena",
+      "purpose": "web_automation",
+      "source_url": "https://github.com/web-arena-x/webarena",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation"],
+      "license": {
+        "declared_spdx_expression": "Apache-2.0",
+        "scope": "component_specific",
+        "evidence_url": "https://github.com/web-arena-x/webarena/blob/main/LICENSE",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": false,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": true,
+        "contains_third_party_content": true,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "The canonical repository is Apache-2.0, but self-hosted GitLab, shopping, CMS, forum, map, and Wikipedia images/content have their own components. Authentication cookies, server mutations, purchases, uploads, and terminal-like tasks make this an isolated evaluation source, not direct SFT data."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 7,
+      "dataset_id": "glaive-function-calling-v2",
+      "display_name": "Glaive Function Calling v2",
+      "purpose": "function_calling",
+      "source_url": "https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "Apache-2.0",
+        "scope": "dataset_wide",
+        "evidence_url": "https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2/blob/main/README.md",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": false,
+        "contains_model_generated_content": true,
+        "generation_system": "Glaive synthetic function-calling generation pipeline; exact generating model and terms unresolved",
+        "requires_personal_data_review": false,
+        "contains_sensitive_safety_content": true,
+        "contains_third_party_content": false,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": false,
+        "source_notes": "The dataset card declares Apache-2.0. Function names and arguments are executable-looking content and must be parsed as inert schemas; generation provenance and any API-documentation components require review before training."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 8,
+      "dataset_id": "nl2bash",
+      "display_name": "NL2Bash",
+      "purpose": "shell_command",
+      "source_url": "https://github.com/TellinaTool/nl2bash",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "MIT",
+        "scope": "component_specific",
+        "evidence_url": "https://github.com/TellinaTool/nl2bash#license",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": true,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": true,
+        "contains_third_party_content": true,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": false,
+        "source_notes": "The repository states that data/bash is separately MIT-licensed. Commands were collected from websites such as Stack Overflow and paired with expert descriptions, so original-source provenance remains component-specific. Commands must never execute during ingestion or normalization."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 9,
+      "dataset_id": "the-stack-v2-permissive-subset",
+      "display_name": "The Stack v2 Permissive Subset",
+      "purpose": "code_generation",
+      "source_url": "https://huggingface.co/datasets/bigcode/the-stack-v2",
+      "source_revision": "unresolved",
+      "intended_uses": ["supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "NOASSERTION",
+        "scope": "component_specific",
+        "evidence_url": "https://huggingface.co/datasets/bigcode/the-stack-v2/blob/main/README.md",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": false,
+        "contains_model_generated_content": false,
+        "generation_system": null,
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": true,
+        "contains_third_party_content": true,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "The Stack v2 card declares license=other, gated Software Heritage/INRIA terms, original file-level licenses, attribution duties, opt-out updates, and bulk-access conditions. Only a freshly derived MIT/Apache-2.0/BSD/ISC/CC0 subset with per-file provenance, secret scanning, malware review, and removal synchronization can be considered."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    },
+    {
+      "priority": 10,
+      "dataset_id": "magicoder-oss-instruct-75k",
+      "display_name": "Magicoder OSS-Instruct 75K",
+      "purpose": "code_generation",
+      "source_url": "https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K",
+      "source_revision": "unresolved",
+      "intended_uses": ["evaluation", "supervised_fine_tuning"],
+      "license": {
+        "declared_spdx_expression": "MIT",
+        "scope": "component_specific",
+        "evidence_url": "https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K/blob/main/README.md",
+        "evidence_revision": "unresolved",
+        "requires_attribution": true,
+        "requires_share_alike": false,
+        "attribution_plan_hash": null,
+        "share_alike_plan_hash": null,
+        "component_license_inventory_hash": null
+      },
+      "risk": {
+        "contains_user_content": false,
+        "contains_model_generated_content": true,
+        "generation_system": "OpenAI gpt-3.5-turbo-1106 through OSS-Instruct",
+        "requires_personal_data_review": true,
+        "contains_sensitive_safety_content": true,
+        "contains_third_party_content": true,
+        "contains_executable_content": true,
+        "contains_credentials_or_session_data": true,
+        "source_notes": "The current dataset card declares MIT, not Apache-2.0, and states that gpt-3.5-turbo-1106 generated the examples. Open-source seed snippets retain component provenance; generation terms, code licenses, secrets, malware, and benchmark contamination require review."
+      },
+      "reviews": {
+        "legal": null,
+        "provenance": null,
+        "privacy": null,
+        "security": null,
+        "generation_terms": null
+      },
+      "artifacts": [],
+      "status": "candidate"
+    }
+  ]
+}

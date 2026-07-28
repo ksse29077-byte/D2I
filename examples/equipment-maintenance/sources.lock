@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "inventory_hash": "sha256:9a4e2d98244823211ede43b0f9cf2b0a671322e09e4acdf43030b6f03c119ae4",
+  "files": [
+    {
+      "path": "README.md",
+      "size": 2044,
+      "content_hash": "sha256:bd3a2a9ce801d8752e4baafa44055b065683b7052477fab820054fd99577d0b3"
+    },
+    {
+      "path": "data/documents/manual-001.md",
+      "size": 271,
+      "content_hash": "sha256:a34421421f044ec568b3b8b1848b67c75936b96d768245aad7675ec339a9e4d5"
+    },
+    {
+      "path": "data/tables/cases.csv",
+      "size": 566,
+      "content_hash": "sha256:083bff15d8d52e21e0a6575b05ceae29e1f31c77b5284bf006a64375f754a102"
+    },
+    {
+      "path": "data/tables/terms.csv",
+      "size": 439,
+      "content_hash": "sha256:e44b38b2c0595d41d94ddbdd79bd8eedc951a8d68dc75f43ff38772c4fd2aa09"
+    },
+    {
+      "path": "domain.yaml",
+      "size": 1137,
+      "content_hash": "sha256:1c0c45b76646ac52252d3cee6d3b9c3f260d2c1eaadc4327e4e25b1656babdec"
+    },
+    {
+      "path": "eval/gold.jsonl",
+      "size": 8768,
+      "content_hash": "sha256:26a40edd5500c8a75a27b3dfc2c21f70b06504916bc8aa9c476b6ae9a5fe4b7f"
+    },
+    {
+      "path": "eval/thresholds.yaml",
+      "size": 103,
+      "content_hash": "sha256:8ca825ed4468320f05b7218b064bc915687940ac48c99b3c4b58778ae11a1f1a"
+    },
+    {
+      "path": "examples/negative.jsonl",
+      "size": 65,
+      "content_hash": "sha256:95c0d19940fce59e09c6975a846fabb93e96797503f473d69c26d7efcea2f868"
+    },
+    {
+      "path": "examples/positive.jsonl",
+      "size": 100,
+      "content_hash": "sha256:81cd4831f3f131515e3acb58a6dd8fce736affbd575888d9e6965cb8e758c3f7"
+    },
+    {
+      "path": "models/benchmarks.yaml",
+      "size": 2497,
+      "content_hash": "sha256:8dc1c09493989fd642577d27bc6e008b51ee83ac4c93e9b38837fc6167a376b0"
+    },
+    {
+      "path": "models/bindings.yaml",
+      "size": 3312,
+      "content_hash": "sha256:f8eaa5ab75ff1e7c3d2091ba164c55691a9f03e093a84ab98a8bf54f1b7c4a05"
+    },
+    {
+      "path": "models/selection.yaml",
+      "size": 290,
+      "content_hash": "sha256:c6b63a28091c240ae033d306490259ca2c699987cfbd8c726f5daefaa77412b0"
+    },
+    {
+      "path": "procedures/diagnose-fault.yaml",
+      "size": 331,
+      "content_hash": "sha256:4dfb76a5cc888e1278f3fef2b413dcbcd9659b2a3b4dab3d45c9537de110caff"
+    },
+    {
+      "path": "requests/vibration.json",
+      "size": 79,
+      "content_hash": "sha256:b41a434a1a246dd25a406d8e9e10ee30700de997c8770238adc924329c60d1e5"
+    },
+    {
+      "path": "rules/constraints.yaml",
+      "size": 101,
+      "content_hash": "sha256:7076faf8dedc002c8718f75317f1adbc9ad45d81b87df4000eb88a1922cb85a7"
+    },
+    {
+      "path": "rules/routing.yaml",
+      "size": 180,
+      "content_hash": "sha256:0087eec7665ff455aa9398527a888c6159289f670510fae9f167ea9e908826c4"
+    },
+    {
+      "path": "schemas/request.schema.json",
+      "size": 556,
+      "content_hash": "sha256:67541bbb24e1161ac788804c42606d51083e1ef4f8944ac66dbad260becb1477"
+    },
+    {
+      "path": "schemas/result.schema.json",
+      "size": 1064,
+      "content_hash": "sha256:f2603a62fad2a2a1dcd1b22a9919d3d72c38656018b4a8dab69b6702863e9f21"
+    },
+    {
+      "path": "security/policy.yaml",
+      "size": 157,
+      "content_hash": "sha256:868d12a01e18277672805467c1107d41cef4d982967ffe2746a440538ede3d8f"
+    }
+  ]
+}

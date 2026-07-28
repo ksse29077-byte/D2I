@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/desktop-action-intent.schema.json",
+  "title": "D2I Desktop Action Intent v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "action_id",
+    "session_id",
+    "sequence",
+    "generated_at_unix_ms",
+    "expires_at_unix_ms",
+    "request_id",
+    "build_id",
+    "package_content_hash",
+    "decision_hash",
+    "evidence_hashes",
+    "idempotency_key",
+    "rationale_hash",
+    "operation"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "action_id": { "$ref": "#/$defs/token" },
+    "session_id": { "$ref": "#/$defs/token" },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "generated_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+    "request_id": { "$ref": "#/$defs/token" },
+    "build_id": { "$ref": "#/$defs/token" },
+    "package_content_hash": { "$ref": "#/$defs/hash" },
+    "decision_hash": { "$ref": "#/$defs/hash" },
+    "evidence_hashes": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/hash" }
+    },
+    "idempotency_key": { "$ref": "#/$defs/token" },
+    "rationale_hash": { "$ref": "#/$defs/hash" },
+    "operation": { "$ref": "#/$defs/operation" }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "path": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "display_id"],
+          "properties": {
+            "kind": { "const": "observe_desktop" },
+            "display_id": { "$ref": "#/$defs/token" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "enum": ["list_windows", "clipboard_read"] } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path", "maximum_bytes"],
+          "properties": {
+            "kind": { "const": "read_file" },
+            "path": { "$ref": "#/$defs/path" },
+            "maximum_bytes": { "type": "integer", "minimum": 1, "maximum": 8388608 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path", "maximum_entries"],
+          "properties": {
+            "kind": { "const": "list_directory" },
+            "path": { "$ref": "#/$defs/path" },
+            "maximum_entries": { "type": "integer", "minimum": 1, "maximum": 10000 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path", "payload_hash", "expected_current_hash", "create_new"],
+          "properties": {
+            "kind": { "const": "write_file" },
+            "path": { "$ref": "#/$defs/path" },
+            "payload_hash": { "$ref": "#/$defs/hash" },
+            "expected_current_hash": {
+              "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+            },
+            "create_new": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path"],
+          "properties": {
+            "kind": { "const": "create_directory" },
+            "path": { "$ref": "#/$defs/path" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "source", "destination", "expected_source_hash"],
+          "properties": {
+            "kind": { "const": "move_path" },
+            "source": { "$ref": "#/$defs/path" },
+            "destination": { "$ref": "#/$defs/path" },
+            "expected_source_hash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "path", "expected_hash"],
+          "properties": {
+            "kind": { "const": "delete_path" },
+            "path": { "$ref": "#/$defs/path" },
+            "expected_hash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "executable",
+            "executable_hash",
+            "arguments",
+            "working_directory",
+            "network_requested"
+          ],
+          "properties": {
+            "kind": { "const": "launch_process" },
+            "executable": { "$ref": "#/$defs/path" },
+            "executable_hash": { "$ref": "#/$defs/hash" },
+            "arguments": {
+              "type": "array",
+              "maxItems": 128,
+              "items": { "$ref": "#/$defs/text" }
+            },
+            "working_directory": { "$ref": "#/$defs/path" },
+            "network_requested": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "process_id", "expected_executable_hash"],
+          "properties": {
+            "kind": { "const": "terminate_process" },
+            "process_id": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
+            "expected_executable_hash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "browser_session_id", "url", "origin"],
+          "properties": {
+            "kind": { "const": "browser_navigate" },
+            "browser_session_id": { "$ref": "#/$defs/token" },
+            "url": { "$ref": "#/$defs/text" },
+            "origin": { "$ref": "#/$defs/text" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "browser_session_id", "origin", "interaction"],
+          "properties": {
+            "kind": { "const": "browser_interact" },
+            "browser_session_id": { "$ref": "#/$defs/token" },
+            "origin": { "$ref": "#/$defs/text" },
+            "interaction": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind", "locator"],
+                  "properties": {
+                    "kind": { "const": "click" },
+                    "locator": { "$ref": "#/$defs/text" }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind", "locator", "text_hash", "secret_ref"],
+                  "properties": {
+                    "kind": { "const": "type_text" },
+                    "locator": { "$ref": "#/$defs/text" },
+                    "text_hash": { "$ref": "#/$defs/hash" },
+                    "secret_ref": {
+                      "oneOf": [{ "$ref": "#/$defs/token" }, { "type": "null" }]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind", "locator", "value_hash"],
+                  "properties": {
+                    "kind": { "const": "select" },
+                    "locator": { "$ref": "#/$defs/text" },
+                    "value_hash": { "$ref": "#/$defs/hash" }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "window", "interaction"],
+          "properties": {
+            "kind": { "const": "ui_interact" },
+            "window": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["process_id", "executable_hash", "title_hash"],
+              "properties": {
+                "process_id": { "type": "integer", "minimum": 1 },
+                "executable_hash": { "$ref": "#/$defs/hash" },
+                "title_hash": { "$ref": "#/$defs/hash" }
+              }
+            },
+            "interaction": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind", "automation_id"],
+                  "properties": {
+                    "kind": { "const": "invoke" },
+                    "automation_id": { "$ref": "#/$defs/token" }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind", "automation_id", "text_hash", "secret_ref"],
+                  "properties": {
+                    "kind": { "const": "set_text" },
+                    "automation_id": { "$ref": "#/$defs/token" },
+                    "text_hash": { "$ref": "#/$defs/hash" },
+                    "secret_ref": {
+                      "oneOf": [{ "$ref": "#/$defs/token" }, { "type": "null" }]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind", "automation_id", "desired"],
+                  "properties": {
+                    "kind": { "const": "toggle" },
+                    "automation_id": { "$ref": "#/$defs/token" },
+                    "desired": { "type": "boolean" }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "payload_hash", "secret_ref"],
+          "properties": {
+            "kind": { "const": "clipboard_write" },
+            "payload_hash": { "$ref": "#/$defs/hash" },
+            "secret_ref": {
+              "oneOf": [{ "$ref": "#/$defs/token" }, { "type": "null" }]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

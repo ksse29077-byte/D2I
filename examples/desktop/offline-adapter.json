@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "adapter_id": "offline-conformance.desktop",
+  "adapter_version": "1.0.0",
+  "platform": "virtual",
+  "capabilities": [
+    "observe_desktop",
+    "list_windows",
+    "read_file",
+    "list_directory",
+    "write_file",
+    "create_directory",
+    "move_path",
+    "delete_path",
+    "launch_process",
+    "terminate_process",
+    "browser_navigate",
+    "browser_interact",
+    "ui_interact",
+    "clipboard_read",
+    "clipboard_write"
+  ],
+  "concrete_host_adapter": false,
+  "process_isolated": true,
+  "network_capable": true
+}

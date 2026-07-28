@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-binding-evidence.schema.json",
+  "title": "D2I Windows Binding Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "binding_id",
+    "integration_id",
+    "observed_at_unix_seconds",
+    "expires_at_unix_seconds",
+    "attestor_id",
+    "host",
+    "adapter_kind",
+    "adapter_descriptor_hash",
+    "configuration_hash",
+    "worker_executable",
+    "worker_executable_hash",
+    "capability",
+    "browser_egress_evidence",
+    "wfp_functional_attestation",
+    "signer_public_key",
+    "signature_hex"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "binding_id": { "$ref": "#/$defs/token" },
+    "integration_id": { "$ref": "#/$defs/token" },
+    "observed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_seconds": { "type": "integer", "minimum": 2 },
+    "attestor_id": { "$ref": "#/$defs/token" },
+    "host": { "$ref": "#/$defs/host" },
+    "adapter_kind": { "$ref": "#/$defs/kind" },
+    "adapter_descriptor_hash": { "$ref": "#/$defs/hash" },
+    "configuration_hash": { "$ref": "#/$defs/hash" },
+    "worker_executable": { "type": "string", "minLength": 3, "maxLength": 4096 },
+    "worker_executable_hash": { "$ref": "#/$defs/hash" },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_kind",
+        "ready",
+        "process_isolated",
+        "job_kill_on_close",
+        "active_process_limit",
+        "per_process_memory_bytes",
+        "process_appcontainer_sid",
+        "network_isolation_enforced",
+        "details_hash"
+      ],
+      "properties": {
+        "adapter_kind": { "$ref": "#/$defs/kind" },
+        "ready": { "type": "boolean" },
+        "process_isolated": { "type": "boolean" },
+        "job_kill_on_close": { "type": "boolean" },
+        "active_process_limit": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "per_process_memory_bytes": {
+          "type": "integer",
+          "minimum": 16777216,
+          "maximum": 4294967296
+        },
+        "process_appcontainer_sid": {
+          "type": ["string", "null"],
+          "pattern": "^S-1-15-2-[0-9-]+$"
+        },
+        "network_isolation_enforced": { "type": "boolean" },
+        "details_hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "browser_egress_evidence": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/browser_egress_evidence" }
+      ]
+    },
+    "wfp_functional_attestation": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/wfp_functional_attestation" }
+      ]
+    },
+    "signer_public_key": { "$ref": "#/$defs/public_key" },
+    "signature_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{128}$"
+    }
+  },
+  "$defs": {
+    "kind": {
+      "enum": ["ui_automation", "web_driver", "file_write", "process"]
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "public_key": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "major_version",
+        "minor_version",
+        "build_number",
+        "architecture",
+        "session_id",
+        "user_sid",
+        "integrity_level_rid",
+        "elevation_type",
+        "is_appcontainer"
+      ],
+      "properties": {
+        "major_version": { "type": "integer", "minimum": 1 },
+        "minor_version": { "type": "integer", "minimum": 0 },
+        "build_number": { "type": "integer", "minimum": 1 },
+        "architecture": { "$ref": "#/$defs/token" },
+        "session_id": { "type": "integer", "minimum": 0 },
+        "user_sid": { "type": "string", "pattern": "^S-1-[0-9-]+$" },
+        "integrity_level_rid": { "type": "integer", "minimum": 1 },
+        "elevation_type": { "$ref": "#/$defs/token" },
+        "is_appcontainer": { "const": false }
+      }
+    },
+    "wfp_functional_attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "runtime_binding_digest",
+        "machine_binding",
+        "enforcement_id",
+        "provider_id",
+        "policy_hash",
+        "provider_key",
+        "sublayer_key",
+        "filter_keys",
+        "browser_version",
+        "browser_executable_hash",
+        "driver_version",
+        "driver_executable_hash",
+        "edge_driver_pin_hash",
+        "self_test_report_hash",
+        "activation_challenge",
+        "self_test_started_at_unix_ms",
+        "self_test_completed_at_unix_ms",
+        "issued_at_unix_seconds",
+        "expires_at_unix_seconds",
+        "ipv4_loopback_passed",
+        "ipv4_direct_ip_blocked",
+        "ipv4_dns_blocked",
+        "ipv4_redirect_blocked",
+        "ipv6_loopback_passed",
+        "ipv6_non_loopback_result",
+        "browser_session_ids",
+        "allowed_origins",
+        "deny_by_default",
+        "signer_key_id",
+        "signer_public_key",
+        "signature_hex"
+      ],
+      "properties": {
+        "schema_version": { "const": 2 },
+        "runtime_binding_digest": { "$ref": "#/$defs/hash" },
+        "machine_binding": { "$ref": "#/$defs/host" },
+        "enforcement_id": { "$ref": "#/$defs/token" },
+        "provider_id": { "const": "d2i.windows.wfp.loopback.v1" },
+        "policy_hash": { "$ref": "#/$defs/hash" },
+        "provider_key": { "$ref": "#/$defs/token" },
+        "sublayer_key": { "$ref": "#/$defs/token" },
+        "filter_keys": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/token" }
+        },
+        "browser_version": { "$ref": "#/$defs/version4" },
+        "browser_executable_hash": { "$ref": "#/$defs/hash" },
+        "driver_version": { "$ref": "#/$defs/version4" },
+        "driver_executable_hash": { "$ref": "#/$defs/hash" },
+        "edge_driver_pin_hash": { "$ref": "#/$defs/hash" },
+        "self_test_report_hash": { "$ref": "#/$defs/hash" },
+        "activation_challenge": { "$ref": "#/$defs/token" },
+        "self_test_started_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "self_test_completed_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "issued_at_unix_seconds": { "type": "integer", "minimum": 1 },
+        "expires_at_unix_seconds": { "type": "integer", "minimum": 2 },
+        "ipv4_loopback_passed": { "const": true },
+        "ipv4_direct_ip_blocked": { "const": true },
+        "ipv4_dns_blocked": { "const": true },
+        "ipv4_redirect_blocked": { "const": true },
+        "ipv6_loopback_passed": { "const": true },
+        "ipv6_non_loopback_result": { "enum": ["blocked", "explicitly_blocked"] },
+        "browser_session_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/token" }
+        },
+        "allowed_origins": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^https?://[^/?#@]+$" }
+        },
+        "deny_by_default": { "const": true },
+        "signer_key_id": { "$ref": "#/$defs/token" },
+        "signer_public_key": { "$ref": "#/$defs/public_key" },
+        "signature_hex": { "type": "string", "pattern": "^[0-9a-fA-F]{128}$" }
+      }
+    },
+    "version4": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "browser_egress_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "enforcement_id",
+        "policy_hash",
+        "provider_id",
+        "observed_at_unix_seconds",
+        "expires_at_unix_seconds",
+        "browser_session_ids",
+        "allowed_origins",
+        "deny_by_default",
+        "signer_public_key",
+        "signature_hex"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "enforcement_id": { "$ref": "#/$defs/token" },
+        "policy_hash": { "$ref": "#/$defs/hash" },
+        "provider_id": { "$ref": "#/$defs/token" },
+        "observed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+        "expires_at_unix_seconds": { "type": "integer", "minimum": 2 },
+        "browser_session_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/token" }
+        },
+        "allowed_origins": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^https?://[^/?#@]+$" }
+        },
+        "deny_by_default": { "const": true },
+        "signer_public_key": { "$ref": "#/$defs/public_key" },
+        "signature_hex": { "type": "string", "pattern": "^[0-9a-fA-F]{128}$" }
+      }
+    }
+  }
+}

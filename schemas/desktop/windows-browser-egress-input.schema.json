@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-browser-egress-input.schema.json",
+  "title": "D2I Windows Browser Egress Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "enforcement_id",
+    "policy_hash",
+    "provider_id",
+    "observed_at_unix_seconds",
+    "expires_at_unix_seconds",
+    "browser_session_ids",
+    "allowed_origins",
+    "deny_by_default"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "enforcement_id": { "$ref": "#/$defs/token" },
+    "policy_hash": { "$ref": "#/$defs/hash" },
+    "provider_id": { "$ref": "#/$defs/token" },
+    "observed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_seconds": { "type": "integer", "minimum": 2 },
+    "browser_session_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/token" }
+    },
+    "allowed_origins": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^https?://[^/?#@]+$" }
+    },
+    "deny_by_default": { "const": true }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    }
+  }
+}

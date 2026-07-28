@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "policy_id": "desktop-local-template",
+  "policy_version": "1.0.0",
+  "allowed_actor_roles": ["operator"],
+  "allowed_capabilities": ["read_file", "list_directory"],
+  "approval_required_for": [
+    "external_communication",
+    "credential_sensitive",
+    "destructive",
+    "privileged"
+  ],
+  "allowed_read_roots": ["C:\\D2I_WORKSPACE"],
+  "allowed_write_roots": [],
+  "allowed_executables": [],
+  "network_allowed": false,
+  "allowed_network_origins": [],
+  "allowed_adapters": {
+    "local-readonly.desktop": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "approver_public_keys": {
+    "organization-approver": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "maximum_actions_per_session": 100,
+  "maximum_action_lifetime_ms": 60000
+}

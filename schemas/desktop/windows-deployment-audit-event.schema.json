@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-deployment-audit-event.schema.json",
+  "title": "D2I Windows Deployment Audit Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "kind",
+    "status",
+    "artifact_hashes",
+    "detail_hash",
+    "recorded_at_unix_ms"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "event_id": { "$ref": "#/$defs/token" },
+    "kind": {
+      "enum": [
+        "policy_installed",
+        "policy_exactly_verified",
+        "self_test_positive",
+        "self_test_negative",
+        "idle_preconnect_observed",
+        "report_created",
+        "report_rejected",
+        "attestation_created",
+        "attestation_rejected",
+        "stale_replay_tamper_rejected",
+        "binding_recertified",
+        "manifest_recertified",
+        "adapter_reactivated",
+        "policy_recalled",
+        "residue_cleaned"
+      ]
+    },
+    "status": {
+      "enum": ["succeeded", "failed", "blocked", "cleaned"]
+    },
+    "artifact_hashes": {
+      "type": "object",
+      "maxProperties": 32,
+      "propertyNames": { "$ref": "#/$defs/token" },
+      "additionalProperties": { "$ref": "#/$defs/hash" }
+    },
+    "detail_hash": { "$ref": "#/$defs/hash" },
+    "recorded_at_unix_ms": { "type": "integer", "minimum": 1 }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    }
+  }
+}

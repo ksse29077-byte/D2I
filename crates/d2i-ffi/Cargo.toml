@@ -1,0 +1,25 @@
+[package]
+name = "d2i-ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+default = []
+arrow-c-data = []
+dlpack = []
+score-kernel = []
+
+[dependencies]
+libloading.workspace = true
+serde.workspace = true
+sha2.workspace = true
+
+[lints.rust]
+unsafe_code = "allow"
+unsafe_op_in_unsafe_fn = "deny"
+
+[lints.clippy]
+undocumented_unsafe_blocks = "deny"
+unwrap_used = "deny"
+expect_used = "deny"

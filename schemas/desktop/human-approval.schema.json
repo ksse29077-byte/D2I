@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/human-approval.schema.json",
+  "title": "D2I Desktop Human Approval v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "approval_id",
+    "approver_id",
+    "action_hash",
+    "policy_decision_hash",
+    "preparation_hash",
+    "issued_at_unix_ms",
+    "expires_at_unix_ms",
+    "nonce",
+    "signature_hex"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "approval_id": { "$ref": "#/$defs/token" },
+    "approver_id": { "$ref": "#/$defs/token" },
+    "action_hash": { "$ref": "#/$defs/hash" },
+    "policy_decision_hash": { "$ref": "#/$defs/hash" },
+    "preparation_hash": { "$ref": "#/$defs/hash" },
+    "issued_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+    "nonce": { "$ref": "#/$defs/token" },
+    "signature_hex": { "type": "string", "pattern": "^[0-9a-fA-F]{128}$" }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" }
+  }
+}

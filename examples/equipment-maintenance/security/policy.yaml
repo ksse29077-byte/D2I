@@ -1,0 +1,7 @@
+id: "equipment-maintenance-policy"
+version: "1"
+network: "deny"
+default_action: "deny"
+human_review:
+  required_for:
+    - "low_confidence_high_criticality"

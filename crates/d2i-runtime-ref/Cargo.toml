@@ -1,0 +1,24 @@
+[package]
+name = "d2i-runtime-ref"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-compiler = { path = "../d2i-compiler" }
+d2i-core = { path = "../d2i-core" }
+d2i-eval = { path = "../d2i-eval" }
+d2i-kernel = { path = "../d2i-kernel" }
+d2i-runtime-api = { path = "../d2i-runtime-api" }
+d2i-schema = { path = "../d2i-schema" }
+jsonschema.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-runtime"
+path = "src/main.rs"

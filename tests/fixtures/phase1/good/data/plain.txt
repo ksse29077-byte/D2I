@@ -1,0 +1,1 @@
+Trusted plain text fixture.

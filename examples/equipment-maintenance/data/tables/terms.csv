@@ -1,0 +1,9 @@
+id,canonical,aliases
+term-vibration,vibration,shaking|oscillation
+term-low-pressure,low pressure,pressure drop|weak pressure
+term-overheating,overheating,running hot|high temperature
+term-noise,noise,unusual sound|loud sound
+term-belt-slip,belt slip,slipping belt|belt slipping
+term-rattling,rattling,rattle|clattering
+term-leakage,leakage,leaking|fluid leak
+term-voltage-fluctuation,voltage fluctuation,unstable voltage|voltage variation

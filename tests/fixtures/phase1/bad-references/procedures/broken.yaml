@@ -1,0 +1,7 @@
+id: "broken-procedure"
+steps:
+  - id: "same-step"
+    kind: "missing-executor"
+    next: "missing-step"
+  - id: "same-step"
+    kind: "return"

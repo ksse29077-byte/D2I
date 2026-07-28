@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "adapter_kind": "web_driver",
+  "worker_executable": "C:\\Program Files\\D2I\\d2i-desktop.exe",
+  "worker_executable_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "request_timeout_ms": 10000,
+  "active_process_limit": 1,
+  "per_process_memory_bytes": 268435456,
+  "write_roots": [],
+  "webdriver_endpoint": "http://127.0.0.1:4444",
+  "browser_session_ids": [
+    "reviewed-session"
+  ],
+  "browser_allowed_origins": [
+    "http://127.0.0.1:8080"
+  ],
+  "browser_egress_policy": {
+    "schema_version": 1,
+    "enforcement_id": "production-edge-loopback",
+    "provider_id": "d2i.windows.wfp.loopback.v1",
+    "browser_executable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "browser_executable_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "ui_allowed_executable_hashes": [],
+  "process_isolation": null
+}

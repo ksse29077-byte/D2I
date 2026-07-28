@@ -1,0 +1,24 @@
+[package]
+name = "d2i-learning"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-compiler = { path = "../d2i-compiler" }
+d2i-eval = { path = "../d2i-eval" }
+d2i-runtime-ref = { path = "../d2i-runtime-ref" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-learning"
+path = "src/bin/d2i-learning.rs"

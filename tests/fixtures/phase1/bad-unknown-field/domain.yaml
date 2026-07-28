@@ -1,0 +1,27 @@
+d2i_version: "0.1"
+unexpected_contract: true
+domain:
+  id: "bad-unknown"
+  version: "0.1.0"
+  name: "Bad Unknown Field"
+  languages: ["en"]
+target:
+  os: "linux"
+  arch: "x86_64"
+  network_policy: "deny"
+  max_memory_mb: 256
+  preferred_device: "cpu"
+objectives:
+  min_task_success_rate: 0.9
+  max_critical_error_rate: 0.01
+  target_p95_latency_ms: 50
+  deterministic: true
+sources: []
+skills: []
+evaluation:
+  dataset: "missing.jsonl"
+  thresholds: "missing.yaml"
+package:
+  signing: "required"
+  include_source_data: false
+  include_eval_data: false

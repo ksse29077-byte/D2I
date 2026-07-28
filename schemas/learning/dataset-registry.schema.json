@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/learning/dataset-registry.schema.json",
+  "title": "D2I Offline Dataset Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "owner",
+    "reviewed_at_unix_seconds",
+    "maximum_total_bytes",
+    "datasets"
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "registry_id": { "$ref": "#/$defs/token" },
+    "owner": { "$ref": "#/$defs/text" },
+    "reviewed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "maximum_total_bytes": { "type": "integer", "minimum": 1 },
+    "datasets": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": { "$ref": "#/$defs/dataset" }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "review": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "reviewer_id",
+        "reviewed_at_unix_seconds",
+        "decision",
+        "evidence_hash",
+        "notes"
+      ],
+      "properties": {
+        "reviewer_id": { "$ref": "#/$defs/token" },
+        "reviewed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+        "decision": { "enum": ["approved", "rejected"] },
+        "evidence_hash": { "$ref": "#/$defs/hash" },
+        "notes": { "$ref": "#/$defs/text" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "content_hash", "size_bytes"],
+      "properties": {
+        "relative_path": { "$ref": "#/$defs/text" },
+        "content_hash": { "$ref": "#/$defs/hash" },
+        "size_bytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "priority",
+        "dataset_id",
+        "display_name",
+        "purpose",
+        "source_url",
+        "source_revision",
+        "intended_uses",
+        "license",
+        "risk",
+        "reviews",
+        "artifacts",
+        "status"
+      ],
+      "properties": {
+        "priority": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "dataset_id": { "$ref": "#/$defs/token" },
+        "display_name": { "$ref": "#/$defs/text" },
+        "purpose": {
+          "enum": [
+            "multi_turn_conversation",
+            "instruction_following",
+            "preference_and_quality",
+            "korean_instruction",
+            "api_calling",
+            "safety_classification",
+            "desktop_interaction",
+            "mobile_interaction",
+            "web_automation",
+            "function_calling",
+            "shell_command",
+            "code_generation"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "pattern": "^https://[^\\s]+$"
+        },
+        "source_revision": { "$ref": "#/$defs/text" },
+        "intended_uses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "supervised_fine_tuning",
+              "reward_modeling",
+              "evaluation",
+              "safety_classification"
+            ]
+          }
+        },
+        "license": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "declared_spdx_expression",
+            "scope",
+            "evidence_url",
+            "evidence_revision",
+            "requires_attribution",
+            "requires_share_alike",
+            "attribution_plan_hash",
+            "share_alike_plan_hash",
+            "component_license_inventory_hash"
+          ],
+          "properties": {
+            "declared_spdx_expression": { "$ref": "#/$defs/text" },
+            "scope": {
+              "enum": [
+                "dataset_wide",
+                "metadata_only",
+                "component_specific",
+                "unresolved"
+              ]
+            },
+            "evidence_url": {
+              "type": "string",
+              "pattern": "^https://[^\\s]+$"
+            },
+            "evidence_revision": { "$ref": "#/$defs/text" },
+            "requires_attribution": { "type": "boolean" },
+            "requires_share_alike": { "type": "boolean" },
+            "attribution_plan_hash": {
+              "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+            },
+            "share_alike_plan_hash": {
+              "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+            },
+            "component_license_inventory_hash": {
+              "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+            }
+          }
+        },
+        "risk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contains_user_content",
+            "contains_model_generated_content",
+            "generation_system",
+            "requires_personal_data_review",
+            "contains_sensitive_safety_content",
+            "contains_third_party_content",
+            "contains_executable_content",
+            "contains_credentials_or_session_data",
+            "source_notes"
+          ],
+          "properties": {
+            "contains_user_content": { "type": "boolean" },
+            "contains_model_generated_content": { "type": "boolean" },
+            "generation_system": {
+              "oneOf": [{ "$ref": "#/$defs/text" }, { "type": "null" }]
+            },
+            "requires_personal_data_review": { "type": "boolean" },
+            "contains_sensitive_safety_content": { "type": "boolean" },
+            "contains_third_party_content": { "type": "boolean" },
+            "contains_executable_content": { "type": "boolean" },
+            "contains_credentials_or_session_data": { "type": "boolean" },
+            "source_notes": { "$ref": "#/$defs/text" }
+          }
+        },
+        "reviews": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "legal",
+            "provenance",
+            "privacy",
+            "security",
+            "generation_terms"
+          ],
+          "properties": {
+            "legal": { "$ref": "#/$defs/review" },
+            "provenance": { "$ref": "#/$defs/review" },
+            "privacy": { "$ref": "#/$defs/review" },
+            "security": { "$ref": "#/$defs/review" },
+            "generation_terms": { "$ref": "#/$defs/review" }
+          }
+        },
+        "artifacts": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": { "$ref": "#/$defs/artifact" }
+        },
+        "status": {
+          "enum": ["candidate", "quarantined", "approved_for_offline_use"]
+        }
+      }
+    }
+  }
+}

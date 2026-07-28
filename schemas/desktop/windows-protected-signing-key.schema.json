@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-protected-signing-key.schema.json",
+  "title": "D2I Protected Windows Signing Key",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "key_id",
+    "purpose",
+    "user_sid",
+    "public_key",
+    "protected_key_hex"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "key_id": { "$ref": "#/$defs/token" },
+    "purpose": {
+      "enum": ["binding_attestor", "certifier", "browser_egress_provider"]
+    },
+    "user_sid": { "type": "string", "pattern": "^S-1-[0-9-]+$" },
+    "public_key": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "protected_key_hex": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 8192,
+      "pattern": "^([0-9a-fA-F]{2})+$"
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    }
+  }
+}

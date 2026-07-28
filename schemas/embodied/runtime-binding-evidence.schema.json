@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/embodied/runtime-binding-evidence.schema.json",
+  "title": "D2I Runtime Binding Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "binding_id",
+    "integration_id",
+    "observed_at_unix_seconds",
+    "expires_at_unix_seconds",
+    "attestor_id",
+    "ros2",
+    "safety",
+    "hardware",
+    "signer_public_key",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "binding_id": { "$ref": "#/$defs/token" },
+    "integration_id": { "$ref": "#/$defs/token" },
+    "observed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "attestor_id": { "$ref": "#/$defs/token" },
+    "ros2": { "$ref": "#/$defs/ros2" },
+    "safety": { "$ref": "#/$defs/safety" },
+    "hardware": { "$ref": "#/$defs/hardware" },
+    "signer_public_key": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{128}$"
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "history": {
+      "enum": ["keep_last", "keep_all", "system_default"]
+    },
+    "reliability": {
+      "enum": ["best_effort", "reliable", "system_default"]
+    },
+    "durability": {
+      "enum": ["volatile", "transient_local", "system_default"]
+    },
+    "liveliness": {
+      "enum": ["automatic", "manual_by_topic", "system_default"]
+    },
+    "qos": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "history",
+        "depth",
+        "reliability",
+        "durability",
+        "deadline_nanos",
+        "lifespan_nanos",
+        "liveliness",
+        "liveliness_lease_nanos"
+      ],
+      "properties": {
+        "history": { "$ref": "#/$defs/history" },
+        "depth": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "reliability": { "$ref": "#/$defs/reliability" },
+        "durability": { "$ref": "#/$defs/durability" },
+        "deadline_nanos": { "type": "integer", "minimum": 0 },
+        "lifespan_nanos": { "type": "integer", "minimum": 0 },
+        "liveliness": { "$ref": "#/$defs/liveliness" },
+        "liveliness_lease_nanos": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "topic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_id",
+        "topic",
+        "direction",
+        "message_type",
+        "message_type_hash",
+        "callback_group_id",
+        "adapter_qos",
+        "peer_qos"
+      ],
+      "properties": {
+        "contract_id": { "$ref": "#/$defs/token" },
+        "topic": { "$ref": "#/$defs/text" },
+        "direction": { "enum": ["subscribe", "publish"] },
+        "message_type": { "$ref": "#/$defs/text" },
+        "message_type_hash": { "$ref": "#/$defs/sha256" },
+        "callback_group_id": { "$ref": "#/$defs/token" },
+        "adapter_qos": { "$ref": "#/$defs/qos" },
+        "peer_qos": { "$ref": "#/$defs/qos" }
+      }
+    },
+    "ros2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distribution",
+        "version",
+        "client_library",
+        "client_library_version",
+        "rmw_implementation",
+        "domain_id",
+        "node_name",
+        "namespace",
+        "network_policy",
+        "allowed_peers",
+        "executor_kind",
+        "executor_implementation",
+        "executor_thread_count",
+        "deterministic_ordering",
+        "bounded_callback_time",
+        "shutdown_timeout_millis",
+        "topics"
+      ],
+      "properties": {
+        "distribution": { "$ref": "#/$defs/text" },
+        "version": { "$ref": "#/$defs/text" },
+        "client_library": { "$ref": "#/$defs/text" },
+        "client_library_version": { "$ref": "#/$defs/text" },
+        "rmw_implementation": { "$ref": "#/$defs/text" },
+        "domain_id": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "node_name": { "$ref": "#/$defs/text" },
+        "namespace": { "$ref": "#/$defs/text" },
+        "network_policy": { "enum": ["deny", "local_only", "managed_allowlist"] },
+        "allowed_peers": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 10000,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "executor_kind": {
+          "enum": ["single_threaded", "multi_threaded", "wait_set", "rclc", "other"]
+        },
+        "executor_implementation": { "$ref": "#/$defs/text" },
+        "executor_thread_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 65535
+        },
+        "deterministic_ordering": { "type": "boolean" },
+        "bounded_callback_time": { "type": "boolean" },
+        "shutdown_timeout_millis": { "type": "integer", "minimum": 0 },
+        "topics": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10000,
+          "items": { "$ref": "#/$defs/topic" }
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controller_id",
+        "protocol",
+        "protocol_version",
+        "intent_hash_algorithm",
+        "permit_authentication",
+        "permit_replay_protection",
+        "fail_closed",
+        "emergency_stop_independent",
+        "measured_maximum_assessment_latency_micros",
+        "monotonic_clock"
+      ],
+      "properties": {
+        "controller_id": { "$ref": "#/$defs/text" },
+        "protocol": { "$ref": "#/$defs/text" },
+        "protocol_version": { "$ref": "#/$defs/text" },
+        "intent_hash_algorithm": { "$ref": "#/$defs/text" },
+        "permit_authentication": { "$ref": "#/$defs/text" },
+        "permit_replay_protection": { "type": "boolean" },
+        "fail_closed": { "type": "boolean" },
+        "emergency_stop_independent": { "type": "boolean" },
+        "measured_maximum_assessment_latency_micros": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "monotonic_clock": { "type": "boolean" }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_id",
+        "api_version",
+        "hardware_profile_hash",
+        "process_isolated",
+        "dispatch_idempotent",
+        "cancellation_supported",
+        "command_acknowledgement",
+        "health_telemetry",
+        "rollback_execution_supported"
+      ],
+      "properties": {
+        "adapter_id": { "$ref": "#/$defs/text" },
+        "api_version": { "$ref": "#/$defs/text" },
+        "hardware_profile_hash": { "$ref": "#/$defs/sha256" },
+        "process_isolated": { "type": "boolean" },
+        "dispatch_idempotent": { "type": "boolean" },
+        "cancellation_supported": { "type": "boolean" },
+        "command_acknowledgement": { "type": "boolean" },
+        "health_telemetry": { "type": "boolean" },
+        "rollback_execution_supported": { "type": "boolean" }
+      }
+    }
+  }
+}

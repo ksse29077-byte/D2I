@@ -1,0 +1,50 @@
+{"id":"gold-001","request":{"equipment_id":"pump-1","symptom":"vibration","error_code":"E101"},"expected":{"category":"normal","fault_code":"bearing-wear","human_review":false}}
+{"id":"gold-002","request":{"equipment_id":"pump-2","symptom":"low pressure","error_code":"E204"},"expected":{"category":"normal","fault_code":"intake-blockage","human_review":false}}
+{"id":"gold-003","request":{"equipment_id":"motor-1","symptom":"overheating","error_code":"E301"},"expected":{"category":"normal","fault_code":"cooling-failure","human_review":false}}
+{"id":"gold-004","request":{"equipment_id":"compressor-1","symptom":"noise","error_code":"E410"},"expected":{"category":"normal","fault_code":"loose-coupling","human_review":false}}
+{"id":"gold-005","request":{"equipment_id":"conveyor-1","symptom":"belt slip","error_code":"E502"},"expected":{"category":"normal","fault_code":"tension-loss","human_review":false}}
+{"id":"gold-006","request":{"equipment_id":"fan-1","symptom":"rattling","error_code":"E601"},"expected":{"category":"normal","fault_code":"blade-damage","human_review":false}}
+{"id":"gold-007","request":{"equipment_id":"valve-1","symptom":"leakage","error_code":"E702"},"expected":{"category":"normal","fault_code":"seal-failure","human_review":false}}
+{"id":"gold-008","request":{"equipment_id":"generator-1","symptom":"voltage fluctuation","error_code":"E803"},"expected":{"category":"normal","fault_code":"regulator-fault","human_review":false}}
+{"id":"gold-009","request":{"equipment_id":"pump-3","symptom":"vibration","error_code":"E101"},"expected":{"category":"normal","fault_code":"bearing-wear","human_review":false}}
+{"id":"gold-010","request":{"equipment_id":"pump-4","symptom":"low pressure","error_code":"E204"},"expected":{"category":"normal","fault_code":"intake-blockage","human_review":false}}
+{"id":"gold-011","request":{"equipment_id":"motor-2","symptom":"overheating","error_code":"E301"},"expected":{"category":"normal","fault_code":"cooling-failure","human_review":false}}
+{"id":"gold-012","request":{"equipment_id":"compressor-2","symptom":"noise","error_code":"E410"},"expected":{"category":"normal","fault_code":"loose-coupling","human_review":false}}
+{"id":"gold-013","request":{"equipment_id":"conveyor-2","symptom":"belt slip","error_code":"E502"},"expected":{"category":"normal","fault_code":"tension-loss","human_review":false}}
+{"id":"gold-014","request":{"equipment_id":"fan-2","symptom":"rattling","error_code":"E601"},"expected":{"category":"normal","fault_code":"blade-damage","human_review":false}}
+{"id":"gold-015","request":{"equipment_id":"valve-2","symptom":"leakage","error_code":"E702"},"expected":{"category":"normal","fault_code":"seal-failure","human_review":false}}
+{"id":"gold-016","request":{"equipment_id":"generator-2","symptom":"voltage fluctuation","error_code":"E803"},"expected":{"category":"normal","fault_code":"regulator-fault","human_review":false}}
+{"id":"gold-017","request":{"equipment_id":"pump-5","symptom":"vibration","error_code":"E101","recent_maintenance":"bearing lubricated"},"expected":{"category":"normal","fault_code":"bearing-wear","human_review":false}}
+{"id":"gold-018","request":{"equipment_id":"motor-3","symptom":"overheating","error_code":"E301","recent_maintenance":"filter replaced"},"expected":{"category":"normal","fault_code":"cooling-failure","human_review":false}}
+{"id":"gold-019","request":{"equipment_id":"fan-3","symptom":"rattling","error_code":"E601","recent_maintenance":"guard inspected"},"expected":{"category":"normal","fault_code":"blade-damage","human_review":false}}
+{"id":"gold-020","request":{"equipment_id":"valve-3","symptom":"leakage","error_code":"E702","recent_maintenance":"actuator serviced"},"expected":{"category":"normal","fault_code":"seal-failure","human_review":false}}
+{"id":"gold-021","request":{"equipment_id":"pump-6","symptom":"vibration","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-022","request":{"equipment_id":"pump-7","symptom":"low pressure","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-023","request":{"equipment_id":"motor-4","symptom":"overheating","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-024","request":{"equipment_id":"compressor-3","symptom":"noise","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-025","request":{"equipment_id":"conveyor-3","symptom":"belt slip","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-026","request":{"equipment_id":"fan-4","symptom":"rattling","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-027","request":{"equipment_id":"valve-4","symptom":"leakage","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-028","request":{"equipment_id":"generator-3","symptom":"voltage fluctuation","error_code":"E999"},"expected":{"category":"negative","human_review":true}}
+{"id":"gold-029","request":{"equipment_id":"pump-8","symptom":"vibration"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-030","request":{"equipment_id":"pump-9","symptom":"low pressure"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-031","request":{"equipment_id":"motor-5","symptom":"overheating"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-032","request":{"equipment_id":"compressor-4","symptom":"noise"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-033","request":{"equipment_id":"conveyor-4","symptom":"belt slip"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-034","request":{"equipment_id":"fan-5","symptom":"rattling"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-035","request":{"equipment_id":"valve-5","symptom":"leakage"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-036","request":{"equipment_id":"generator-4","symptom":"voltage fluctuation"},"expected":{"category":"ambiguous","human_review":true}}
+{"id":"gold-037","request":{"equipment_id":"pump-10","symptom":"  ShAkInG  ","error_code":"E101"},"expected":{"category":"edge","fault_code":"bearing-wear","human_review":false}}
+{"id":"gold-038","request":{"equipment_id":"pump-11","symptom":"pressure-drop","error_code":"E204"},"expected":{"category":"edge","fault_code":"intake-blockage","human_review":false}}
+{"id":"gold-039","request":{"equipment_id":"motor-6","symptom":"RUNNING HOT","error_code":"E301"},"expected":{"category":"edge","fault_code":"cooling-failure","human_review":false}}
+{"id":"gold-040","request":{"equipment_id":"compressor-5","symptom":"unusual_sound","error_code":"E410"},"expected":{"category":"edge","fault_code":"loose-coupling","human_review":false}}
+{"id":"gold-041","request":{"equipment_id":"conveyor-5","symptom":"slipping belt","error_code":"E502"},"expected":{"category":"edge","fault_code":"tension-loss","human_review":false}}
+{"id":"gold-042","request":{"equipment_id":"generator-5","symptom":"unstable voltage","error_code":"E803"},"expected":{"category":"edge","fault_code":"regulator-fault","human_review":false}}
+{"id":"gold-043","request":{"equipment_id":"pump-12","symptom":"electrical arcing","error_code":"X001"},"expected":{"category":"unsupported","human_review":true}}
+{"id":"gold-044","request":{"equipment_id":"motor-7","symptom":"shaft fracture","error_code":"X002"},"expected":{"category":"unsupported","human_review":true}}
+{"id":"gold-045","request":{"equipment_id":"robot-1","symptom":"navigation drift","error_code":"X003"},"expected":{"category":"unsupported","human_review":true}}
+{"id":"gold-046","request":{"equipment_id":"boiler-1","symptom":"flame instability","error_code":"X004"},"expected":{"category":"unsupported","human_review":true}}
+{"id":"gold-047","request":{"equipment_id":"motor-8","symptom":"overheating","error_code":"E301","sensor_snapshot":{"temperature_c":150}},"expected":{"category":"critical","fault_code":"cooling-failure","human_review":true}}
+{"id":"gold-048","request":{"equipment_id":"pump-13","symptom":"vibration","error_code":"E101","sensor_snapshot":{"temperature_c":145}},"expected":{"category":"critical","fault_code":"bearing-wear","human_review":true}}
+{"id":"gold-049","request":{"equipment_id":"generator-6","symptom":"voltage fluctuation","error_code":"E803","sensor_snapshot":{"temperature_c":160}},"expected":{"category":"critical","fault_code":"regulator-fault","human_review":true}}
+{"id":"gold-050","request":{"equipment_id":"compressor-6","symptom":"noise","error_code":"E410","sensor_snapshot":{"temperature_c":155}},"expected":{"category":"critical","fault_code":"loose-coupling","human_review":true}}

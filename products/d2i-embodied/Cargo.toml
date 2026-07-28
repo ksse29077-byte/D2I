@@ -1,0 +1,23 @@
+[package]
+name = "d2i-embodied"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-compiler = { path = "../../crates/d2i-compiler" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+d2i-core = { path = "../../crates/d2i-core" }
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-embodied"
+path = "src/bin/d2i-embodied.rs"

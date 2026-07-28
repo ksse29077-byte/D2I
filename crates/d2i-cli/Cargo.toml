@@ -1,0 +1,21 @@
+[package]
+name = "d2i-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "d2ic"
+path = "src/main.rs"
+
+[dependencies]
+d2i-core = { path = "../d2i-core" }
+d2i-compiler = { path = "../d2i-compiler" }
+d2i-eval = { path = "../d2i-eval" }
+d2i-runtime-adapter = { path = "../d2i-runtime-adapter" }
+d2i-runtime-ref = { path = "../d2i-runtime-ref" }
+serde_json.workspace = true
+
+[lints]
+workspace = true

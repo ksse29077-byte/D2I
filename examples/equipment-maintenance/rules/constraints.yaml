@@ -1,0 +1,6 @@
+id: "constraints"
+version: "1"
+constraints:
+  network: "deny"
+  side_effects: "deny"
+  max_steps: 16

@@ -1,0 +1,36 @@
+include "common.fbs";
+
+namespace D2I.Package;
+
+table AccessLabel {
+  resource:string (required);
+  label:string (required);
+  provenance_id:string (required);
+}
+
+table ConfidenceThreshold {
+  skill_id:string (required);
+  minimum:double;
+  fallback:string (required);
+  provenance_id:string (required);
+}
+
+table ActionPermission {
+  action:string (required);
+  allowed:bool;
+  requires_human_review:bool;
+  provenance_id:string (required);
+}
+
+table PolicyBundle {
+  schema_version:uint;
+  default_action:string (required);
+  network_allowed:bool;
+  access_labels:[AccessLabel] (required);
+  confidence_thresholds:[ConfidenceThreshold] (required);
+  action_permissions:[ActionPermission] (required);
+  allowed_executors:[string] (required);
+}
+
+root_type PolicyBundle;
+file_identifier "D2PL";

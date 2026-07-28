@@ -1,0 +1,24 @@
+include "common.fbs";
+
+namespace D2I.Package;
+
+table DomainBundle {
+  schema_version:uint;
+  domain_id:string (required);
+  domain_version:string (required);
+  name:string (required);
+  languages:[string] (required);
+  entities:[StringRecord] (required);
+  relations:[StringRecord] (required);
+  terms:[StringRecord] (required);
+  facts:[StringRecord] (required);
+  documents:[StringRecord] (required);
+  procedures:[StringRecord] (required);
+  rules:[StringRecord] (required);
+  examples:[StringRecord] (required);
+  outcomes:[StringRecord] (required);
+  provenance:[Provenance] (required);
+}
+
+root_type DomainBundle;
+file_identifier "D2DM";

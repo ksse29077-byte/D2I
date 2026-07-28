@@ -1,0 +1,28 @@
+include "common.fbs";
+
+namespace D2I.Package;
+
+table PackageFile {
+  path:string (required);
+  size:ulong;
+  content_hash:string (required);
+}
+
+table PackageManifest {
+  schema_version:uint;
+  package_format_version:string (required);
+  compiler_version:string (required);
+  runtime_abi_version:string (required);
+  domain_id:string (required);
+  domain_version:string (required);
+  build_id:string (required);
+  source_inventory_hash:string (required);
+  payload_hash:string (required);
+  target_os:string (required);
+  target_arch:string (required);
+  network_policy:string (required);
+  files:[PackageFile] (required);
+}
+
+root_type PackageManifest;
+file_identifier "D2PM";

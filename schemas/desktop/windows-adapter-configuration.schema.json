@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-adapter-configuration.schema.json",
+  "title": "D2I Windows Adapter Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "adapter_kind",
+    "worker_executable",
+    "worker_executable_hash",
+    "request_timeout_ms",
+    "active_process_limit",
+    "per_process_memory_bytes",
+    "write_roots",
+    "webdriver_endpoint",
+    "browser_session_ids",
+    "browser_allowed_origins",
+    "browser_egress_policy",
+    "ui_allowed_executable_hashes",
+    "process_isolation"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "adapter_kind": {
+      "enum": ["ui_automation", "web_driver", "file_write", "process"]
+    },
+    "worker_executable": { "type": "string", "minLength": 3, "maxLength": 4096 },
+    "worker_executable_hash": { "$ref": "#/$defs/hash" },
+    "request_timeout_ms": { "type": "integer", "minimum": 100, "maximum": 60000 },
+    "active_process_limit": { "type": "integer", "minimum": 1, "maximum": 64 },
+    "per_process_memory_bytes": {
+      "type": "integer",
+      "minimum": 16777216,
+      "maximum": 4294967296
+    },
+    "write_roots": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 3, "maxLength": 4096 }
+    },
+    "webdriver_endpoint": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "browser_session_ids": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/token" }
+    },
+    "browser_allowed_origins": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^https?://[^/?#@]+$" }
+    },
+    "browser_egress_policy": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/wfp_browser_egress_policy" }
+      ]
+    },
+    "ui_allowed_executable_hashes": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/hash" }
+    },
+    "process_isolation": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/process_isolation" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "adapter_kind": { "const": "ui_automation" } } },
+      "then": {
+        "properties": {
+          "active_process_limit": { "const": 1 },
+          "write_roots": { "maxItems": 0 },
+          "webdriver_endpoint": { "type": "null" },
+          "browser_session_ids": { "maxItems": 0 },
+          "browser_allowed_origins": { "maxItems": 0 },
+          "browser_egress_policy": { "type": "null" },
+          "ui_allowed_executable_hashes": { "minItems": 1 },
+          "process_isolation": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "adapter_kind": { "const": "web_driver" } } },
+      "then": {
+        "properties": {
+          "active_process_limit": { "const": 1 },
+          "write_roots": { "maxItems": 0 },
+          "webdriver_endpoint": {
+            "type": "string",
+            "pattern": "^http://(127\\.0\\.0\\.1|localhost|\\[::1\\]):[0-9]+$"
+          },
+          "browser_session_ids": { "minItems": 1 },
+          "browser_allowed_origins": { "minItems": 1 },
+          "ui_allowed_executable_hashes": { "maxItems": 0 },
+          "process_isolation": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "adapter_kind": { "const": "file_write" } } },
+      "then": {
+        "properties": {
+          "active_process_limit": { "const": 1 },
+          "write_roots": { "minItems": 1 },
+          "webdriver_endpoint": { "type": "null" },
+          "browser_session_ids": { "maxItems": 0 },
+          "browser_allowed_origins": { "maxItems": 0 },
+          "browser_egress_policy": { "type": "null" },
+          "ui_allowed_executable_hashes": { "maxItems": 0 },
+          "process_isolation": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "adapter_kind": { "const": "process" } } },
+      "then": {
+        "properties": {
+          "active_process_limit": { "minimum": 2 },
+          "write_roots": { "maxItems": 0 },
+          "webdriver_endpoint": { "type": "null" },
+          "browser_session_ids": { "maxItems": 0 },
+          "browser_allowed_origins": { "maxItems": 0 },
+          "browser_egress_policy": { "type": "null" },
+          "ui_allowed_executable_hashes": { "maxItems": 0 },
+          "process_isolation": { "$ref": "#/$defs/process_isolation" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "process_isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_name", "profile_sid"],
+      "properties": {
+        "profile_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "profile_sid": {
+          "type": "string",
+          "pattern": "^S-1-15-2-[0-9-]+$"
+        }
+      }
+    },
+    "wfp_browser_egress_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "enforcement_id",
+        "provider_id",
+        "browser_executable",
+        "browser_executable_hash",
+        "verifier_profile_name",
+        "verifier_profile_sid",
+        "policy_owner_sid"
+      ],
+      "properties": {
+        "schema_version": { "const": 2 },
+        "enforcement_id": { "$ref": "#/$defs/token" },
+        "provider_id": { "const": "d2i.windows.wfp.loopback.v1" },
+        "browser_executable": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 4096
+        },
+        "browser_executable_hash": { "$ref": "#/$defs/hash" },
+        "verifier_profile_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "verifier_profile_sid": {
+          "type": "string",
+          "pattern": "^S-1-15-2-[0-9-]+$"
+        },
+        "policy_owner_sid": {
+          "type": "string",
+          "pattern": "^S-1-[0-9-]+$"
+        }
+      }
+    }
+  }
+}

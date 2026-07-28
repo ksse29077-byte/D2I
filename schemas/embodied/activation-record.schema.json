@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/embodied/activation-record.schema.json",
+  "title": "D2I Runtime Activation Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sequence",
+    "ledger_id",
+    "integration_id",
+    "binding_id",
+    "manifest_hash",
+    "evidence_hash",
+    "observed_at_unix_seconds",
+    "expires_at_unix_seconds",
+    "activated_at_unix_seconds",
+    "activator_id",
+    "previous_record_hash",
+    "record_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "ledger_id": { "$ref": "#/$defs/token" },
+    "integration_id": { "$ref": "#/$defs/token" },
+    "binding_id": { "$ref": "#/$defs/token" },
+    "manifest_hash": { "$ref": "#/$defs/sha256" },
+    "evidence_hash": { "$ref": "#/$defs/sha256" },
+    "observed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "activated_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "activator_id": { "$ref": "#/$defs/token" },
+    "previous_record_hash": { "$ref": "#/$defs/sha256" },
+    "record_hash": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    }
+  }
+}

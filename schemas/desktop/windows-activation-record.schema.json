@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-activation-record.schema.json",
+  "title": "D2I Windows Activation Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sequence",
+    "ledger_id",
+    "integration_id",
+    "binding_id",
+    "certification_id",
+    "manifest_hash",
+    "evidence_hash",
+    "certification_hash",
+    "activation_challenge",
+    "self_test_report_hash",
+    "observed_at_unix_seconds",
+    "expires_at_unix_seconds",
+    "activated_at_unix_seconds",
+    "activator_id",
+    "previous_record_hash",
+    "record_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "ledger_id": { "$ref": "#/$defs/token" },
+    "integration_id": { "$ref": "#/$defs/token" },
+    "binding_id": { "$ref": "#/$defs/token" },
+    "certification_id": { "$ref": "#/$defs/token" },
+    "manifest_hash": { "$ref": "#/$defs/hash" },
+    "evidence_hash": { "$ref": "#/$defs/hash" },
+    "certification_hash": { "$ref": "#/$defs/hash" },
+    "activation_challenge": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/token" }
+      ]
+    },
+    "self_test_report_hash": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/hash" }
+      ]
+    },
+    "observed_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_seconds": { "type": "integer", "minimum": 2 },
+    "activated_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "activator_id": { "$ref": "#/$defs/token" },
+    "previous_record_hash": { "$ref": "#/$defs/hash" },
+    "record_hash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    }
+  }
+}

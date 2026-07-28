@@ -1,0 +1,73 @@
+include "common.fbs";
+
+namespace D2I.Package;
+
+enum NodeKind:ubyte {
+  ReadInput,
+  Normalize,
+  Lookup,
+  Retrieve,
+  RuleEval,
+  NativeCall,
+  ModelCall,
+  Parallel,
+  Join,
+  Branch,
+  LoopBounded,
+  Validate,
+  PolicyGate,
+  HumanReview,
+  Return
+}
+
+enum EdgeKind:ubyte {
+  Success,
+  Failure,
+  BranchTrue,
+  BranchFalse,
+  Parallel,
+  Join
+}
+
+table ExecutionNode {
+  id:string (required);
+  kind:NodeKind;
+  input_type:string (required);
+  output_type:string (required);
+  timeout_ms:uint;
+  expected_memory_bytes:ulong;
+  executor_id:string;
+  min_confidence:double;
+  failure_target:string;
+  retry_limit:uint;
+  cacheable:bool;
+  side_effect:bool;
+  parallel_group:string;
+  evidence_required:bool;
+  loop_max_iterations:uint;
+  provenance_id:string (required);
+}
+
+table ExecutionEdge {
+  from:string (required);
+  to:string (required);
+  kind:EdgeKind;
+  condition:string;
+  provenance_id:string (required);
+}
+
+table ExecutionGraph {
+  schema_version:uint;
+  skill_id:string (required);
+  entry_node:string (required);
+  nodes:[ExecutionNode] (required);
+  edges:[ExecutionEdge] (required);
+}
+
+table ExecutionBundle {
+  schema_version:uint;
+  graphs:[ExecutionGraph] (required);
+}
+
+root_type ExecutionBundle;
+file_identifier "D2EX";

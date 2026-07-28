@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-runtime-manifest.schema.json",
+  "title": "D2I Windows Runtime Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "integration_id",
+    "adapter_kind",
+    "adapter_descriptor",
+    "configuration_hash",
+    "worker_executable_hash",
+    "process_isolation",
+    "browser_egress_requirement",
+    "host",
+    "interactive_session_required",
+    "binding_attestor_id",
+    "binding_attestor_public_key",
+    "certifier_id",
+    "certifier_public_key"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "integration_id": { "$ref": "#/$defs/token" },
+    "adapter_kind": { "$ref": "#/$defs/kind" },
+    "adapter_descriptor": { "$ref": "#/$defs/descriptor" },
+    "configuration_hash": { "$ref": "#/$defs/hash" },
+    "worker_executable_hash": { "$ref": "#/$defs/hash" },
+    "process_isolation": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/process_isolation" }
+      ]
+    },
+    "browser_egress_requirement": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/browser_egress_requirement" }
+      ]
+    },
+    "host": { "$ref": "#/$defs/host" },
+    "interactive_session_required": { "type": "boolean" },
+    "binding_attestor_id": { "$ref": "#/$defs/token" },
+    "binding_attestor_public_key": { "$ref": "#/$defs/public_key" },
+    "certifier_id": { "$ref": "#/$defs/token" },
+    "certifier_public_key": { "$ref": "#/$defs/public_key" }
+  },
+  "$defs": {
+    "kind": {
+      "enum": ["ui_automation", "web_driver", "file_write", "process"]
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "public_key": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "major_version",
+        "minor_version",
+        "build_number",
+        "architecture",
+        "session_id",
+        "user_sid",
+        "integrity_level_rid",
+        "elevation_type",
+        "is_appcontainer"
+      ],
+      "properties": {
+        "major_version": { "type": "integer", "minimum": 1 },
+        "minor_version": { "type": "integer", "minimum": 0 },
+        "build_number": { "type": "integer", "minimum": 1 },
+        "architecture": { "$ref": "#/$defs/token" },
+        "session_id": { "type": "integer", "minimum": 0 },
+        "user_sid": { "type": "string", "pattern": "^S-1-[0-9-]+$" },
+        "integrity_level_rid": { "type": "integer", "minimum": 1 },
+        "elevation_type": { "$ref": "#/$defs/token" },
+        "is_appcontainer": { "const": false }
+      }
+    },
+    "process_isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_name", "profile_sid"],
+      "properties": {
+        "profile_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "profile_sid": {
+          "type": "string",
+          "pattern": "^S-1-15-2-[0-9-]+$"
+        }
+      }
+    },
+    "browser_egress_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enforcement_id",
+        "policy_hash",
+        "provider_id",
+        "provider_public_key",
+        "browser_session_ids",
+        "allowed_origins",
+        "functional_attestation_hash",
+        "edge_driver_executable_hash",
+        "self_test_report_hash",
+        "activation_challenge"
+      ],
+      "properties": {
+        "enforcement_id": { "$ref": "#/$defs/token" },
+        "policy_hash": { "$ref": "#/$defs/hash" },
+        "provider_id": { "$ref": "#/$defs/token" },
+        "provider_public_key": { "$ref": "#/$defs/public_key" },
+        "browser_session_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/token" }
+        },
+        "allowed_origins": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^https?://[^/?#@]+$" }
+        },
+        "functional_attestation_hash": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/hash" }
+          ]
+        },
+        "edge_driver_executable_hash": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/hash" }
+          ]
+        },
+        "self_test_report_hash": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/hash" }
+          ]
+        },
+        "activation_challenge": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/token" }
+          ]
+        }
+      }
+    },
+    "descriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "adapter_id",
+        "adapter_version",
+        "platform",
+        "capabilities",
+        "concrete_host_adapter",
+        "process_isolated",
+        "network_capable"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "adapter_id": { "$ref": "#/$defs/token" },
+        "adapter_version": { "$ref": "#/$defs/token" },
+        "platform": { "const": "windows" },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "list_windows",
+              "write_file",
+              "launch_process",
+              "terminate_process",
+              "browser_navigate",
+              "browser_interact",
+              "ui_interact"
+            ]
+          }
+        },
+        "concrete_host_adapter": { "const": true },
+        "process_isolated": { "const": true },
+        "network_capable": { "type": "boolean" }
+      }
+    }
+  }
+}

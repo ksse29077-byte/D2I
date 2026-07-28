@@ -1,0 +1,8 @@
+{
+  "artifact_count": 18,
+  "build_id": "b71a963f776d62de2a65a4c781a419af1f9c32a6ffefe761309784b792df45867",
+  "domain_id": "equipment-maintenance-demo",
+  "package_content_hash": "sha256:de05f85a395f1242e9be6834efd54621764322c045a324855ba9779a5879201f",
+  "payload_hash": "sha256:d0efa225197fb7f1de7ba7502220b488bbc9e20fa073a595225729381c516aa6",
+  "source_inventory_hash": "sha256:9a4e2d98244823211ede43b0f9cf2b0a671322e09e4acdf43030b6f03c119ae4"
+}

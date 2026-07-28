@@ -1,0 +1,34 @@
+include "common.fbs";
+
+namespace D2I.Package;
+
+enum Criticality:ubyte {
+  Low,
+  Medium,
+  High,
+  Critical
+}
+
+table Skill {
+  id:string (required);
+  version:string (required);
+  input_schema:string (required);
+  output_schema:string (required);
+  preconditions:[string] (required);
+  postconditions:[string] (required);
+  criticality:Criticality;
+  fallback:string;
+  evidence_required:bool;
+  evaluation_dataset:string (required);
+  evaluation_thresholds:string (required);
+  candidate_executors:[string] (required);
+  provenance_id:string (required);
+}
+
+table SkillBundle {
+  schema_version:uint;
+  skills:[Skill] (required);
+}
+
+root_type SkillBundle;
+file_identifier "D2SK";

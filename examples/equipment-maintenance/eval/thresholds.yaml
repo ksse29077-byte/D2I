@@ -1,0 +1,4 @@
+task_success_rate: 0.95
+critical_error_rate: 0.001
+field_accuracy: 0.95
+deterministic_replay_rate: 1.0

@@ -1,0 +1,13 @@
+required_abi: "d2i-rust-executor-v1"
+weights:
+  latency: 1.0
+  memory: 1.0
+  package_size: 0.5
+  cold_start: 0.25
+  copies: 0.25
+forced_bindings: {}
+fallbacks:
+  term-normalizer: "human_review"
+  case-retriever: "human_review"
+  procedure-decider: "human_review"
+small_first_cascade: false

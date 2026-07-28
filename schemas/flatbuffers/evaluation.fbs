@@ -1,0 +1,35 @@
+include "common.fbs";
+
+namespace D2I.Package;
+
+table EvaluationCase {
+  id:string (required);
+  skill_id:string (required);
+  request_json:string (required);
+  expected_json:string (required);
+  provenance_id:string (required);
+}
+
+table MetricSpec {
+  id:string (required);
+  threshold:double;
+  higher_is_better:bool;
+  provenance_id:string (required);
+}
+
+table CriticalErrorCondition {
+  id:string (required);
+  expression:string (required);
+  maximum_rate:double;
+  provenance_id:string (required);
+}
+
+table EvaluationBundle {
+  schema_version:uint;
+  cases:[EvaluationCase] (required);
+  metrics:[MetricSpec] (required);
+  critical_errors:[CriticalErrorCondition] (required);
+}
+
+root_type EvaluationBundle;
+file_identifier "D2EV";

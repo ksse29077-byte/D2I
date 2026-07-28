@@ -1,0 +1,55 @@
+d2i_version: "0.1"
+
+domain:
+  id: "equipment-maintenance-demo"
+  version: "0.1.0"
+  name: "Equipment Maintenance Demo"
+  languages: ["en"]
+
+target:
+  os: "any"
+  arch: "any"
+  network_policy: "deny"
+  max_memory_mb: 2048
+  preferred_device: "cpu"
+
+objectives:
+  min_task_success_rate: 0.95
+  max_critical_error_rate: 0.001
+  target_p95_latency_ms: 20
+  deterministic: true
+
+sources:
+  - path: "data/documents"
+    kind: "knowledge"
+    trust: "approved"
+  - path: "data/tables/cases.csv"
+    kind: "historical_cases"
+    trust: "verified"
+  - path: "data/tables/terms.csv"
+    kind: "terminology"
+    trust: "approved"
+  - path: "procedures"
+    kind: "procedure"
+    trust: "approved"
+  - path: "rules"
+    kind: "rule"
+    trust: "approved"
+
+skills:
+  - id: "diagnose_fault"
+    version: "1"
+    input_schema: "schemas/request.schema.json"
+    output_schema: "schemas/result.schema.json"
+    criticality: "high"
+    fallback: "human_review"
+    evidence_required: true
+
+evaluation:
+  dataset: "eval/gold.jsonl"
+  thresholds: "eval/thresholds.yaml"
+
+package:
+  signing: "required"
+  include_source_data: false
+  include_eval_data: true

@@ -1,0 +1,9 @@
+case_id,equipment_type,symptom,error_code,fault_code,recommended_step
+case-001,pump,vibration,E101,bearing-wear,inspect-bearing
+case-002,pump,low pressure,E204,intake-blockage,inspect-intake
+case-003,motor,overheating,E301,cooling-failure,inspect-cooling
+case-004,compressor,noise,E410,loose-coupling,inspect-coupling
+case-005,conveyor,belt slip,E502,tension-loss,adjust-tension
+case-006,fan,rattling,E601,blade-damage,inspect-blades
+case-007,valve,leakage,E702,seal-failure,inspect-seal
+case-008,generator,voltage fluctuation,E803,regulator-fault,inspect-regulator

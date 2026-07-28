@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/learning/episode.schema.json",
+  "title": "D2I Learning Episode v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "episode_id",
+    "recorded_at_unix_seconds",
+    "build_id",
+    "package_content_hash",
+    "situation",
+    "selected_route",
+    "action",
+    "output",
+    "outcome",
+    "correction",
+    "policy",
+    "provenance",
+    "trust"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "episode_id": { "$ref": "#/$defs/token" },
+    "recorded_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "build_id": { "$ref": "#/$defs/token" },
+    "package_content_hash": { "$ref": "#/$defs/sha256" },
+    "situation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "request", "context_labels", "edge_case"],
+      "properties": {
+        "category": { "$ref": "#/$defs/text" },
+        "request": {},
+        "context_labels": {
+          "type": "object",
+          "maxProperties": 256,
+          "additionalProperties": { "$ref": "#/$defs/text" }
+        },
+        "edge_case": { "type": "boolean" }
+      }
+    },
+    "selected_route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill_id", "node_ids", "module_ids"],
+      "properties": {
+        "skill_id": { "$ref": "#/$defs/token" },
+        "node_ids": { "$ref": "#/$defs/token_list" },
+        "module_ids": { "$ref": "#/$defs/token_list" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "summary", "side_effect_requested"],
+      "properties": {
+        "kind": { "$ref": "#/$defs/text" },
+        "summary": { "$ref": "#/$defs/text" },
+        "side_effect_requested": { "type": "boolean" }
+      }
+    },
+    "output": {},
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reward_milli", "critical_error", "labels"],
+      "properties": {
+        "status": {
+          "enum": ["success", "corrected", "failed", "unknown"]
+        },
+        "reward_milli": {
+          "type": "integer",
+          "minimum": -1000,
+          "maximum": 1000
+        },
+        "critical_error": { "type": "boolean" },
+        "labels": {
+          "type": "object",
+          "maxProperties": 256,
+          "additionalProperties": { "$ref": "#/$defs/text" }
+        }
+      }
+    },
+    "correction": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["corrected_output", "reason", "reviewer_id"],
+          "properties": {
+            "corrected_output": {},
+            "reason": { "$ref": "#/$defs/text" },
+            "reviewer_id": { "$ref": "#/$defs/token" }
+          }
+        }
+      ]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "policy_ids", "human_approved"],
+      "properties": {
+        "result": { "$ref": "#/$defs/text" },
+        "policy_ids": { "$ref": "#/$defs/token_list" },
+        "human_approved": { "type": "boolean" }
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "span", "content_hash"],
+        "properties": {
+          "source": { "$ref": "#/$defs/text" },
+          "span": { "$ref": "#/$defs/text" },
+          "content_hash": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    "trust": {
+      "enum": ["trusted", "reviewed", "untrusted"]
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[A-Fa-f0-9]{64}$"
+    },
+    "token_list": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/token" }
+    }
+  }
+}

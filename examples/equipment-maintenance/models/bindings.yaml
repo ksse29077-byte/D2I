@@ -1,0 +1,91 @@
+bindings:
+  - id: "term-normalizer"
+    version: "1.0.0"
+    kind: "lookup"
+    abi: "d2i-rust-executor-v1"
+    capabilities: ["term-normalizer"]
+    input_schemas: ["schemas/request.schema.json"]
+    output_schemas: ["schemas/result.schema.json"]
+    targets: [{ os: "any", arch: "any" }]
+    resource_profile:
+      resident_memory_bytes: 262144
+      cold_start_us: 20
+      package_size_bytes: 65536
+      deterministic: true
+    security: { network: false, side_effects: false }
+    license: { id: "Apache-2.0" }
+    artifact:
+      path: "builtin://term-normalizer"
+      sha256: "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  - id: "case-retriever-compact"
+    version: "1.0.0"
+    kind: "search"
+    abi: "d2i-rust-executor-v1"
+    capabilities: ["case-retriever"]
+    input_schemas: ["schemas/request.schema.json"]
+    output_schemas: ["schemas/result.schema.json"]
+    targets: [{ os: "any", arch: "any" }]
+    resource_profile:
+      resident_memory_bytes: 1048576
+      cold_start_us: 100
+      package_size_bytes: 524288
+      deterministic: true
+    security: { network: false, side_effects: false }
+    license: { id: "Apache-2.0" }
+    artifact:
+      path: "builtin://case-retriever-compact"
+      sha256: "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  - id: "case-retriever-fast"
+    version: "1.0.0"
+    kind: "search"
+    abi: "d2i-rust-executor-v1"
+    capabilities: ["case-retriever"]
+    input_schemas: ["schemas/request.schema.json"]
+    output_schemas: ["schemas/result.schema.json"]
+    targets: [{ os: "any", arch: "any" }]
+    resource_profile:
+      resident_memory_bytes: 8388608
+      cold_start_us: 40
+      package_size_bytes: 2097152
+      deterministic: true
+    security: { network: false, side_effects: false }
+    license: { id: "Apache-2.0" }
+    artifact:
+      path: "builtin://case-retriever-fast"
+      sha256: "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  - id: "case-retriever-low-quality"
+    version: "1.0.0"
+    kind: "search"
+    abi: "d2i-rust-executor-v1"
+    capabilities: ["case-retriever"]
+    input_schemas: ["schemas/request.schema.json"]
+    output_schemas: ["schemas/result.schema.json"]
+    targets: [{ os: "any", arch: "any" }]
+    resource_profile:
+      resident_memory_bytes: 524288
+      cold_start_us: 30
+      package_size_bytes: 262144
+      deterministic: true
+    security: { network: false, side_effects: false }
+    license: { id: "Apache-2.0" }
+    artifact:
+      path: "builtin://case-retriever-low-quality"
+      sha256: "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  - id: "procedure-decider"
+    version: "1.0.0"
+    kind: "rule"
+    abi: "d2i-rust-executor-v1"
+    capabilities: ["procedure-decider"]
+    input_schemas: ["schemas/request.schema.json"]
+    output_schemas: ["schemas/result.schema.json"]
+    targets: [{ os: "any", arch: "any" }]
+    resource_profile:
+      resident_memory_bytes: 131072
+      cold_start_us: 10
+      package_size_bytes: 32768
+      deterministic: true
+    security: { network: false, side_effects: false }
+    license: { id: "Apache-2.0" }
+    artifact:
+      path: "builtin://procedure-decider"
+      sha256: "sha256:5555555555555555555555555555555555555555555555555555555555555555"

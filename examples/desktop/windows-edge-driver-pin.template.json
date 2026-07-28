@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "browser_name": "MicrosoftEdge",
+  "browser_executable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "browser_version": "150.0.4078.99",
+  "browser_executable_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "driver_executable": "C:\\D2I\\msedgedriver.exe",
+  "driver_version": "150.0.4078.99",
+  "driver_executable_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "compatibility_version": "150.0.4078"
+}

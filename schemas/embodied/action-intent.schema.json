@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/embodied/action-intent.schema.json",
+  "title": "D2I Embodied Action Intent v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "intent_id",
+    "robot_id",
+    "generated_at_unix_nanos",
+    "expires_at_unix_nanos",
+    "deadline_class",
+    "action_kind",
+    "parameters",
+    "constraints",
+    "source_build_id",
+    "source_package_content_hash",
+    "evidence_hashes"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "intent_id": { "$ref": "#/$defs/token" },
+    "robot_id": { "$ref": "#/$defs/token" },
+    "generated_at_unix_nanos": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_nanos": { "type": "integer", "minimum": 2 },
+    "deadline_class": {
+      "enum": ["control", "interactive", "mission"]
+    },
+    "action_kind": {
+      "enum": [
+        "navigate",
+        "inspect",
+        "manipulate",
+        "dock",
+        "hold",
+        "stop_request",
+        "custom"
+      ]
+    },
+    "parameters": {},
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["constraint_id", "description", "hard"],
+        "properties": {
+          "constraint_id": { "$ref": "#/$defs/token" },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "hard": { "type": "boolean" }
+        }
+      }
+    },
+    "source_build_id": { "$ref": "#/$defs/token" },
+    "source_package_content_hash": { "$ref": "#/$defs/sha256" },
+    "evidence_hashes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/sha256" }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[A-Fa-f0-9]{64}$"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+id: "broken-rules"
+rules:
+  - id: "route-nowhere"
+    then:
+      target: "missing-target"

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/embodied/sensor-event.schema.json",
+  "title": "D2I Embodied Sensor Event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "robot_id",
+    "sequence",
+    "observed_at_unix_nanos",
+    "frame_id",
+    "sensor_kind",
+    "deadline_class",
+    "payload",
+    "payload_hash",
+    "quality_milli",
+    "labels"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "event_id": { "$ref": "#/$defs/token" },
+    "robot_id": { "$ref": "#/$defs/token" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "observed_at_unix_nanos": { "type": "integer", "minimum": 1 },
+    "frame_id": { "$ref": "#/$defs/token" },
+    "sensor_kind": {
+      "enum": [
+        "camera",
+        "lidar",
+        "imu",
+        "joint_state",
+        "force_torque",
+        "proximity",
+        "battery",
+        "custom"
+      ]
+    },
+    "deadline_class": {
+      "enum": ["safety_loop", "control", "interactive", "mission"]
+    },
+    "payload": {},
+    "payload_hash": { "$ref": "#/$defs/sha256" },
+    "quality_milli": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "labels": {
+      "type": "object",
+      "maxProperties": 256,
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[A-Fa-f0-9]{64}$"
+    }
+  }
+}

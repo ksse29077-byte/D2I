@@ -1,0 +1,45 @@
+d2i_version: "0.1"
+domain:
+  id: "bad-references"
+  version: "0.1.0"
+  name: "Bad References"
+  languages: ["en"]
+target:
+  os: "linux"
+  arch: "x86_64"
+  network_policy: "deny"
+  max_memory_mb: 256
+  preferred_device: "cpu"
+objectives:
+  min_task_success_rate: 0.9
+  max_critical_error_rate: 0.01
+  target_p95_latency_ms: 50
+  deterministic: true
+sources:
+  - path: "procedures"
+    kind: "procedure"
+    trust: "approved"
+  - path: "rules"
+    kind: "rule"
+    trust: "approved"
+skills:
+  - id: "duplicate"
+    version: "1"
+    input_schema: "schemas/request.schema.json"
+    output_schema: "schemas/result.schema.json"
+    criticality: "high"
+    fallback: "missing-fallback"
+    evidence_required: true
+  - id: "duplicate"
+    version: "1"
+    input_schema: "schemas/request.schema.json"
+    output_schema: "schemas/result.schema.json"
+    criticality: "low"
+    evidence_required: false
+evaluation:
+  dataset: "eval/gold.jsonl"
+  thresholds: "eval/thresholds.yaml"
+package:
+  signing: "required"
+  include_source_data: false
+  include_eval_data: false

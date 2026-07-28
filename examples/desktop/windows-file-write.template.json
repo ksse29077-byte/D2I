@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "adapter_kind": "file_write",
+  "worker_executable": "C:\\Program Files\\D2I\\d2i-desktop.exe",
+  "worker_executable_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "request_timeout_ms": 10000,
+  "active_process_limit": 1,
+  "per_process_memory_bytes": 268435456,
+  "write_roots": [
+    "C:\\D2I-Approved"
+  ],
+  "webdriver_endpoint": null,
+  "browser_session_ids": [],
+  "browser_allowed_origins": [],
+  "browser_egress_policy": null,
+  "ui_allowed_executable_hashes": [],
+  "process_isolation": null
+}

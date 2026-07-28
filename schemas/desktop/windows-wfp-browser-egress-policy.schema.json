@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-wfp-browser-egress-policy.schema.json",
+  "title": "D2I Windows WFP Browser Egress Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "enforcement_id",
+    "provider_id",
+    "browser_executable",
+    "browser_executable_hash",
+    "verifier_profile_name",
+    "verifier_profile_sid",
+    "policy_owner_sid"
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "enforcement_id": { "$ref": "#/$defs/token" },
+    "provider_id": { "const": "d2i.windows.wfp.loopback.v1" },
+    "browser_executable": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 4096
+    },
+    "browser_executable_hash": { "$ref": "#/$defs/hash" },
+    "verifier_profile_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "verifier_profile_sid": {
+      "type": "string",
+      "pattern": "^S-1-15-2-[0-9-]+$"
+    },
+    "policy_owner_sid": {
+      "type": "string",
+      "pattern": "^S-1-[0-9-]+$"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    }
+  }
+}

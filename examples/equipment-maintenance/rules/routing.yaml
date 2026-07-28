@@ -1,0 +1,9 @@
+id: "routing"
+version: "1"
+rules:
+  - id: "high-criticality-human-review"
+    when:
+      criticality: "high"
+      confidence_below: 0.80
+    then:
+      fallback: "human_review"

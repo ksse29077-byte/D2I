@@ -1,0 +1,21 @@
+[package]
+name = "d2i-kernel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+default = []
+mojo-backend = ["dep:d2i-ffi", "d2i-ffi/score-kernel"]
+
+[dependencies]
+d2i-ffi = { path = "../d2i-ffi", optional = true }
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-kernel-bench"
+path = "src/bin/d2i-kernel-bench.rs"

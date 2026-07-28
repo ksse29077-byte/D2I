@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "enforcement_id": "production-edge-loopback",
+  "policy_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "provider_id": "d2i.windows.wfp.loopback.v1",
+  "observed_at_unix_seconds": 1000,
+  "expires_at_unix_seconds": 1600,
+  "browser_session_ids": [
+    "reviewed-session"
+  ],
+  "allowed_origins": [
+    "http://127.0.0.1:8080"
+  ],
+  "deny_by_default": true
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-signed-certification.schema.json",
+  "title": "D2I Signed Windows Certification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "certification_id",
+    "integration_id",
+    "binding_id",
+    "manifest_hash",
+    "evidence_hash",
+    "configuration_hash",
+    "adapter_descriptor_hash",
+    "issued_at_unix_seconds",
+    "expires_at_unix_seconds",
+    "certifier_id",
+    "certifier_public_key",
+    "signature_hex"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "certification_id": { "$ref": "#/$defs/token" },
+    "integration_id": { "$ref": "#/$defs/token" },
+    "binding_id": { "$ref": "#/$defs/token" },
+    "manifest_hash": { "$ref": "#/$defs/hash" },
+    "evidence_hash": { "$ref": "#/$defs/hash" },
+    "configuration_hash": { "$ref": "#/$defs/hash" },
+    "adapter_descriptor_hash": { "$ref": "#/$defs/hash" },
+    "issued_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_seconds": { "type": "integer", "minimum": 2 },
+    "certifier_id": { "$ref": "#/$defs/token" },
+    "certifier_public_key": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "signature_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{128}$"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    }
+  }
+}

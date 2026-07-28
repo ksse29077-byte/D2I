@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "integration_id": "warehouse-robot-template",
+  "owner": "replace-me",
+  "reviewed_at_unix_seconds": 0,
+  "package_signature_verifier": "replace-me",
+  "credential_provider": "replace-me",
+  "binding_attestor_id": "replace-me",
+  "binding_attestor_public_key": "0000000000000000000000000000000000000000000000000000000000000000",
+  "ros2": {
+    "distribution": "replace-me",
+    "version": "replace-me",
+    "client_library": "replace-me",
+    "client_library_version": "replace-me",
+    "rmw_implementation": "replace-me",
+    "domain_id": 0,
+    "node_name": "d2i_embodied",
+    "namespace": "/robot_1",
+    "network_policy": "local_only",
+    "allowed_peers": [],
+    "topic_map": {
+      "sensor_topics": {
+        "lidar": "/robot_1/lidar"
+      },
+      "action_intent_topic": "/robot_1/d2i/action_intent",
+      "safety_assessment_topic": "/robot_1/safety/assessment"
+    },
+    "topics": [
+      {
+        "contract_id": "lidar-input",
+        "topic": "/robot_1/lidar",
+        "direction": "subscribe",
+        "message_type": "replace-me",
+        "message_type_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "sensor_kind": "lidar",
+        "deadline_class": "control",
+        "bypasses_d2i": false,
+        "callback_group_id": "sensor-callbacks",
+        "adapter_qos": {
+          "history": "system_default",
+          "depth": 0,
+          "reliability": "system_default",
+          "durability": "system_default",
+          "deadline_nanos": 0,
+          "lifespan_nanos": 0,
+          "liveliness": "system_default",
+          "liveliness_lease_nanos": 0
+        },
+        "peer_qos": {
+          "history": "system_default",
+          "depth": 0,
+          "reliability": "system_default",
+          "durability": "system_default",
+          "deadline_nanos": 0,
+          "lifespan_nanos": 0,
+          "liveliness": "system_default",
+          "liveliness_lease_nanos": 0
+        }
+      },
+      {
+        "contract_id": "action-output",
+        "topic": "/robot_1/d2i/action_intent",
+        "direction": "publish",
+        "message_type": "replace-me",
+        "message_type_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "sensor_kind": null,
+        "deadline_class": "control",
+        "bypasses_d2i": false,
+        "callback_group_id": "output-callbacks",
+        "adapter_qos": {
+          "history": "system_default",
+          "depth": 0,
+          "reliability": "system_default",
+          "durability": "system_default",
+          "deadline_nanos": 0,
+          "lifespan_nanos": 0,
+          "liveliness": "system_default",
+          "liveliness_lease_nanos": 0
+        },
+        "peer_qos": {
+          "history": "system_default",
+          "depth": 0,
+          "reliability": "system_default",
+          "durability": "system_default",
+          "deadline_nanos": 0,
+          "lifespan_nanos": 0,
+          "liveliness": "system_default",
+          "liveliness_lease_nanos": 0
+        }
+      },
+      {
+        "contract_id": "safety-output",
+        "topic": "/robot_1/safety/assessment",
+        "direction": "publish",
+        "message_type": "replace-me",
+        "message_type_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "sensor_kind": null,
+        "deadline_class": "control",
+        "bypasses_d2i": false,
+        "callback_group_id": "output-callbacks",
+        "adapter_qos": {
+          "history": "system_default",
+          "depth": 0,
+          "reliability": "system_default",
+          "durability": "system_default",
+          "deadline_nanos": 0,
+          "lifespan_nanos": 0,
+          "liveliness": "system_default",
+          "liveliness_lease_nanos": 0
+        },
+        "peer_qos": {
+          "history": "system_default",
+          "depth": 0,
+          "reliability": "system_default",
+          "durability": "system_default",
+          "deadline_nanos": 0,
+          "lifespan_nanos": 0,
+          "liveliness": "system_default",
+          "liveliness_lease_nanos": 0
+        }
+      }
+    ],
+    "executor": {
+      "kind": "other",
+      "implementation": "replace-me",
+      "thread_count": 1,
+      "deterministic_ordering": false,
+      "bounded_callback_time": false,
+      "callback_groups": [
+        {
+          "callback_group_id": "sensor-callbacks",
+          "kind": "mutually_exclusive",
+          "dedicated_to_contract_ids": [
+            "lidar-input"
+          ],
+          "allows_blocking_calls": false
+        },
+        {
+          "callback_group_id": "output-callbacks",
+          "kind": "mutually_exclusive",
+          "dedicated_to_contract_ids": [
+            "action-output",
+            "safety-output"
+          ],
+          "allows_blocking_calls": false
+        }
+      ],
+      "shutdown_timeout_millis": 1000
+    }
+  },
+  "safety": {
+    "controller_id": "replace-me",
+    "protocol": "replace-me",
+    "protocol_version": "replace-me",
+    "intent_hash_algorithm": "sha256",
+    "permit_authentication": "replace-me",
+    "permit_replay_protection": false,
+    "fail_closed": false,
+    "emergency_stop_independent": false,
+    "maximum_assessment_latency_micros": 0,
+    "monotonic_clock": false
+  },
+  "hardware": {
+    "adapter_id": "replace-me",
+    "api_version": "replace-me",
+    "hardware_profile": {
+      "profile_id": "mobile-inspector-template",
+      "robot_id": "robot-1",
+      "robot_class": "mobile-inspector",
+      "sensor_kinds": [
+        "lidar"
+      ],
+      "action_kinds": [
+        "navigate"
+      ],
+      "safety_controller_required": true,
+      "maximum_command_bytes": 65536
+    },
+    "process_isolated": false,
+    "dispatch_idempotent": false,
+    "cancellation_supported": false,
+    "command_acknowledgement": false,
+    "health_telemetry": false,
+    "rollback_execution_supported": false
+  }
+}
