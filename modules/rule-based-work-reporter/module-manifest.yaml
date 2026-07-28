@@ -1,0 +1,116 @@
+schema_version: 1
+identity:
+  module_id: rule-based-work-reporter
+  display_name: Rule-Based Work Reporter
+  description: Deterministically converts verified Cognitive IR outcomes into a WorkReport.
+  version: 1.0.0
+  contract_version: 1
+  build_id: rule-based-work-reporter-v1
+  artifact_filename: artifacts/rule-based-work-reporter.ref
+  artifact_sha256: sha256:c819dae8da3ddf6c931af5086a40122d29817b5dacd3f94f778425eff2e39840
+  author: D2I Cognitive Module Platform
+  maintainer: D2I Cognitive Module Platform
+capabilities:
+  - capability_id: cognitive.work-report
+    capability_version: 1.0.0
+    category: work_reporter
+    supported_input_kinds:
+      - cognitive-work-report-input-v1
+    supported_output_kinds:
+      - cognitive-work-report-v1
+    supported_risk_classes:
+      - read_only
+      - reversible
+      - business_state_change
+      - high_criticality
+    deterministic: true
+    side_effect: false
+    network_requirement: denied
+    streaming: false
+    confidence_semantics: not_applicable
+    input_schemas:
+      - cognitive-work-report-input-v1
+    output_schemas:
+      - cognitive-work-report-v1
+    unsupported_case_policy: Return unsupported when neither verification nor recovery records exist.
+    fallback_capability: null
+    fallback_module: null
+schemas:
+  - schema_id: cognitive-work-report-input-v1
+    schema_version: 1
+    path: schemas/input.schema.json
+    sha256: sha256:857f8e43fb2ae462a2847c067f3e743a59b6548bedec2e7b6c2471ce7bec6298
+  - schema_id: cognitive-work-report-v1
+    schema_version: 1
+    path: schemas/output.schema.json
+    sha256: sha256:9111ae79d284bb8968f9ad6e19585d48b92450717751752b6670d0f655e78b7e
+execution:
+  mode: in_process_rust_reference
+  timeout_logical_ticks: 100
+  maximum_input_bytes: 1048576
+  maximum_output_bytes: 1048576
+  memory_limit_bytes: 8388608
+  logical_operation_budget: 4096
+  maximum_retries: 0
+  maximum_concurrent_invocations: 1
+  network_requirement: denied
+  filesystem_required: false
+  environment_variables_allowed: false
+  side_effect: false
+  reversible: true
+security:
+  accepted_trust_labels:
+    - fixture
+    - verified_operational_state
+    - approved_procedure
+    - untrusted_web_content
+    - untrusted_document_content
+  untrusted_content_handling: treat_as_data
+  secrets_required: false
+  raw_secret_input: false
+  privileged_operation: false
+  allowed_external_dependencies:
+    - d2i-desktop
+    - d2i-module-sdk
+  audit_requirement: invocation_and_result
+  fail_policy: closed
+  data_retention: none
+evaluation:
+  evaluation_set_id: work-reporter-conformance
+  evaluation_set_version: 1.0.0
+  metrics:
+    - deterministic_replay
+    - schema_validity
+    - untrusted_content_preservation
+  acceptance_thresholds:
+    deterministic_replay: 1.0
+    schema_validity: 1.0
+    untrusted_content_preservation: 1.0
+  critical_error_definition: Any schema-invalid report, secret output, or untrusted instruction elevation.
+  known_unsupported_cases:
+    - Inputs without verification or recovery records.
+  benchmark_reference: fixtures/valid/single-step.json
+  deterministic_replay_required: true
+provenance_and_license:
+  source_repository: D2I/modules/rule-based-work-reporter
+  source_license: Apache-2.0
+  artifact_license: Apache-2.0
+  datasets: []
+  dataset_licenses: {}
+  commercial_use: permitted-under-apache-2.0
+  attribution:
+    - D2I Cognitive Module Platform
+  generated_artifact: false
+  third_party_dependencies:
+    - name: serde
+      version: 1.0.217
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+    - name: serde_json
+      version: 1.0.138
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+  supply_chain_metadata: Cargo.lock and repository commit bind the Rust source.
+  model_card: model-card.md
+  data_card: data-card.md
+  threat_model: threat-model.md

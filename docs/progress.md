@@ -13,6 +13,8 @@ Date: 2026-07-28
   audit/activation storage, Windows worker boundaries, and concrete WFP
   loopback browser-egress contracts.
 - Cognitive IR v1 and model-free `CognitiveExecutor` baseline.
+- Cognitive Module Contract v1, Rust Module SDK, deterministic fixture runner,
+  Conformance Suite, starter template, and `RuleBasedWorkReporter`.
 
 ## Cognitive Core Status
 
@@ -41,6 +43,45 @@ fails closed for unsupported or incomplete contracts.
 - `docs/adr/0014-contract-governed-cognitive-task-runtime.md`
 - `docs/cognitive-ir-v1.md`
 - `schemas/cognitive/cognitive-ir-v1.schema.json`
+- `docs/adr/0015-versioned-cognitive-module-contract-and-conformance-platform.md`
+- `docs/modules/`
+- `schemas/modules/`
+
+## Cognitive Module Platform Status
+
+Implemented in `crates/d2i-module-sdk`:
+
+- versioned module identity, capability, invocation, result, and error contracts
+- strict JSON parsing with unknown/duplicate-field and nesting rejection
+- canonical JSON and stable SHA-256 hashing
+- Module Manifest v1 loading, path containment, schema compilation, and
+  artifact/schema hash verification
+- deny-by-default network, side-effect, privilege, secret, and retention policy
+- typed Rust `Module` SDK with schema conversion, stale lifecycle checks,
+  panic boundary, logical timeout, resource limits, result binding, and
+  untrusted-content guard
+- deterministic fixture runner and stable machine-readable conformance report
+
+Reference module assets:
+
+- `modules/example-module` copyable starter
+- `modules/rule-based-work-reporter` deterministic Cognitive IR to
+  `WorkReport` implementation
+- valid, invalid, unsupported, untrusted-content, deadline, capability, and
+  deterministic replay fixtures
+- model/data cards, threat models, license declarations, and PR checklist
+
+CLI:
+
+```text
+cargo run -p d2i-cli -- module validate modules/rule-based-work-reporter --json
+cargo run -p d2i-cli -- module conformance modules/rule-based-work-reporter --json
+```
+
+Both commands pass. The reference manifest hash is
+`sha256:d2c404a923beb9327bc2c5a4f7efec4b2a365144e68b41a3e6821158a389dcca`;
+the latest conformance report hash is
+`sha256:d1d0d4452fa648047caf1489b0bd6934d6cf394abe16be5a603337b9cf5ae366`.
 
 ## Test Coverage Added
 
@@ -62,6 +103,16 @@ fails closed for unsupported or incomplete contracts.
 - untrusted observation content not elevated into an action
 - deadline and audit fail-closed behavior
 - deterministic replay with identical `WorkReport`
+- module contract/schema round trips and stable canonical hashes
+- duplicate key, invalid version/enum/hash, path traversal, and raw secret
+  rejection
+- manifest/artifact tamper and stale manifest identity rejection
+- deny-by-default manifest values
+- typed invocation and result binding
+- panic, logical timeout, invalid output, secret leakage, and unsupported input
+  fail-closed behavior
+- stable conformance report and exit codes
+- starter and reference module deterministic replay
 
 ## Verification
 
@@ -84,9 +135,12 @@ cargo build --workspace --release
 - No production package format or Runtime ABI change.
 - No concrete WFP, Windows adapter, activation ledger, or protected audit
   storage changes in the Cognitive Core work.
+- No production module loader, package embedding, native ABI, Mojo loader, or
+  CognitiveExecutor production-flow connection.
 
 ## Next Task
 
-Write an RFC for connecting Cognitive IR v1 to real desktop policy,
-activation, and audit implementations through the new traits. Do not start
-that integration until the RFC is reviewed.
+Define the parallel module-development operating model: GitHub Issue template,
+per-module work-order generation format, and branch, PR, and review rules. Do
+not start production loader, Runtime ABI, package embedding, or concrete
+policy/activation/audit integration.

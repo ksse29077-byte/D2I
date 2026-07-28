@@ -1,0 +1,13 @@
+[package]
+name = "d2i-example-module"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
+serde.workspace = true
+
+[lints]
+workspace = true

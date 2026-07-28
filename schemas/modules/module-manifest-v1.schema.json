@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/module-manifest-v1.schema.json",
+  "title": "D2I Module Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity",
+    "capabilities",
+    "schemas",
+    "execution",
+    "security",
+    "evaluation",
+    "provenance_and_license"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "identity": { "$ref": "#/$defs/identity" },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1024,
+      "items": { "$ref": "#/$defs/capability" }
+    },
+    "schemas": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 1024,
+      "items": { "$ref": "#/$defs/schemaRef" }
+    },
+    "execution": { "$ref": "#/$defs/execution" },
+    "security": { "$ref": "#/$defs/security" },
+    "evaluation": { "$ref": "#/$defs/evaluation" },
+    "provenance_and_license": { "$ref": "#/$defs/license" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "not": { "pattern": "(^[/\\\\]|:|(^|[/\\\\])\\.\\.([/\\\\]|$))" }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "module_id",
+        "display_name",
+        "description",
+        "version",
+        "contract_version",
+        "build_id",
+        "artifact_filename",
+        "artifact_sha256",
+        "author",
+        "maintainer"
+      ],
+      "properties": {
+        "module_id": { "$ref": "#/$defs/id" },
+        "display_name": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "version": { "$ref": "#/$defs/version" },
+        "contract_version": { "const": 1 },
+        "build_id": { "$ref": "#/$defs/id" },
+        "artifact_filename": { "$ref": "#/$defs/path" },
+        "artifact_sha256": { "$ref": "#/$defs/hash" },
+        "manifest_sha256": { "$ref": "#/$defs/hash" },
+        "author": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "maintainer": { "type": "string", "minLength": 1, "maxLength": 16384 }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "capability_version",
+        "category",
+        "supported_input_kinds",
+        "supported_output_kinds",
+        "supported_risk_classes",
+        "deterministic",
+        "streaming",
+        "confidence_semantics",
+        "input_schemas",
+        "output_schemas",
+        "unsupported_case_policy",
+        "fallback_capability",
+        "fallback_module"
+      ],
+      "properties": {
+        "capability_id": { "$ref": "#/$defs/id" },
+        "capability_version": { "$ref": "#/$defs/version" },
+        "category": {
+          "type": "string",
+          "pattern": "^(goal_compiler|observation_reducer|element_grounder|action_candidate_provider|plan_ranker|verifier|recovery_critic|work_reporter|knowledge_retriever|domain_evaluator|generic_transformation|x-[A-Za-z0-9._-]+)$"
+        },
+        "supported_input_kinds": { "$ref": "#/$defs/idList" },
+        "supported_output_kinds": { "$ref": "#/$defs/idList" },
+        "supported_risk_classes": { "$ref": "#/$defs/idList" },
+        "deterministic": { "type": "boolean" },
+        "side_effect": { "const": false },
+        "network_requirement": { "const": "denied" },
+        "streaming": { "type": "boolean" },
+        "confidence_semantics": {
+          "enum": ["probability", "calibrated_score", "relative_ranking", "not_applicable"]
+        },
+        "input_schemas": { "$ref": "#/$defs/idList" },
+        "output_schemas": { "$ref": "#/$defs/idList" },
+        "unsupported_case_policy": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "fallback_capability": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "fallback_module": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        }
+      }
+    },
+    "idList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1024,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_id", "schema_version", "path", "sha256"],
+      "properties": {
+        "schema_id": { "$ref": "#/$defs/id" },
+        "schema_version": { "type": "integer", "minimum": 1 },
+        "path": { "$ref": "#/$defs/path" },
+        "sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "timeout_logical_ticks",
+        "maximum_input_bytes",
+        "maximum_output_bytes",
+        "memory_limit_bytes",
+        "logical_operation_budget",
+        "maximum_retries",
+        "maximum_concurrent_invocations"
+      ],
+      "properties": {
+        "mode": { "const": "in_process_rust_reference" },
+        "timeout_logical_ticks": { "type": "integer", "minimum": 1 },
+        "maximum_input_bytes": { "type": "integer", "minimum": 1 },
+        "maximum_output_bytes": { "type": "integer", "minimum": 1 },
+        "memory_limit_bytes": { "type": "integer", "minimum": 1 },
+        "logical_operation_budget": { "type": "integer", "minimum": 1 },
+        "maximum_retries": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "maximum_concurrent_invocations": { "type": "integer", "minimum": 1 },
+        "network_requirement": { "const": "denied" },
+        "filesystem_required": { "const": false },
+        "environment_variables_allowed": { "const": false },
+        "side_effect": { "const": false },
+        "reversible": { "type": "boolean" }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_trust_labels",
+        "allowed_external_dependencies",
+        "audit_requirement"
+      ],
+      "properties": {
+        "accepted_trust_labels": { "$ref": "#/$defs/idList" },
+        "untrusted_content_handling": { "enum": ["treat_as_data", "reject"] },
+        "secrets_required": { "const": false },
+        "raw_secret_input": { "const": false },
+        "privileged_operation": { "const": false },
+        "allowed_external_dependencies": {
+          "type": "array",
+          "maxItems": 1024,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "audit_requirement": { "enum": ["invocation_and_result", "result_only"] },
+        "fail_policy": { "const": "closed" },
+        "data_retention": { "const": "none" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluation_set_id",
+        "evaluation_set_version",
+        "metrics",
+        "acceptance_thresholds",
+        "critical_error_definition",
+        "known_unsupported_cases",
+        "benchmark_reference",
+        "deterministic_replay_required"
+      ],
+      "properties": {
+        "evaluation_set_id": { "$ref": "#/$defs/id" },
+        "evaluation_set_version": { "$ref": "#/$defs/version" },
+        "metrics": { "$ref": "#/$defs/idList" },
+        "acceptance_thresholds": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "critical_error_definition": { "type": "string", "minLength": 1 },
+        "known_unsupported_cases": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "benchmark_reference": { "type": "string", "minLength": 1 },
+        "deterministic_replay_required": { "type": "boolean" }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "license", "source"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_repository",
+        "source_license",
+        "artifact_license",
+        "datasets",
+        "dataset_licenses",
+        "commercial_use",
+        "attribution",
+        "generated_artifact",
+        "third_party_dependencies",
+        "supply_chain_metadata",
+        "model_card",
+        "data_card",
+        "threat_model"
+      ],
+      "properties": {
+        "source_repository": { "type": "string", "minLength": 1 },
+        "source_license": { "type": "string", "minLength": 1 },
+        "artifact_license": { "type": "string", "minLength": 1 },
+        "datasets": { "type": "array", "items": { "type": "string" } },
+        "dataset_licenses": { "type": "object", "additionalProperties": { "type": "string" } },
+        "commercial_use": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "array", "items": { "type": "string" } },
+        "generated_artifact": { "type": "boolean" },
+        "third_party_dependencies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/dependency" }
+        },
+        "supply_chain_metadata": { "type": "string", "minLength": 1 },
+        "model_card": { "$ref": "#/$defs/path" },
+        "data_card": { "$ref": "#/$defs/path" },
+        "threat_model": { "$ref": "#/$defs/path" }
+      }
+    }
+  }
+}

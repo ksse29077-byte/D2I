@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/cognitive-module-contract-v1.schema.json",
+  "title": "D2I Cognitive Module Contract v1",
+  "oneOf": [
+    { "$ref": "#/$defs/invocation" },
+    { "$ref": "#/$defs/result" },
+    { "$ref": "#/$defs/moduleError" }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "moduleIdentifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "module_id",
+        "module_version",
+        "contract_version",
+        "build_id",
+        "artifact_sha256",
+        "manifest_sha256"
+      ],
+      "properties": {
+        "module_id": { "$ref": "#/$defs/id" },
+        "module_version": { "$ref": "#/$defs/version" },
+        "contract_version": { "const": 1 },
+        "build_id": { "$ref": "#/$defs/id" },
+        "artifact_sha256": { "$ref": "#/$defs/hash" },
+        "manifest_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "resourceBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_input_bytes",
+        "max_output_bytes",
+        "memory_bytes",
+        "logical_operation_budget"
+      ],
+      "properties": {
+        "max_input_bytes": { "type": "integer", "minimum": 1 },
+        "max_output_bytes": { "type": "integer", "minimum": 1 },
+        "memory_bytes": { "type": "integer", "minimum": 1 },
+        "logical_operation_budget": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "reason", "replacement_sha256"],
+      "properties": {
+        "field": { "$ref": "#/$defs/id" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "replacement_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_sha256", "producer"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/id" },
+        "source_sha256": { "$ref": "#/$defs/hash" },
+        "producer": { "$ref": "#/$defs/id" }
+      }
+    },
+    "replayContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replay_id", "seed", "fixture_hash"],
+      "properties": {
+        "replay_id": { "$ref": "#/$defs/id" },
+        "seed": { "type": "integer", "minimum": 0 },
+        "fixture_hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "invocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "invocation_id",
+        "module",
+        "requested_capability",
+        "input_schema_id",
+        "input_schema_version",
+        "payload",
+        "goal_id",
+        "source_observation_hash",
+        "plan_generation_id",
+        "logical_sequence",
+        "deadline_logical_tick",
+        "resource_budget",
+        "trust_labels",
+        "redactions",
+        "provenance",
+        "replay",
+        "correlation_id",
+        "trace_id"
+      ],
+      "properties": {
+        "contract_version": { "const": 1 },
+        "invocation_id": { "$ref": "#/$defs/id" },
+        "module": { "$ref": "#/$defs/moduleIdentifier" },
+        "requested_capability": { "$ref": "#/$defs/id" },
+        "input_schema_id": { "$ref": "#/$defs/id" },
+        "input_schema_version": { "type": "integer", "minimum": 1 },
+        "payload": {},
+        "goal_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "plan_generation_id": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "logical_sequence": { "type": "integer", "minimum": 0 },
+        "deadline_logical_tick": { "type": "integer", "minimum": 1 },
+        "resource_budget": { "$ref": "#/$defs/resourceBudget" },
+        "trust_labels": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "redactions": {
+          "type": "array",
+          "maxItems": 1024,
+          "items": { "$ref": "#/$defs/redaction" }
+        },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "replay": { "$ref": "#/$defs/replayContext" },
+        "correlation_id": { "$ref": "#/$defs/id" },
+        "trace_id": { "$ref": "#/$defs/id" }
+      }
+    },
+    "moduleError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "retryable",
+        "user_action_required",
+        "message",
+        "redacted_detail",
+        "fallback_available"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "invalid_input",
+            "unsupported_input",
+            "unsupported_capability",
+            "schema_mismatch",
+            "contract_version_mismatch",
+            "timeout",
+            "resource_exhausted",
+            "policy_prohibited",
+            "network_prohibited",
+            "untrusted_input_violation",
+            "deterministic_replay_mismatch",
+            "internal_failure",
+            "panic_or_abnormal_termination",
+            "artifact_mismatch",
+            "dependency_unavailable"
+          ]
+        },
+        "retryable": { "type": "boolean" },
+        "user_action_required": { "type": "boolean" },
+        "message": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "redacted_detail": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 16384 },
+            { "type": "null" }
+          ]
+        },
+        "fallback_available": { "type": "boolean" }
+      }
+    },
+    "resourceUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_bytes",
+        "output_bytes",
+        "peak_memory_bytes",
+        "logical_operations"
+      ],
+      "properties": {
+        "input_bytes": { "type": "integer", "minimum": 0 },
+        "output_bytes": { "type": "integer", "minimum": 0 },
+        "peak_memory_bytes": { "type": "integer", "minimum": 0 },
+        "logical_operations": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "logical_tick"],
+      "properties": {
+        "phase": { "$ref": "#/$defs/id" },
+        "logical_tick": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "replayResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replay_id", "seed", "invocation_hash"],
+      "properties": {
+        "replay_id": { "$ref": "#/$defs/id" },
+        "seed": { "type": "integer", "minimum": 0 },
+        "invocation_hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "invocation_id",
+        "module",
+        "status",
+        "output_schema_id",
+        "output_schema_version",
+        "payload",
+        "confidence",
+        "evidence",
+        "warnings",
+        "unsupported_reason",
+        "error",
+        "resource_usage",
+        "timings",
+        "replay",
+        "output_hash",
+        "provenance"
+      ],
+      "properties": {
+        "contract_version": { "const": 1 },
+        "invocation_id": { "$ref": "#/$defs/id" },
+        "module": { "$ref": "#/$defs/moduleIdentifier" },
+        "status": { "enum": ["succeeded", "unsupported", "failed"] },
+        "output_schema_id": { "$ref": "#/$defs/id" },
+        "output_schema_version": { "type": "integer", "minimum": 1 },
+        "payload": {},
+        "confidence": {
+          "oneOf": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "null" }
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "maxItems": 1024,
+          "items": { "type": "string", "minLength": 1, "maxLength": 16384 }
+        },
+        "warnings": {
+          "type": "array",
+          "maxItems": 1024,
+          "items": { "type": "string", "minLength": 1, "maxLength": 16384 }
+        },
+        "unsupported_reason": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 16384 },
+            { "type": "null" }
+          ]
+        },
+        "error": {
+          "oneOf": [{ "$ref": "#/$defs/moduleError" }, { "type": "null" }]
+        },
+        "resource_usage": { "$ref": "#/$defs/resourceUsage" },
+        "timings": {
+          "type": "array",
+          "maxItems": 1024,
+          "items": { "$ref": "#/$defs/timing" }
+        },
+        "replay": { "$ref": "#/$defs/replayResult" },
+        "output_hash": { "$ref": "#/$defs/hash" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/modules/example-module/input-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text", "mode"],
+  "properties": {
+    "text": { "type": "string", "minLength": 1, "maxLength": 16384 },
+    "mode": { "type": "string", "minLength": 1, "maxLength": 128 }
+  }
+}

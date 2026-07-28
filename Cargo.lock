@@ -227,6 +227,8 @@ dependencies = [
  "d2i-compiler",
  "d2i-core",
  "d2i-eval",
+ "d2i-module-sdk",
+ "d2i-rule-based-work-reporter",
  "d2i-runtime-adapter",
  "d2i-runtime-ref",
  "serde_json",
@@ -296,6 +298,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "d2i-example-module"
+version = "0.9.0"
+dependencies = [
+ "d2i-module-sdk",
+ "serde",
+]
+
+[[package]]
 name = "d2i-ffi"
 version = "0.9.0"
 dependencies = [
@@ -325,6 +335,29 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+]
+
+[[package]]
+name = "d2i-module-sdk"
+version = "0.9.0"
+dependencies = [
+ "d2i-core",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-rule-based-work-reporter"
+version = "0.9.0"
+dependencies = [
+ "d2i-desktop",
+ "d2i-module-sdk",
+ "jsonschema",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

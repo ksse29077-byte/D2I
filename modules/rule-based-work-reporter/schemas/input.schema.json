@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/modules/rule-based-work-reporter/input-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "goal_spec",
+    "verification_results",
+    "recovery_decisions",
+    "execution_events"
+  ],
+  "properties": {
+    "goal_spec": { "type": "object" },
+    "verification_results": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": { "type": "object" }
+    },
+    "recovery_decisions": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": { "type": "object" }
+    },
+    "execution_events": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "summary",
+          "completed",
+          "logical_tick",
+          "trust_labels",
+          "module_ids"
+        ],
+        "properties": {
+          "event_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "summary": { "type": "string", "minLength": 1, "maxLength": 16384 },
+          "completed": { "type": "boolean" },
+          "logical_tick": { "type": "integer", "minimum": 0 },
+          "trust_labels": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "authenticated_user_instruction",
+                "approved_policy",
+                "approved_procedure",
+                "verified_operational_state",
+                "observed_ui_state",
+                "untrusted_web_content",
+                "untrusted_document_content",
+                "fixture"
+              ]
+            }
+          },
+          "module_ids": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+          }
+        }
+      }
+    }
+  }
+}

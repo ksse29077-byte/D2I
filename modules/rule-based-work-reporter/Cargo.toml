@@ -1,0 +1,18 @@
+[package]
+name = "d2i-rule-based-work-reporter"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+d2i-desktop = { path = "../../products/d2i-desktop" }
+d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true

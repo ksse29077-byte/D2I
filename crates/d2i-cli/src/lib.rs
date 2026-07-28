@@ -5,6 +5,8 @@ use d2i_compiler::{
 };
 use d2i_core::{validate_source_pack, write_source_lock, Diagnostic, Severity, ValidationReport};
 use d2i_eval::{benchmark_runtime, BenchmarkMetadata, RuntimeBenchmarkReport};
+use d2i_module_sdk::{load_module_manifest, run_fixture_suite, ConformanceStatus};
+use d2i_rule_based_work_reporter::{RuleBasedWorkReporter, MODULE_ID as WORK_REPORTER_MODULE_ID};
 use d2i_runtime_adapter::{
     check_package_compatibility, phase5_abi_mapping, run_conformance, AdapterContract,
     ConformanceOptions, MockRuntimeAdapter,
@@ -28,6 +30,8 @@ pub const EXIT_IO: i32 = 4;
 pub const EXIT_PACKAGE: i32 = 5;
 /// Evaluation or benchmark threshold regression.
 pub const EXIT_EVALUATION: i32 = 6;
+/// Cognitive module validation or conformance failure.
+pub const EXIT_MODULE: i32 = 7;
 
 const HELP: &str = "\
 d2ic - Domain-to-Intelligence Compiler
@@ -42,6 +46,8 @@ Usage:
   d2ic adapter-check [--json] PACKAGE_DIR
   d2ic adapter-conformance [--json] [--iterations N] PACKAGE_DIR
   d2ic adapter-abi [--json]
+  d2ic module validate [--json] MODULE_DIR
+  d2ic module conformance [--json] MODULE_DIR
   d2ic verify [--json] PACKAGE_DIR
   d2ic diff [--json] OLD_PACKAGE NEW_PACKAGE
   d2ic version
@@ -59,6 +65,10 @@ Commands:
   adapter-conformance
               Compare reference and mock adapter vectors, errors, and timings.
   adapter-abi Print the safe-Rust mapping and unresolved proprietary contracts.
+  module validate
+              Validate Module Manifest v1, schemas, paths, and artifact hashes.
+  module conformance
+              Run deterministic fixtures for a built-in Rust reference module.
   verify      Verify package paths, versions, FlatBuffers, and hashes.
   diff        Compare two verified packages by artifact hash.
   version     Print the compiler version.
@@ -76,6 +86,7 @@ Exit codes:
   4  output, lock, or package I/O failed
   5  package integrity, format, or version failure
   6  evaluation or benchmark threshold regression
+  7  cognitive module validation or conformance failure
 ";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -123,6 +134,19 @@ struct BenchmarkOptions {
     package: PathBuf,
     json: bool,
     iterations: u32,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ModuleCommand {
+    Validate,
+    Conformance,
+}
+
+#[derive(Debug)]
+struct ModuleOptions {
+    command: ModuleCommand,
+    root: PathBuf,
+    json: bool,
 }
 
 /// Runs the CLI against the process standard streams.
@@ -198,6 +222,10 @@ where
             Ok(json) => execute_adapter_abi(json, out),
             Err(message) => usage_error(err, &message),
         },
+        "module" => match parse_module_options(&args[2..]) {
+            Ok(options) => execute_module(options, out, err),
+            Err(message) => usage_error(err, &message),
+        },
         "verify" => match parse_verify_options(&args[2..]) {
             Ok(options) => execute_verify(options, out, err),
             Err(message) => usage_error(err, &message),
@@ -208,6 +236,33 @@ where
         },
         other => usage_error(err, &format!("unknown command '{other}'")),
     }
+}
+
+fn parse_module_options(args: &[OsString]) -> Result<ModuleOptions, String> {
+    let values = unicode_args(args)?;
+    let Some(command) = values.first() else {
+        return Err("module requires 'validate' or 'conformance'".to_owned());
+    };
+    let command = match command.as_str() {
+        "validate" => ModuleCommand::Validate,
+        "conformance" => ModuleCommand::Conformance,
+        other => return Err(format!("unknown module command '{other}'")),
+    };
+    let (json, paths) = split_json_and_paths(values.into_iter().skip(1).collect())?;
+    if paths.len() != 1 {
+        return Err(format!(
+            "module {} requires exactly one MODULE_DIR",
+            match command {
+                ModuleCommand::Validate => "validate",
+                ModuleCommand::Conformance => "conformance",
+            }
+        ));
+    }
+    Ok(ModuleOptions {
+        command,
+        root: PathBuf::from(&paths[0]),
+        json,
+    })
 }
 
 fn parse_source_options(
@@ -906,6 +961,120 @@ fn execute_adapter_abi<O: Write>(json_output: bool, out: &mut O) -> i32 {
         EXIT_SUCCESS
     } else {
         EXIT_IO
+    }
+}
+
+fn execute_module<O: Write, E: Write>(options: ModuleOptions, out: &mut O, err: &mut E) -> i32 {
+    let loaded = match load_module_manifest(&options.root) {
+        Ok(loaded) => loaded,
+        Err(error) => {
+            return write_command_error(
+                options.json,
+                out,
+                err,
+                "D2IM9000",
+                &error.to_string(),
+                EXIT_MODULE,
+            )
+        }
+    };
+    match options.command {
+        ModuleCommand::Validate => {
+            let value = json!({
+                "command": "module validate",
+                "status": "pass",
+                "module": loaded.identifier,
+                "manifest_sha256": loaded.manifest_sha256,
+                "manifest_path": loaded.manifest_path,
+                "execution_mode": loaded.manifest.execution.mode,
+                "network_requirement": loaded.manifest.execution.network_requirement,
+                "side_effect": loaded.manifest.execution.side_effect
+            });
+            let written = if options.json {
+                write_json(out, &value)
+            } else {
+                writeln!(
+                    out,
+                    "module validation: pass\nmodule: {} {}\nmanifest: {}\nnetwork: denied\nside effect: false",
+                    value["module"]["module_id"].as_str().unwrap_or("<unknown>"),
+                    value["module"]["module_version"]
+                        .as_str()
+                        .unwrap_or("<unknown>"),
+                    value["manifest_sha256"].as_str().unwrap_or("<unknown>")
+                )
+            };
+            if written.is_ok() {
+                EXIT_SUCCESS
+            } else {
+                EXIT_IO
+            }
+        }
+        ModuleCommand::Conformance => {
+            if loaded.identifier.module_id != WORK_REPORTER_MODULE_ID {
+                let value = json!({
+                    "command": "module conformance",
+                    "status": "unsupported",
+                    "module": loaded.identifier,
+                    "reason": "no production loader exists; only the built-in Rust reference module is executable"
+                });
+                let written = if options.json {
+                    write_json(out, &value)
+                } else {
+                    writeln!(
+                        out,
+                        "module conformance: unsupported\nreason: no reference runner for module '{}'",
+                        loaded.identifier.module_id
+                    )
+                };
+                return if written.is_ok() {
+                    EXIT_MODULE
+                } else {
+                    EXIT_IO
+                };
+            }
+            let report = match run_fixture_suite(&RuleBasedWorkReporter, &options.root) {
+                Ok(report) => report,
+                Err(error) => {
+                    return write_command_error(
+                        options.json,
+                        out,
+                        err,
+                        "D2IM9001",
+                        &error.to_string(),
+                        EXIT_MODULE,
+                    )
+                }
+            };
+            let success = report.status == ConformanceStatus::Pass;
+            let written = if options.json {
+                write_json(
+                    out,
+                    &json!({
+                        "command": "module conformance",
+                        "success": success,
+                        "report": report
+                    }),
+                )
+            } else {
+                writeln!(
+                    out,
+                    "module conformance: {:?}\npassed: {}\nfailed: {}\nunsupported: {}\nskipped: {}\nreport hash: {}",
+                    report.status,
+                    report.passed,
+                    report.failed,
+                    report.unsupported,
+                    report.skipped,
+                    report.report_hash
+                )
+            };
+            if written.is_err() {
+                EXIT_IO
+            } else if success {
+                EXIT_SUCCESS
+            } else {
+                EXIT_MODULE
+            }
+        }
     }
 }
 

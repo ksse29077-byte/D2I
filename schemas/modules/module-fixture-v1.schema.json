@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/module-fixture-v1.schema.json",
+  "title": "D2I Module Fixture v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fixture_id",
+    "fixture_kind",
+    "invocation",
+    "context",
+    "expected",
+    "replay_count"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "fixture_id": { "$ref": "#/$defs/id" },
+    "fixture_kind": {
+      "enum": [
+        "valid",
+        "invalid",
+        "unsupported",
+        "untrusted_content",
+        "deadline_expired",
+        "payload_size",
+        "output_schema_violation",
+        "panic_simulation",
+        "timeout_simulation",
+        "deterministic_replay",
+        "artifact_mismatch",
+        "manifest_tampering",
+        "capability_mismatch",
+        "confidence_invalid",
+        "secret_leakage_attempt"
+      ]
+    },
+    "invocation": { "type": "object" },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "current_logical_tick",
+        "current_observation_hash",
+        "current_plan_generation_id",
+        "allowed_trust_labels",
+        "invocation_trust_labels"
+      ],
+      "properties": {
+        "current_logical_tick": { "type": "integer", "minimum": 0 },
+        "current_observation_hash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "current_plan_generation_id": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "allowed_trust_labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "invocation_trust_labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
+      }
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "error_code", "output_hash", "output_payload"],
+      "properties": {
+        "status": { "enum": ["succeeded", "unsupported", "failed"] },
+        "error_code": {
+          "oneOf": [
+            {
+              "enum": [
+                "invalid_input",
+                "unsupported_input",
+                "unsupported_capability",
+                "schema_mismatch",
+                "contract_version_mismatch",
+                "timeout",
+                "resource_exhausted",
+                "policy_prohibited",
+                "network_prohibited",
+                "untrusted_input_violation",
+                "deterministic_replay_mismatch",
+                "internal_failure",
+                "panic_or_abnormal_termination",
+                "artifact_mismatch",
+                "dependency_unavailable"
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "output_hash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "output_payload": {}
+      }
+    },
+    "replay_count": { "type": "integer", "minimum": 1, "maximum": 10 }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

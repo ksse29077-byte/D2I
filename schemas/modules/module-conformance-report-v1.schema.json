@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/module-conformance-report-v1.schema.json",
+  "title": "D2I Module Conformance Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "module_id",
+    "module_version",
+    "manifest_sha256",
+    "status",
+    "checks",
+    "fixtures",
+    "passed",
+    "failed",
+    "unsupported",
+    "skipped",
+    "exit_code",
+    "report_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "module_id": { "$ref": "#/$defs/id" },
+    "module_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "manifest_sha256": { "$ref": "#/$defs/hash" },
+    "status": { "$ref": "#/$defs/status" },
+    "checks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/check" }
+    },
+    "fixtures": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/fixture" }
+    },
+    "passed": { "type": "integer", "minimum": 0 },
+    "failed": { "type": "integer", "minimum": 0 },
+    "unsupported": { "type": "integer", "minimum": 0 },
+    "skipped": { "type": "integer", "minimum": 0 },
+    "exit_code": { "enum": [0, 10, 11, 12] },
+    "report_hash": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "status": { "enum": ["pass", "fail", "unsupported", "skipped"] },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "status", "message"],
+      "properties": {
+        "check_id": { "$ref": "#/$defs/id" },
+        "status": { "$ref": "#/$defs/status" },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixture_id",
+        "status",
+        "result_status",
+        "result_hash",
+        "replay_hashes",
+        "message"
+      ],
+      "properties": {
+        "fixture_id": { "$ref": "#/$defs/id" },
+        "status": { "$ref": "#/$defs/status" },
+        "result_status": {
+          "oneOf": [
+            { "enum": ["succeeded", "unsupported", "failed"] },
+            { "type": "null" }
+          ]
+        },
+        "result_hash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "replay_hashes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hash" }
+        },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

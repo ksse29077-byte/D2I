@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "fixture_id": "deadline-expired",
+  "fixture_kind": "deadline_expired",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "invoke-expired",
+    "module": {
+      "module_id": "rule-based-work-reporter",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "rule-based-work-reporter-v1",
+      "artifact_sha256": "sha256:c819dae8da3ddf6c931af5086a40122d29817b5dacd3f94f778425eff2e39840",
+      "manifest_sha256": "sha256:d2c404a923beb9327bc2c5a4f7efec4b2a365144e68b41a3e6821158a389dcca"
+    },
+    "requested_capability": "cognitive.work-report",
+    "input_schema_id": "cognitive-work-report-input-v1",
+    "input_schema_version": 1,
+    "payload": {},
+    "goal_id": "goal-expired",
+    "source_observation_hash": "sha256:3131313131313131313131313131313131313131313131313131313131313131",
+    "plan_generation_id": "plan-generation-expired",
+    "logical_sequence": 1,
+    "deadline_logical_tick": 1,
+    "resource_budget": {
+      "max_input_bytes": 1048576,
+      "max_output_bytes": 1048576,
+      "memory_bytes": 8388608,
+      "logical_operation_budget": 4096
+    },
+    "trust_labels": ["fixture"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "expired-fixture",
+      "source_sha256": "sha256:3232323232323232323232323232323232323232323232323232323232323232",
+      "producer": "fixture-author"
+    },
+    "replay": {
+      "replay_id": "expired-replay",
+      "seed": 13,
+      "fixture_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "correlation_id": "correlation-expired",
+    "trace_id": "trace-expired"
+  },
+  "context": {
+    "current_logical_tick": 1,
+    "current_observation_hash": "sha256:3131313131313131313131313131313131313131313131313131313131313131",
+    "current_plan_generation_id": "plan-generation-expired",
+    "allowed_trust_labels": ["fixture"],
+    "invocation_trust_labels": ["fixture"]
+  },
+  "expected": {
+    "status": "failed",
+    "error_code": "timeout",
+    "output_hash": null,
+    "output_payload": null
+  },
+  "replay_count": 2
+}

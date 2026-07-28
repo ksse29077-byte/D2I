@@ -1,0 +1,17 @@
+[package]
+name = "d2i-module-sdk"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+d2i-core = { path = "../d2i-core" }
+jsonschema.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+sha2.workspace = true
+
+[lints]
+workspace = true

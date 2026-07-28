@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/modules/rule-based-work-reporter/output-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "confirmed_facts",
+    "completed_actions",
+    "incomplete_items",
+    "opinions",
+    "opinion_basis",
+    "uncertainties",
+    "user_decision_required",
+    "build_id",
+    "module_ids",
+    "timings",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "confirmed_facts": { "$ref": "#/$defs/textList" },
+    "completed_actions": { "$ref": "#/$defs/textList" },
+    "incomplete_items": { "$ref": "#/$defs/textList" },
+    "opinions": { "$ref": "#/$defs/textList" },
+    "opinion_basis": { "$ref": "#/$defs/textList" },
+    "uncertainties": { "$ref": "#/$defs/textList" },
+    "user_decision_required": { "type": "boolean" },
+    "build_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "module_ids": { "$ref": "#/$defs/textList" },
+    "timings": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["step", "logical_tick"],
+        "properties": {
+          "step": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "logical_tick": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "warnings": { "$ref": "#/$defs/textList" }
+  },
+  "$defs": {
+    "textList": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": { "type": "string", "minLength": 1, "maxLength": 16384 }
+    }
+  }
+}

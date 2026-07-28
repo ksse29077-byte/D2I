@@ -1,0 +1,7 @@
+D2I reference module descriptor
+module_id=rule-based-work-reporter
+module_version=1.0.0
+contract_version=1
+execution=in_process_rust_reference
+network=denied
+side_effect=false
