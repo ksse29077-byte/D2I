@@ -1,10 +1,11 @@
 # Main Branch Protection Manual
 
-This is a repository-owner checklist. The 2026-07-29 unauthenticated GitHub
-API audit could confirm the public repository, `main` default branch, and one
-active `ci` workflow, but branch-protection details require authenticated
-administrative access. Nothing in this document claims that protection is
-already enabled.
+This is a repository-owner checklist. The 2026-07-29 authenticated API audit
+performed with the `graykavinjeo` push credential found no repository ruleset
+and no legacy `main` branch protection. That credential does not have
+administrative permission to create either protection. The intended ruleset
+payload is checked in at `.github/main-ruleset.json`; it must be applied and
+verified by a repository administrator.
 
 ## Repository Merge Settings
 
@@ -26,37 +27,40 @@ Prefer a repository ruleset targeting the exact branch `main`. If the account
 plan does not expose rulesets, configure equivalent branch protection.
 
 - [ ] Require a pull request before merging
-- [ ] Require at least one approving review
-- [ ] Require approval from CODEOWNERS
-- [ ] Dismiss stale approvals when new commits are pushed
-- [ ] Require approval of the most recent reviewable push by someone else
+- [ ] Set required approving reviews to `0`
+- [ ] Do not make CODEOWNERS review a repository-wide branch rule
 - [ ] Require all conversations to be resolved
 - [ ] Require status checks to pass and require the branch to be up to date
-- [ ] Add `ci / rust` after it has reported once
-- [ ] Add `ci / workspace-test` only after the documented portability blocker is fixed and the check reports green
-- [ ] Add `module-pr / module-governance` after it has reported once
+- [ ] Require `ci / rust`
+- [ ] Require `ci / workspace-test`
+- [ ] Require `module-pr / module-governance`
+- [ ] Require `core-governance / core-approval`
 - [ ] Block force pushes
 - [ ] Block branch deletion
 - [ ] Require linear history
 - [ ] Restrict direct updates to `main`
 
-GitHub exposes status names only after a workflow reports them. Verify the
-exact displayed names on the first PR before making them required.
+The general approval count is zero so a validated module-only PR can be
+manually merged by its author. Core protection is not removed:
+`core-governance / core-approval` runs only the trusted base-branch script,
+classifies Core-owned paths without executing PR code, and requires an
+`APPROVED` GitHub review from a non-author CODEOWNER for the exact current
+head. `module-pr / module-governance` continues module artifact, fixture,
+conformance, replay, and trust-boundary validation. CODEOWNERS requests the
+appropriate reviewers, while the trusted workflow makes path-specific approval
+enforceable.
 
-At the 2026-07-29 audit, `ci / workspace-test` exposed a pre-existing
-cross-platform failure: `d2i-core` accepts `C:\outside.json` as relative on
-Linux while its test requires rejection. Do not mark that failing check as
-required until a separate Core-owned fix is reviewed. Do not waive or hide the
-failure. Full Windows workspace tests remain a mandatory local report, and the
-headless concrete adapter limitation remains separately visible in the
-baseline audit.
+The earlier Linux path-validation blocker was fixed by PR #3, and
+`ci / workspace-test` has reported successfully on subsequent PRs. Do not
+remove, waive, or disguise this required check.
 
 ## Bypass And Administration
 
-The recommended bypass list is empty. Administrators are subject to the same
-rules. If emergency bypass is retained, document the named actors, reason,
-expiry, required incident record, and follow-up review. A bypass never permits
-credentials, customer data, weakened tests, or an unversioned contract change.
+The checked-in ruleset has an empty bypass list. Administrators are subject to
+the same rules. If an emergency bypass is later introduced, keep it to named
+repository administrators and document the actor, reason, expiry, incident
+record, and follow-up review. A bypass never permits credentials, customer
+data, weakened tests, or an unversioned contract change.
 
 ## Signing Review
 
@@ -70,13 +74,18 @@ requirement until recovery and bot behavior are tested.
 After saving the rules:
 
 1. Attempt a direct non-admin push to `main`; it must be rejected.
-2. Open a documentation PR and confirm `ci / rust`.
-3. Open a synthetic module PR and confirm both required checks.
-4. Touch a CODEOWNERS path and confirm owner review is requested.
-5. Push a new commit and confirm stale approval dismissal.
-6. Leave a conversation unresolved and confirm merge is blocked.
-7. Confirm force push and `main` deletion are blocked.
-8. Confirm only manual squash merge is offered.
+2. Open a module-only PR and confirm all four required checks report.
+3. Confirm the module-only PR is mergeable with zero approvals after checks
+   pass and conversations are resolved.
+4. Touch a Core-owned path and confirm `core-governance / core-approval` fails
+   with the file, approvers, approval method, and policy path.
+5. Submit a non-author CODEOWNER approval on the current head and confirm the
+   governance check reruns and succeeds.
+6. Push another commit and confirm the old Core approval no longer satisfies
+   the exact-head check.
+7. Leave a conversation unresolved and confirm merge is blocked.
+8. Confirm force push and `main` deletion are blocked.
+9. Confirm only manual squash merge is offered.
 
 Record screenshots or settings exports in the operations system, not in a
 module feature PR.

@@ -16,16 +16,16 @@ policy, activation, audit, filesystem, process, secret, or network authority.
 
 ```text
 Cognitive Module Issue complete and assigned
--> total owner confirms readiness
+-> issue readiness and contract completeness validated
 -> employee GPT creates a repository-grounded Codex work order
--> total owner approves that work order
+-> automated and author checks confirm the work order stays in module scope
 -> module/<issue-number>-<module-id> branch
 -> manifest, schemas, implementation, fixtures, evaluation, and documentation
 -> author checks
 -> module PR
--> CI and peer review
+-> required CI and optional peer review
 -> Core review when a trigger applies
--> manual squash merge
+-> author or maintainer manual squash merge
 -> issue closure
 ```
 
@@ -35,7 +35,7 @@ The readiness result is `Issue 보완 필요`.
 
 ## Module Work Order
 
-The approved Codex work order is generated from the issue and repository, not
+The Codex work order is generated from the ready issue and repository, not
 written from memory. It must identify:
 
 1. Issue and assignee.
@@ -57,12 +57,12 @@ capability semantics, paths, APIs, limits, or acceptance thresholds.
 
 ## Implementation Boundary
 
-Module work normally changes exactly one `modules/<module-id>/` directory and
-the workspace member list only when a new crate must be registered. Changing
-the workspace root requires explicit review because it has a repository-wide
-effect. Unrelated formatting, generated build output, customer data,
-credentials, lockfile churn without a dependency reason, and production
-integration are out of scope.
+Module work normally changes exactly one `modules/<module-id>/` directory,
+`Cargo.lock` when the module changes the resolved workspace, and one exact
+`modules/<module-id>` member addition in the root `Cargo.toml` when a new crate
+must be registered. Any other root manifest edit is a Core change. Unrelated
+formatting, generated build output, customer data, credentials, lockfile churn
+without a dependency reason, and production integration are out of scope.
 
 Use `crates/d2i-module-sdk` and the checked-in schemas. `module validate`
 checks manifests, schemas, path confinement, hashes, security defaults,
@@ -85,7 +85,14 @@ Record failures honestly. `skipped` and `unsupported` are not passes.
 
 ## Merge And Completion
 
-Merge only after required checks pass, review conversations are resolved, and
-the required approvals exist. Automatic merge is prohibited. The repository
-uses squash merge for team PRs; the PR title becomes the conventional commit.
-Close the issue only after the merged commit and reports are linked.
+Module changes use a PR and required automated checks, but a third-party
+approval is not a merge condition. The module author may manually squash-merge
+their own PR when all required checks pass on the current head, conversations
+are resolved, the PR is ready and conflict-free, and no Core-owned path or
+shared contract changed. Peer review remains available but is optional.
+
+Core, contract, security, trust-boundary, shared workflow, ADR, and shared
+workspace-policy changes require a separate Core PR and a current-head
+approval from a non-author Core CODEOWNER. Automatic merge is prohibited. The
+PR title becomes the squash commit title. Close the issue only after the
+merged commit and reports are linked.

@@ -97,6 +97,23 @@ verifier, and production hot path must not require Python.
   approval.
 - Learning feedback is quarantined until evaluated and promoted.
 
+## Module Collaboration
+
+- Module changes always use a pull request and pass every required automated
+  check, but a third-party approval is not a merge condition for a module-only
+  PR.
+- A module author may manually squash-merge their own PR when it changes one
+  `modules/<module-id>/` directory, includes only allowed workspace
+  registration updates, changes no Core-owned path, has no unresolved review
+  conversation or merge conflict, and all required checks pass.
+- Peer review of module-only work is optional. Automatic merge remains
+  disabled.
+- Core contracts, shared schemas, security and trust boundaries, shared
+  workflows, ADRs, and other paths in `.github/core-owned-paths.txt` require a
+  current-head approval from a non-author Core CODEOWNER.
+- A module feature and a Core contract change must not share a branch or pull
+  request.
+
 ## Required Task Report
 
 At the end of a Codex task, report phase and scope completed, files changed,

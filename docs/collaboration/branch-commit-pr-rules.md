@@ -57,3 +57,12 @@ The PR title must follow the commit format because team PRs are squash merged.
 Do not enable automatic merge. Repository maintainers must configure GitHub to
 allow squash merge and disable merge commits and rebase merge for this policy
 to be mechanically consistent.
+
+A module-only PR does not require a third-party approval. Its author may
+manually squash-merge after the required checks pass on the current head, all
+conversations are resolved, the PR is ready and conflict-free, and governance
+confirms that no Core-owned path changed. Peer review is optional.
+
+Core-owned changes require a separate Core PR and a current-head approval from
+a non-author Core CODEOWNER. A PR-body checkbox or author declaration is not
+approval evidence.
