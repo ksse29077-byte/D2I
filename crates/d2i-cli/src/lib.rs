@@ -6,6 +6,7 @@ use d2i_compiler::{
 use d2i_core::{validate_source_pack, write_source_lock, Diagnostic, Severity, ValidationReport};
 use d2i_eval::{benchmark_runtime, BenchmarkMetadata, RuntimeBenchmarkReport};
 use d2i_module_sdk::{load_module_manifest, run_fixture_suite, ConformanceStatus};
+use d2i_plan_ranker::{PlanRanker, MODULE_ID as PLAN_RANKER_MODULE_ID};
 use d2i_rule_based_work_reporter::{RuleBasedWorkReporter, MODULE_ID as WORK_REPORTER_MODULE_ID};
 use d2i_runtime_adapter::{
     check_package_compatibility, phase5_abi_mapping, run_conformance, AdapterContract,
@@ -1010,7 +1011,11 @@ fn execute_module<O: Write, E: Write>(options: ModuleOptions, out: &mut O, err: 
             }
         }
         ModuleCommand::Conformance => {
-            if loaded.identifier.module_id != WORK_REPORTER_MODULE_ID {
+            let report = if loaded.identifier.module_id == WORK_REPORTER_MODULE_ID {
+                run_fixture_suite(&RuleBasedWorkReporter, &options.root)
+            } else if loaded.identifier.module_id == PLAN_RANKER_MODULE_ID {
+                run_fixture_suite(&PlanRanker, &options.root)
+            } else {
                 let value = json!({
                     "command": "module conformance",
                     "status": "unsupported",
@@ -1031,8 +1036,8 @@ fn execute_module<O: Write, E: Write>(options: ModuleOptions, out: &mut O, err: 
                 } else {
                     EXIT_IO
                 };
-            }
-            let report = match run_fixture_suite(&RuleBasedWorkReporter, &options.root) {
+            };
+            let report = match report {
                 Ok(report) => report,
                 Err(error) => {
                     return write_command_error(

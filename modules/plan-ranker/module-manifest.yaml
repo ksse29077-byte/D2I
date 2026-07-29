@@ -1,0 +1,118 @@
+schema_version: 1
+identity:
+  module_id: plan-ranker
+  display_name: Plan Ranker
+  description: Deterministically ranks bounded prevalidated action-candidate metadata.
+  version: 1.0.0
+  contract_version: 1
+  build_id: plan-ranker-v1
+  artifact_filename: artifacts/plan-ranker.ref
+  artifact_sha256: sha256:c23e5733970c18c53c4028bf7067b536fc1c70bcfcdfe9fcd765e50301a80867
+  author: D2I Cognitive Module Platform
+  maintainer: ksse29077-byte
+capabilities:
+  - capability_id: cognitive.plan-rank
+    capability_version: 1.0.0
+    category: plan_ranker
+    supported_input_kinds:
+      - cognitive-plan-ranking-input-v1
+    supported_output_kinds:
+      - cognitive-plan-ranking-output-v1
+    supported_risk_classes:
+      - read_only
+    deterministic: true
+    side_effect: false
+    network_requirement: denied
+    streaming: false
+    confidence_semantics: not_applicable
+    input_schemas:
+      - cognitive-plan-ranking-input-v1
+    output_schemas:
+      - cognitive-plan-ranking-output-v1
+    unsupported_case_policy: Return unsupported with reason no_candidates for an empty candidate set.
+    fallback_capability: null
+    fallback_module: null
+schemas:
+  - schema_id: cognitive-plan-ranking-input-v1
+    schema_version: 1
+    path: schemas/input.schema.json
+    sha256: sha256:fe024798ad80f1880efce130fe71027e10b74fbabc12c1e9a92cc96e1473533f
+  - schema_id: cognitive-plan-ranking-output-v1
+    schema_version: 1
+    path: schemas/output.schema.json
+    sha256: sha256:07ccdab27e3880fc381190fc9666837228e24f3370f8f8b6ef509ab12d7be649
+execution:
+  mode: in_process_rust_reference
+  timeout_logical_ticks: 100
+  maximum_input_bytes: 1048576
+  maximum_output_bytes: 1048576
+  memory_limit_bytes: 8388608
+  logical_operation_budget: 4096
+  maximum_retries: 0
+  maximum_concurrent_invocations: 1
+  network_requirement: denied
+  filesystem_required: false
+  environment_variables_allowed: false
+  side_effect: false
+  reversible: true
+security:
+  accepted_trust_labels:
+    - fixture
+    - approved_policy
+    - verified_operational_state
+    - untrusted_web_content
+    - untrusted_document_content
+  untrusted_content_handling: treat_as_data
+  secrets_required: false
+  raw_secret_input: false
+  privileged_operation: false
+  allowed_external_dependencies:
+    - d2i-module-sdk
+  audit_requirement: invocation_and_result
+  fail_policy: closed
+  data_retention: none
+evaluation:
+  evaluation_set_id: plan-ranker-v1
+  evaluation_set_version: 1.0.0
+  metrics:
+    - schema_validity
+    - deterministic_replay
+    - hard_gate_exclusion
+    - rank_order_accuracy
+    - tie_break_determinism
+    - duplicate_rejection
+    - untrusted_authority_rejection
+    - critical_error_free
+  acceptance_thresholds:
+    schema_validity: 1.0
+    deterministic_replay: 1.0
+    hard_gate_exclusion: 1.0
+    rank_order_accuracy: 1.0
+    tie_break_determinism: 1.0
+    duplicate_rejection: 1.0
+    untrusted_authority_rejection: 1.0
+    critical_error_free: 1.0
+  critical_error_definition: Ranking an ineligible or wrong candidate, nondeterminism, duplicate acceptance, authority elevation, secret output, invalid output, or unbounded resource use.
+  known_unsupported_cases:
+    - Empty candidate sets.
+  benchmark_reference: fixtures/valid/maximum-candidates.json
+  deterministic_replay_required: true
+provenance_and_license:
+  source_repository: D2I/modules/plan-ranker
+  source_license: Apache-2.0
+  artifact_license: Apache-2.0
+  datasets: []
+  dataset_licenses: {}
+  commercial_use: permitted-under-apache-2.0
+  attribution:
+    - D2I Cognitive Module Platform
+  generated_artifact: false
+  third_party_dependencies:
+    - name: serde
+      version: 1.0.217
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+  supply_chain_metadata: Cargo.lock and repository commit bind the Rust source.
+  model_card: model-card.md
+  data_card: data-card.md
+  threat_model: threat-model.md

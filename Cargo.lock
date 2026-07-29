@@ -228,6 +228,7 @@ dependencies = [
  "d2i-core",
  "d2i-eval",
  "d2i-module-sdk",
+ "d2i-plan-ranker",
  "d2i-rule-based-work-reporter",
  "d2i-runtime-adapter",
  "d2i-runtime-ref",
@@ -348,6 +349,16 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "sha2",
+]
+
+[[package]]
+name = "d2i-plan-ranker"
+version = "0.9.0"
+dependencies = [
+ "d2i-module-sdk",
+ "jsonschema",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

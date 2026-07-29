@@ -14,6 +14,7 @@ d2i-core = { path = "../d2i-core" }
 d2i-compiler = { path = "../d2i-compiler" }
 d2i-eval = { path = "../d2i-eval" }
 d2i-module-sdk = { path = "../d2i-module-sdk" }
+d2i-plan-ranker = { path = "../../modules/plan-ranker" }
 d2i-rule-based-work-reporter = { path = "../../modules/rule-based-work-reporter" }
 d2i-runtime-adapter = { path = "../d2i-runtime-adapter" }
 d2i-runtime-ref = { path = "../d2i-runtime-ref" }

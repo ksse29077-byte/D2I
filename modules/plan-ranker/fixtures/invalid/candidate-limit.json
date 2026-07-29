@@ -1,0 +1,1892 @@
+{
+    "schema_version":  1,
+    "fixture_id":  "candidate-limit",
+    "invocation":  {
+                       "contract_version":  1,
+                       "invocation_id":  "invoke-candidate-limit",
+                       "module":  {
+                                      "module_id":  "plan-ranker",
+                                      "module_version":  "1.0.0",
+                                      "contract_version":  1,
+                                      "build_id":  "plan-ranker-v1",
+                                      "artifact_sha256":  "sha256:c23e5733970c18c53c4028bf7067b536fc1c70bcfcdfe9fcd765e50301a80867",
+                                      "manifest_sha256":  "sha256:d9560e047a24be96a8f37d8f074b7e409d9528b3a4919ea729f1c3bcf31f9300"
+                                  },
+                       "requested_capability":  "cognitive.plan-rank",
+                       "input_schema_id":  "cognitive-plan-ranking-input-v1",
+                       "input_schema_version":  1,
+                       "payload":  {
+                                       "schema_version":  1,
+                                       "candidates":  [
+                                                          {
+                                                              "candidate_id":  "candidate-01",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  1,
+                                                              "success_likelihood_millionths":  1,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-01"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-02",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000002",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  2,
+                                                              "success_likelihood_millionths":  2,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-02"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-03",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  3,
+                                                              "success_likelihood_millionths":  3,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-03"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-04",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000004",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  4,
+                                                              "success_likelihood_millionths":  4,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-04"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-05",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000005",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  5,
+                                                              "success_likelihood_millionths":  5,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-05"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-06",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000006",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  6,
+                                                              "success_likelihood_millionths":  6,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-06"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-07",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000007",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  7,
+                                                              "success_likelihood_millionths":  7,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-07"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-08",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000008",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  8,
+                                                              "success_likelihood_millionths":  8,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-08"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-09",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000009",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  9,
+                                                              "success_likelihood_millionths":  9,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-09"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-10",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000000a",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  10,
+                                                              "success_likelihood_millionths":  10,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-10"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-11",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000000b",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  11,
+                                                              "success_likelihood_millionths":  11,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-11"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-12",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000000c",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  12,
+                                                              "success_likelihood_millionths":  12,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-12"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-13",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000000d",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  13,
+                                                              "success_likelihood_millionths":  13,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-13"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-14",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000000e",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  14,
+                                                              "success_likelihood_millionths":  14,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-14"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-15",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000000f",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  15,
+                                                              "success_likelihood_millionths":  15,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-15"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-16",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000010",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  16,
+                                                              "success_likelihood_millionths":  16,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-16"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-17",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000011",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  17,
+                                                              "success_likelihood_millionths":  17,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-17"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-18",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000012",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  18,
+                                                              "success_likelihood_millionths":  18,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-18"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-19",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000013",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  19,
+                                                              "success_likelihood_millionths":  19,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-19"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-20",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000014",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  20,
+                                                              "success_likelihood_millionths":  20,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-20"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-21",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000015",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  21,
+                                                              "success_likelihood_millionths":  21,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-21"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-22",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000016",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  22,
+                                                              "success_likelihood_millionths":  22,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-22"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-23",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000017",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  23,
+                                                              "success_likelihood_millionths":  23,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-23"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-24",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000018",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  24,
+                                                              "success_likelihood_millionths":  24,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-24"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-25",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000019",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  25,
+                                                              "success_likelihood_millionths":  25,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-25"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-26",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000001a",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  26,
+                                                              "success_likelihood_millionths":  26,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-26"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-27",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000001b",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  27,
+                                                              "success_likelihood_millionths":  27,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-27"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-28",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000001c",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  28,
+                                                              "success_likelihood_millionths":  28,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-28"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-29",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000001d",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  29,
+                                                              "success_likelihood_millionths":  29,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-29"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-30",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000001e",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  30,
+                                                              "success_likelihood_millionths":  30,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-30"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-31",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000001f",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  31,
+                                                              "success_likelihood_millionths":  31,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-31"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-32",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000020",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  32,
+                                                              "success_likelihood_millionths":  32,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-32"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-33",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000021",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  33,
+                                                              "success_likelihood_millionths":  33,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-33"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-34",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000022",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  34,
+                                                              "success_likelihood_millionths":  34,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-34"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-35",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000023",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  35,
+                                                              "success_likelihood_millionths":  35,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-35"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-36",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000024",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  36,
+                                                              "success_likelihood_millionths":  36,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-36"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-37",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000025",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  37,
+                                                              "success_likelihood_millionths":  37,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-37"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-38",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000026",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  38,
+                                                              "success_likelihood_millionths":  38,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-38"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-39",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000027",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  39,
+                                                              "success_likelihood_millionths":  39,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-39"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-40",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000028",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  40,
+                                                              "success_likelihood_millionths":  40,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-40"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-41",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000029",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  41,
+                                                              "success_likelihood_millionths":  41,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-41"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-42",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000002a",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  42,
+                                                              "success_likelihood_millionths":  42,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-42"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-43",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000002b",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  43,
+                                                              "success_likelihood_millionths":  43,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-43"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-44",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000002c",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  44,
+                                                              "success_likelihood_millionths":  44,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-44"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-45",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000002d",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  45,
+                                                              "success_likelihood_millionths":  45,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-45"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-46",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000002e",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  46,
+                                                              "success_likelihood_millionths":  46,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-46"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-47",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000002f",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  47,
+                                                              "success_likelihood_millionths":  47,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-47"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-48",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000030",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  48,
+                                                              "success_likelihood_millionths":  48,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-48"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-49",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000031",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  49,
+                                                              "success_likelihood_millionths":  49,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-49"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-50",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000032",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  50,
+                                                              "success_likelihood_millionths":  50,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-50"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-51",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000033",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  51,
+                                                              "success_likelihood_millionths":  51,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-51"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-52",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000034",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  52,
+                                                              "success_likelihood_millionths":  52,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-52"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-53",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000035",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  53,
+                                                              "success_likelihood_millionths":  53,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-53"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-54",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000036",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  54,
+                                                              "success_likelihood_millionths":  54,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-54"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-55",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000037",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  55,
+                                                              "success_likelihood_millionths":  55,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-55"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-56",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000038",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  56,
+                                                              "success_likelihood_millionths":  56,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-56"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-57",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000039",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  57,
+                                                              "success_likelihood_millionths":  57,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-57"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-58",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000003a",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  58,
+                                                              "success_likelihood_millionths":  58,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-58"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-59",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000003b",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  59,
+                                                              "success_likelihood_millionths":  59,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-59"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-60",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000003c",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  60,
+                                                              "success_likelihood_millionths":  60,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-60"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-61",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000003d",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  61,
+                                                              "success_likelihood_millionths":  61,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-61"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-62",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000003e",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  62,
+                                                              "success_likelihood_millionths":  62,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-62"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-63",
+                                                              "candidate_hash":  "sha256:000000000000000000000000000000000000000000000000000000000000003f",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  63,
+                                                              "success_likelihood_millionths":  63,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-63"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-64",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000040",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  64,
+                                                              "success_likelihood_millionths":  64,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-64"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-65",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000041",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  65,
+                                                              "success_likelihood_millionths":  65,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-65"
+                                                                               ]
+                                                          }
+                                                      ]
+                                   },
+                       "goal_id":  "plan-ranking-goal",
+                       "source_observation_hash":  "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                       "plan_generation_id":  "plan-generation-1",
+                       "logical_sequence":  1,
+                       "deadline_logical_tick":  100,
+                       "resource_budget":  {
+                                               "max_input_bytes":  1048576,
+                                               "max_output_bytes":  1048576,
+                                               "memory_bytes":  8388608,
+                                               "logical_operation_budget":  4096
+                                           },
+                       "trust_labels":  [
+                                            "fixture"
+                                        ],
+                       "redactions":  [
+
+                                      ],
+                       "provenance":  {
+                                          "source_id":  "candidate-limit-fixture",
+                                          "source_sha256":  "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                                          "producer":  "fixture-author"
+                                      },
+                       "replay":  {
+                                      "replay_id":  "candidate-limit-replay",
+                                      "seed":  1,
+                                      "fixture_hash":  "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                                  },
+                       "correlation_id":  "candidate-limit-correlation",
+                       "trace_id":  "candidate-limit-trace"
+                   },
+    "expected":  {
+                     "status":  "failed",
+                     "error_code":  "schema_mismatch",
+                     "output_hash":  null,
+                     "output_payload":  null
+                 },
+    "context":  {
+                    "current_logical_tick":  1,
+                    "current_observation_hash":  "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "current_plan_generation_id":  "plan-generation-1",
+                    "allowed_trust_labels":  [
+                                                 "fixture"
+                                             ],
+                    "invocation_trust_labels":  [
+                                                    "fixture"
+                                                ]
+                },
+    "replay_count":  2,
+    "fixture_kind":  "payload_size"
+}
