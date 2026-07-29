@@ -952,29 +952,38 @@ pub(crate) fn reject_sensitive_fields(
     field: &str,
     reject_secret_values: bool,
 ) -> Result<(), ModuleError> {
+    reject_sensitive_fields_in(value, field, reject_secret_values, None)
+}
+
+fn reject_sensitive_fields_in(
+    value: &Value,
+    field: &str,
+    reject_secret_values: bool,
+    containing_object: Option<&str>,
+) -> Result<(), ModuleError> {
     match value {
         Value::Object(object) => {
             for (key, child) in object {
                 let normalized = key.to_ascii_lowercase();
-                if normalized == "password"
+                let prohibited_field = normalized == "password"
                     || normalized == "secret"
                     || normalized == "credential"
                     || normalized == "credentials"
                     || normalized == "raw_token"
                     || normalized == "authentication_token"
-                    || normalized == "authorization"
-                {
+                    || normalized == "authorization";
+                if prohibited_field && !is_credential_gate_status(containing_object, key, child) {
                     return Err(ModuleError::new(
                         ModuleErrorCode::InvalidInput,
                         format!("{field} contains prohibited raw secret field '{key}'"),
                     ));
                 }
-                reject_sensitive_fields(child, field, reject_secret_values)?;
+                reject_sensitive_fields_in(child, field, reject_secret_values, Some(key))?;
             }
         }
         Value::Array(items) => {
             for child in items {
-                reject_sensitive_fields(child, field, reject_secret_values)?;
+                reject_sensitive_fields_in(child, field, reject_secret_values, None)?;
             }
         }
         Value::String(text)
@@ -995,6 +1004,42 @@ pub(crate) fn reject_sensitive_fields(
     Ok(())
 }
 
+fn is_credential_gate_status(containing_object: Option<&str>, key: &str, value: &Value) -> bool {
+    containing_object == Some("gate_results")
+        && key == "credential"
+        && value
+            .as_str()
+            .is_some_and(|status| matches!(status, "passed" | "failed" | "unknown"))
+}
+
 pub(crate) fn sha256_bytes(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::reject_sensitive_fields;
+    use serde_json::json;
+
+    #[test]
+    fn output_scan_allows_only_bounded_credential_gate_status() {
+        let status = json!({
+            "results": [{
+                "gate_results": {
+                    "credential": "failed"
+                }
+            }]
+        });
+        assert!(reject_sensitive_fields(&status, "output payload", true).is_ok());
+
+        let raw_token = json!({"message": "Bearer must-not-cross"});
+        assert!(reject_sensitive_fields(&raw_token, "output payload", true).is_err());
+
+        let credential = json!({
+            "gate_results": {
+                "credential": "must-not-cross"
+            }
+        });
+        assert!(reject_sensitive_fields(&credential, "output payload", true).is_err());
+    }
 }
