@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "fixture_id": "duplicate-label",
+  "fixture_kind": "ambiguous",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "ground-ambiguous",
+    "module": {
+      "module_id": "element-grounder",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "element-grounder-v1",
+      "artifact_sha256": "sha256:b1a81f8fca05c26f6758e21b1faa63b39343a0d277c476ba6817eb409f5627d5",
+      "manifest_sha256": "sha256:dd71eab8fcfa851af6e3a7667851f6a1b2a451fc95bc9aae791002de38106fb5"
+    },
+    "requested_capability": "cognitive.element-ground",
+    "input_schema_id": "element-grounding-input-v1",
+    "input_schema_version": 1,
+    "payload": {
+      "schema_version": 1,
+      "goal_id": "goal-1",
+      "target_text": "Submit",
+      "observation_snapshot": {
+        "schema_version": 1,
+        "observation_id": "obs-ambiguous",
+        "source_kind": "fixture",
+        "target_binding": { "surface": "fixture" },
+        "state_hash": "sha256:99408a39fbb3053dac0d580aa62783da80c46e56932ede1ecc19da929bdce779",
+        "sequence": 1,
+        "trust_labels": ["fixture"],
+        "observable_elements": [
+          { "element_id": "element-b", "kind": "button", "label": "Submit", "value": null, "trust_labels": ["fixture"] },
+          { "element_id": "element-a", "kind": "button", "label": "Submit", "value": null, "trust_labels": ["fixture"] }
+        ],
+        "redactions": [],
+        "provenance": {
+          "source": "ambiguous fixture",
+          "source_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "module_id": "fixture-provider"
+        }
+      },
+      "world_state": null,
+      "expected_kinds": [],
+      "required_terms": [],
+      "excluded_terms": [],
+      "context_terms": [],
+      "max_candidates": 8,
+      "source_observation_hash": "sha256:99408a39fbb3053dac0d580aa62783da80c46e56932ede1ecc19da929bdce779",
+      "plan_generation_id": "plan-1",
+      "trust_labels": ["fixture"],
+      "replay_context": { "replay_id": "replay-ambiguous", "seed": 2 }
+    },
+    "goal_id": "goal-1",
+    "source_observation_hash": "sha256:99408a39fbb3053dac0d580aa62783da80c46e56932ede1ecc19da929bdce779",
+    "plan_generation_id": "plan-1",
+    "logical_sequence": 1,
+    "deadline_logical_tick": 100,
+    "resource_budget": {
+      "max_input_bytes": 1048576,
+      "max_output_bytes": 1048576,
+      "memory_bytes": 8388608,
+      "logical_operation_budget": 100000
+    },
+    "trust_labels": ["fixture"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "element-grounder-fixture",
+      "source_sha256": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "producer": "fixture-author"
+    },
+    "replay": {
+      "replay_id": "replay-ambiguous",
+      "seed": 2,
+      "fixture_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "correlation_id": "correlation-ambiguous",
+    "trace_id": "trace-ambiguous"
+  },
+  "context": {
+    "current_logical_tick": 1,
+    "current_observation_hash": "sha256:99408a39fbb3053dac0d580aa62783da80c46e56932ede1ecc19da929bdce779",
+    "current_plan_generation_id": "plan-1",
+    "allowed_trust_labels": ["fixture"],
+    "invocation_trust_labels": ["fixture"]
+  },
+  "expected": {
+    "status": "succeeded",
+    "error_code": null,
+    "output_hash": null,
+    "output_payload": {
+      "schema_version": 1,
+      "goal_id": "goal-1",
+      "source_observation_hash": "sha256:99408a39fbb3053dac0d580aa62783da80c46e56932ede1ecc19da929bdce779",
+      "plan_generation_id": "plan-1",
+      "target_text": "Submit",
+      "status": "ambiguous",
+      "selected_element_id": null,
+      "candidates": [
+        {
+          "element_id": "element-a",
+          "kind": "button",
+          "label": "Submit",
+          "score": 0.75,
+          "matched_features": ["normalized_label_exact", "raw_label_exact"],
+          "evidence": ["observation:obs-ambiguous/element:element-a"],
+          "trust_labels": ["fixture"]
+        },
+        {
+          "element_id": "element-b",
+          "kind": "button",
+          "label": "Submit",
+          "score": 0.75,
+          "matched_features": ["normalized_label_exact", "raw_label_exact"],
+          "evidence": ["observation:obs-ambiguous/element:element-b"],
+          "trust_labels": ["fixture"]
+        }
+      ],
+      "ambiguity_reason": "top candidates are within the unique-match margin",
+      "user_confirmation_required": true,
+      "evidence": [
+        "observation:obs-ambiguous",
+        "ranking-policy:deterministic-element-grounder-v1"
+      ],
+      "warnings": []
+    }
+  },
+  "replay_count": 2
+}
