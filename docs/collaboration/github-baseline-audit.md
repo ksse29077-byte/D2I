@@ -22,6 +22,11 @@ Audit date: 2026-07-29 Asia/Seoul
 The default labels were `bug`, `documentation`, `duplicate`, `enhancement`,
 `good first issue`, `help wanted`, `invalid`, `question`, and `wontfix`.
 
+The original CI used `ubuntu-latest`. A governance-branch run showed that the
+exact workspace Clippy command treats Windows-only imports/constants as unused
+on Linux. The workflow now uses `windows-latest`, matching the repository's
+Windows desktop targets, without modifying or suppressing Windows/WFP code.
+
 ## Not Confirmed
 
 The branch-protection endpoint returned `401 Requires authentication`.

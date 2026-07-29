@@ -126,6 +126,33 @@ fn github_yaml_and_issue_forms_have_required_structure() {
         permissions.get(Value::String("contents".to_owned())),
         Some(&Value::String("read".to_owned()))
     );
+
+    let ci = yaml(".github/workflows/ci.yml");
+    let ci = mapping(&ci, "workspace CI");
+    let jobs = mapping(field(ci, "jobs", "workspace CI"), "workspace CI jobs");
+    let rust = mapping(
+        field(jobs, "rust", "workspace CI jobs"),
+        "workspace CI rust job",
+    );
+    assert_eq!(
+        field(rust, "runs-on", "workspace CI rust job"),
+        &Value::String("windows-latest".to_owned())
+    );
+    let serialized = match serde_yaml::to_string(&ci) {
+        Ok(value) => value,
+        Err(error) => panic!("cannot serialize workspace CI for inspection: {error}"),
+    };
+    for command in [
+        "cargo fmt --all -- --check",
+        "cargo clippy --workspace --all-targets --all-features -- -D warnings",
+        "cargo test --workspace --all-features",
+        "cargo build --workspace --release",
+    ] {
+        assert!(
+            serialized.contains(command),
+            "workspace CI is missing '{command}'"
+        );
+    }
 }
 
 #[test]
