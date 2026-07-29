@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/element-grounding-result-v1.schema.json",
+  "title": "Element Grounding Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "goal_id",
+    "source_observation_hash",
+    "plan_generation_id",
+    "target_text",
+    "status",
+    "selected_element_id",
+    "candidates",
+    "ambiguity_reason",
+    "user_confirmation_required",
+    "evidence",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "goal_id": { "$ref": "#/$defs/token" },
+    "source_observation_hash": { "$ref": "#/$defs/hash" },
+    "plan_generation_id": { "$ref": "#/$defs/token" },
+    "target_text": { "$ref": "#/$defs/text" },
+    "status": {
+      "enum": ["unique_match", "ambiguous", "not_found", "unsupported"]
+    },
+    "selected_element_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/token" },
+        { "type": "null" }
+      ]
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "ambiguity_reason": {
+      "oneOf": [
+        { "$ref": "#/$defs/text" },
+        { "type": "null" }
+      ]
+    },
+    "user_confirmation_required": { "type": "boolean" },
+    "evidence": { "$ref": "#/$defs/string_array" },
+    "warnings": { "$ref": "#/$defs/string_array" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "unique_match" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "selected_element_id": { "$ref": "#/$defs/token" }
+        }
+      },
+      "else": {
+        "properties": {
+          "selected_element_id": { "type": "null" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "string_array": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "trust_label": {
+      "enum": [
+        "authenticated_user_instruction",
+        "approved_policy",
+        "approved_procedure",
+        "verified_operational_state",
+        "observed_ui_state",
+        "untrusted_web_content",
+        "untrusted_document_content",
+        "fixture"
+      ]
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "element_id",
+        "kind",
+        "label",
+        "score",
+        "matched_features",
+        "evidence",
+        "trust_labels"
+      ],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/token" },
+        "kind": { "$ref": "#/$defs/token" },
+        "label": { "$ref": "#/$defs/text" },
+        "score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "matched_features": { "$ref": "#/$defs/string_array" },
+        "evidence": { "$ref": "#/$defs/string_array" },
+        "trust_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/trust_label" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+schema_version: 1
+identity:
+  module_id: element-grounder
+  display_name: Deterministic Element Grounder
+  description: Ranks only observed Cognitive IR v1 elements for a semantic target without executing actions.
+  version: 1.0.0
+  contract_version: 1
+  build_id: element-grounder-v1
+  artifact_filename: artifacts/element-grounder.ref
+  artifact_sha256: sha256:b1a81f8fca05c26f6758e21b1faa63b39343a0d277c476ba6817eb409f5627d5
+  author: D2I Cognitive Module Platform
+  maintainer: D2I Cognitive Module Platform
+capabilities:
+  - capability_id: cognitive.element-ground
+    capability_version: 1.0.0
+    category: element_grounder
+    supported_input_kinds:
+      - element-grounding-input-v1
+    supported_output_kinds:
+      - element-grounding-result-v1
+    supported_risk_classes:
+      - read_only
+    deterministic: true
+    side_effect: false
+    network_requirement: denied
+    streaming: false
+    confidence_semantics: relative_ranking
+    input_schemas:
+      - element-grounding-input-v1
+    output_schemas:
+      - element-grounding-result-v1
+    unsupported_case_policy: Return an unsupported output status for target text with no searchable content; reject malformed or stale inputs.
+    fallback_capability: null
+    fallback_module: null
+schemas:
+  - schema_id: element-grounding-input-v1
+    schema_version: 1
+    path: schemas/input.schema.json
+    sha256: sha256:e514049843a1dbfceec388037ab0adddc234f51b1f27ab98d971c714a85607ac
+  - schema_id: element-grounding-result-v1
+    schema_version: 1
+    path: schemas/output.schema.json
+    sha256: sha256:a5855cf174662e46093cca24f58d7da0e74a2ec4809caa59589669d5cd84529a
+execution:
+  mode: in_process_rust_reference
+  timeout_logical_ticks: 100
+  maximum_input_bytes: 8388608
+  maximum_output_bytes: 1048576
+  memory_limit_bytes: 33554432
+  logical_operation_budget: 4000000
+  maximum_retries: 0
+  maximum_concurrent_invocations: 1
+  network_requirement: denied
+  filesystem_required: false
+  environment_variables_allowed: false
+  side_effect: false
+  reversible: true
+security:
+  accepted_trust_labels:
+    - fixture
+    - observed_ui_state
+    - verified_operational_state
+    - untrusted_web_content
+    - untrusted_document_content
+  untrusted_content_handling: treat_as_data
+  secrets_required: false
+  raw_secret_input: false
+  privileged_operation: false
+  allowed_external_dependencies:
+    - d2i-module-sdk
+  audit_requirement: invocation_and_result
+  fail_policy: closed
+  data_retention: none
+evaluation:
+  evaluation_set_id: element-grounder-conformance
+  evaluation_set_version: 1.0.0
+  metrics:
+    - exact_grounding_accuracy
+    - unique_match_precision
+    - ambiguous_detection_rate
+    - not_found_correctness
+    - stale_binding_rejection
+    - deterministic_replay_rate
+    - critical_wrong_selection_rate
+  acceptance_thresholds:
+    exact_grounding_accuracy: 1.0
+    unique_match_precision: 1.0
+    ambiguous_detection_rate: 1.0
+    not_found_correctness: 1.0
+    stale_binding_rejection: 1.0
+    deterministic_replay_rate: 1.0
+    critical_wrong_selection_rate: 0.0
+  critical_error_definition: Wrong unique selection, stale selection, nonexistent element ID, untrusted instruction elevation, or secret disclosure.
+  known_unsupported_cases:
+    - Target text that normalizes to no searchable content.
+    - Semantic distinctions absent from ObservableElement kind, label, value, and trust_labels.
+  benchmark_reference: fixtures/valid/exact-label.json
+  deterministic_replay_required: true
+provenance_and_license:
+  source_repository: D2I/modules/element-grounder
+  source_license: Apache-2.0
+  artifact_license: Apache-2.0
+  datasets: []
+  dataset_licenses: {}
+  commercial_use: permitted-under-apache-2.0
+  attribution:
+    - D2I Cognitive Module Platform
+  generated_artifact: false
+  third_party_dependencies:
+    - name: serde
+      version: 1.0.217
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+    - name: serde_json
+      version: 1.0.138
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+  supply_chain_metadata: Cargo.lock and repository commit bind the Rust source.
+  model_card: model-card.md
+  data_card: data-card.md
+  threat_model: threat-model.md

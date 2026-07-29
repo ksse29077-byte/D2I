@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "module_license": "Apache-2.0",
+  "commercial_use": "permitted-under-apache-2.0",
+  "dependencies": [
+    {
+      "name": "d2i-module-sdk",
+      "version": "workspace",
+      "license": "Apache-2.0",
+      "source": "repository"
+    },
+    {
+      "name": "serde",
+      "version": "1.0.217",
+      "license": "MIT-OR-Apache-2.0",
+      "source": "workspace-lock"
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.138",
+      "license": "MIT-OR-Apache-2.0",
+      "source": "workspace-lock"
+    }
+  ],
+  "training_data": [],
+  "external_services": []
+}

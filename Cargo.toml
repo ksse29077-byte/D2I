@@ -17,6 +17,7 @@ members = [
     "products/d2i-desktop",
     "modules/example-module",
     "modules/rule-based-work-reporter",
+    "modules/element-grounder",
 ]
 resolver = "2"
 
