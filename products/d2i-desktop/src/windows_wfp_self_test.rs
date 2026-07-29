@@ -584,7 +584,7 @@ fn validate_telemetry(
 fn validate_wfp_observation(
     observation: &WindowsWfpBrowserEgressObservation,
 ) -> Result<(), DesktopError> {
-    if observation.schema_version != 2
+    if !matches!(observation.schema_version, 2 | 3)
         || observation.provider_id != WINDOWS_WFP_LOOPBACK_PROVIDER_ID
     {
         return Err(DesktopError::Invalid(
@@ -603,7 +603,12 @@ fn validate_wfp_observation(
     for key in &observation.filter_keys {
         validate_guid(key, "WFP filter key")?;
     }
-    if !observation.verifier_sid.starts_with("S-1-15-2-") {
+    let verifier_sid_matches_version = match observation.schema_version {
+        2 => observation.verifier_sid.starts_with("S-1-15-2-"),
+        3 => observation.verifier_sid.starts_with("S-1-5-80-"),
+        _ => false,
+    };
+    if !verifier_sid_matches_version {
         return Err(DesktopError::Invalid(
             "WFP observation verifier SID is invalid".to_owned(),
         ));

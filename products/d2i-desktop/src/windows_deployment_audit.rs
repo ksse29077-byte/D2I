@@ -33,6 +33,21 @@ pub enum WindowsDeploymentAuditEventKind {
     AdapterReactivated,
     PolicyRecalled,
     ResidueCleaned,
+    VerifierBrokerStarted,
+    VerifierCallerVerified,
+    VerifierRequestAccepted,
+    VerifierRequestRejected,
+    VerifierChallengeConsumed,
+    VerifierEngineOpened,
+    VerifierObjectExactlyVerified,
+    VerifierAclVerified,
+    VerifierPolicyDigestCreated,
+    VerifierReceiptCreated,
+    VerifierReceiptSigned,
+    VerifierReceiptValidated,
+    BindingEvidenceCreated,
+    BindingEvidenceRejected,
+    VerifierBrokerStopped,
 }
 
 /// Outcome classification with no unrestricted payload.

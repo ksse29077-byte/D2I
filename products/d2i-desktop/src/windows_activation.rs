@@ -1,8 +1,8 @@
 use crate::windows_binding::CertifiedWindowsBinding;
 use crate::{
     hash_value, json_bytes, pretty_json_bytes, read_bounded, sha256_bytes, validate_hash,
-    validate_token, write_new, DesktopAdapterDescriptor, DesktopError, WindowsAdapterKind,
-    WindowsRuntimeManifest,
+    validate_token, write_new, DesktopAdapterDescriptor, DesktopError,
+    SignedWindowsWfpFunctionalAttestationV2, WindowsAdapterKind, WindowsRuntimeManifest,
 };
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
@@ -77,6 +77,7 @@ pub struct ActivatedWindowsBinding {
     pub(crate) adapter_descriptor: DesktopAdapterDescriptor,
     pub(crate) observed_at_unix_seconds: u64,
     pub(crate) expires_at_unix_seconds: u64,
+    pub(crate) wfp_functional_attestation: Option<SignedWindowsWfpFunctionalAttestationV2>,
 }
 
 impl ActivatedWindowsBinding {
@@ -311,6 +312,7 @@ pub fn activate_certified_windows_binding(
         adapter_descriptor: certified.adapter_descriptor,
         observed_at_unix_seconds: certified.observed_at_unix_seconds,
         expires_at_unix_seconds: certified.expires_at_unix_seconds,
+        wfp_functional_attestation: certified.wfp_functional_attestation,
     };
     drop(lock);
     Ok(WindowsActivationAdmission {
@@ -686,6 +688,7 @@ mod tests {
             expires_at_unix_seconds: observed + 120,
             activation_challenge: Some(challenge.to_owned()),
             self_test_report_hash: Some(report_hash.to_owned()),
+            wfp_functional_attestation: None,
         }
     }
 

@@ -20,7 +20,22 @@ pub fn install_wfp_loopback_policy(
     verifier_sid: &str,
     owner_sid: &str,
 ) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
-    platform::install(application, verifier_sid, owner_sid)
+    platform::install(application, None, verifier_sid, owner_sid)
+}
+
+/// Installs the browser policy plus loopback-only filters for the verifier image.
+pub fn install_wfp_loopback_policy_with_verifier_network_denial(
+    application: &Path,
+    verifier_application: &Path,
+    verifier_sid: &str,
+    owner_sid: &str,
+) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
+    platform::install(
+        application,
+        Some(verifier_application),
+        verifier_sid,
+        owner_sid,
+    )
 }
 
 /// Verifies every persistent WFP object and condition against the application.
@@ -29,7 +44,22 @@ pub fn verify_wfp_loopback_policy(
     verifier_sid: &str,
     owner_sid: &str,
 ) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
-    platform::verify(application, verifier_sid, owner_sid)
+    platform::verify(application, None, verifier_sid, owner_sid)
+}
+
+/// Verifies browser and verifier-image loopback-only filters by fixed key.
+pub fn verify_wfp_loopback_policy_with_verifier_network_denial(
+    application: &Path,
+    verifier_application: &Path,
+    verifier_sid: &str,
+    owner_sid: &str,
+) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
+    platform::verify(
+        application,
+        Some(verifier_application),
+        verifier_sid,
+        owner_sid,
+    )
 }
 
 /// Removes the D2I WFP policy. Missing objects are treated as already removed.
@@ -86,6 +116,14 @@ mod platform {
     const V4_EGRESS_BLOCK_KEY: GUID = GUID::from_u128(0xfaab358b_8445_488e_8836_ce1173cd6000);
     const V6_LOOPBACK_PERMIT_KEY: GUID = GUID::from_u128(0x5433444c_fc9f_4845_9139_f83e316cbac2);
     const V6_EGRESS_BLOCK_KEY: GUID = GUID::from_u128(0x17ddc305_ac3a_4799_886e_0990bed1f105);
+    const VERIFIER_V4_LOOPBACK_PERMIT_KEY: GUID =
+        GUID::from_u128(0x19fe4430_e15a_4724_9f69_fa4094f91f68);
+    const VERIFIER_V4_EGRESS_BLOCK_KEY: GUID =
+        GUID::from_u128(0x2a442793_137e_4e30_8dfd_36e6ec51f73e);
+    const VERIFIER_V6_LOOPBACK_PERMIT_KEY: GUID =
+        GUID::from_u128(0x32525113_1bb9_4d36_b334_28049fe0e137);
+    const VERIFIER_V6_EGRESS_BLOCK_KEY: GUID =
+        GUID::from_u128(0x4ab70e6d_4d44_43dc_98c2_c7872094039d);
     const PROVIDER_NAME: &str = "D2I Browser Egress Provider v1";
     const PROVIDER_DESCRIPTION: &str =
         "D2I persistent WFP provider for a hash-pinned loopback-only browser";
@@ -267,21 +305,32 @@ mod platform {
 
     pub(super) fn install(
         application: &Path,
+        verifier_application: Option<&Path>,
         verifier_sid: &str,
         owner_sid: &str,
     ) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
         let descriptor = object_security_descriptor(verifier_sid, owner_sid)?;
         let engine = open_engine()?;
         set_engine_verifier_access(&engine, verifier_sid, true)?;
-        if let Ok(engine_sddl) = verify_with_engine(&engine, application, verifier_sid, owner_sid) {
+        if let Ok(engine_sddl) = verify_with_engine(
+            &engine,
+            application,
+            verifier_application,
+            verifier_sid,
+            owner_sid,
+        ) {
             return Ok(identity(verifier_sid, &engine_sddl, &descriptor.sddl));
         }
-        let app_id = app_id(application)?;
+        let browser_app_id = app_id(application)?;
+        let verifier_app_id = verifier_application.map(app_id).transpose()?;
         let install_result = (|| {
             let transaction = Transaction::begin(&engine)?;
             add_provider(&engine, descriptor.value)?;
             add_sublayer(&engine, descriptor.value)?;
-            add_filters(&engine, &app_id, descriptor.value)?;
+            add_filters(&engine, &browser_app_id, descriptor.value)?;
+            if let Some(verifier_app_id) = verifier_app_id.as_ref() {
+                add_verifier_filters(&engine, verifier_app_id, descriptor.value)?;
+            }
             transaction.commit()
         })();
         if let Err(error) = install_result {
@@ -295,7 +344,13 @@ mod platform {
                 ))),
             };
         }
-        let engine_sddl = match verify_with_engine(&engine, application, verifier_sid, owner_sid) {
+        let engine_sddl = match verify_with_engine(
+            &engine,
+            application,
+            verifier_application,
+            verifier_sid,
+            owner_sid,
+        ) {
             Ok(value) => value,
             Err(error) => {
                 drop(engine);
@@ -314,12 +369,19 @@ mod platform {
 
     pub(super) fn verify(
         application: &Path,
+        verifier_application: Option<&Path>,
         verifier_sid: &str,
         owner_sid: &str,
     ) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
         let descriptor = object_security_descriptor(verifier_sid, owner_sid)?;
         let engine = open_engine()?;
-        let engine_sddl = verify_with_engine(&engine, application, verifier_sid, owner_sid)?;
+        let engine_sddl = verify_with_engine(
+            &engine,
+            application,
+            verifier_application,
+            verifier_sid,
+            owner_sid,
+        )?;
         Ok(identity(verifier_sid, &engine_sddl, &descriptor.sddl))
     }
 
@@ -332,6 +394,10 @@ mod platform {
             V4_EGRESS_BLOCK_KEY,
             V6_LOOPBACK_PERMIT_KEY,
             V6_EGRESS_BLOCK_KEY,
+            VERIFIER_V4_LOOPBACK_PERMIT_KEY,
+            VERIFIER_V4_EGRESS_BLOCK_KEY,
+            VERIFIER_V6_LOOPBACK_PERMIT_KEY,
+            VERIFIER_V6_EGRESS_BLOCK_KEY,
         ] {
             // SAFETY: the engine and key pointers are valid.
             let code = unsafe { FwpmFilterDeleteByKey0(engine.0, &key) };
@@ -366,6 +432,10 @@ mod platform {
             V4_EGRESS_BLOCK_KEY,
             V6_LOOPBACK_PERMIT_KEY,
             V6_EGRESS_BLOCK_KEY,
+            VERIFIER_V4_LOOPBACK_PERMIT_KEY,
+            VERIFIER_V4_EGRESS_BLOCK_KEY,
+            VERIFIER_V6_LOOPBACK_PERMIT_KEY,
+            VERIFIER_V6_EGRESS_BLOCK_KEY,
         ] {
             let mut pointer = null_mut();
             // SAFETY: the engine, key, and writable output pointer are valid.
@@ -550,6 +620,65 @@ mod platform {
         )
     }
 
+    fn add_verifier_filters(
+        engine: &Engine,
+        app_id: &AppId,
+        descriptor: PSECURITY_DESCRIPTOR,
+    ) -> Result<(), WindowsHostError> {
+        let mut v4_loopback = FWP_V4_ADDR_AND_MASK {
+            addr: 0x7f00_0000,
+            mask: 0xff00_0000,
+        };
+        let mut v6_loopback = FWP_V6_ADDR_AND_MASK {
+            addr: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            prefixLength: 128,
+        };
+        add_filter(
+            engine,
+            app_id,
+            VERIFIER_V4_LOOPBACK_PERMIT_KEY,
+            "D2I Verifier IPv4 Loopback Permit v1",
+            FWPM_LAYER_ALE_AUTH_CONNECT_V4,
+            FWP_ACTION_PERMIT,
+            PERMIT_WEIGHT,
+            Some(AddressCondition::V4(&mut v4_loopback)),
+            descriptor,
+        )?;
+        add_filter(
+            engine,
+            app_id,
+            VERIFIER_V4_EGRESS_BLOCK_KEY,
+            "D2I Verifier IPv4 Egress Block v1",
+            FWPM_LAYER_ALE_AUTH_CONNECT_V4,
+            FWP_ACTION_BLOCK,
+            BLOCK_WEIGHT,
+            None,
+            descriptor,
+        )?;
+        add_filter(
+            engine,
+            app_id,
+            VERIFIER_V6_LOOPBACK_PERMIT_KEY,
+            "D2I Verifier IPv6 Loopback Permit v1",
+            FWPM_LAYER_ALE_AUTH_CONNECT_V6,
+            FWP_ACTION_PERMIT,
+            PERMIT_WEIGHT,
+            Some(AddressCondition::V6(&mut v6_loopback)),
+            descriptor,
+        )?;
+        add_filter(
+            engine,
+            app_id,
+            VERIFIER_V6_EGRESS_BLOCK_KEY,
+            "D2I Verifier IPv6 Egress Block v1",
+            FWPM_LAYER_ALE_AUTH_CONNECT_V6,
+            FWP_ACTION_BLOCK,
+            BLOCK_WEIGHT,
+            None,
+            descriptor,
+        )
+    }
+
     enum AddressCondition<'a> {
         V4(&'a mut FWP_V4_ADDR_AND_MASK),
         V6(&'a mut FWP_V6_ADDR_AND_MASK),
@@ -627,18 +756,19 @@ mod platform {
     fn verify_with_engine(
         engine: &Engine,
         application: &Path,
+        verifier_application: Option<&Path>,
         verifier_sid: &str,
         owner_sid: &str,
     ) -> Result<String, WindowsHostError> {
         let engine_sddl = verify_engine_security(engine, verifier_sid)?;
-        let app_id = app_id(application)?;
+        let browser_app_id = app_id(application)?;
         verify_provider(engine)?;
         verify_provider_security(engine, verifier_sid, owner_sid)?;
         verify_sublayer(engine)?;
         verify_sublayer_security(engine, verifier_sid, owner_sid)?;
         verify_filter(
             engine,
-            &app_id,
+            &browser_app_id,
             V4_LOOPBACK_PERMIT_KEY,
             FWPM_LAYER_ALE_AUTH_CONNECT_V4,
             FWP_ACTION_PERMIT,
@@ -648,7 +778,7 @@ mod platform {
         verify_filter_security(engine, &V4_LOOPBACK_PERMIT_KEY, verifier_sid, owner_sid)?;
         verify_filter(
             engine,
-            &app_id,
+            &browser_app_id,
             V4_EGRESS_BLOCK_KEY,
             FWPM_LAYER_ALE_AUTH_CONNECT_V4,
             FWP_ACTION_BLOCK,
@@ -658,7 +788,7 @@ mod platform {
         verify_filter_security(engine, &V4_EGRESS_BLOCK_KEY, verifier_sid, owner_sid)?;
         verify_filter(
             engine,
-            &app_id,
+            &browser_app_id,
             V6_LOOPBACK_PERMIT_KEY,
             FWPM_LAYER_ALE_AUTH_CONNECT_V6,
             FWP_ACTION_PERMIT,
@@ -668,7 +798,7 @@ mod platform {
         verify_filter_security(engine, &V6_LOOPBACK_PERMIT_KEY, verifier_sid, owner_sid)?;
         verify_filter(
             engine,
-            &app_id,
+            &browser_app_id,
             V6_EGRESS_BLOCK_KEY,
             FWPM_LAYER_ALE_AUTH_CONNECT_V6,
             FWP_ACTION_BLOCK,
@@ -676,6 +806,50 @@ mod platform {
             ExpectedAddress::None,
         )?;
         verify_filter_security(engine, &V6_EGRESS_BLOCK_KEY, verifier_sid, owner_sid)?;
+        if let Some(verifier_application) = verifier_application {
+            let verifier_app_id = app_id(verifier_application)?;
+            for (key, layer, action, weight, address) in [
+                (
+                    VERIFIER_V4_LOOPBACK_PERMIT_KEY,
+                    FWPM_LAYER_ALE_AUTH_CONNECT_V4,
+                    FWP_ACTION_PERMIT,
+                    PERMIT_WEIGHT,
+                    ExpectedAddress::V4,
+                ),
+                (
+                    VERIFIER_V4_EGRESS_BLOCK_KEY,
+                    FWPM_LAYER_ALE_AUTH_CONNECT_V4,
+                    FWP_ACTION_BLOCK,
+                    BLOCK_WEIGHT,
+                    ExpectedAddress::None,
+                ),
+                (
+                    VERIFIER_V6_LOOPBACK_PERMIT_KEY,
+                    FWPM_LAYER_ALE_AUTH_CONNECT_V6,
+                    FWP_ACTION_PERMIT,
+                    PERMIT_WEIGHT,
+                    ExpectedAddress::V6,
+                ),
+                (
+                    VERIFIER_V6_EGRESS_BLOCK_KEY,
+                    FWPM_LAYER_ALE_AUTH_CONNECT_V6,
+                    FWP_ACTION_BLOCK,
+                    BLOCK_WEIGHT,
+                    ExpectedAddress::None,
+                ),
+            ] {
+                verify_filter(
+                    engine,
+                    &verifier_app_id,
+                    key,
+                    layer,
+                    action,
+                    weight,
+                    address,
+                )?;
+                verify_filter_security(engine, &key, verifier_sid, owner_sid)?;
+            }
+        }
         Ok(engine_sddl)
     }
 
@@ -1040,13 +1214,13 @@ mod platform {
 
     fn validate_verifier_sid(verifier_sid: &str) -> Result<(), WindowsHostError> {
         if verifier_sid.len() > 256
-            || !verifier_sid.starts_with("S-1-15-2-")
+            || !(verifier_sid.starts_with("S-1-15-2-") || verifier_sid.starts_with("S-1-5-80-"))
             || verifier_sid
                 .bytes()
                 .any(|byte| !byte.is_ascii_digit() && byte != b'-' && byte != b'S')
         {
             return Err(WindowsHostError::new(
-                "WFP verifier SID must be an exact AppContainer profile SID",
+                "WFP verifier SID must be an exact AppContainer or Service SID",
             ));
         }
         Ok(())
@@ -1380,6 +1554,7 @@ mod platform {
 
     pub(super) fn install(
         _application: &Path,
+        _verifier_application: Option<&Path>,
         _verifier_sid: &str,
         _owner_sid: &str,
     ) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {
@@ -1388,6 +1563,7 @@ mod platform {
 
     pub(super) fn verify(
         _application: &Path,
+        _verifier_application: Option<&Path>,
         _verifier_sid: &str,
         _owner_sid: &str,
     ) -> Result<WindowsWfpLoopbackPolicyIdentity, WindowsHostError> {

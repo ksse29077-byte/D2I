@@ -12,10 +12,11 @@
     "browser_executable_hash",
     "verifier_profile_name",
     "verifier_profile_sid",
-    "policy_owner_sid"
+    "policy_owner_sid",
+    "verifier_broker"
   ],
   "properties": {
-    "schema_version": { "const": 2 },
+    "schema_version": { "enum": [2, 3] },
     "enforcement_id": { "$ref": "#/$defs/token" },
     "provider_id": { "const": "d2i.windows.wfp.loopback.v1" },
     "browser_executable": {
@@ -37,8 +38,24 @@
     "policy_owner_sid": {
       "type": "string",
       "pattern": "^S-1-[0-9-]+$"
+    },
+    "verifier_broker": {
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/verifier_broker" }
+      ]
     }
   },
+  "allOf": [
+    {
+      "if": { "properties": { "schema_version": { "const": 2 } } },
+      "then": { "properties": { "verifier_broker": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "schema_version": { "const": 3 } } },
+      "then": { "properties": { "verifier_broker": { "$ref": "#/$defs/verifier_broker" } } }
+    }
+  ],
   "$defs": {
     "hash": {
       "type": "string",
@@ -49,6 +66,32 @@
       "minLength": 1,
       "maxLength": 4096,
       "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "verifier_broker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "service_name",
+        "service_sid",
+        "pipe_name",
+        "verifier_build_id",
+        "verifier_executable",
+        "verifier_executable_hash",
+        "signer_key_id",
+        "signer_public_key"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "service_name": { "$ref": "#/$defs/token" },
+        "service_sid": { "type": "string", "pattern": "^S-1-5-80-[0-9-]+$" },
+        "pipe_name": { "$ref": "#/$defs/token" },
+        "verifier_build_id": { "$ref": "#/$defs/token" },
+        "verifier_executable": { "type": "string", "minLength": 3, "maxLength": 4096 },
+        "verifier_executable_hash": { "$ref": "#/$defs/hash" },
+        "signer_key_id": { "$ref": "#/$defs/token" },
+        "signer_public_key": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      }
     }
   }
 }

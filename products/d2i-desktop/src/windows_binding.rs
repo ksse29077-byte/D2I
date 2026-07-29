@@ -1,7 +1,8 @@
 use crate::{
     hash_value, hex_decode_array, hex_encode, json_bytes, read_bounded, sha256_bytes,
     validate_hash, validate_text, validate_token, DesktopAdapterDescriptor, DesktopCapability,
-    DesktopError, SignedWindowsWfpFunctionalAttestationV2,
+    DesktopError, SignedWfpVerificationReceipt, SignedWindowsWfpFunctionalAttestationV2,
+    WfpReceiptReplayLedger, WindowsWfpVerifierBrokerBinding,
 };
 use d2i_windows_host::host_identity;
 use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
@@ -56,14 +57,16 @@ pub struct WindowsWfpBrowserEgressPolicy {
     pub verifier_profile_name: String,
     pub verifier_profile_sid: String,
     pub policy_owner_sid: String,
+    #[serde(default)]
+    pub verifier_broker: Option<WindowsWfpVerifierBrokerBinding>,
 }
 
 impl WindowsWfpBrowserEgressPolicy {
     /// Validates the concrete provider identity and browser image declaration.
     pub fn validate(&self) -> Result<(), DesktopError> {
-        if self.schema_version != 2 {
+        if !matches!(self.schema_version, 2 | 3) {
             return Err(DesktopError::Invalid(
-                "Windows WFP browser-egress policy schema_version must be 2".to_owned(),
+                "Windows WFP browser-egress policy schema_version must be 2 or 3".to_owned(),
             ));
         }
         validate_token(&self.enforcement_id, "browser egress enforcement_id")?;
@@ -82,6 +85,21 @@ impl WindowsWfpBrowserEgressPolicy {
             ));
         }
         validate_windows_sid(&self.policy_owner_sid, "WFP policy owner SID")?;
+        match (self.schema_version, &self.verifier_broker) {
+            (2, None) => {}
+            (3, Some(broker)) => broker.validate()?,
+            (2, Some(_)) => {
+                return Err(DesktopError::Invalid(
+                    "WFP policy v2 cannot claim a verifier broker".to_owned(),
+                ));
+            }
+            (3, None) => {
+                return Err(DesktopError::Invalid(
+                    "WFP policy v3 requires a verifier broker binding".to_owned(),
+                ));
+            }
+            _ => unreachable!("schema version was checked above"),
+        }
         Ok(())
     }
 
@@ -89,6 +107,12 @@ impl WindowsWfpBrowserEgressPolicy {
     pub fn policy_hash(&self) -> Result<String, DesktopError> {
         self.validate()?;
         hash_value(self)
+    }
+
+    pub(crate) fn wfp_reader_sid(&self) -> &str {
+        self.verifier_broker
+            .as_ref()
+            .map_or(&self.verifier_profile_sid, |broker| &broker.service_sid)
     }
 }
 
@@ -211,6 +235,8 @@ pub struct WindowsAdapterConfiguration {
     pub browser_session_ids: BTreeSet<String>,
     pub browser_allowed_origins: BTreeSet<String>,
     pub browser_egress_policy: Option<WindowsWfpBrowserEgressPolicy>,
+    #[serde(default)]
+    pub deployment_audit_root: Option<String>,
     pub ui_allowed_executable_hashes: BTreeSet<String>,
     pub process_isolation: Option<WindowsProcessIsolation>,
 }
@@ -264,6 +290,9 @@ impl WindowsAdapterConfiguration {
         for hash in &self.ui_allowed_executable_hashes {
             validate_hash(hash, "UI allowed executable hash")?;
         }
+        if let Some(root) = &self.deployment_audit_root {
+            validate_absolute_path(root, "deployment_audit_root")?;
+        }
         match self.adapter_kind {
             WindowsAdapterKind::UiAutomation => {
                 if self.ui_allowed_executable_hashes.is_empty()
@@ -272,6 +301,7 @@ impl WindowsAdapterConfiguration {
                     || !self.browser_session_ids.is_empty()
                     || !self.browser_allowed_origins.is_empty()
                     || self.browser_egress_policy.is_some()
+                    || self.deployment_audit_root.is_some()
                     || self.process_isolation.is_some()
                 {
                     return Err(DesktopError::Invalid(
@@ -297,6 +327,12 @@ impl WindowsAdapterConfiguration {
                 }
                 if let Some(policy) = &self.browser_egress_policy {
                     policy.validate()?;
+                    if policy.verifier_broker.is_some() && self.deployment_audit_root.is_none() {
+                        return Err(DesktopError::Invalid(
+                            "broker-backed WFP configuration requires a protected audit root"
+                                .to_owned(),
+                        ));
+                    }
                     for origin in &self.browser_allowed_origins {
                         validate_loopback_origin(origin)?;
                     }
@@ -308,6 +344,7 @@ impl WindowsAdapterConfiguration {
                     || !self.browser_session_ids.is_empty()
                     || !self.browser_allowed_origins.is_empty()
                     || self.browser_egress_policy.is_some()
+                    || self.deployment_audit_root.is_some()
                     || !self.ui_allowed_executable_hashes.is_empty()
                     || self.process_isolation.is_some()
                 {
@@ -323,6 +360,7 @@ impl WindowsAdapterConfiguration {
                     || !self.browser_session_ids.is_empty()
                     || !self.browser_allowed_origins.is_empty()
                     || self.browser_egress_policy.is_some()
+                    || self.deployment_audit_root.is_some()
                     || !self.ui_allowed_executable_hashes.is_empty()
                 {
                     return Err(DesktopError::Invalid(
@@ -569,6 +607,7 @@ pub struct WindowsBindingInput {
     pub capability: WindowsCapabilityObservation,
     pub browser_egress_evidence: Option<SignedWindowsBrowserEgressEvidence>,
     pub wfp_functional_attestation: Option<SignedWindowsWfpFunctionalAttestationV2>,
+    pub wfp_verification_receipt: Option<SignedWfpVerificationReceipt>,
 }
 
 /// Probe-signed Windows runtime observation.
@@ -590,6 +629,7 @@ pub struct WindowsBindingEvidence {
     pub capability: WindowsCapabilityObservation,
     pub browser_egress_evidence: Option<SignedWindowsBrowserEgressEvidence>,
     pub wfp_functional_attestation: Option<SignedWindowsWfpFunctionalAttestationV2>,
+    pub wfp_verification_receipt: Option<SignedWfpVerificationReceipt>,
     pub signer_public_key: String,
     pub signature_hex: String,
 }
@@ -659,6 +699,7 @@ pub struct CertifiedWindowsBinding {
     pub(crate) expires_at_unix_seconds: u64,
     pub(crate) activation_challenge: Option<String>,
     pub(crate) self_test_report_hash: Option<String>,
+    pub(crate) wfp_functional_attestation: Option<SignedWindowsWfpFunctionalAttestationV2>,
 }
 
 /// Side-effect-free boundary implemented by a concrete Windows host probe.
@@ -742,8 +783,15 @@ impl ConcreteWindowsRuntimeBindingProbe {
 
 impl WindowsRuntimeBindingProbe for ConcreteWindowsRuntimeBindingProbe {
     fn collect_binding_evidence(&self) -> Result<WindowsBindingEvidence, DesktopError> {
-        crate::windows_egress::verify_configured_windows_browser_egress(&self.configuration)?;
         let host = current_windows_host_binding()?;
+        let mut receipt_replay = WfpReceiptReplayLedger::default();
+        let _ = crate::windows_egress::verify_configured_windows_browser_egress(
+            &self.configuration,
+            &host,
+            self.wfp_functional_attestation.as_ref(),
+            &mut receipt_replay,
+            self.observed_at_unix_seconds,
+        )?;
         let worker = canonical_regular_path(
             Path::new(&self.configuration.worker_executable),
             "worker executable",
@@ -755,7 +803,14 @@ impl WindowsRuntimeBindingProbe for ConcreteWindowsRuntimeBindingProbe {
             ));
         }
         let capability = crate::windows_worker::probe_worker(&self.configuration)?;
-        crate::windows_egress::verify_configured_windows_browser_egress(&self.configuration)?;
+        let wfp_verification_receipt =
+            crate::windows_egress::verify_configured_windows_browser_egress(
+                &self.configuration,
+                &host,
+                self.wfp_functional_attestation.as_ref(),
+                &mut receipt_replay,
+                self.observed_at_unix_seconds,
+            )?;
         validate_probe_browser_egress(
             &self.configuration,
             &host,
@@ -763,7 +818,7 @@ impl WindowsRuntimeBindingProbe for ConcreteWindowsRuntimeBindingProbe {
             self.browser_egress_evidence.as_ref(),
             self.wfp_functional_attestation.as_ref(),
         )?;
-        create_windows_binding_evidence(
+        let result = create_windows_binding_evidence(
             WindowsBindingInput {
                 schema_version: 1,
                 binding_id: self.binding_id.clone(),
@@ -780,9 +835,37 @@ impl WindowsRuntimeBindingProbe for ConcreteWindowsRuntimeBindingProbe {
                 capability,
                 browser_egress_evidence: self.browser_egress_evidence.clone(),
                 wfp_functional_attestation: self.wfp_functional_attestation.clone(),
+                wfp_verification_receipt,
             },
             &self.signing_key,
-        )
+        );
+        if self
+            .configuration
+            .browser_egress_policy
+            .as_ref()
+            .is_some_and(|policy| policy.verifier_broker.is_some())
+        {
+            match &result {
+                Ok(evidence) => {
+                    let evidence_hash = hash_value(evidence)?;
+                    crate::windows_wfp_broker_runtime::record_binding_evidence_audit(
+                        &self.configuration,
+                        Some(&evidence_hash),
+                        None,
+                        self.observed_at_unix_seconds,
+                    )?;
+                }
+                Err(error) => {
+                    crate::windows_wfp_broker_runtime::record_binding_evidence_audit(
+                        &self.configuration,
+                        None,
+                        Some(error),
+                        self.observed_at_unix_seconds,
+                    )?;
+                }
+            }
+        }
+        result
     }
 }
 
@@ -803,6 +886,7 @@ struct SignedEvidencePayload<'a> {
     capability: &'a WindowsCapabilityObservation,
     browser_egress_evidence: &'a Option<SignedWindowsBrowserEgressEvidence>,
     wfp_functional_attestation: &'a Option<SignedWindowsWfpFunctionalAttestationV2>,
+    wfp_verification_receipt: &'a Option<SignedWfpVerificationReceipt>,
     signer_public_key: &'a str,
 }
 
@@ -908,6 +992,7 @@ pub fn create_windows_binding_evidence(
         capability: input.capability,
         browser_egress_evidence: input.browser_egress_evidence,
         wfp_functional_attestation: input.wfp_functional_attestation,
+        wfp_verification_receipt: input.wfp_verification_receipt,
         signer_public_key,
         signature_hex,
     })
@@ -1175,6 +1260,7 @@ pub fn verify_signed_windows_certification(
             .wfp_functional_attestation
             .as_ref()
             .map(|attestation| attestation.self_test_report_hash.clone()),
+        wfp_functional_attestation: evidence.wfp_functional_attestation.clone(),
     })
 }
 
@@ -1207,22 +1293,31 @@ fn validate_binding_input(input: &WindowsBindingInput) -> Result<(), DesktopErro
             match (
                 input.browser_egress_evidence.as_ref(),
                 input.wfp_functional_attestation.as_ref(),
+                input.wfp_verification_receipt.as_ref(),
             ) {
-                (Some(evidence), None) => validate_browser_egress_evidence(evidence)?,
-                (None, Some(attestation)) => {
+                (Some(evidence), None, None) => validate_browser_egress_evidence(evidence)?,
+                (None, Some(attestation), Some(receipt)) => {
                     crate::windows_attestation::validate_windows_wfp_functional_attestation_v2(
                         attestation,
+                    )?;
+                    validate_receipt_matches_binding(
+                        receipt,
+                        attestation,
+                        &input.configuration_hash,
+                        &input.host,
                     )?;
                 }
                 _ => {
                     return Err(DesktopError::Invalid(
-                        "WebDriver binding requires exactly one browser-egress proof".to_owned(),
+                        "WebDriver binding requires external proof or attestation plus receipt"
+                            .to_owned(),
                     ));
                 }
             }
         }
         _ if input.browser_egress_evidence.is_some()
-            || input.wfp_functional_attestation.is_some() =>
+            || input.wfp_functional_attestation.is_some()
+            || input.wfp_verification_receipt.is_some() =>
         {
             return Err(DesktopError::Invalid(
                 "non-WebDriver binding contains browser-egress evidence".to_owned(),
@@ -1394,12 +1489,24 @@ fn browser_egress_matches(
                 let Some(observed) = evidence.wfp_functional_attestation.as_ref() else {
                     return Ok(false);
                 };
+                let Some(receipt) = evidence.wfp_verification_receipt.as_ref() else {
+                    return Ok(false);
+                };
                 Ok(crate::verify_windows_wfp_functional_attestation_v2(
                     observed,
                     &requirement.provider_public_key,
                     now_unix_seconds,
                 )
                 .is_ok()
+                    && validate_receipt_matches_binding(
+                        receipt,
+                        observed,
+                        &evidence.configuration_hash,
+                        &evidence.host,
+                    )
+                    .is_ok()
+                    && now_unix_seconds >= receipt.issued_at_unix_seconds
+                    && now_unix_seconds <= receipt.expires_at_unix_seconds
                     && observed.runtime_binding_digest == evidence.configuration_hash
                     && observed.machine_binding == evidence.host
                     && observed.enforcement_id == requirement.enforcement_id
@@ -1416,7 +1523,9 @@ fn browser_egress_matches(
                     && requirement.activation_challenge.as_deref()
                         == Some(observed.activation_challenge.as_str()))
             } else {
-                if evidence.wfp_functional_attestation.is_some() {
+                if evidence.wfp_functional_attestation.is_some()
+                    || evidence.wfp_verification_receipt.is_some()
+                {
                     return Ok(false);
                 }
                 let Some(observed) = evidence.browser_egress_evidence.as_ref() else {
@@ -1436,7 +1545,8 @@ fn browser_egress_matches(
         }
         _ => Ok(manifest.browser_egress_requirement.is_none()
             && evidence.browser_egress_evidence.is_none()
-            && evidence.wfp_functional_attestation.is_none()),
+            && evidence.wfp_functional_attestation.is_none()
+            && evidence.wfp_verification_receipt.is_none()),
     }
 }
 
@@ -1472,9 +1582,43 @@ fn validate_evidence(evidence: &WindowsBindingEvidence) -> Result<(), DesktopErr
         capability: evidence.capability.clone(),
         browser_egress_evidence: evidence.browser_egress_evidence.clone(),
         wfp_functional_attestation: evidence.wfp_functional_attestation.clone(),
+        wfp_verification_receipt: evidence.wfp_verification_receipt.clone(),
     })?;
     validate_public_key(&evidence.signer_public_key, "evidence signer_public_key")?;
     let _ = hex_decode_array::<64>(&evidence.signature_hex)?;
+    Ok(())
+}
+
+fn validate_receipt_matches_binding(
+    receipt: &SignedWfpVerificationReceipt,
+    attestation: &SignedWindowsWfpFunctionalAttestationV2,
+    configuration_hash: &str,
+    host: &WindowsHostBinding,
+) -> Result<(), DesktopError> {
+    crate::verify_wfp_verification_receipt_signature(receipt)?;
+    if receipt.result_status != crate::WfpVerificationStatus::Verified
+        || receipt.failure_code != "none"
+        || !receipt.object_acl_verification_passed
+        || !receipt.verifier_network_egress_denied
+        || receipt.runtime_binding_digest != configuration_hash
+        || receipt.machine_session_binding != *host
+        || receipt.verified_policy_canonical_digest != attestation.policy_hash
+        || receipt.edge_hash != attestation.browser_executable_hash
+        || receipt.edge_driver_hash != attestation.driver_executable_hash
+        || receipt.source_functional_report_hash != attestation.self_test_report_hash
+        || receipt.attestation_hash != attestation.attestation_hash()?
+        || receipt.object_guids.provider != attestation.provider_key
+        || receipt.object_guids.sublayer != attestation.sublayer_key
+        || receipt.object_guids.filters != attestation.filter_keys
+        || receipt
+            .object_results
+            .iter()
+            .any(|result| !result.exact_fields_verified || !result.acl_verified)
+    {
+        return Err(DesktopError::Integrity(
+            "WFP verification receipt differs from binding attestation".to_owned(),
+        ));
+    }
     Ok(())
 }
 
@@ -1587,6 +1731,7 @@ fn evidence_payload_from_input<'a>(
         capability: &input.capability,
         browser_egress_evidence: &input.browser_egress_evidence,
         wfp_functional_attestation: &input.wfp_functional_attestation,
+        wfp_verification_receipt: &input.wfp_verification_receipt,
         signer_public_key,
     }
 }
@@ -1608,6 +1753,7 @@ fn evidence_payload(evidence: &WindowsBindingEvidence) -> SignedEvidencePayload<
         capability: &evidence.capability,
         browser_egress_evidence: &evidence.browser_egress_evidence,
         wfp_functional_attestation: &evidence.wfp_functional_attestation,
+        wfp_verification_receipt: &evidence.wfp_verification_receipt,
         signer_public_key: &evidence.signer_public_key,
     }
 }

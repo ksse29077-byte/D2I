@@ -14,7 +14,10 @@ mod windows_binding;
 mod windows_deployment_audit;
 mod windows_egress;
 mod windows_keys;
+mod windows_post_activation_self_test;
 mod windows_webdriver;
+mod windows_wfp_broker;
+mod windows_wfp_broker_runtime;
 mod windows_wfp_self_test;
 mod windows_worker;
 
@@ -91,7 +94,26 @@ pub use windows_keys::{
     protect_windows_signing_key, unprotect_windows_signing_key, WindowsProtectedSigningKey,
     WindowsSigningKeyPurpose,
 };
+pub use windows_post_activation_self_test::{
+    run_windows_webdriver_post_activation_self_test, WindowsWebDriverPostActivationSelfTestReport,
+};
 pub use windows_webdriver::{create_windows_edge_driver_pin, WindowsEdgeDriverPin};
+pub use windows_wfp_broker::{
+    create_signed_wfp_verification_receipt, protect_wfp_verifier_signing_key,
+    unprotect_wfp_verifier_signing_key, verify_wfp_verification_receipt_signature,
+    SignedWfpVerificationReceipt, WfpExpectedObjectGuids, WfpObjectVerificationResult,
+    WfpReceiptReplayLedger, WfpVerificationRequest, WfpVerificationStatus, WfpVerifierOperation,
+    WindowsProtectedWfpVerifierKey, WindowsWfpVerifierBrokerBinding,
+    WindowsWfpVerifierBrokerServiceConfiguration, WINDOWS_WFP_FILTER_GUIDS,
+    WINDOWS_WFP_PROVIDER_GUID, WINDOWS_WFP_SUBLAYER_GUID,
+    WINDOWS_WFP_VERIFIER_NETWORK_FILTER_GUIDS,
+};
+pub use windows_wfp_broker_runtime::{
+    configure_windows_wfp_verifier_broker, provision_windows_wfp_verifier_broker,
+    remove_windows_wfp_verifier_broker_artifacts, run_windows_wfp_broker_client_worker,
+    run_windows_wfp_verifier_broker_service, verify_windows_wfp_browser_egress_through_broker,
+    WindowsWfpBrokerRuntimeVerification,
+};
 pub use windows_wfp_self_test::{
     run_windows_wfp_browser_egress_self_test, WindowsWfpBrowserEgressSelfTestReport,
     WindowsWfpConnectionEvent, WindowsWfpConnectionOutcome, WindowsWfpNetworkProbe,

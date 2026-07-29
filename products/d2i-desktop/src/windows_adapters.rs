@@ -3,7 +3,8 @@ use crate::windows_worker::IsolatedWindowsWorker;
 use crate::{
     ActivatedWindowsBinding, AdapterExecution, DesktopActionIntent, DesktopAdapter,
     DesktopAdapterDescriptor, DesktopError, ExecutionPermit, PreparedAction,
-    WindowsAdapterConfiguration, WindowsAdapterKind,
+    SignedWindowsWfpFunctionalAttestationV2, WfpReceiptReplayLedger, WindowsAdapterConfiguration,
+    WindowsAdapterKind,
 };
 
 struct WindowsWorkerAdapter {
@@ -14,6 +15,8 @@ struct WindowsWorkerAdapter {
     activation_record_hash: String,
     observed_at_unix_seconds: u64,
     expires_at_unix_seconds: u64,
+    wfp_functional_attestation: Option<SignedWindowsWfpFunctionalAttestationV2>,
+    receipt_replay: WfpReceiptReplayLedger,
     worker: IsolatedWindowsWorker,
 }
 
@@ -47,7 +50,15 @@ impl WindowsWorkerAdapter {
                 "Windows adapter configuration differs from its certified hash".to_owned(),
             ));
         }
-        crate::windows_egress::verify_configured_windows_browser_egress(&configuration)?;
+        let host = crate::current_windows_host_binding()?;
+        let mut receipt_replay = WfpReceiptReplayLedger::default();
+        let _ = crate::windows_egress::verify_configured_windows_browser_egress(
+            &configuration,
+            &host,
+            activation.wfp_functional_attestation.as_ref(),
+            &mut receipt_replay,
+            now_unix_seconds,
+        )?;
         let descriptor = configuration.descriptor()?;
         if descriptor != activation.adapter_descriptor {
             return Err(DesktopError::Integrity(
@@ -63,6 +74,8 @@ impl WindowsWorkerAdapter {
             activation_record_hash: activation.activation_record_hash,
             observed_at_unix_seconds: activation.observed_at_unix_seconds,
             expires_at_unix_seconds: activation.expires_at_unix_seconds,
+            wfp_functional_attestation: activation.wfp_functional_attestation,
+            receipt_replay,
             worker,
         })
     }
@@ -85,7 +98,7 @@ impl WindowsWorkerAdapter {
         now_unix_ms: u64,
     ) -> Result<PreparedAction, DesktopError> {
         self.validate_lifetime(now_unix_ms)?;
-        crate::windows_egress::verify_configured_windows_browser_egress(&self.configuration)?;
+        self.verify_live_egress(now_unix_ms / 1_000)?;
         intent.validate()?;
         if !self
             .descriptor
@@ -109,7 +122,7 @@ impl WindowsWorkerAdapter {
         now_unix_ms: u64,
     ) -> Result<AdapterExecution, DesktopError> {
         self.validate_lifetime(now_unix_ms)?;
-        crate::windows_egress::verify_configured_windows_browser_egress(&self.configuration)?;
+        self.verify_live_egress(now_unix_ms / 1_000)?;
         intent.validate()?;
         if !self
             .descriptor
@@ -137,6 +150,18 @@ impl WindowsWorkerAdapter {
 
     fn descriptor(&self) -> &DesktopAdapterDescriptor {
         &self.descriptor
+    }
+
+    fn verify_live_egress(&mut self, now_unix_seconds: u64) -> Result<(), DesktopError> {
+        let host = crate::current_windows_host_binding()?;
+        let _ = crate::windows_egress::verify_configured_windows_browser_egress(
+            &self.configuration,
+            &host,
+            self.wfp_functional_attestation.as_ref(),
+            &mut self.receipt_replay,
+            now_unix_seconds,
+        )?;
+        Ok(())
     }
 
     fn integration_id(&self) -> &str {

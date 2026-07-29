@@ -24,3 +24,7 @@ workspace = true
 [[bin]]
 name = "d2i-desktop"
 path = "src/bin/d2i-desktop.rs"
+
+[[bin]]
+name = "d2i-wfp-verifier-broker"
+path = "src/bin/d2i-wfp-verifier-broker.rs"
