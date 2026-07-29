@@ -1,5 +1,9 @@
 # ADR 0013: Concrete Windows WFP Browser Egress
 
+Runtime verification of this policy is superseded by
+[ADR 0016](0016-least-privilege-wfp-verifier-broker.md). AppContainer processes
+no longer receive direct WFP engine access under the v3 policy.
+
 - Status: Accepted
 - Date: 2026-07-28
 - Decision owners: D2I runtime, security, and Windows integration maintainers

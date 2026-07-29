@@ -1,9 +1,10 @@
 #![cfg(windows)]
 
 use d2i_windows_host::{
-    appcontainer_profile, delete_appcontainer_profile, harden_path_for_current_user,
-    path_security_descriptor, protect_current_user, provision_appcontainer_profile,
-    spawn_zero_capability_appcontainer, unprotect_current_user,
+    appcontainer_profile, delete_appcontainer_profile, grant_appcontainer_child_query_to_verifier,
+    grant_current_process_query_to_verifier, harden_path_for_current_user,
+    inspect_verifier_process, path_security_descriptor, process_parent_id, protect_current_user,
+    provision_appcontainer_profile, spawn_zero_capability_appcontainer, unprotect_current_user,
 };
 use std::fmt::Debug;
 use std::path::{Path, PathBuf};
@@ -89,9 +90,29 @@ fn zero_capability_appcontainer_process_has_reviewed_sid() {
         &profile_name,
         &profile.profile_sid,
         &command,
-        &["/D".to_owned(), "/C".to_owned(), "exit 23".to_owned()],
+        &[
+            "/D".to_owned(),
+            "/C".to_owned(),
+            "ping -n 3 127.0.0.1 >nul & exit 23".to_owned(),
+        ],
         &system32,
     ));
     assert_ne!(child.id(), 0);
+    let verifier_sid = "S-1-5-80-1-2-3-4-5";
+    ok(grant_current_process_query_to_verifier(verifier_sid));
+    ok(grant_appcontainer_child_query_to_verifier(
+        &child,
+        verifier_sid,
+    ));
+    let identity = ok(inspect_verifier_process(child.id()));
+    eprintln!("AppContainer test identity: {identity:?}");
+    assert!(identity.is_appcontainer);
+    assert_eq!(identity.integrity_level_rid, 4_096);
+    assert_eq!(identity.elevation_type, "limited");
+    assert_eq!(
+        identity.appcontainer_sid.as_deref(),
+        Some(profile.profile_sid.as_str())
+    );
+    assert_eq!(ok(process_parent_id(child.id())), std::process::id());
     assert_eq!(ok(child.wait_timeout(Duration::from_secs(10))), Some(23));
 }

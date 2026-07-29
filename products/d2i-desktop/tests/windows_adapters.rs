@@ -134,6 +134,7 @@ fn base_configuration(kind: WindowsAdapterKind) -> WindowsAdapterConfiguration {
         browser_session_ids: BTreeSet::new(),
         browser_allowed_origins: BTreeSet::new(),
         browser_egress_policy: None,
+        deployment_audit_root: None,
         ui_allowed_executable_hashes: BTreeSet::new(),
         process_isolation: None,
     }
@@ -523,6 +524,7 @@ fn concrete_wfp_contract_is_loopback_only_and_cannot_use_generic_signing() {
         verifier_profile_name: "d2i-wfp-verifier-test".to_owned(),
         verifier_profile_sid: "S-1-15-2-1".to_owned(),
         policy_owner_sid: "S-1-5-21-1".to_owned(),
+        verifier_broker: None,
     };
     validate_schema(
         "desktop/windows-wfp-browser-egress-policy.schema.json",

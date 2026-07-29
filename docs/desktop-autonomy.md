@@ -111,12 +111,15 @@ one-time activation challenge. The protected activation ledger consumes the
 challenge and report hash and rejects either value appearing again.
 
 Runtime WFP checks do not grant WFP visibility to an ordinary medium-token
-process or the Users group. A zero-capability verifier AppContainer has only
+process, the Users group, or the verifier AppContainer. The AppContainer sends
+one bounded, challenge-bound request to a demand-start LocalService broker over
+an authenticated local Named Pipe. A dedicated restricted Service SID has only
 `READ_CONTROL | FWPM_ACTRL_OPEN` on the filter engine and
-`READ_CONTROL | FWPM_ACTRL_READ` on the fixed provider, sublayer, and four
-filters. It performs exact-key reads and emits a bounded observation. Any
-engine ACE, owner, SID, object DACL, condition, weight, or application binding
-drift fails closed.
+`READ_CONTROL | FWPM_ACTRL_READ` on the fixed provider, sublayer, four browser
+filters, and four broker-network filters. The broker performs fixed-key reads,
+returns a short-lived signed receipt, and exits. Any caller identity, engine
+ACE, owner, SID, object DACL, condition, weight, application binding, receipt
+signature, challenge, or pinned hash drift fails closed.
 
 ## Approval Flow
 
@@ -173,16 +176,17 @@ cargo run -p d2i-desktop -- windows-key-protect attestor-key.hex runtime-attesto
 cargo run -p d2i-desktop -- windows-key-protect certifier-key.hex release-certifier-key certifier certifier-key.protected.json
 cargo run -p d2i-desktop -- windows-key-protect egress-key.hex edge-egress-provider browser_egress_provider egress-provider-key.protected.json
 cargo run -p d2i-desktop -- windows-browser-egress-sign egress-input.json egress-provider-key.protected.json egress-evidence.json
-cargo run -p d2i-desktop -- windows-wfp-egress-policy production-edge-loopback "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" wfp-policy.json
+cargo run -p d2i-desktop -- windows-wfp-egress-policy production-edge-loopback "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" D2I.Wfp.Verifier wfp-policy-v2.json
+cargo run -p d2i-desktop -- windows-wfp-verifier-broker-provision wfp-policy-v2.json D2IWfpVerifierBroker d2i-wfp-verifier verifier-build-1 target\release\d2i-wfp-verifier-broker.exe C:\ProgramData\D2I\WfpVerifier\service-config.json C:\ProgramData\D2I\WfpVerifier\receipt-key.protected.json wfp-verifier-receipt-key wfp-policy-v3.json
 cargo run -p d2i-desktop -- windows-edgedriver-pin "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" C:\D2I\msedgedriver.exe edge-driver-pin.json
-cargo run -p d2i-desktop -- windows-wfp-egress-install wfp-policy.json
-cargo run -p d2i-desktop -- windows-wfp-egress-check wfp-policy.json
-cargo run -p d2i-desktop -- windows-wfp-egress-remove wfp-policy.json
-cargo run -p d2i-desktop -- windows-wfp-egress-runtime-check windows-webdriver.json
+cargo run -p d2i-desktop -- windows-wfp-egress-install wfp-policy-v3.json
+cargo run -p d2i-desktop -- windows-wfp-egress-check wfp-policy-v3.json
 cargo run -p d2i-desktop -- windows-edgedriver-check edge-driver-pin.json
-cargo run -p d2i-desktop -- windows-wfp-egress-self-test wfp-policy.json edge-driver-pin.json activation-challenge-0001 5000 wfp-self-test-report.json
-cargo run -p d2i-desktop -- windows-wfp-egress-functional-attest wfp-policy.json edge-driver-pin.json egress-input-v2.json egress-provider-key.protected.json activation-challenge-0001 5000 wfp-functional-report.json wfp-attestation-v2.json
+cargo run -p d2i-desktop -- windows-wfp-egress-self-test wfp-policy-v3.json edge-driver-pin.json activation-challenge-0001 5000 wfp-self-test-report.json
+cargo run -p d2i-desktop -- windows-wfp-egress-functional-attest wfp-policy-v3.json edge-driver-pin.json egress-input-v2.json egress-provider-key.protected.json activation-challenge-0001 5000 wfp-functional-report.json wfp-attestation-v2.json
 cargo run -p d2i-desktop -- windows-wfp-egress-attestation-check wfp-attestation-v2.json <provider-public-key> <now-unix-seconds>
+cargo run -p d2i-desktop -- windows-wfp-verifier-broker-configure wfp-policy-v3.json windows-webdriver.json wfp-attestation-v2.json C:\ProgramData\D2I\WfpVerifier\receipt-key.protected.json <now-unix-seconds> C:\ProgramData\D2I\WfpVerifier\service-config.json
+cargo run -p d2i-desktop -- windows-wfp-egress-runtime-check windows-webdriver.json wfp-attestation-v2.json <now-unix-seconds>
 cargo run -p d2i-desktop -- windows-deployment-audit-init deployment-audit deployment-audit-1 deployment-session-1 128 <now-unix-ms>
 cargo run -p d2i-desktop -- windows-deployment-audit-record deployment-audit deployment-event.json
 cargo run -p d2i-desktop -- windows-deployment-audit-check deployment-audit
@@ -192,15 +196,38 @@ cargo run -p d2i-desktop -- windows-certification-check windows-manifest.json ev
 cargo run -p d2i-desktop -- windows-activation-init activation-ledger ledger-1 windows-manifest.json deployment-agent 10000
 cargo run -p d2i-desktop -- windows-activate activation-ledger deployment-agent windows-manifest.json evidence.json certificate.json 1002
 cargo run -p d2i-desktop -- windows-activation-check activation-ledger
+target\release\d2i-desktop.exe __windows-webdriver-post-activation-self-test windows-webdriver.json windows-manifest.json evidence.json certificate.json activation-ledger deployment-agent 18080 post-activation-report.json
+cargo run -p d2i-desktop -- windows-wfp-egress-remove wfp-policy-v3.json
+cargo run -p d2i-desktop -- windows-wfp-verifier-broker-remove wfp-policy-v3.json
+cargo run -p d2i-desktop -- windows-wfp-verifier-artifacts-remove wfp-policy-v3.json C:\ProgramData\D2I\WfpVerifier\service-config.json
 ```
 
 `windows-probe` starts only the configured isolated worker and performs its
 bounded capability probe. The browser probe contacts only the configured
-loopback WebDriver endpoint. Concrete WFP checks run in the dedicated
-least-privilege verifier profile. WFP policy installation and removal require
-an elevated deployment session. `windows-browser-egress-sign` remains for
-reviewed external providers and rejects the concrete WFP provider ID; the
-legacy concrete `windows-wfp-egress-attest` path is explicitly rejected.
+loopback WebDriver endpoint. Concrete WFP runtime checks use signed receipts
+from the dedicated restricted-Service-SID broker; the approved AppContainer
+never opens the WFP engine or the service Named Pipe. Windows package-scoped
+Named Pipe rules prevent a direct cross-package AppContainer-to-service
+channel. The approved medium `d2i-desktop` process therefore relays one bounded
+request over the service pipe. The broker admits it only after checking the
+relay's kernel PID, medium token, session, executable hash, the live
+AppContainer child's SID/hash, and the child-to-relay parent relationship.
+Both PIDs and the challenge are signed into the receipt, which the
+AppContainer and medium runtime independently consume. Broker
+provisioning/configuration and WFP policy installation/removal are
+deployment-admin operations. Broker start and receipt validation remain
+ordinary medium-runtime operations. The hidden post-activation deployment
+self-test must run from the exact certified `d2i-desktop.exe` image; it consumes
+one fresh activation, rejects its replay, performs loopback Type/Select/Click,
+then confirms direct-IP, pinned-DNS, and redirect non-loopback denial.
+After policy and service recall, the dedicated artifact cleanup command removes
+only the policy-matched immutable service configuration, DPAPI receipt key, and
+staged broker image. It refuses recursive cleanup when either directory
+contains any unrecognized entry.
+`windows-browser-egress-sign` remains for reviewed external providers and
+rejects the concrete WFP provider ID; the legacy concrete
+`windows-wfp-egress-attest` and direct-AppContainer runtime verifier paths are
+explicitly rejected.
 
 `windows-edgedriver-pin` records canonical browser/driver paths, PE product
 versions, and SHA-256 hashes. Verification requires the first three components

@@ -17,6 +17,7 @@
     "browser_session_ids",
     "browser_allowed_origins",
     "browser_egress_policy",
+    "deployment_audit_root",
     "ui_allowed_executable_hashes",
     "process_isolation"
   ],
@@ -63,6 +64,11 @@
         { "$ref": "#/$defs/wfp_browser_egress_policy" }
       ]
     },
+    "deployment_audit_root": {
+      "type": ["string", "null"],
+      "minLength": 3,
+      "maxLength": 4096
+    },
     "ui_allowed_executable_hashes": {
       "type": "array",
       "maxItems": 256,
@@ -87,6 +93,7 @@
           "browser_session_ids": { "maxItems": 0 },
           "browser_allowed_origins": { "maxItems": 0 },
           "browser_egress_policy": { "type": "null" },
+          "deployment_audit_root": { "type": "null" },
           "ui_allowed_executable_hashes": { "minItems": 1 },
           "process_isolation": { "type": "null" }
         }
@@ -119,6 +126,7 @@
           "browser_session_ids": { "maxItems": 0 },
           "browser_allowed_origins": { "maxItems": 0 },
           "browser_egress_policy": { "type": "null" },
+          "deployment_audit_root": { "type": "null" },
           "ui_allowed_executable_hashes": { "maxItems": 0 },
           "process_isolation": { "type": "null" }
         }
@@ -134,6 +142,7 @@
           "browser_session_ids": { "maxItems": 0 },
           "browser_allowed_origins": { "maxItems": 0 },
           "browser_egress_policy": { "type": "null" },
+          "deployment_audit_root": { "type": "null" },
           "ui_allowed_executable_hashes": { "maxItems": 0 },
           "process_isolation": { "$ref": "#/$defs/process_isolation" }
         }
@@ -179,10 +188,11 @@
         "browser_executable_hash",
         "verifier_profile_name",
         "verifier_profile_sid",
-        "policy_owner_sid"
+        "policy_owner_sid",
+        "verifier_broker"
       ],
       "properties": {
-        "schema_version": { "const": 2 },
+        "schema_version": { "enum": [2, 3] },
         "enforcement_id": { "$ref": "#/$defs/token" },
         "provider_id": { "const": "d2i.windows.wfp.loopback.v1" },
         "browser_executable": {
@@ -204,7 +214,49 @@
         "policy_owner_sid": {
           "type": "string",
           "pattern": "^S-1-[0-9-]+$"
+        },
+        "verifier_broker": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/verifier_broker" }
+          ]
         }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "schema_version": { "const": 2 } } },
+          "then": { "properties": { "verifier_broker": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "schema_version": { "const": 3 } } },
+          "then": { "properties": { "verifier_broker": { "$ref": "#/$defs/verifier_broker" } } }
+        }
+      ]
+    },
+    "verifier_broker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "service_name",
+        "service_sid",
+        "pipe_name",
+        "verifier_build_id",
+        "verifier_executable",
+        "verifier_executable_hash",
+        "signer_key_id",
+        "signer_public_key"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "service_name": { "$ref": "#/$defs/token" },
+        "service_sid": { "type": "string", "pattern": "^S-1-5-80-[0-9-]+$" },
+        "pipe_name": { "$ref": "#/$defs/token" },
+        "verifier_build_id": { "$ref": "#/$defs/token" },
+        "verifier_executable": { "type": "string", "minLength": 3, "maxLength": 4096 },
+        "verifier_executable_hash": { "$ref": "#/$defs/hash" },
+        "signer_key_id": { "$ref": "#/$defs/token" },
+        "signer_public_key": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
       }
     }
   }

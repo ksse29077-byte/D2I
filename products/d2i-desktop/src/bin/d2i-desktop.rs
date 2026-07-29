@@ -1,14 +1,17 @@
 use d2i_desktop::{
     activate_certified_windows_binding, attest_windows_wfp_browser_egress, certify_windows_binding,
-    create_windows_browser_egress_evidence, create_windows_edge_driver_pin,
-    create_windows_wfp_browser_egress_policy, create_windows_wfp_functional_attestation_v2,
-    current_windows_host_binding, initialize_windows_activation_ledger,
-    initialize_windows_deployment_audit, install_windows_wfp_browser_egress,
-    protect_windows_signing_key, remove_windows_wfp_browser_egress, replay_audit,
-    run_windows_adapter_worker, run_windows_wfp_browser_egress_self_test,
-    run_windows_wfp_verifier_worker, unprotect_windows_signing_key, verify_audit_ledger,
-    verify_signed_windows_certification, verify_windows_activation_ledger,
-    verify_windows_wfp_browser_egress, verify_windows_wfp_browser_egress_runtime,
+    configure_windows_wfp_verifier_broker, create_windows_browser_egress_evidence,
+    create_windows_edge_driver_pin, create_windows_wfp_browser_egress_policy,
+    create_windows_wfp_functional_attestation_v2, current_windows_host_binding,
+    initialize_windows_activation_ledger, initialize_windows_deployment_audit,
+    install_windows_wfp_browser_egress, protect_windows_signing_key,
+    provision_windows_wfp_verifier_broker, remove_windows_wfp_browser_egress,
+    remove_windows_wfp_verifier_broker_artifacts, replay_audit, run_windows_adapter_worker,
+    run_windows_webdriver_post_activation_self_test, run_windows_wfp_broker_client_worker,
+    run_windows_wfp_browser_egress_self_test, run_windows_wfp_verifier_worker,
+    unprotect_windows_signing_key, verify_audit_ledger, verify_signed_windows_certification,
+    verify_windows_activation_ledger, verify_windows_wfp_browser_egress,
+    verify_windows_wfp_browser_egress_runtime, verify_windows_wfp_browser_egress_through_broker,
     verify_windows_wfp_functional_attestation_v2, AuditReplayExpectation,
     ConcreteWindowsRuntimeBindingProbe, DesktopActionIntent, DesktopError, DesktopPolicy,
     LocalReadOnlyDesktopAdapter, SignedWindowsBrowserEgressEvidence, SignedWindowsCertification,
@@ -25,6 +28,7 @@ use serde::Serialize;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -36,6 +40,21 @@ fn main() -> ExitCode {
                 ExitCode::from(2)
             }
         };
+    }
+    if let [mode, configuration] = arguments.as_slice() {
+        if mode == "__windows-wfp-broker-client" {
+            return match run_windows_wfp_broker_client_worker(Path::new(configuration)) {
+                Ok(()) => ExitCode::SUCCESS,
+                Err(error) => {
+                    let _ = std::fs::write(
+                        Path::new(configuration).with_extension("error.txt"),
+                        error.to_string().as_bytes(),
+                    );
+                    eprintln!("d2i-desktop WFP verifier broker client: {error}");
+                    ExitCode::from(2)
+                }
+            };
+        }
     }
     if let [mode, browser, verifier_sid, owner_sid, output] = arguments.as_slice() {
         if mode == "__windows-wfp-verifier" {
@@ -265,6 +284,108 @@ fn run(arguments: Vec<String>) -> Result<String, DesktopError> {
             let configuration: WindowsAdapterConfiguration =
                 read_json(Path::new(configuration))?;
             pretty_json(&verify_windows_wfp_browser_egress_runtime(&configuration)?)
+        }
+        [command, configuration, attestation, now]
+            if command == "windows-wfp-egress-runtime-check" =>
+        {
+            let configuration: WindowsAdapterConfiguration =
+                read_json(Path::new(configuration))?;
+            let attestation: SignedWindowsWfpFunctionalAttestationV2 =
+                read_json(Path::new(attestation))?;
+            pretty_json(&verify_windows_wfp_browser_egress_through_broker(
+                &configuration,
+                &attestation,
+                parse_u64(now, "now_unix_seconds")?,
+            )?)
+        }
+        [
+            command,
+            base_policy,
+            service_name,
+            pipe_name,
+            verifier_build_id,
+            verifier_executable,
+            future_service_configuration,
+            protected_key,
+            signer_key_id,
+            output_policy,
+        ] if command == "windows-wfp-verifier-broker-provision" => {
+            let policy: WindowsWfpBrowserEgressPolicy =
+                read_json(Path::new(base_policy))?;
+            let policy = provision_windows_wfp_verifier_broker(
+                policy,
+                service_name,
+                pipe_name,
+                verifier_build_id,
+                Path::new(verifier_executable),
+                Path::new(future_service_configuration),
+                Path::new(protected_key),
+                signer_key_id,
+            )?;
+            write_json_new(Path::new(output_policy), &policy)?;
+            Ok(format!(
+                "provisioned WFP verifier broker {}",
+                policy
+                    .verifier_broker
+                    .as_ref()
+                    .map_or("<missing>", |broker| broker.service_name.as_str())
+            ))
+        }
+        [command, policy, configuration, attestation, protected_key, now, output]
+            if command == "windows-wfp-verifier-broker-configure" =>
+        {
+            let policy: WindowsWfpBrowserEgressPolicy = read_json(Path::new(policy))?;
+            let configuration: WindowsAdapterConfiguration =
+                read_json(Path::new(configuration))?;
+            let attestation: SignedWindowsWfpFunctionalAttestationV2 =
+                read_json(Path::new(attestation))?;
+            let configured = configure_windows_wfp_verifier_broker(
+                &policy,
+                &configuration,
+                &attestation,
+                Path::new(protected_key),
+                Path::new(output),
+                parse_u64(now, "now_unix_seconds")?,
+            )?;
+            Ok(format!(
+                "configured WFP verifier broker {}",
+                configured.broker.service_name
+            ))
+        }
+        [command, policy] if command == "windows-wfp-verifier-broker-remove" => {
+            let policy: WindowsWfpBrowserEgressPolicy = read_json(Path::new(policy))?;
+            policy.validate()?;
+            let broker = policy.verifier_broker.as_ref().ok_or_else(|| {
+                DesktopError::Invalid("WFP policy has no verifier broker".to_owned())
+            })?;
+            d2i_windows_host::remove_verifier_service(&broker.service_name).map_err(|error| {
+                DesktopError::AccessDenied(format!(
+                    "WFP verifier broker removal failed: {error}"
+                ))
+            })?;
+            Ok(format!(
+                "removed WFP verifier broker {}",
+                broker.service_name
+            ))
+        }
+        [command, policy, service_configuration]
+            if command == "windows-wfp-verifier-artifacts-remove" =>
+        {
+            let policy: WindowsWfpBrowserEgressPolicy = read_json(Path::new(policy))?;
+            let service_name = policy
+                .verifier_broker
+                .as_ref()
+                .map(|broker| broker.service_name.clone())
+                .ok_or_else(|| {
+                    DesktopError::Invalid("WFP policy has no verifier broker".to_owned())
+                })?;
+            remove_windows_wfp_verifier_broker_artifacts(
+                &policy,
+                Path::new(service_configuration),
+            )?;
+            Ok(format!(
+                "removed WFP verifier broker artifacts {service_name}"
+            ))
         }
         [command, attestation, provider_public_key, now]
             if command == "windows-wfp-egress-attestation-check" =>
@@ -560,6 +681,39 @@ fn run(arguments: Vec<String>) -> Result<String, DesktopError> {
                 activate_certified_windows_binding(Path::new(root), activator_id, certified, now)?;
             pretty_json(&admission.verification)
         }
+        [
+            command,
+            configuration,
+            manifest,
+            evidence,
+            certification,
+            activation_root,
+            activator_id,
+            fixture_port,
+            report_output,
+        ] if command == "__windows-webdriver-post-activation-self-test" => {
+            let configuration: WindowsAdapterConfiguration =
+                read_json(Path::new(configuration))?;
+            let manifest: WindowsRuntimeManifest = read_json(Path::new(manifest))?;
+            let evidence: WindowsBindingEvidence = read_json(Path::new(evidence))?;
+            let certification: SignedWindowsCertification =
+                read_json(Path::new(certification))?;
+            let report = run_windows_webdriver_post_activation_self_test(
+                configuration,
+                manifest,
+                evidence,
+                certification,
+                Path::new(activation_root),
+                activator_id,
+                parse_u16(fixture_port, "fixture_port")?,
+                now_unix_seconds()?,
+            )?;
+            write_json_new(Path::new(report_output), &report)?;
+            Ok(format!(
+                "completed approved-runtime WebDriver post-activation self-test {}",
+                report.activation_chain_head
+            ))
+        }
         [command, path] if command == "audit-check" => {
             let report = verify_audit_ledger(Path::new(path))?;
             serde_json::to_string_pretty(&report)
@@ -582,7 +736,7 @@ fn run(arguments: Vec<String>) -> Result<String, DesktopError> {
                 .map_err(|error| DesktopError::Json(error.to_string()))
         }
         _ => Err(DesktopError::Invalid(
-            "usage: d2i-desktop <policy-check|intent-check|adapter-check|audit-check|windows-config-check|windows-manifest-check|windows-activation-check|windows-edgedriver-check|windows-wfp-egress-install|windows-wfp-egress-check|windows-wfp-egress-remove> <path> | windows-wfp-egress-policy <enforcement-id> <browser> <verifier-profile> <output> | windows-wfp-egress-self-test <policy> <edge-pin> <activation-challenge> <blocked-observation-ms> <report-output> | windows-edgedriver-pin <browser> <driver> <output> | windows-wfp-egress-attest <policy> <input> <protected-key> <output> | windows-wfp-egress-functional-attest <policy> <edge-pin> <input> <protected-key> <activation-challenge> <blocked-observation-ms> <report-output> <evidence-output> | audit-replay <ledger> <expectation> | local-readonly-descriptor <root>... | windows-appcontainer-provision <name> | windows-appcontainer-grant <name> <read_execute|read_write> <true|false> <path> | windows-appcontainer-delete <name> | windows-key-protect <raw-key> <key-id> <purpose> <output> | windows-browser-egress-sign <input> <protected-key> <output> | windows-probe <config> <binding-id> <integration-id> <observed> <expires> <attestor-id> <protected-key> [browser-egress] <evidence-output> | windows-certify <manifest> <evidence> <certification-id> <certifier-id> <protected-key> <now> <report-output> <certification-output> | windows-certification-check <manifest> <evidence> <certification> <now> | windows-activation-init <root> <ledger-id> <manifest> <activator-id> <maximum-entries> | windows-activate <root> <activator-id> <manifest> <evidence> <certification> <now>".to_owned(),
+            "usage: d2i-desktop <policy-check|intent-check|adapter-check|audit-check|windows-config-check|windows-manifest-check|windows-activation-check|windows-edgedriver-check|windows-wfp-egress-install|windows-wfp-egress-check|windows-wfp-egress-remove|windows-wfp-verifier-broker-remove> <path> | windows-wfp-egress-policy <enforcement-id> <browser> <verifier-profile> <output> | windows-wfp-verifier-broker-provision <v2-policy> <service-name> <pipe-name> <verifier-build-id> <verifier-executable> <future-service-config> <protected-key> <signer-key-id> <v3-policy-output> | windows-wfp-verifier-broker-configure <v3-policy> <runtime-config> <functional-attestation> <protected-key> <now> <service-config-output> | windows-wfp-egress-runtime-check <runtime-config> <functional-attestation> <now> | windows-wfp-egress-self-test <policy> <edge-pin> <activation-challenge> <blocked-observation-ms> <report-output> | windows-edgedriver-pin <browser> <driver> <output> | windows-wfp-egress-attest <policy> <input> <protected-key> <output> | windows-wfp-egress-functional-attest <policy> <edge-pin> <input> <protected-key> <activation-challenge> <blocked-observation-ms> <report-output> <evidence-output> | audit-replay <ledger> <expectation> | local-readonly-descriptor <root>... | windows-appcontainer-provision <name> | windows-appcontainer-grant <name> <read_execute|read_write> <true|false> <path> | windows-appcontainer-delete <name> | windows-key-protect <raw-key> <key-id> <purpose> <output> | windows-browser-egress-sign <input> <protected-key> <output> | windows-probe <config> <binding-id> <integration-id> <observed> <expires> <attestor-id> <protected-key> [browser-egress] <evidence-output> | windows-certify <manifest> <evidence> <certification-id> <certifier-id> <protected-key> <now> <report-output> <certification-output> | windows-certification-check <manifest> <evidence> <certification> <now> | windows-activation-init <root> <ledger-id> <manifest> <activator-id> <maximum-entries> | windows-activate <root> <activator-id> <manifest> <evidence> <certification> <now>".to_owned(),
         )),
     }
 }
@@ -591,6 +745,19 @@ fn parse_u64(value: &str, field: &str) -> Result<u64, DesktopError> {
     value
         .parse::<u64>()
         .map_err(|_| DesktopError::Invalid(format!("{field} must be an unsigned integer")))
+}
+
+fn parse_u16(value: &str, field: &str) -> Result<u16, DesktopError> {
+    value
+        .parse::<u16>()
+        .map_err(|_| DesktopError::Invalid(format!("{field} must be a 16-bit unsigned integer")))
+}
+
+fn now_unix_seconds() -> Result<u64, DesktopError> {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|elapsed| elapsed.as_secs())
+        .map_err(|error| DesktopError::AdapterUnavailable(format!("system clock failed: {error}")))
 }
 
 fn pretty_json<T: Serialize>(value: &T) -> Result<String, DesktopError> {

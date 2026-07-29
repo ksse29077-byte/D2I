@@ -1,7 +1,9 @@
 use crate::windows_binding::{WindowsWfpBrowserEgressPolicy, WINDOWS_WFP_LOOPBACK_PROVIDER_ID};
 use crate::{
-    read_bounded, sha256_bytes, DesktopError, SignedWindowsBrowserEgressEvidence,
-    WindowsAdapterConfiguration, WindowsBrowserEgressInput,
+    read_bounded, sha256_bytes, DesktopError, SignedWfpVerificationReceipt,
+    SignedWindowsBrowserEgressEvidence, SignedWindowsWfpFunctionalAttestationV2,
+    WfpReceiptReplayLedger, WindowsAdapterConfiguration, WindowsBrowserEgressInput,
+    WindowsHostBinding,
 };
 use d2i_windows_host::WindowsWfpLoopbackPolicyIdentity;
 use ed25519_dalek::SigningKey;
@@ -10,6 +12,7 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 const MAX_BROWSER_IMAGE_BYTES: u64 = 512 * 1024 * 1024;
+#[allow(dead_code)]
 const MAX_VERIFIER_OUTPUT_BYTES: u64 = 64 * 1024;
 
 /// Serializable identity of the concrete WFP objects verified on the host.
@@ -88,6 +91,7 @@ pub fn create_windows_wfp_browser_egress_policy(
         verifier_profile_name: verifier.profile_name,
         verifier_profile_sid: verifier.profile_sid,
         policy_owner_sid: owner.user_sid,
+        verifier_broker: None,
     };
     let _ = verify_browser_image(&policy)?;
     Ok(policy)
@@ -98,11 +102,21 @@ pub fn install_windows_wfp_browser_egress(
     policy: &WindowsWfpBrowserEgressPolicy,
 ) -> Result<WindowsWfpBrowserEgressObservation, DesktopError> {
     let browser = verify_browser_image(policy)?;
-    let identity = d2i_windows_host::install_wfp_loopback_policy(
-        &browser,
-        &policy.verifier_profile_sid,
-        &policy.policy_owner_sid,
-    )
+    let verifier = verify_broker_image(policy)?;
+    let identity = if let Some(verifier) = verifier.as_deref() {
+        d2i_windows_host::install_wfp_loopback_policy_with_verifier_network_denial(
+            &browser,
+            verifier,
+            policy.wfp_reader_sid(),
+            &policy.policy_owner_sid,
+        )
+    } else {
+        d2i_windows_host::install_wfp_loopback_policy(
+            &browser,
+            policy.wfp_reader_sid(),
+            &policy.policy_owner_sid,
+        )
+    }
     .map_err(|error| {
         DesktopError::AccessDenied(format!(
             "Windows WFP loopback policy installation failed: {error}"
@@ -116,11 +130,21 @@ pub fn verify_windows_wfp_browser_egress(
     policy: &WindowsWfpBrowserEgressPolicy,
 ) -> Result<WindowsWfpBrowserEgressObservation, DesktopError> {
     let browser = verify_browser_image(policy)?;
-    let identity = d2i_windows_host::verify_wfp_loopback_policy(
-        &browser,
-        &policy.verifier_profile_sid,
-        &policy.policy_owner_sid,
-    )
+    let verifier = verify_broker_image(policy)?;
+    let identity = if let Some(verifier) = verifier.as_deref() {
+        d2i_windows_host::verify_wfp_loopback_policy_with_verifier_network_denial(
+            &browser,
+            verifier,
+            policy.wfp_reader_sid(),
+            &policy.policy_owner_sid,
+        )
+    } else {
+        d2i_windows_host::verify_wfp_loopback_policy(
+            &browser,
+            policy.wfp_reader_sid(),
+            &policy.policy_owner_sid,
+        )
+    }
     .map_err(|error| {
         DesktopError::AdapterUnavailable(format!(
             "Windows WFP loopback policy verification failed: {error}"
@@ -134,7 +158,7 @@ pub fn remove_windows_wfp_browser_egress(
     policy: &WindowsWfpBrowserEgressPolicy,
 ) -> Result<(), DesktopError> {
     policy.validate()?;
-    d2i_windows_host::remove_wfp_loopback_policy(&policy.verifier_profile_sid).map_err(|error| {
+    d2i_windows_host::remove_wfp_loopback_policy(policy.wfp_reader_sid()).map_err(|error| {
         DesktopError::AccessDenied(format!(
             "Windows WFP loopback policy removal failed: {error}"
         ))
@@ -155,11 +179,44 @@ pub fn attest_windows_wfp_browser_egress(
 
 pub(crate) fn verify_configured_windows_browser_egress(
     configuration: &WindowsAdapterConfiguration,
-) -> Result<(), DesktopError> {
+    host: &WindowsHostBinding,
+    functional_attestation: Option<&SignedWindowsWfpFunctionalAttestationV2>,
+    replay: &mut WfpReceiptReplayLedger,
+    now_unix_seconds: u64,
+) -> Result<Option<SignedWfpVerificationReceipt>, DesktopError> {
     if let Some(policy) = &configuration.browser_egress_policy {
-        let _ = verify_windows_wfp_browser_egress_isolated(configuration, policy)?;
+        if policy.verifier_broker.is_none() {
+            return Err(DesktopError::AccessDenied(
+                "legacy direct-AppContainer WFP verification is rejected; broker v3 is required"
+                    .to_owned(),
+            ));
+        }
+        let functional_attestation = functional_attestation.ok_or_else(|| {
+            DesktopError::AdapterUnavailable(
+                "WFP broker verification requires functional attestation v2".to_owned(),
+            )
+        })?;
+        let result = crate::windows_wfp_broker_runtime::verify_windows_wfp_through_broker(
+            configuration,
+            host,
+            functional_attestation,
+            replay,
+            now_unix_seconds,
+        );
+        let (_, receipt) = match result {
+            Ok(value) => value,
+            Err(error) => {
+                crate::windows_wfp_broker_runtime::record_broker_failure_audit(
+                    configuration,
+                    &error,
+                    now_unix_seconds,
+                )?;
+                return Err(error);
+            }
+        };
+        return Ok(Some(receipt));
     }
-    Ok(())
+    Ok(None)
 }
 
 /// Verifies concrete WFP state through the dedicated least-privilege verifier.
@@ -167,13 +224,9 @@ pub fn verify_windows_wfp_browser_egress_runtime(
     configuration: &WindowsAdapterConfiguration,
 ) -> Result<WindowsWfpBrowserEgressObservation, DesktopError> {
     configuration.validate()?;
-    let policy = configuration
-        .browser_egress_policy
-        .as_ref()
-        .ok_or_else(|| {
-            DesktopError::Invalid("runtime WFP check requires a concrete browser policy".to_owned())
-        })?;
-    verify_windows_wfp_browser_egress_isolated(configuration, policy)
+    Err(DesktopError::AccessDenied(
+        "runtime WFP verification requires a functional attestation and broker receipt".to_owned(),
+    ))
 }
 
 /// Runs the exact-key verifier inside the dedicated zero-capability profile.
@@ -202,6 +255,7 @@ pub fn run_windows_wfp_verifier_worker(
     crate::write_new(output_path, &crate::json_bytes(&output)?)
 }
 
+#[allow(dead_code)]
 fn verify_windows_wfp_browser_egress_isolated(
     configuration: &WindowsAdapterConfiguration,
     policy: &WindowsWfpBrowserEgressPolicy,
@@ -305,6 +359,7 @@ fn verify_windows_wfp_browser_egress_isolated(
     Ok(result)
 }
 
+#[allow(dead_code)]
 struct VerifierDirectory(PathBuf);
 
 impl Drop for VerifierDirectory {
@@ -318,7 +373,7 @@ fn observation(
     identity: WindowsWfpLoopbackPolicyIdentity,
 ) -> Result<WindowsWfpBrowserEgressObservation, DesktopError> {
     Ok(WindowsWfpBrowserEgressObservation {
-        schema_version: 2,
+        schema_version: policy.schema_version,
         enforcement_id: policy.enforcement_id.clone(),
         provider_id: policy.provider_id.clone(),
         policy_hash: policy.policy_hash()?,
@@ -369,4 +424,41 @@ fn verify_browser_image(policy: &WindowsWfpBrowserEgressPolicy) -> Result<PathBu
         ));
     }
     Ok(canonical)
+}
+
+fn verify_broker_image(
+    policy: &WindowsWfpBrowserEgressPolicy,
+) -> Result<Option<PathBuf>, DesktopError> {
+    let Some(broker) = &policy.verifier_broker else {
+        return Ok(None);
+    };
+    let declared = Path::new(&broker.verifier_executable);
+    let metadata = std::fs::symlink_metadata(declared).map_err(|error| DesktopError::Io {
+        path: declared.display().to_string(),
+        message: error.to_string(),
+    })?;
+    if metadata.file_type().is_symlink()
+        || !metadata.is_file()
+        || metadata.len() > MAX_BROWSER_IMAGE_BYTES
+        || d2i_windows_host::is_reparse_point(declared).map_err(|error| {
+            DesktopError::Integrity(format!("broker reparse-point check failed: {error}"))
+        })?
+    {
+        return Err(DesktopError::Integrity(
+            "broker executable must be a bounded regular non-reparse file".to_owned(),
+        ));
+    }
+    let canonical = std::fs::canonicalize(declared).map_err(|error| DesktopError::Io {
+        path: declared.display().to_string(),
+        message: error.to_string(),
+    })?;
+    if canonical.display().to_string() != broker.verifier_executable
+        || sha256_bytes(&read_bounded(&canonical, MAX_BROWSER_IMAGE_BYTES)?)
+            != broker.verifier_executable_hash
+    {
+        return Err(DesktopError::Integrity(
+            "broker executable path or hash differs from the WFP policy".to_owned(),
+        ));
+    }
+    Ok(Some(canonical))
 }

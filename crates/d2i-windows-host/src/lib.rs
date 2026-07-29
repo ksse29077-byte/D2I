@@ -1,10 +1,21 @@
 //! Narrow Win32 FFI wrappers used by the isolated desktop worker.
 
+mod verifier_broker;
 mod wfp;
 
+pub use verifier_broker::{
+    accept_verifier_pipe, connect_verifier_pipe, current_process_has_sid,
+    grant_appcontainer_child_query_to_verifier, grant_current_process_query_to_verifier,
+    harden_executable_for_verifier_service, harden_path_for_verifier_service,
+    inspect_verifier_process, install_verifier_service, process_parent_id, protect_local_machine,
+    read_verifier_pipe_message, remove_verifier_service, run_verifier_service_dispatcher,
+    start_verifier_service, unprotect_local_machine, write_verifier_pipe_message,
+    WindowsVerifierPipeCaller, WindowsVerifierPipeConnection, WindowsVerifierServiceIdentity,
+};
 pub use wfp::{
-    install_wfp_loopback_policy, remove_wfp_loopback_policy, verify_wfp_loopback_policy,
-    WindowsWfpLoopbackPolicyIdentity,
+    install_wfp_loopback_policy, install_wfp_loopback_policy_with_verifier_network_denial,
+    remove_wfp_loopback_policy, verify_wfp_loopback_policy,
+    verify_wfp_loopback_policy_with_verifier_network_denial, WindowsWfpLoopbackPolicyIdentity,
 };
 
 use std::fmt::{self, Display, Formatter};
@@ -215,6 +226,11 @@ pub fn secure_random_bytes<const N: usize>() -> Result<[u8; N], WindowsHostError
     platform::secure_random_bytes()
 }
 
+/// Returns milliseconds elapsed since Windows boot for monotonic receipt ordering.
+pub fn monotonic_milliseconds() -> Result<u64, WindowsHostError> {
+    platform::monotonic_milliseconds()
+}
+
 /// Replaces a path DACL with protected full-control entries for SYSTEM and the
 /// current user, then returns its owner/DACL security descriptor bytes.
 pub fn harden_path_for_current_user(path: &Path) -> Result<Vec<u8>, WindowsHostError> {
@@ -305,6 +321,7 @@ mod platform {
         JOB_OBJECT_LIMIT_PROCESS_MEMORY,
     };
     use windows::Win32::System::RemoteDesktop::ProcessIdToSessionId;
+    use windows::Win32::System::SystemInformation::GetTickCount64;
     use windows::Win32::System::SystemInformation::OSVERSIONINFOW;
     use windows::Win32::System::Threading::{
         CreateProcessW, DeleteProcThreadAttributeList, GetCurrentProcess, GetCurrentProcessId,
@@ -830,6 +847,17 @@ mod platform {
             .ok()
             .map_err(|error| WindowsHostError::new(format!("BCryptGenRandom failed: {error}")))?;
         Ok(output)
+    }
+
+    pub(super) fn monotonic_milliseconds() -> Result<u64, WindowsHostError> {
+        // SAFETY: GetTickCount64 takes no pointers and cannot fail.
+        let value = unsafe { GetTickCount64() };
+        if value == 0 {
+            return Err(WindowsHostError::new(
+                "Windows monotonic clock returned zero",
+            ));
+        }
+        Ok(value)
     }
 
     pub(super) fn harden_path_for_current_user(path: &Path) -> Result<Vec<u8>, WindowsHostError> {
@@ -1440,6 +1468,10 @@ mod platform {
     }
 
     pub(super) fn secure_random_bytes<const N: usize>() -> Result<[u8; N], WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn monotonic_milliseconds() -> Result<u64, WindowsHostError> {
         Err(unavailable())
     }
 

@@ -32,7 +32,22 @@
         "manifest_recertified",
         "adapter_reactivated",
         "policy_recalled",
-        "residue_cleaned"
+        "residue_cleaned",
+        "verifier_broker_started",
+        "verifier_caller_verified",
+        "verifier_request_accepted",
+        "verifier_request_rejected",
+        "verifier_challenge_consumed",
+        "verifier_engine_opened",
+        "verifier_object_exactly_verified",
+        "verifier_acl_verified",
+        "verifier_policy_digest_created",
+        "verifier_receipt_created",
+        "verifier_receipt_signed",
+        "verifier_receipt_validated",
+        "binding_evidence_created",
+        "binding_evidence_rejected",
+        "verifier_broker_stopped"
       ]
     },
     "status": {

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-webdriver-post-activation-self-test-report.schema.json",
+  "title": "D2I Windows WebDriver Post-Activation Self-Test Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "activation_chain_head",
+    "activation_replay_rejected",
+    "type_passed",
+    "select_passed",
+    "click_passed",
+    "direct_ipv4_blocked",
+    "dns_blocked",
+    "redirect_blocked"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "activation_chain_head": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "activation_replay_rejected": { "const": true },
+    "type_passed": { "const": true },
+    "select_passed": { "const": true },
+    "click_passed": { "const": true },
+    "direct_ipv4_blocked": { "const": true },
+    "dns_blocked": { "const": true },
+    "redirect_blocked": { "const": true }
+  }
+}

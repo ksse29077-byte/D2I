@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-wfp-verification-request.schema.json",
+  "title": "D2I Windows WFP Verification Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "operation",
+    "request_id",
+    "one_time_challenge",
+    "relay_process_id",
+    "appcontainer_process_id",
+    "expected_runtime_binding_digest",
+    "expected_machine_session_binding",
+    "expected_wfp_policy_digest",
+    "expected_object_guids",
+    "expected_edge_hash",
+    "expected_edge_driver_hash",
+    "expected_functional_report_hash",
+    "expected_attestation_hash",
+    "issued_at_unix_seconds",
+    "deadline_unix_seconds"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "operation": { "const": "verify_d2i_browser_egress_v1" },
+    "request_id": { "$ref": "#/$defs/token" },
+    "one_time_challenge": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+    "relay_process_id": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
+    "appcontainer_process_id": { "type": "integer", "minimum": 1, "maximum": 4294967295 },
+    "expected_runtime_binding_digest": { "$ref": "#/$defs/hash" },
+    "expected_machine_session_binding": { "$ref": "#/$defs/host" },
+    "expected_wfp_policy_digest": { "$ref": "#/$defs/hash" },
+    "expected_object_guids": { "$ref": "#/$defs/object_guids" },
+    "expected_edge_hash": { "$ref": "#/$defs/hash" },
+    "expected_edge_driver_hash": { "$ref": "#/$defs/hash" },
+    "expected_functional_report_hash": { "$ref": "#/$defs/hash" },
+    "expected_attestation_hash": { "$ref": "#/$defs/hash" },
+    "issued_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "deadline_unix_seconds": { "type": "integer", "minimum": 2 }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "major_version",
+        "minor_version",
+        "build_number",
+        "architecture",
+        "session_id",
+        "user_sid",
+        "integrity_level_rid",
+        "elevation_type",
+        "is_appcontainer"
+      ],
+      "properties": {
+        "major_version": { "type": "integer", "minimum": 1 },
+        "minor_version": { "type": "integer", "minimum": 0 },
+        "build_number": { "type": "integer", "minimum": 1 },
+        "architecture": { "$ref": "#/$defs/token" },
+        "session_id": { "type": "integer", "minimum": 0 },
+        "user_sid": { "type": "string", "pattern": "^S-1-[0-9-]+$" },
+        "integrity_level_rid": { "type": "integer", "minimum": 1 },
+        "elevation_type": { "$ref": "#/$defs/token" },
+        "is_appcontainer": { "const": false }
+      }
+    },
+    "object_guids": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "sublayer", "filters", "verifier_network_filters"],
+      "properties": {
+        "provider": { "const": "effa5c68-709d-4311-9a4c-1ff4f3c20bf0" },
+        "sublayer": { "const": "f328c32f-dba5-4527-bcc0-c3763b734590" },
+        "filters": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "769fcfb8-8dc3-4685-8e70-49deff9012d9" },
+            { "const": "faab358b-8445-488e-8836-ce1173cd6000" },
+            { "const": "5433444c-fc9f-4845-9139-f83e316cbac2" },
+            { "const": "17ddc305-ac3a-4799-886e-0990bed1f105" }
+          ],
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "verifier_network_filters": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "19fe4430-e15a-4724-9f69-fa4094f91f68" },
+            { "const": "2a442793-137e-4e30-8dfd-36e6ec51f73e" },
+            { "const": "32525113-1bb9-4d36-b334-28049fe0e137" },
+            { "const": "4ab70e6d-4d44-43dc-98c2-c7872094039d" }
+          ],
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    }
+  }
+}

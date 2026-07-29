@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/desktop/windows-wfp-verifier-broker-service-configuration.schema.json",
+  "title": "D2I Windows WFP Verifier Broker Service Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "broker",
+    "approved_appcontainer_sid",
+    "approved_runtime_executable_hash",
+    "expected_runtime_binding_digest",
+    "expected_machine_session_binding",
+    "policy",
+    "edge_driver_hash",
+    "functional_report_hash",
+    "attestation_hash",
+    "protected_signing_key_path"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "broker": { "$ref": "#/$defs/broker" },
+    "approved_appcontainer_sid": {
+      "type": "string",
+      "pattern": "^S-1-15-2-[0-9-]+$"
+    },
+    "approved_runtime_executable_hash": { "$ref": "#/$defs/hash" },
+    "expected_runtime_binding_digest": { "$ref": "#/$defs/hash" },
+    "expected_machine_session_binding": { "$ref": "#/$defs/host" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "edge_driver_hash": { "$ref": "#/$defs/hash" },
+    "functional_report_hash": { "$ref": "#/$defs/hash" },
+    "attestation_hash": { "$ref": "#/$defs/hash" },
+    "protected_signing_key_path": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 4096
+    }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9._:/-]+$"
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "major_version",
+        "minor_version",
+        "build_number",
+        "architecture",
+        "session_id",
+        "user_sid",
+        "integrity_level_rid",
+        "elevation_type",
+        "is_appcontainer"
+      ],
+      "properties": {
+        "major_version": { "type": "integer", "minimum": 1 },
+        "minor_version": { "type": "integer", "minimum": 0 },
+        "build_number": { "type": "integer", "minimum": 1 },
+        "architecture": { "$ref": "#/$defs/token" },
+        "session_id": { "type": "integer", "minimum": 0 },
+        "user_sid": { "type": "string", "pattern": "^S-1-[0-9-]+$" },
+        "integrity_level_rid": { "type": "integer", "minimum": 1 },
+        "elevation_type": { "$ref": "#/$defs/token" },
+        "is_appcontainer": { "const": false }
+      }
+    },
+    "broker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "service_name",
+        "service_sid",
+        "pipe_name",
+        "verifier_build_id",
+        "verifier_executable",
+        "verifier_executable_hash",
+        "signer_key_id",
+        "signer_public_key"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "service_name": { "$ref": "#/$defs/token" },
+        "service_sid": { "type": "string", "pattern": "^S-1-5-80-[0-9-]+$" },
+        "pipe_name": { "$ref": "#/$defs/token" },
+        "verifier_build_id": { "$ref": "#/$defs/token" },
+        "verifier_executable": { "type": "string", "minLength": 3, "maxLength": 4096 },
+        "verifier_executable_hash": { "$ref": "#/$defs/hash" },
+        "signer_key_id": { "$ref": "#/$defs/token" },
+        "signer_public_key": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "enforcement_id",
+        "provider_id",
+        "browser_executable",
+        "browser_executable_hash",
+        "verifier_profile_name",
+        "verifier_profile_sid",
+        "policy_owner_sid",
+        "verifier_broker"
+      ],
+      "properties": {
+        "schema_version": { "const": 3 },
+        "enforcement_id": { "$ref": "#/$defs/token" },
+        "provider_id": { "const": "d2i.windows.wfp.loopback.v1" },
+        "browser_executable": { "type": "string", "minLength": 3, "maxLength": 4096 },
+        "browser_executable_hash": { "$ref": "#/$defs/hash" },
+        "verifier_profile_name": { "$ref": "#/$defs/token" },
+        "verifier_profile_sid": {
+          "type": "string",
+          "pattern": "^S-1-15-2-[0-9-]+$"
+        },
+        "policy_owner_sid": { "type": "string", "pattern": "^S-1-[0-9-]+$" },
+        "verifier_broker": { "$ref": "#/$defs/broker" }
+      }
+    }
+  }
+}
