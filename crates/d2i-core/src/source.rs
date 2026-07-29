@@ -8,6 +8,7 @@ use std::path::{Component, Path, PathBuf};
 
 /// Maximum accepted size of one source file (16 MiB).
 pub const MAX_SOURCE_FILE_BYTES: u64 = 16 * 1024 * 1024;
+const MAX_REFERENCE_BYTES: usize = 4096;
 const LOCK_FILE_NAME: &str = "sources.lock";
 const ALLOWED_EXTENSIONS: &[&str] = &["csv", "json", "jsonl", "md", "txt", "yaml", "yml"];
 
@@ -291,22 +292,53 @@ pub fn write_source_lock(inventory: &SourceInventory) -> Result<PathBuf, io::Err
 }
 
 pub(crate) fn validate_relative_reference(path: &str) -> Result<(), &'static str> {
-    let candidate = Path::new(path);
-    if candidate.as_os_str().is_empty() {
+    if path.is_empty() {
         return Err("path must not be empty");
     }
-    if candidate.is_absolute() {
+    if path.len() > MAX_REFERENCE_BYTES {
+        return Err("path exceeds the reference length limit");
+    }
+    if path.chars().any(char::is_control) {
+        return Err("path contains a control character");
+    }
+    if has_cross_platform_root_or_drive_prefix(path) || Path::new(path).is_absolute() {
         return Err("absolute paths are not allowed");
     }
-    if candidate.components().any(|component| {
+    if contains_parent_traversal(path) || host_path_has_unsafe_component(path) {
+        return Err("path traversal is not allowed");
+    }
+    if path.contains('\\') {
+        return Err("path must use forward-slash separators");
+    }
+    if path.contains(':') {
+        return Err("path contains a disallowed colon");
+    }
+    if path.split('/').any(str::is_empty) {
+        return Err("path segments must not be empty");
+    }
+    Ok(())
+}
+
+fn has_cross_platform_root_or_drive_prefix(path: &str) -> bool {
+    let bytes = path.as_bytes();
+    matches!(bytes.first(), Some(b'/' | b'\\'))
+        || matches!(
+            bytes,
+            [drive, b':', ..] if drive.is_ascii_alphabetic()
+        )
+}
+
+fn contains_parent_traversal(path: &str) -> bool {
+    path.split(['/', '\\']).any(|component| component == "..")
+}
+
+fn host_path_has_unsafe_component(path: &str) -> bool {
+    Path::new(path).components().any(|component| {
         matches!(
             component,
             Component::ParentDir | Component::RootDir | Component::Prefix(_)
         )
-    }) {
-        return Err("path traversal is not allowed");
-    }
-    Ok(())
+    })
 }
 
 pub(crate) fn resolve_reference(root: &Path, reference: &str) -> Result<PathBuf, String> {
@@ -394,10 +426,69 @@ mod tests {
 
     #[test]
     fn relative_references_reject_traversal_and_absolute_paths() {
-        assert!(validate_relative_reference("../outside.json").is_err());
-        assert!(validate_relative_reference("a/../../outside.json").is_err());
-        assert!(validate_relative_reference("C:\\outside.json").is_err());
-        assert!(validate_relative_reference("schemas/request.schema.json").is_ok());
+        let rejected = [
+            "",
+            "/etc/passwd",
+            "C:\\outside.json",
+            "c:\\outside.json",
+            "C:/outside.json",
+            "c:/outside.json",
+            "C:outside.json",
+            "\\\\server\\share\\outside.json",
+            "//server/share/outside.json",
+            "\\Windows\\system32\\file",
+            "\\\\?\\C:\\outside.json",
+            "\\\\.\\C:\\outside.json",
+            "../outside.json",
+            "..\\outside.json",
+            "safe/../../outside.json",
+            "safe\\..\\..\\outside.json",
+            "safe/..\\..\\outside.json",
+            "schemas\\input.schema.json",
+            "schemas//input.schema.json",
+            "schemas/",
+            "https://example.invalid/schema.json",
+            "schemas/\0input.schema.json",
+            "schemas/\ninput.schema.json",
+        ];
+        for path in rejected {
+            assert!(
+                validate_relative_reference(path).is_err(),
+                "unsafe reference was accepted: {path:?}"
+            );
+        }
+
+        let accepted = [
+            "schemas/input.schema.json",
+            "schemas/output.schema.json",
+            "fixtures/valid/example.json",
+            "module-manifest.yaml",
+            "./schemas/input.schema.json",
+            ".schema.json",
+            "deeply/nested/schemas/request.schema.json",
+            "schemas/\u{c785}\u{ccad}.schema.json",
+            "schemas/%2e%2e.json",
+        ];
+        for path in accepted {
+            assert!(
+                validate_relative_reference(path).is_ok(),
+                "safe reference was rejected: {path:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn relative_reference_length_is_bounded() {
+        let suffix = ".json";
+        let at_limit = format!(
+            "{}{suffix}",
+            "a".repeat(MAX_REFERENCE_BYTES.saturating_sub(suffix.len()))
+        );
+        assert_eq!(at_limit.len(), MAX_REFERENCE_BYTES);
+        assert!(validate_relative_reference(&at_limit).is_ok());
+
+        let over_limit = format!("{at_limit}a");
+        assert!(validate_relative_reference(&over_limit).is_err());
     }
 
     #[test]

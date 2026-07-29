@@ -686,14 +686,14 @@ fn missing_local_ref(
             .parent()
             .unwrap_or_else(|| Path::new(""));
         let joined = parent.join(file_part);
-        if crate::source::validate_relative_reference(joined.to_string_lossy().as_ref()).is_err() {
-            return Some(reference.to_owned());
-        }
         let normalized = joined
             .components()
             .map(|component| component.as_os_str().to_string_lossy())
             .collect::<Vec<_>>()
             .join("/");
+        if crate::source::validate_relative_reference(&normalized).is_err() {
+            return Some(reference.to_owned());
+        }
         if !documents.contains_key(normalized.as_str()) {
             return Some(normalized);
         }

@@ -8,9 +8,12 @@ The supported contract version is `d2i_version: "0.1"`. Domain versions use
 `major.minor.patch` syntax. Domain and skill IDs use ASCII letters, digits,
 hyphen, underscore, and period, and may not begin with punctuation.
 
-Manifest paths are source-root-relative. Empty, absolute, traversal, missing,
-unreadable, or root-escaping references are errors. High and critical skills
-must declare a resolvable fallback.
+Manifest paths are source-root-relative, use forward-slash separators, and are
+limited to 4,096 UTF-8 bytes. Empty segments, control characters, colons,
+backslashes, absolute or drive-prefixed paths, traversal, missing, unreadable,
+or root-escaping references are errors. These lexical rules are applied
+independently of the host operating system. High and critical skills must
+declare a resolvable fallback.
 
 ## Inventory and Limits
 
