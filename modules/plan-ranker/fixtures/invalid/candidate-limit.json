@@ -1846,7 +1846,7 @@
                        "logical_sequence":  1,
                        "deadline_logical_tick":  100,
                        "resource_budget":  {
-                                               "max_input_bytes":  1048576,
+                                               "max_input_bytes":  1024,
                                                "max_output_bytes":  1048576,
                                                "memory_bytes":  8388608,
                                                "logical_operation_budget":  4096
@@ -1872,7 +1872,7 @@
                    },
     "expected":  {
                      "status":  "failed",
-                     "error_code":  "schema_mismatch",
+                     "error_code":  "resource_exhausted",
                      "output_hash":  null,
                      "output_payload":  null
                  },

@@ -197,3 +197,21 @@ fn maximum_candidate_set_stays_within_logical_operation_budget() {
     assert_eq!(output.value.ranked_candidates.len(), 64);
     assert!(output.logical_operations <= 4_096);
 }
+
+#[test]
+fn candidate_count_above_64_is_rejected() {
+    let candidates = (1..=65)
+        .map(|index| candidate(index, index, 1_000_000 - index))
+        .collect();
+    let error = PlanRanker
+        .validate_input(
+            &PlanRankerInput {
+                schema_version: 1,
+                candidates,
+            },
+            &context(&["fixture"]),
+        )
+        .err()
+        .map(|error| error.code);
+    assert_eq!(error, Some(ModuleErrorCode::ResourceExhausted));
+}

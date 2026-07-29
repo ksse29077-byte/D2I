@@ -51,11 +51,7 @@ fn maximum_fixture_repeats_with_identical_hash_and_bounded_resources() {
         &fixture.invocation,
         &fixture.context,
     ));
-    assert_eq!(
-        first.status,
-        ModuleResultStatus::Succeeded,
-        "{first:#?}"
-    );
+    assert_eq!(first.status, ModuleResultStatus::Succeeded, "{first:#?}");
     let first_hash = ok(canonical_sha256(&first));
     assert!(first.resource_usage.logical_operations <= 4_096);
     assert!(first.resource_usage.output_bytes <= 1_048_576);
