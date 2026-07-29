@@ -47,6 +47,12 @@ expired deadlines, stale observation/plan bindings, oversized payloads,
 unaccepted trust labels, raw secret fields, and resource budgets above the
 manifest.
 
+The key `credential` is non-secret status metadata only when it appears
+directly in an object named `gate_results` and its value is exactly `passed`,
+`failed`, or `unknown`. Every other `credential` field name, location, type,
+or value remains prohibited. This bounded exception carries a gate decision,
+not credential material, and does not permit secret handles or raw secrets.
+
 ## Result
 
 `ModuleResultEnvelope` returns exactly one terminal status:
