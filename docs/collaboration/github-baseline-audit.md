@@ -24,8 +24,13 @@ The default labels were `bug`, `documentation`, `duplicate`, `enhancement`,
 
 The original CI used `ubuntu-latest`. A governance-branch run showed that the
 exact workspace Clippy command treats Windows-only imports/constants as unused
-on Linux. The workflow now uses `windows-latest`, matching the repository's
-Windows desktop targets, without modifying or suppressing Windows/WFP code.
+on Linux. A headless `windows-latest` run passed Clippy but could not satisfy a
+concrete process-adapter integration precondition. The workflow therefore runs
+fmt, exact workspace Clippy, and release build on `windows-latest`, and runs the
+exact workspace test command on `ubuntu-latest`. This preserves executable
+required checks without modifying, suppressing, or skipping Windows/WFP tests.
+Concrete Windows adapter integration remains a separate local/manual
+environment check.
 
 ## Not Confirmed
 

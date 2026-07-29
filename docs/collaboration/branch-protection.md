@@ -33,6 +33,7 @@ plan does not expose rulesets, configure equivalent branch protection.
 - [ ] Require all conversations to be resolved
 - [ ] Require status checks to pass and require the branch to be up to date
 - [ ] Add `ci / rust` after it has reported once
+- [ ] Add `ci / workspace-test` after it has reported once
 - [ ] Add `module-pr / module-governance` after it has reported once
 - [ ] Block force pushes
 - [ ] Block branch deletion

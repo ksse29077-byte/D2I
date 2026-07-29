@@ -138,6 +138,14 @@ fn github_yaml_and_issue_forms_have_required_structure() {
         field(rust, "runs-on", "workspace CI rust job"),
         &Value::String("windows-latest".to_owned())
     );
+    let workspace_test = mapping(
+        field(jobs, "workspace-test", "workspace CI jobs"),
+        "workspace CI test job",
+    );
+    assert_eq!(
+        field(workspace_test, "runs-on", "workspace CI test job"),
+        &Value::String("ubuntu-latest".to_owned())
+    );
     let serialized = match serde_yaml::to_string(&ci) {
         Ok(value) => value,
         Err(error) => panic!("cannot serialize workspace CI for inspection: {error}"),
