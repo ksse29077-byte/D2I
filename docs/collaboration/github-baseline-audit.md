@@ -32,6 +32,23 @@ required checks without modifying, suppressing, or skipping Windows/WFP tests.
 Concrete Windows adapter integration remains a separate local/manual
 environment check.
 
+## Remote CI Findings
+
+Governance-branch runs exposed two baseline failures outside this task:
+
+- Headless Windows: `signed_process_binding_manages_only_its_child` failed
+  because the zero-capability child exited before termination and was no longer
+  in the worker's managed-child set.
+- Ubuntu: `source::tests::relative_references_reject_traversal_and_absolute_paths`
+  failed because `C:\outside.json` was not rejected as absolute on Linux.
+
+No related source or test was changed, skipped, allowed to fail, or reported as
+passing. The split workflow keeps Windows fmt/Clippy/release and portable
+workspace test outcomes separately visible. `ci / workspace-test` must not
+become a required branch check until a dedicated Core-owned portability fix is
+approved. The module PR workflow has static and local execution evidence but
+cannot report on GitHub until a PR event exists.
+
 ## Not Confirmed
 
 The branch-protection endpoint returned `401 Requires authentication`.

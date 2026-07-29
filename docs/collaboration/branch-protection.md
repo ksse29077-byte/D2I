@@ -33,7 +33,7 @@ plan does not expose rulesets, configure equivalent branch protection.
 - [ ] Require all conversations to be resolved
 - [ ] Require status checks to pass and require the branch to be up to date
 - [ ] Add `ci / rust` after it has reported once
-- [ ] Add `ci / workspace-test` after it has reported once
+- [ ] Add `ci / workspace-test` only after the documented portability blocker is fixed and the check reports green
 - [ ] Add `module-pr / module-governance` after it has reported once
 - [ ] Block force pushes
 - [ ] Block branch deletion
@@ -42,6 +42,14 @@ plan does not expose rulesets, configure equivalent branch protection.
 
 GitHub exposes status names only after a workflow reports them. Verify the
 exact displayed names on the first PR before making them required.
+
+At the 2026-07-29 audit, `ci / workspace-test` exposed a pre-existing
+cross-platform failure: `d2i-core` accepts `C:\outside.json` as relative on
+Linux while its test requires rejection. Do not mark that failing check as
+required until a separate Core-owned fix is reviewed. Do not waive or hide the
+failure. Full Windows workspace tests remain a mandatory local report, and the
+headless concrete adapter limitation remains separately visible in the
+baseline audit.
 
 ## Bypass And Administration
 
