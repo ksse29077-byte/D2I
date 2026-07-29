@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "fixture_id": "unsupported-locale",
+  "fixture_kind": "unsupported",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "goal-locale",
+    "module": {
+      "module_id": "goal-compiler",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "goal-compiler-v1",
+      "artifact_sha256": "sha256:17f6d475a1f5930deded0d42333def58e7d3e0e8fe69e5cdc9d81aaf2eb8194c",
+      "manifest_sha256": "sha256:2eaab21fe32fcffd0d8814ccaab7db320d50c6568b6a861c90e6e8e0129212d8"
+    },
+    "requested_capability": "cognitive.goal-compile",
+    "input_schema_id": "goal-compilation-input-v1",
+    "input_schema_version": 1,
+    "payload": {
+      "schema_version": 1,
+      "instruction": "목표: 교육 현황을 조회\n범위: 2026년 교육 포털\n결과: 수료 상태 목록\n제약: 읽기 전용",
+      "locale": "en-US",
+      "source_id": "fixture-locale",
+      "source_hash": "sha256:349de5bb81b04afa5737a6d99933b62e95fb4a2b724da9749a7ec52487879a09",
+      "scope_hints": {},
+      "explicit_constraints": [],
+      "success_criteria": [],
+      "confirmation_policy": null,
+      "trust_labels": ["authenticated_user_instruction"],
+      "replay_context": { "replay_id": "replay-locale", "seed": 3 }
+    },
+    "goal_id": "goal-request-locale",
+    "source_observation_hash": null,
+    "plan_generation_id": null,
+    "logical_sequence": 1,
+    "deadline_logical_tick": 100,
+    "resource_budget": {
+      "max_input_bytes": 1048576,
+      "max_output_bytes": 1048576,
+      "memory_bytes": 8388608,
+      "logical_operation_budget": 4096
+    },
+    "trust_labels": ["authenticated_user_instruction"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "goal-fixture",
+      "source_sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "producer": "fixture-author"
+    },
+    "replay": {
+      "replay_id": "replay-locale",
+      "seed": 3,
+      "fixture_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "correlation_id": "correlation-locale",
+    "trace_id": "trace-locale"
+  },
+  "context": {
+    "current_logical_tick": 1,
+    "current_observation_hash": null,
+    "current_plan_generation_id": null,
+    "allowed_trust_labels": ["authenticated_user_instruction"],
+    "invocation_trust_labels": ["authenticated_user_instruction"]
+  },
+  "expected": {
+    "status": "unsupported",
+    "error_code": null,
+    "output_hash": null,
+    "output_payload": null
+  },
+  "replay_count": 2
+}

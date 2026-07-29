@@ -121,6 +121,53 @@ returns a short-lived signed receipt, and exits. Any caller identity, engine
 ACE, owner, SID, object DACL, condition, weight, application binding, receipt
 signature, challenge, or pinned hash drift fails closed.
 
+## Read-Only Observation Plane
+
+The Windows observation plane implements the existing Cognitive IR v1
+`ObservationProvider` boundary without adding an action capability:
+
+```text
+certified UIA target -> isolated read-only worker -> normalized ObservationSnapshot
+attested Edge session -> isolated W3C reads -> normalized ObservationSnapshot
+```
+
+`WindowsUiaObservationProvider` binds the process ID, canonical executable path
+and hash, title hash, session, and activated configuration digest.
+`WindowsWebObservationProvider` binds the Edge/EdgeDriver pin, WebDriver
+session, loopback origin, configuration digest, WFP policy, functional report,
+and attestation. Web collection obtains fresh signed WFP verification receipts
+before and after reading. Ephemeral receipt hashes are audited but excluded from
+the stable observation binding. The isolated collector keeps its
+single-process Job Object; a separate hash-pinned, one-shot
+`d2i-desktop __windows-worker` relay performs each broker check over the
+existing bounded framed protocol. It accepts no payload, closes after one
+request, uses the certified timeout and response limits, and is killed and
+waited on for both success and failure.
+
+The worker command has no action payload and exposes no click, value mutation,
+navigation, JavaScript, DevTools, cookie, storage, screenshot, clipboard, file,
+or process operation. Web collection uses standard W3C element reads plus
+`Find Elements`; URL, origin, and title are rechecked after traversal.
+
+Both providers normalize source elements into snapshot-local IDs, canonical
+parent/child ordering, roles or control types, bounded accessible names and
+text, current or redacted values, state flags, locator hints, read-pattern
+metadata, table dimensions, and provenance. UI and document text remains
+untrusted content. Password, hidden credential, token, and personal-data
+candidate values are blocked before the value read and represented by
+redaction metadata.
+
+`ObservationLimits` caps depth, element count, text bytes, total snapshot
+bytes, duration, skipped elements, locator hints, options, and table
+dimensions. Bounded partial observations name every applied limit; malformed
+worker output, identity drift, deadline expiry, and audit failure fail closed.
+RuntimeId, WebDriver element IDs, timestamps, observation identity, sequence,
+and WFP receipt challenges do not enter the semantic state hash.
+
+See [ADR 0017](adr/0017-windows-read-only-observation-plane.md) for the exact
+binding, command allowlist, redaction, determinism, audit, and known platform
+limits.
+
 ## Approval Flow
 
 For directly allowed read-only work, `DesktopExecutor::execute` performs

@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/goal-compilation-result-v1.schema.json",
+  "title": "Goal Compilation Result v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "goal_spec"],
+      "properties": {
+        "status": { "const": "compiled" },
+        "goal_spec": { "$ref": "#/$defs/goal_spec" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "missing_fields",
+        "ambiguities",
+        "questions",
+        "reason_codes"
+      ],
+      "properties": {
+        "status": { "const": "clarification_required" },
+        "missing_fields": {
+          "type": "array",
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "objective",
+              "scope",
+              "required_outcomes",
+              "success_criteria",
+              "approval_condition"
+            ]
+          }
+        },
+        "ambiguities": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "missing_required_field",
+              "multiple_objectives",
+              "conflicting_constraints",
+              "structured_success_criterion_required",
+              "risky_action_requires_approval"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "version": { "const": 1 },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "value": true,
+    "string_array": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "source_hash", "module_id"],
+      "properties": {
+        "source": { "$ref": "#/$defs/text" },
+        "source_hash": { "$ref": "#/$defs/hash" },
+        "module_id": { "$ref": "#/$defs/token" }
+      }
+    },
+    "risk": {
+      "enum": ["read_only", "reversible", "business_state_change", "high_criticality"]
+    },
+    "confirmation_policy": {
+      "enum": ["never", "before_risky_action", "before_irreversible_action", "always"]
+    },
+    "comparison_op": {
+      "enum": ["equals", "not_equals", "contains", "exists", "greater_or_equal", "less_or_equal"]
+    },
+    "postcondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_state", "op", "expected_value", "required", "timeout_ms"],
+      "properties": {
+        "target_state": { "$ref": "#/$defs/token" },
+        "op": { "$ref": "#/$defs/comparison_op" },
+        "expected_value": { "$ref": "#/$defs/value" },
+        "required": { "type": "boolean" },
+        "timeout_ms": { "type": "integer", "minimum": 1, "maximum": 60000 }
+      }
+    },
+    "goal_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "goal_id",
+        "objective",
+        "scope",
+        "required_outcomes",
+        "constraints",
+        "success_criteria",
+        "risk_class",
+        "confirmation_policy",
+        "provenance"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "goal_id": { "$ref": "#/$defs/token" },
+        "objective": { "$ref": "#/$defs/text" },
+        "scope": { "type": "object" },
+        "required_outcomes": { "$ref": "#/$defs/string_array" },
+        "constraints": { "$ref": "#/$defs/string_array" },
+        "success_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/postcondition" }
+        },
+        "risk_class": { "$ref": "#/$defs/risk" },
+        "confirmation_policy": { "$ref": "#/$defs/confirmation_policy" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    }
+  }
+}

@@ -1,7 +1,9 @@
+use crate::windows_observation::{ReadOnlyObservationPayload, ReadOnlyObservationRequest};
 use crate::{
     json_bytes, read_bounded, sha256_bytes, validate_hash, BrowserInteraction, DesktopError,
-    DesktopOperation, UiInteraction, WindowIdentity, WindowsAdapterConfiguration,
-    WindowsAdapterKind, WindowsCapabilityObservation, MAX_ACTION_PAYLOAD_BYTES,
+    DesktopOperation, SignedWindowsWfpFunctionalAttestationV2, UiInteraction,
+    WfpReceiptReplayLedger, WindowIdentity, WindowsAdapterConfiguration, WindowsAdapterKind,
+    WindowsCapabilityObservation, MAX_ACTION_PAYLOAD_BYTES,
 };
 use d2i_windows_host::{
     appcontainer_profile, spawn_zero_capability_appcontainer, WindowsAppContainerChild, WindowsJob,
@@ -28,6 +30,13 @@ const MAX_SELECT_OPTIONS: usize = 1_000;
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 enum WorkerCommand {
     Probe,
+    VerifyBrowserEgress {
+        functional_attestation: Option<Box<SignedWindowsWfpFunctionalAttestationV2>>,
+        now_unix_seconds: u64,
+    },
+    Observe {
+        request: Box<ReadOnlyObservationRequest>,
+    },
     Snapshot {
         operation: DesktopOperation,
     },
@@ -162,6 +171,22 @@ impl IsolatedWindowsWorker {
         Ok(sha256_bytes(&payload))
     }
 
+    pub(crate) fn observe(
+        &mut self,
+        request: &ReadOnlyObservationRequest,
+    ) -> Result<ReadOnlyObservationPayload, DesktopError> {
+        let payload = self.request(
+            WorkerCommand::Observe {
+                request: Box::new(request.clone()),
+            },
+            None,
+        )?;
+        let observation: ReadOnlyObservationPayload = serde_json::from_slice(&payload)
+            .map_err(|error| DesktopError::Json(error.to_string()))?;
+        observation.validate(request)?;
+        Ok(observation)
+    }
+
     pub(crate) fn commit(
         &mut self,
         operation: &DesktopOperation,
@@ -248,6 +273,89 @@ impl IsolatedWindowsWorker {
             WorkerResponseStatus::Failed => Err(DesktopError::Precondition(reply.header.message)),
         }
     }
+}
+
+pub(crate) fn verify_browser_egress_with_approved_relay(
+    configuration: &WindowsAdapterConfiguration,
+    functional_attestation: Option<&SignedWindowsWfpFunctionalAttestationV2>,
+    now_unix_seconds: u64,
+) -> Result<Option<crate::SignedWfpVerificationReceipt>, DesktopError> {
+    configuration.validate()?;
+    let worker_path = canonical_regular_file(
+        Path::new(&configuration.worker_executable),
+        "Windows egress relay executable",
+    )?;
+    let actual_hash = sha256_bytes(&read_bounded(&worker_path, 64 * 1024 * 1024)?);
+    if actual_hash != configuration.worker_executable_hash {
+        return Err(DesktopError::Integrity(
+            "Windows egress relay hash changed before launch".to_owned(),
+        ));
+    }
+    let mut command = Command::new(&worker_path);
+    command
+        .arg("__windows-worker")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null());
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        command.creation_flags(0x0800_0000);
+    }
+    let mut child = command.spawn().map_err(|error| DesktopError::Io {
+        path: worker_path.display().to_string(),
+        message: error.to_string(),
+    })?;
+    let result = (|| {
+        let mut stdin = child.stdin.take().ok_or_else(|| {
+            DesktopError::AdapterUnavailable(
+                "Windows egress relay stdin was not created".to_owned(),
+            )
+        })?;
+        let stdout = child.stdout.take().ok_or_else(|| {
+            DesktopError::AdapterUnavailable(
+                "Windows egress relay stdout was not created".to_owned(),
+            )
+        })?;
+        let request_id = 1;
+        let request = WorkerRequest {
+            schema_version: 1,
+            request_id,
+            configuration: configuration.clone(),
+            payload_present: false,
+            payload_bytes: 0,
+            command: WorkerCommand::VerifyBrowserEgress {
+                functional_attestation: functional_attestation.cloned().map(Box::new),
+                now_unix_seconds,
+            },
+        };
+        write_frame(&mut stdin, &request, &[])?;
+        drop(stdin);
+        let (sender, receiver) = mpsc::sync_channel(1);
+        std::thread::spawn(move || {
+            let mut reader = BufReader::new(stdout);
+            let _ = sender.send(read_response_frame(&mut reader));
+        });
+        let timeout = Duration::from_millis(configuration.request_timeout_ms);
+        let reply = receiver.recv_timeout(timeout).map_err(|_| {
+            DesktopError::AdapterUnavailable(
+                "Windows egress relay exceeded its certified timeout".to_owned(),
+            )
+        })??;
+        if reply.header.request_id != request_id {
+            return Err(DesktopError::Integrity(
+                "Windows egress relay response request_id mismatch".to_owned(),
+            ));
+        }
+        match reply.header.status {
+            WorkerResponseStatus::Succeeded => serde_json::from_slice(&reply.payload)
+                .map_err(|error| DesktopError::Json(error.to_string())),
+            WorkerResponseStatus::Failed => Err(DesktopError::Precondition(reply.header.message)),
+        }
+    })();
+    let _ = child.kill();
+    let _ = child.wait();
+    result
 }
 
 impl Drop for IsolatedWindowsWorker {
@@ -367,6 +475,34 @@ fn dispatch_worker(
             }
             probe_capability(configuration)
         }
+        WorkerCommand::VerifyBrowserEgress {
+            functional_attestation,
+            now_unix_seconds,
+        } => {
+            if payload_present {
+                return Err(DesktopError::Invalid(
+                    "worker egress verification does not accept payload".to_owned(),
+                ));
+            }
+            let mut replay = WfpReceiptReplayLedger::default();
+            let receipt = verify_worker_browser_egress(
+                configuration,
+                functional_attestation.as_deref(),
+                &mut replay,
+                now_unix_seconds,
+            )?;
+            json_bytes(&receipt)
+        }
+        WorkerCommand::Observe { request } => {
+            if payload_present {
+                return Err(DesktopError::Invalid(
+                    "worker observation does not accept payload".to_owned(),
+                ));
+            }
+            let observation = crate::windows_observation_worker::collect(configuration, &request)?;
+            observation.validate(&request)?;
+            json_bytes(&observation)
+        }
         WorkerCommand::Snapshot { operation } => {
             if payload_present {
                 return Err(DesktopError::Invalid(
@@ -395,6 +531,22 @@ fn dispatch_worker(
         }
         WorkerCommand::Shutdown => Ok(Vec::new()),
     }
+}
+
+fn verify_worker_browser_egress(
+    configuration: &WindowsAdapterConfiguration,
+    functional_attestation: Option<&SignedWindowsWfpFunctionalAttestationV2>,
+    replay: &mut WfpReceiptReplayLedger,
+    now_unix_seconds: u64,
+) -> Result<Option<crate::SignedWfpVerificationReceipt>, DesktopError> {
+    let host = crate::current_windows_host_binding()?;
+    crate::windows_egress::verify_configured_windows_browser_egress(
+        configuration,
+        &host,
+        functional_attestation,
+        replay,
+        now_unix_seconds,
+    )
 }
 
 fn validate_worker_operation(
@@ -1393,7 +1545,7 @@ fn resolve_loopback_endpoint(endpoint: &str) -> Result<(String, SocketAddr), Des
     Ok((authority.to_owned(), address))
 }
 
-fn ensure_url_origin(url: &str, expected_origin: &str) -> Result<(), DesktopError> {
+pub(crate) fn ensure_url_origin(url: &str, expected_origin: &str) -> Result<(), DesktopError> {
     let actual = url_origin(url)?;
     if actual != expected_origin {
         return Err(DesktopError::AccessDenied(
@@ -1441,7 +1593,7 @@ fn parse_css_locator(locator: &str) -> Result<&str, DesktopError> {
     Ok(selector)
 }
 
-fn validate_webdriver_segment(value: &str, field: &str) -> Result<(), DesktopError> {
+pub(crate) fn validate_webdriver_segment(value: &str, field: &str) -> Result<(), DesktopError> {
     if value.is_empty()
         || value.len() > 256
         || !value

@@ -47,7 +47,18 @@
         "verifier_receipt_validated",
         "binding_evidence_created",
         "binding_evidence_rejected",
-        "verifier_broker_stopped"
+        "verifier_broker_stopped",
+        "observation_started",
+        "observation_target_verified",
+        "observation_source_collection_started",
+        "observation_source_collection_completed",
+        "observation_limit_applied",
+        "observation_succeeded",
+        "observation_failed",
+        "observation_forbidden_read_blocked",
+        "observation_stale_target_rejected",
+        "observation_process_hash_rejected",
+        "observation_origin_rejected"
       ]
     },
     "status": {
