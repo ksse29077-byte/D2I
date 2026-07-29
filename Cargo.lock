@@ -232,6 +232,7 @@ dependencies = [
  "d2i-runtime-adapter",
  "d2i-runtime-ref",
  "serde_json",
+ "serde_yaml",
 ]
 
 [[package]]
