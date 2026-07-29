@@ -945,13 +945,27 @@ mod tests {
     impl Fixture {
         fn new() -> Self {
             let key = SigningKey::from_bytes(&[7_u8; 32]);
+            let fixture_root = std::env::current_dir()
+                .unwrap_or_else(|error| panic!("fixture current directory failed: {error}"));
+            let verifier_executable = fixture_root
+                .join("d2i-desktop-fixture.exe")
+                .to_string_lossy()
+                .into_owned();
+            let browser_executable = fixture_root
+                .join("msedge-fixture.exe")
+                .to_string_lossy()
+                .into_owned();
+            let protected_signing_key_path = fixture_root
+                .join("wfp-receipt-key.json")
+                .to_string_lossy()
+                .into_owned();
             let broker = WindowsWfpVerifierBrokerBinding {
                 schema_version: 1,
                 service_name: "D2IWfpVerifier".to_owned(),
                 service_sid: "S-1-5-80-1-2-3-4-5".to_owned(),
                 pipe_name: "D2IWfpVerifier".to_owned(),
                 verifier_build_id: "d2i-desktop-0.9.0".to_owned(),
-                verifier_executable: r"C:\D2I\d2i-desktop.exe".to_owned(),
+                verifier_executable,
                 verifier_executable_hash: fixed_hash(1),
                 signer_key_id: "wfp-receipt-key-1".to_owned(),
                 signer_public_key: hex_encode(&key.verifying_key().to_bytes()),
@@ -971,8 +985,7 @@ mod tests {
                 schema_version: 3,
                 enforcement_id: "edge-loopback".to_owned(),
                 provider_id: crate::windows_binding::WINDOWS_WFP_LOOPBACK_PROVIDER_ID.to_owned(),
-                browser_executable: r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
-                    .to_owned(),
+                browser_executable,
                 browser_executable_hash: fixed_hash(2),
                 verifier_profile_name: "d2i-wfp-runtime".to_owned(),
                 verifier_profile_sid: "S-1-15-2-1-2-3".to_owned(),
@@ -1046,7 +1059,7 @@ mod tests {
                 edge_driver_hash: driver_hash,
                 functional_report_hash: report_hash,
                 attestation_hash,
-                protected_signing_key_path: r"C:\D2I\wfp-receipt-key.json".to_owned(),
+                protected_signing_key_path,
             };
             let observation = WindowsWfpBrowserEgressObservation {
                 schema_version: 3,
