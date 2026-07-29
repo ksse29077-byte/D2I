@@ -167,6 +167,20 @@ fn github_yaml_and_issue_forms_have_required_structure() {
 fn core_ownership_and_module_ci_cover_contract_boundary() {
     let codeowners = read(".github/CODEOWNERS");
     let core_paths = read(".github/core-owned-paths.txt");
+    for owner in ["@ksse29077-byte", "@graykavinjeo"] {
+        assert!(
+            codeowners.contains(owner),
+            "CODEOWNERS does not contain confirmed owner {owner}"
+        );
+    }
+    assert!(
+        codeowners.lines().any(|line| {
+            line.starts_with("/.github/")
+                && line.contains("@ksse29077-byte")
+                && line.contains("@graykavinjeo")
+        }),
+        "CODEOWNERS must protect its own directory with both confirmed owners"
+    );
     for protected in [
         "schemas/cognitive/",
         "schemas/modules/",

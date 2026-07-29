@@ -1,34 +1,35 @@
-# Bootstrap owner confirmed from the repository owner identity. Add a validated
-# organization team beside this account when team ownership is provisioned.
-/.github/ @ksse29077-byte
-/docs/adr/0014-contract-governed-cognitive-task-runtime.md @ksse29077-byte
-/docs/adr/0015-versioned-cognitive-module-contract-and-conformance-platform.md @ksse29077-byte
-/docs/cognitive-ir-v1.md @ksse29077-byte
-/docs/modules/cognitive-module-contract-v1.md @ksse29077-byte
-/docs/modules/module-manifest-v1.md @ksse29077-byte
-/docs/modules/conformance-suite.md @ksse29077-byte
-/docs/modules/versioning-compatibility.md @ksse29077-byte
-/schemas/cognitive/ @ksse29077-byte
-/schemas/modules/ @ksse29077-byte
-/crates/d2i-module-sdk/ @ksse29077-byte
-/products/d2i-desktop/src/cognitive.rs @ksse29077-byte
-/products/d2i-desktop/tests/cognitive_runtime.rs @ksse29077-byte
-/crates/d2i-compiler/src/package.rs @ksse29077-byte
-/schemas/flatbuffers/ @ksse29077-byte
-/crates/d2i-runtime-api/ @ksse29077-byte
-/crates/d2i-ffi/ @ksse29077-byte
-/products/d2i-desktop/src/policy.rs @ksse29077-byte
-/products/d2i-desktop/src/approval.rs @ksse29077-byte
-/products/d2i-desktop/src/audit.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_activation.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_attestation.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_binding.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_deployment_audit.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_egress.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_keys.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_wfp_self_test.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_adapters.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_webdriver.rs @ksse29077-byte
-/products/d2i-desktop/src/windows_worker.rs @ksse29077-byte
-/crates/d2i-windows-host/ @ksse29077-byte
-/schemas/desktop/ @ksse29077-byte
+# Repository owner and second reviewer identities and repository permissions
+# were confirmed before assignment. Add a validated organization team when
+# team ownership is provisioned.
+/.github/ @ksse29077-byte @graykavinjeo
+/docs/adr/0014-contract-governed-cognitive-task-runtime.md @ksse29077-byte @graykavinjeo
+/docs/adr/0015-versioned-cognitive-module-contract-and-conformance-platform.md @ksse29077-byte @graykavinjeo
+/docs/cognitive-ir-v1.md @ksse29077-byte @graykavinjeo
+/docs/modules/cognitive-module-contract-v1.md @ksse29077-byte @graykavinjeo
+/docs/modules/module-manifest-v1.md @ksse29077-byte @graykavinjeo
+/docs/modules/conformance-suite.md @ksse29077-byte @graykavinjeo
+/docs/modules/versioning-compatibility.md @ksse29077-byte @graykavinjeo
+/schemas/cognitive/ @ksse29077-byte @graykavinjeo
+/schemas/modules/ @ksse29077-byte @graykavinjeo
+/crates/d2i-module-sdk/ @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/cognitive.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/tests/cognitive_runtime.rs @ksse29077-byte @graykavinjeo
+/crates/d2i-compiler/src/package.rs @ksse29077-byte @graykavinjeo
+/schemas/flatbuffers/ @ksse29077-byte @graykavinjeo
+/crates/d2i-runtime-api/ @ksse29077-byte @graykavinjeo
+/crates/d2i-ffi/ @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/policy.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/approval.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/audit.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_activation.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_attestation.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_binding.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_deployment_audit.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_egress.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_keys.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_wfp_self_test.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_adapters.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_webdriver.rs @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/windows_worker.rs @ksse29077-byte @graykavinjeo
+/crates/d2i-windows-host/ @ksse29077-byte @graykavinjeo
+/schemas/desktop/ @ksse29077-byte @graykavinjeo
