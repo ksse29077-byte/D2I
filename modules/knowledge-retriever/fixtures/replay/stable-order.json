@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "fixture_id": "replay-stable-order",
+  "fixture_kind": "deterministic_replay",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "invocation-order",
+    "module": {
+      "module_id": "knowledge-retriever",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "knowledge-retriever-v1",
+      "artifact_sha256": "sha256:b013d736cfa5c1ce9242e0e80f04961cca6179a79ed48f03a99ff81147314eac",
+      "manifest_sha256": "sha256:872a6cb9c6d44ae5e15fb61aee7d492e5a86e94b75a705a2f445976d9f553ace"
+    },
+    "requested_capability": "knowledge.retrieve",
+    "input_schema_id": "knowledge-retriever-input-v1",
+    "input_schema_version": 1,
+    "payload": {
+      "query": {
+        "query_id": "query-order",
+        "text": "stable rule",
+        "intent": "find_rule",
+        "requested_knowledge_types": ["rule"],
+        "filters": { "domain_tags": [], "task_tags": [], "role_tags": [] },
+        "as_of": null,
+        "maximum_results": 2,
+        "minimum_evidence_count": 2,
+        "exclude_superseded": true,
+        "sort": "relevance_authority_id"
+      },
+      "knowledge_snapshot": [
+        {
+          "knowledge_item_id": "item-b",
+          "document_id": "doc-b",
+          "revision_id": "rev-1",
+          "section_id": "section-b",
+          "locator": "L20",
+          "text": "stable rule",
+          "knowledge_type": "rule",
+          "authority_rank": 10,
+          "effective_from": null,
+          "effective_until": null,
+          "superseded_by": null,
+          "content_sha256": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+          "domain_tags": [],
+          "task_tags": [],
+          "role_tags": [],
+          "access_labels": ["public"],
+          "provenance": {
+            "source_id": "source-b",
+            "source_sha256": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+            "producer": "synthetic-fixture"
+          },
+          "structured_claim": null
+        },
+        {
+          "knowledge_item_id": "item-a",
+          "document_id": "doc-a",
+          "revision_id": "rev-1",
+          "section_id": "section-a",
+          "locator": "L10",
+          "text": "stable rule",
+          "knowledge_type": "rule",
+          "authority_rank": 10,
+          "effective_from": null,
+          "effective_until": null,
+          "superseded_by": null,
+          "content_sha256": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "domain_tags": [],
+          "task_tags": [],
+          "role_tags": [],
+          "access_labels": ["public"],
+          "provenance": {
+            "source_id": "source-a",
+            "source_sha256": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+            "producer": "synthetic-fixture"
+          },
+          "structured_claim": null
+        }
+      ],
+      "terminology": [],
+      "access_context": {
+        "allowed_access_labels": ["public"],
+        "allowed_scope_tags": []
+      }
+    },
+    "goal_id": "goal-order",
+    "source_observation_hash": null,
+    "plan_generation_id": null,
+    "logical_sequence": 10,
+    "deadline_logical_tick": 100010,
+    "resource_budget": {
+      "max_input_bytes": 524288,
+      "max_output_bytes": 131072,
+      "memory_bytes": 8388608,
+      "logical_operation_budget": 100000
+    },
+    "trust_labels": ["fixture"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "fixture-order",
+      "source_sha256": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "producer": "knowledge-module-tests"
+    },
+    "replay": {
+      "replay_id": "replay-order",
+      "seed": 0,
+      "fixture_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "correlation_id": "correlation-order",
+    "trace_id": "trace-order"
+  },
+  "context": {
+    "current_logical_tick": 10,
+    "current_observation_hash": null,
+    "current_plan_generation_id": null,
+    "allowed_trust_labels": ["fixture"],
+    "invocation_trust_labels": ["fixture"]
+  },
+  "expected": {
+    "status": "succeeded",
+    "error_code": null,
+    "output_hash": null,
+    "output_payload": null
+  },
+  "replay_count": 3
+}

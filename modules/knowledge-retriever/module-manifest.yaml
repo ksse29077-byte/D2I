@@ -1,0 +1,133 @@
+schema_version: 1
+identity:
+  module_id: knowledge-retriever
+  display_name: Knowledge Module
+  description: Deterministic industry-independent retrieval over a caller-supplied immutable knowledge snapshot.
+  version: 1.0.0
+  contract_version: 1
+  build_id: knowledge-retriever-v1
+  artifact_filename: artifacts/knowledge-retriever.ref
+  artifact_sha256: sha256:b013d736cfa5c1ce9242e0e80f04961cca6179a79ed48f03a99ff81147314eac
+  author: D2I Cognitive Module Platform
+  maintainer: h-hyung
+capabilities:
+  - capability_id: knowledge.retrieve
+    capability_version: 1.0.0
+    category: knowledge_retriever
+    supported_input_kinds:
+      - knowledge-retriever-input-v1
+    supported_output_kinds:
+      - knowledge-retriever-output-v1
+    supported_risk_classes:
+      - read_only
+    deterministic: true
+    side_effect: false
+    network_requirement: denied
+    streaming: false
+    confidence_semantics: relative_ranking
+    input_schemas:
+      - knowledge-retriever-input-v1
+    output_schemas:
+      - knowledge-retriever-output-v1
+    unsupported_case_policy: Return SDK unsupported for semantic/vector search, external I/O, parsing, answer generation, domain judgment, action execution, persistence, and learning.
+    fallback_capability: null
+    fallback_module: null
+schemas:
+  - schema_id: knowledge-retriever-input-v1
+    schema_version: 1
+    path: schemas/input.schema.json
+    sha256: sha256:2559a0c68f67a92b47ac1e41615bb8f0502eddd6b89abff8800d496774492ca2
+  - schema_id: knowledge-retriever-output-v1
+    schema_version: 1
+    path: schemas/output.schema.json
+    sha256: sha256:e3c854aed94e6b2db9e01fc86c9d4bbb06624f1a10e806cdb5595f94700b10d0
+execution:
+  mode: in_process_rust_reference
+  timeout_logical_ticks: 100000
+  maximum_input_bytes: 524288
+  maximum_output_bytes: 131072
+  memory_limit_bytes: 8388608
+  logical_operation_budget: 100000
+  maximum_retries: 0
+  maximum_concurrent_invocations: 1
+  network_requirement: denied
+  filesystem_required: false
+  environment_variables_allowed: false
+  side_effect: false
+  reversible: true
+security:
+  accepted_trust_labels:
+    - fixture
+    - approved_knowledge
+    - untrusted_document_content
+    - untrusted_web_content
+  untrusted_content_handling: treat_as_data
+  secrets_required: false
+  raw_secret_input: false
+  privileged_operation: false
+  allowed_external_dependencies:
+    - d2i-module-sdk
+    - serde
+    - serde_json
+  audit_requirement: invocation_and_result
+  fail_policy: closed
+  data_retention: none
+evaluation:
+  evaluation_set_id: knowledge-retriever-synthetic-v1
+  evaluation_set_version: 1.0.0
+  metrics:
+    - deterministic_replay
+    - schema_validity
+    - expected_terminal_status_accuracy
+    - expected_evidence_order_accuracy
+    - exact_locator_preservation
+    - superseded_item_rejection
+    - labeled_conflict_detection
+    - unsupported_case_accuracy
+    - unauthorized_evidence_leakage
+    - instruction_elevation
+    - invented_evidence
+  acceptance_thresholds:
+    deterministic_replay: 1.0
+    schema_validity: 1.0
+    expected_terminal_status_accuracy: 1.0
+    expected_evidence_order_accuracy: 1.0
+    exact_locator_preservation: 1.0
+    superseded_item_rejection: 1.0
+    labeled_conflict_detection: 1.0
+    unsupported_case_accuracy: 1.0
+    unauthorized_evidence_leakage: 0.0
+    instruction_elevation: 0.0
+    invented_evidence: 0.0
+  critical_error_definition: Any unauthorized evidence or metadata disclosure, invented evidence, excerpt or locator mutation, replay drift, instruction elevation, schema-invalid output, included excluded-superseded evidence, disguised failure or unsupported result, hidden I/O or side effect, escaped panic, or weakened acceptance threshold.
+  known_unsupported_cases:
+    - Semantic embedding or vector search.
+    - PDF or OCR parsing.
+    - Network, filesystem, or database access.
+    - Natural-language answer generation or final domain judgment.
+    - Action execution, persistent index mutation, or online learning.
+  benchmark_reference: benchmarks/benchmark-report.json
+  deterministic_replay_required: true
+provenance_and_license:
+  source_repository: D2I/modules/knowledge-retriever
+  source_license: Apache-2.0
+  artifact_license: Apache-2.0
+  datasets: []
+  dataset_licenses: {}
+  commercial_use: permitted-under-apache-2.0
+  attribution:
+    - D2I Cognitive Module Platform
+  generated_artifact: false
+  third_party_dependencies:
+    - name: serde
+      version: 1.0.217
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+    - name: serde_json
+      version: 1.0.138
+      license: MIT-OR-Apache-2.0
+      source: workspace-lock
+  supply_chain_metadata: Cargo.lock and repository commit bind the Rust source; no new third-party dependency is introduced.
+  model_card: model-card.md
+  data_card: data-card.md
+  threat_model: threat-model.md

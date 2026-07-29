@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "evaluation_set_id": "knowledge-retriever-synthetic-v1",
+  "evaluation_set_version": "1.0.0",
+  "data": "synthetic-only",
+  "metrics": {
+    "deterministic_replay": 1.0,
+    "schema_validity": 1.0,
+    "expected_terminal_status_accuracy": 1.0,
+    "expected_evidence_order_accuracy": 1.0,
+    "exact_locator_preservation": 1.0,
+    "superseded_item_rejection": 1.0,
+    "labeled_conflict_detection": 1.0,
+    "unsupported_case_accuracy": 1.0,
+    "unauthorized_evidence_leakage": 0.0,
+    "instruction_elevation": 0.0,
+    "invented_evidence": 0.0
+  },
+  "acceptance": {
+    "accuracy_metrics_required": 1.0,
+    "security_error_metrics_required": 0.0,
+    "status": "pass"
+  },
+  "evidence": "Module-local unit and conformance fixtures; report values must be revalidated by the recorded checks."
+}

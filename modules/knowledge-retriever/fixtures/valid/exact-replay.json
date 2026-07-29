@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "fixture_id": "valid-exact-replay",
+  "fixture_kind": "deterministic_replay",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "invocation-valid-exact",
+    "module": {
+      "module_id": "knowledge-retriever",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "knowledge-retriever-v1",
+      "artifact_sha256": "sha256:b013d736cfa5c1ce9242e0e80f04961cca6179a79ed48f03a99ff81147314eac",
+      "manifest_sha256": "sha256:872a6cb9c6d44ae5e15fb61aee7d492e5a86e94b75a705a2f445976d9f553ace"
+    },
+    "requested_capability": "knowledge.retrieve",
+    "input_schema_id": "knowledge-retriever-input-v1",
+    "input_schema_version": 1,
+    "payload": {
+      "query": {
+        "query_id": "query-valid",
+        "text": "safety rule",
+        "intent": "find_rule",
+        "requested_knowledge_types": ["rule"],
+        "filters": {
+          "domain_tags": ["general"],
+          "task_tags": [],
+          "role_tags": []
+        },
+        "as_of": "2026-01-01",
+        "maximum_results": 2,
+        "minimum_evidence_count": 1,
+        "exclude_superseded": true,
+        "sort": "relevance_authority_id"
+      },
+      "knowledge_snapshot": [
+        {
+          "knowledge_item_id": "rule-a",
+          "document_id": "doc-a",
+          "revision_id": "rev-2",
+          "section_id": "section-1",
+          "locator": "L10-L12",
+          "text": "The safety rule requires verification.",
+          "knowledge_type": "rule",
+          "authority_rank": 100,
+          "effective_from": "2025-01-01",
+          "effective_until": null,
+          "superseded_by": null,
+          "content_sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "domain_tags": ["general"],
+          "task_tags": ["verification"],
+          "role_tags": ["operator"],
+          "access_labels": ["public"],
+          "provenance": {
+            "source_id": "source-a",
+            "source_sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "producer": "synthetic-fixture"
+          },
+          "structured_claim": null
+        },
+        {
+          "knowledge_item_id": "rule-b",
+          "document_id": "doc-b",
+          "revision_id": "rev-1",
+          "section_id": "section-2",
+          "locator": "L20-L21",
+          "text": "A separate safety guideline contains a rule.",
+          "knowledge_type": "rule",
+          "authority_rank": 50,
+          "effective_from": "2025-01-01",
+          "effective_until": null,
+          "superseded_by": null,
+          "content_sha256": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "domain_tags": ["general"],
+          "task_tags": ["verification"],
+          "role_tags": ["operator"],
+          "access_labels": ["public"],
+          "provenance": {
+            "source_id": "source-b",
+            "source_sha256": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "producer": "synthetic-fixture"
+          },
+          "structured_claim": null
+        }
+      ],
+      "terminology": [],
+      "access_context": {
+        "allowed_access_labels": ["public"],
+        "allowed_scope_tags": []
+      }
+    },
+    "goal_id": "goal-valid",
+    "source_observation_hash": null,
+    "plan_generation_id": null,
+    "logical_sequence": 10,
+    "deadline_logical_tick": 100010,
+    "resource_budget": {
+      "max_input_bytes": 524288,
+      "max_output_bytes": 131072,
+      "memory_bytes": 8388608,
+      "logical_operation_budget": 100000
+    },
+    "trust_labels": ["fixture"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "fixture-valid",
+      "source_sha256": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "producer": "knowledge-module-tests"
+    },
+    "replay": {
+      "replay_id": "replay-valid",
+      "seed": 0,
+      "fixture_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "correlation_id": "correlation-valid",
+    "trace_id": "trace-valid"
+  },
+  "context": {
+    "current_logical_tick": 10,
+    "current_observation_hash": null,
+    "current_plan_generation_id": null,
+    "allowed_trust_labels": ["fixture", "untrusted_document_content"],
+    "invocation_trust_labels": ["fixture"]
+  },
+  "expected": {
+    "status": "succeeded",
+    "error_code": null,
+    "output_hash": null,
+    "output_payload": null
+  },
+  "replay_count": 3
+}

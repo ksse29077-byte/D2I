@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "knowledge-retriever-synthetic-v1",
+  "baseline": "deterministic Rust rule-based implementation",
+  "wall_clock_is_acceptance_criterion": false,
+  "cases": [
+    {
+      "fixture_id": "valid-exact-replay",
+      "knowledge_item_count": 3,
+      "query_term_count": 2,
+      "returned_evidence_count": 2,
+      "logical_operations_upper_bound": 100000,
+      "logical_ticks_upper_bound": 100000,
+      "declared_peak_memory_bytes": 8388608,
+      "maximum_input_bytes": 524288,
+      "maximum_output_bytes": 131072,
+      "repeated_result_hash_required": true
+    }
+  ],
+  "performance_claim": "No wall-clock or speed superiority claim is made."
+}

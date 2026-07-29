@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/knowledge-retriever-input-v1.schema.json",
+  "title": "Knowledge Retriever Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["query", "knowledge_snapshot", "terminology", "access_context"],
+  "properties": {
+    "query": { "$ref": "#/$defs/query" },
+    "knowledge_snapshot": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/knowledgeItem" }
+    },
+    "terminology": {
+      "type": "array",
+      "maxItems": 128,
+      "items": { "$ref": "#/$defs/terminology" }
+    },
+    "access_context": { "$ref": "#/$defs/accessContext" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_id",
+        "text",
+        "intent",
+        "requested_knowledge_types",
+        "filters",
+        "as_of",
+        "maximum_results",
+        "minimum_evidence_count",
+        "exclude_superseded",
+        "sort"
+      ],
+      "properties": {
+        "query_id": { "$ref": "#/$defs/id" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "intent": {
+          "enum": [
+            "find_definition",
+            "find_rule",
+            "find_requirement",
+            "find_prohibition",
+            "find_permission",
+            "find_exception",
+            "find_procedure",
+            "find_role_responsibility",
+            "find_threshold",
+            "find_case",
+            "find_evidence",
+            "compare_versions",
+            "verify_statement",
+            "semantic_search",
+            "vector_search",
+            "pdf_parsing",
+            "ocr",
+            "network_search",
+            "file_loading",
+            "database_query",
+            "answer_generation",
+            "domain_judgment",
+            "action_execution",
+            "persistent_index_mutation",
+            "online_learning"
+          ]
+        },
+        "requested_knowledge_types": {
+          "type": "array",
+          "maxItems": 11,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/knowledgeType" }
+        },
+        "filters": { "$ref": "#/$defs/queryFilters" },
+        "as_of": { "oneOf": [{ "$ref": "#/$defs/date" }, { "type": "null" }] },
+        "maximum_results": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "minimum_evidence_count": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "exclude_superseded": { "type": "boolean" },
+        "sort": { "enum": ["relevance_authority_id"] }
+      }
+    },
+    "queryFilters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain_tags", "task_tags", "role_tags"],
+      "properties": {
+        "domain_tags": { "$ref": "#/$defs/tags" },
+        "task_tags": { "$ref": "#/$defs/tags" },
+        "role_tags": { "$ref": "#/$defs/tags" }
+      }
+    },
+    "knowledgeType": {
+      "enum": [
+        "definition",
+        "rule",
+        "requirement",
+        "prohibition",
+        "permission",
+        "exception",
+        "procedure",
+        "role_responsibility",
+        "threshold",
+        "case",
+        "evidence"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_sha256", "producer"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/id" },
+        "source_sha256": { "$ref": "#/$defs/hash" },
+        "producer": { "$ref": "#/$defs/id" }
+      }
+    },
+    "structuredClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_key",
+        "normalized_value",
+        "modality",
+        "unit_or_value_type",
+        "scope_key"
+      ],
+      "properties": {
+        "claim_key": { "$ref": "#/$defs/id" },
+        "normalized_value": { "$ref": "#/$defs/text" },
+        "modality": { "enum": ["asserted", "required", "prohibited", "permitted", "exception"] },
+        "unit_or_value_type": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "scope_key": { "$ref": "#/$defs/id" }
+      }
+    },
+    "knowledgeItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "knowledge_item_id",
+        "document_id",
+        "revision_id",
+        "section_id",
+        "locator",
+        "text",
+        "knowledge_type",
+        "authority_rank",
+        "effective_from",
+        "effective_until",
+        "superseded_by",
+        "content_sha256",
+        "domain_tags",
+        "task_tags",
+        "role_tags",
+        "access_labels",
+        "provenance",
+        "structured_claim"
+      ],
+      "properties": {
+        "knowledge_item_id": { "$ref": "#/$defs/id" },
+        "document_id": { "$ref": "#/$defs/id" },
+        "revision_id": { "$ref": "#/$defs/id" },
+        "section_id": { "$ref": "#/$defs/id" },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "text": { "$ref": "#/$defs/text" },
+        "knowledge_type": { "$ref": "#/$defs/knowledgeType" },
+        "authority_rank": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "effective_from": { "oneOf": [{ "$ref": "#/$defs/date" }, { "type": "null" }] },
+        "effective_until": { "oneOf": [{ "$ref": "#/$defs/date" }, { "type": "null" }] },
+        "superseded_by": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "content_sha256": { "$ref": "#/$defs/hash" },
+        "domain_tags": { "$ref": "#/$defs/tags" },
+        "task_tags": { "$ref": "#/$defs/tags" },
+        "role_tags": { "$ref": "#/$defs/tags" },
+        "access_labels": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "structured_claim": {
+          "oneOf": [{ "$ref": "#/$defs/structuredClaim" }, { "type": "null" }]
+        }
+      }
+    },
+    "terminology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_term", "aliases", "abbreviations"],
+      "properties": {
+        "canonical_term": { "$ref": "#/$defs/text" },
+        "aliases": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "abbreviations": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/text" }
+        }
+      }
+    },
+    "accessContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_access_labels", "allowed_scope_tags"],
+      "properties": {
+        "allowed_access_labels": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "allowed_scope_tags": { "$ref": "#/$defs/tags" }
+      }
+    }
+  }
+}

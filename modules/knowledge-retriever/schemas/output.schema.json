@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/knowledge-retriever-output-v1.schema.json",
+  "title": "Knowledge Retriever Evidence Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "query_id",
+    "status",
+    "normalized_query",
+    "evidence_items",
+    "conflicts",
+    "evidence_gaps",
+    "warnings",
+    "applied_filters",
+    "deterministic_ordering",
+    "logical_operations"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "query_id": { "$ref": "#/$defs/id" },
+    "status": {
+      "enum": [
+        "evidence_found",
+        "no_evidence",
+        "insufficient_evidence",
+        "ambiguous_query",
+        "conflicting_evidence",
+        "superseded_evidence_only"
+      ]
+    },
+    "normalized_query": { "type": "string", "maxLength": 2048 },
+    "evidence_items": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/evidenceItem" }
+    },
+    "conflicts": {
+      "type": "array",
+      "maxItems": 120,
+      "items": { "$ref": "#/$defs/conflict" }
+    },
+    "evidence_gaps": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+    },
+    "warnings": {
+      "type": "array",
+      "maxItems": 16,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1024 }
+    },
+    "applied_filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "access_filter_applied",
+        "temporal_filter_applied",
+        "superseded_filter_applied",
+        "metadata_filter_applied"
+      ],
+      "properties": {
+        "access_filter_applied": { "type": "boolean" },
+        "temporal_filter_applied": { "type": "boolean" },
+        "superseded_filter_applied": { "type": "boolean" },
+        "metadata_filter_applied": { "type": "boolean" }
+      }
+    },
+    "deterministic_ordering": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "logical_operations": { "type": "integer", "minimum": 1, "maximum": 100000 }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "knowledgeType": {
+      "enum": [
+        "definition",
+        "rule",
+        "requirement",
+        "prohibition",
+        "permission",
+        "exception",
+        "procedure",
+        "role_responsibility",
+        "threshold",
+        "case",
+        "evidence"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_sha256", "producer"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/id" },
+        "source_sha256": { "$ref": "#/$defs/hash" },
+        "producer": { "$ref": "#/$defs/id" }
+      }
+    },
+    "structuredClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_key",
+        "normalized_value",
+        "modality",
+        "unit_or_value_type",
+        "scope_key"
+      ],
+      "properties": {
+        "claim_key": { "$ref": "#/$defs/id" },
+        "normalized_value": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "modality": { "enum": ["asserted", "required", "prohibited", "permitted", "exception"] },
+        "unit_or_value_type": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "scope_key": { "$ref": "#/$defs/id" }
+      }
+    },
+    "evidenceItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "knowledge_item_id",
+        "document_id",
+        "revision_id",
+        "section_id",
+        "locator",
+        "excerpt",
+        "knowledge_type",
+        "authority_rank",
+        "effective_from",
+        "effective_until",
+        "provenance",
+        "relevance_score_bps",
+        "ranking_reasons",
+        "applied_tags",
+        "structured_claim"
+      ],
+      "properties": {
+        "evidence_id": { "$ref": "#/$defs/id" },
+        "knowledge_item_id": { "$ref": "#/$defs/id" },
+        "document_id": { "$ref": "#/$defs/id" },
+        "revision_id": { "$ref": "#/$defs/id" },
+        "section_id": { "$ref": "#/$defs/id" },
+        "locator": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "knowledge_type": { "$ref": "#/$defs/knowledgeType" },
+        "authority_rank": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "effective_from": { "oneOf": [{ "$ref": "#/$defs/date" }, { "type": "null" }] },
+        "effective_until": { "oneOf": [{ "$ref": "#/$defs/date" }, { "type": "null" }] },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "relevance_score_bps": { "type": "integer", "minimum": 0, "maximum": 10000 },
+        "ranking_reasons": {
+          "type": "array",
+          "maxItems": 16,
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "applied_tags": {
+          "type": "array",
+          "maxItems": 48,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "structured_claim": {
+          "oneOf": [{ "$ref": "#/$defs/structuredClaim" }, { "type": "null" }]
+        }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_key",
+        "scope_key",
+        "left_knowledge_item_id",
+        "right_knowledge_item_id",
+        "left_value",
+        "right_value"
+      ],
+      "properties": {
+        "claim_key": { "$ref": "#/$defs/id" },
+        "scope_key": { "$ref": "#/$defs/id" },
+        "left_knowledge_item_id": { "$ref": "#/$defs/id" },
+        "right_knowledge_item_id": { "$ref": "#/$defs/id" },
+        "left_value": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "right_value": { "type": "string", "minLength": 1, "maxLength": 4096 }
+      }
+    }
+  }
+}

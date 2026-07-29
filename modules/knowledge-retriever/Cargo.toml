@@ -1,0 +1,17 @@
+[package]
+name = "d2i-knowledge-retriever"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
