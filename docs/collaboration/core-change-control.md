@@ -16,6 +16,10 @@ Core ownership covers:
 
 The machine-readable path list is `.github/core-owned-paths.txt`. CODEOWNERS
 and the module PR workflow protect the corresponding repository paths.
+The workflow accepts only an `APPROVED` GitHub review from a CODEOWNER other
+than the PR author, and the review must bind to the current head commit.
+Checkboxes, PR-body declarations, stale approvals, comments, and author
+self-approval are not approval evidence.
 
 ## Required RFC Flow
 
@@ -35,6 +39,13 @@ separate Core RFC Issue
 An RFC in `Pending` state grants no permission. The module author must not edit
 Core files, weaken tests, copy a Core type locally, or silently introduce a
 parallel schema. A Core change and module implementation never share a PR.
+
+The root `Cargo.toml` is Core-owned except for one exact addition of an
+approved `modules/<module-id>` workspace member on that module's branch. The
+governance validator checks the diff and rejects dependency, profile, lint,
+patch, resolver, workspace-policy, removal, or multi-line manifest changes.
+`Cargo.lock` may accompany a module change but must remain synchronized under
+`cargo metadata --locked`.
 
 New schemas, capability categories, confidence semantics, network or side
 effects, model-backed behavior, external dependencies, trust-boundary changes,

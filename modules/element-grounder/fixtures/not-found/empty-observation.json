@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "fixture_id": "empty-observation",
+  "fixture_kind": "not_found",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "ground-not-found",
+    "module": {
+      "module_id": "element-grounder",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "element-grounder-v1",
+      "artifact_sha256": "sha256:b1a81f8fca05c26f6758e21b1faa63b39343a0d277c476ba6817eb409f5627d5",
+      "manifest_sha256": "sha256:dd71eab8fcfa851af6e3a7667851f6a1b2a451fc95bc9aae791002de38106fb5"
+    },
+    "requested_capability": "cognitive.element-ground",
+    "input_schema_id": "element-grounding-input-v1",
+    "input_schema_version": 1,
+    "payload": {
+      "schema_version": 1,
+      "goal_id": "goal-1",
+      "target_text": "Save",
+      "observation_snapshot": {
+        "schema_version": 1,
+        "observation_id": "obs-empty",
+        "source_kind": "fixture",
+        "target_binding": { "surface": "fixture" },
+        "state_hash": "sha256:61239cdece799177bdf5d91ed3c5790ffc6c07d2ebf94a948d08b163f55de8c6",
+        "sequence": 1,
+        "trust_labels": ["fixture"],
+        "observable_elements": [],
+        "redactions": [],
+        "provenance": {
+          "source": "empty fixture",
+          "source_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "module_id": "fixture-provider"
+        }
+      },
+      "world_state": null,
+      "expected_kinds": [],
+      "required_terms": [],
+      "excluded_terms": [],
+      "context_terms": [],
+      "max_candidates": 8,
+      "source_observation_hash": "sha256:61239cdece799177bdf5d91ed3c5790ffc6c07d2ebf94a948d08b163f55de8c6",
+      "plan_generation_id": "plan-1",
+      "trust_labels": ["fixture"],
+      "replay_context": { "replay_id": "replay-empty", "seed": 3 }
+    },
+    "goal_id": "goal-1",
+    "source_observation_hash": "sha256:61239cdece799177bdf5d91ed3c5790ffc6c07d2ebf94a948d08b163f55de8c6",
+    "plan_generation_id": "plan-1",
+    "logical_sequence": 1,
+    "deadline_logical_tick": 100,
+    "resource_budget": {
+      "max_input_bytes": 1048576,
+      "max_output_bytes": 1048576,
+      "memory_bytes": 8388608,
+      "logical_operation_budget": 100000
+    },
+    "trust_labels": ["fixture"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "element-grounder-fixture",
+      "source_sha256": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "producer": "fixture-author"
+    },
+    "replay": {
+      "replay_id": "replay-empty",
+      "seed": 3,
+      "fixture_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "correlation_id": "correlation-empty",
+    "trace_id": "trace-empty"
+  },
+  "context": {
+    "current_logical_tick": 1,
+    "current_observation_hash": "sha256:61239cdece799177bdf5d91ed3c5790ffc6c07d2ebf94a948d08b163f55de8c6",
+    "current_plan_generation_id": "plan-1",
+    "allowed_trust_labels": ["fixture"],
+    "invocation_trust_labels": ["fixture"]
+  },
+  "expected": {
+    "status": "succeeded",
+    "error_code": null,
+    "output_hash": null,
+    "output_payload": {
+      "schema_version": 1,
+      "goal_id": "goal-1",
+      "source_observation_hash": "sha256:61239cdece799177bdf5d91ed3c5790ffc6c07d2ebf94a948d08b163f55de8c6",
+      "plan_generation_id": "plan-1",
+      "target_text": "Save",
+      "status": "not_found",
+      "selected_element_id": null,
+      "candidates": [],
+      "ambiguity_reason": "ObservationSnapshot contains no observable elements",
+      "user_confirmation_required": false,
+      "evidence": [
+        "observation:obs-empty",
+        "ranking-policy:deterministic-element-grounder-v1"
+      ],
+      "warnings": []
+    }
+  },
+  "replay_count": 2
+}

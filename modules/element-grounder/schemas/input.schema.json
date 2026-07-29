@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/element-grounding-input-v1.schema.json",
+  "title": "Element Grounding Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "goal_id",
+    "target_text",
+    "observation_snapshot",
+    "world_state",
+    "expected_kinds",
+    "required_terms",
+    "excluded_terms",
+    "context_terms",
+    "max_candidates",
+    "source_observation_hash",
+    "plan_generation_id",
+    "trust_labels",
+    "replay_context"
+  ],
+  "properties": {
+    "schema_version": { "$ref": "#/$defs/version" },
+    "goal_id": { "$ref": "#/$defs/token" },
+    "target_text": { "$ref": "#/$defs/text" },
+    "observation_snapshot": { "$ref": "#/$defs/observation_snapshot" },
+    "world_state": {
+      "oneOf": [
+        { "$ref": "#/$defs/world_state" },
+        { "type": "null" }
+      ]
+    },
+    "expected_kinds": { "$ref": "#/$defs/hint_array" },
+    "required_terms": { "$ref": "#/$defs/hint_array" },
+    "excluded_terms": { "$ref": "#/$defs/hint_array" },
+    "context_terms": { "$ref": "#/$defs/hint_array" },
+    "max_candidates": { "type": "integer", "minimum": 1, "maximum": 64 },
+    "source_observation_hash": { "$ref": "#/$defs/hash" },
+    "plan_generation_id": { "$ref": "#/$defs/token" },
+    "trust_labels": { "$ref": "#/$defs/trust_labels" },
+    "replay_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replay_id", "seed"],
+      "properties": {
+        "replay_id": { "$ref": "#/$defs/token" },
+        "seed": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "version": { "const": 1 },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "value": true,
+    "hint_array": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "string_array": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "source_hash", "module_id"],
+      "properties": {
+        "source": { "$ref": "#/$defs/text" },
+        "source_hash": { "$ref": "#/$defs/hash" },
+        "module_id": { "$ref": "#/$defs/token" }
+      }
+    },
+    "trust_label": {
+      "enum": [
+        "authenticated_user_instruction",
+        "approved_policy",
+        "approved_procedure",
+        "verified_operational_state",
+        "observed_ui_state",
+        "untrusted_web_content",
+        "untrusted_document_content",
+        "fixture"
+      ]
+    },
+    "trust_labels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/trust_label" }
+    },
+    "source_kind": {
+      "enum": ["fixture", "uia", "web_driver", "file_metadata", "process"]
+    },
+    "observable_element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "kind", "label", "value", "trust_labels"],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/token" },
+        "kind": { "$ref": "#/$defs/token" },
+        "label": { "$ref": "#/$defs/text" },
+        "value": { "$ref": "#/$defs/value" },
+        "trust_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/trust_label" }
+        }
+      }
+    },
+    "redaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "reason", "replacement_hash"],
+      "properties": {
+        "field": { "$ref": "#/$defs/token" },
+        "reason": { "$ref": "#/$defs/text" },
+        "replacement_hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "observation_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "observation_id",
+        "source_kind",
+        "target_binding",
+        "state_hash",
+        "sequence",
+        "trust_labels",
+        "observable_elements",
+        "redactions",
+        "provenance"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "observation_id": { "$ref": "#/$defs/token" },
+        "source_kind": { "$ref": "#/$defs/source_kind" },
+        "target_binding": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/text" }
+        },
+        "state_hash": { "$ref": "#/$defs/hash" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "trust_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/trust_label" }
+        },
+        "observable_elements": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": { "$ref": "#/$defs/observable_element" }
+        },
+        "redactions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/redaction" }
+        },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "world_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fact_id", "kind", "subject", "predicate", "object", "evidence"],
+      "properties": {
+        "fact_id": { "$ref": "#/$defs/token" },
+        "kind": {
+          "enum": [
+            "observed_fact",
+            "inferred_state",
+            "user_assertion",
+            "policy_fact",
+            "untrusted_content"
+          ]
+        },
+        "subject": { "$ref": "#/$defs/text" },
+        "predicate": { "$ref": "#/$defs/text" },
+        "object": { "$ref": "#/$defs/value" },
+        "evidence": { "$ref": "#/$defs/string_array" }
+      }
+    },
+    "world_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "world_state_id",
+        "goal_id",
+        "normalized_facts",
+        "known_state",
+        "uncertain_state",
+        "conflicts",
+        "capabilities",
+        "current_step",
+        "current_observation_hash",
+        "plan_generation_id",
+        "provenance"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "world_state_id": { "$ref": "#/$defs/token" },
+        "goal_id": { "$ref": "#/$defs/token" },
+        "normalized_facts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/world_fact" }
+        },
+        "known_state": { "type": "object" },
+        "uncertain_state": { "type": "object" },
+        "conflicts": { "$ref": "#/$defs/string_array" },
+        "capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/token" }
+        },
+        "current_step": { "$ref": "#/$defs/token" },
+        "current_observation_hash": { "$ref": "#/$defs/hash" },
+        "plan_generation_id": { "$ref": "#/$defs/token" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    }
+  }
+}

@@ -19,8 +19,8 @@
 - [ ] Give the employee GPT only the Issue URL/number and assignee
 - [ ] Require repository and issue inspection
 - [ ] Stop on `Issue 보완 필요`
-- [ ] Total owner reviews exact allowed paths, fixtures, checks, and Core exclusions
-- [ ] Total owner explicitly approves the generated Codex work order
+- [ ] Exact allowed paths, fixtures, checks, and Core exclusions are complete
+- [ ] The generated Codex work order passes the module-scope readiness check
 
 ## Start Authorization
 

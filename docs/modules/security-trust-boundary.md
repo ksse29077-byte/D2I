@@ -11,9 +11,13 @@ observation and plan bindings, deadline, trust labels, redactions, resource
 budgets, typed conversion, output schema, confidence, and result hash.
 
 Raw fields named password, secret, credential, raw token, authentication token,
-or authorization are prohibited at the envelope boundary. Use redaction
-markers and secret handles managed outside the module contract. Never return a
-credential in evidence, warnings, errors, provenance, or output payload.
+or authorization are prohibited at the envelope boundary. The only
+`credential` exception is status metadata directly inside `gate_results` with
+the exact string value `passed`, `failed`, or `unknown`. Any other location,
+type, value, spelling, or case remains prohibited. This status reports a gate
+decision and must never contain credential material. Use redaction markers and
+secret handles managed outside the module contract. Never return credential
+material in evidence, warnings, errors, provenance, or output payload.
 
 Untrusted content may be classified, summarized, reduced, or quoted as data.
 It may not alter policy, request a capability, become an action instruction, or

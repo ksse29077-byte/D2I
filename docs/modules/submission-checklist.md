@@ -20,6 +20,10 @@
 - [ ] `cargo fmt --all -- --check` passes
 - [ ] workspace Clippy with `-D warnings` passes
 - [ ] workspace tests and release build pass
+- [ ] Review conversations are resolved and the PR is conflict-free
+- [ ] No Core-owned path changed, or a separate Core PR has a current-head non-author CODEOWNER approval
 - [ ] PR is not configured for automatic merge
 
-The reviewer must treat `skipped` as unresolved, not passed.
+Module-only PRs may be manually squash-merged by their author without a
+third-party approval. Optional reviewers must treat `skipped` as unresolved,
+not passed.

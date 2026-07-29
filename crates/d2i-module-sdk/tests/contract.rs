@@ -170,6 +170,44 @@ fn invalid_version_hash_enum_and_secret_fields_fail_closed() {
 }
 
 #[test]
+fn credential_gate_status_metadata_is_allowed_only_in_its_bounded_shape() {
+    for status in ["passed", "failed", "unknown"] {
+        let mut metadata = invocation();
+        metadata.payload = json!({
+            "candidates": [{
+                "gate_results": {
+                    "credential": status
+                }
+            }]
+        });
+        assert!(
+            metadata.validate().is_ok(),
+            "bounded credential gate status '{status}' should be accepted"
+        );
+    }
+
+    let prohibited_payloads = [
+        json!({"credential": "passed"}),
+        json!({"other_results": {"credential": "passed"}}),
+        json!({"gate_results": {"credential": "Bearer must-not-cross"}}),
+        json!({"gate_results": {"credential": {"status": "passed"}}}),
+        json!({"gate_results": {"credential": ["passed"]}}),
+        json!({"gate_results": {"Credential": "passed"}}),
+        json!({"gate_results": [{"credential": "passed"}]}),
+        json!({"gate_results": {"credential": "passed", "password": "must-not-cross"}}),
+        json!({"gate_results": {"credentials": "passed"}}),
+    ];
+    for payload in prohibited_payloads {
+        let mut invocation = invocation();
+        invocation.payload = payload;
+        assert_eq!(
+            invocation.validate().err().map(|error| error.code),
+            Some(ModuleErrorCode::InvalidInput)
+        );
+    }
+}
+
+#[test]
 fn canonical_hash_is_key_order_independent_and_duplicate_keys_are_rejected() {
     let first = json!({"b": 2, "a": {"d": 4, "c": 3}});
     let second = json!({"a": {"c": 3, "d": 4}, "b": 2});

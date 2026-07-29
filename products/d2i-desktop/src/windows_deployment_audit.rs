@@ -48,6 +48,17 @@ pub enum WindowsDeploymentAuditEventKind {
     BindingEvidenceCreated,
     BindingEvidenceRejected,
     VerifierBrokerStopped,
+    ObservationStarted,
+    ObservationTargetVerified,
+    ObservationSourceCollectionStarted,
+    ObservationSourceCollectionCompleted,
+    ObservationLimitApplied,
+    ObservationSucceeded,
+    ObservationFailed,
+    ObservationForbiddenReadBlocked,
+    ObservationStaleTargetRejected,
+    ObservationProcessHashRejected,
+    ObservationOriginRejected,
 }
 
 /// Outcome classification with no unrestricted payload.

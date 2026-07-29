@@ -18,6 +18,8 @@ members = [
     "modules/example-module",
     "modules/knowledge-retriever",
     "modules/rule-based-work-reporter",
+    "modules/element-grounder",
+    "modules/goal-compiler",
 ]
 resolver = "2"
 

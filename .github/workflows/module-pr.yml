@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - main
+  pull_request_review:
+    types:
+      - submitted
+      - dismissed
 
 permissions:
   contents: read
@@ -12,6 +16,7 @@ permissions:
 
 jobs:
   module-governance:
+    if: github.event.pull_request.base.ref == 'main'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
@@ -29,5 +34,6 @@ jobs:
           ./scripts/ci/validate-module-pr.ps1
           -BaseSha '${{ github.event.pull_request.base.sha }}'
           -HeadSha '${{ github.event.pull_request.head.sha }}'
-          -BranchName '${{ github.head_ref }}'
+          -BranchName '${{ github.event.pull_request.head.ref }}'
+          -PullRequestNumber '${{ github.event.pull_request.number }}'
           -VerifyGitHubIssue

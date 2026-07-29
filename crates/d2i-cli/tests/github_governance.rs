@@ -117,6 +117,7 @@ fn github_yaml_and_issue_forms_have_required_structure() {
         "module-pr workflow events",
     );
     assert!(events.contains_key(Value::String("pull_request".to_owned())));
+    assert!(events.contains_key(Value::String("pull_request_review".to_owned())));
     assert!(!events.contains_key(Value::String("pull_request_target".to_owned())));
     let permissions = mapping(
         field(workflow, "permissions", "module-pr workflow"),
@@ -126,6 +127,28 @@ fn github_yaml_and_issue_forms_have_required_structure() {
         permissions.get(Value::String("contents".to_owned())),
         Some(&Value::String("read".to_owned()))
     );
+
+    let core_workflow = yaml(".github/workflows/core-governance.yml");
+    let core_workflow = mapping(&core_workflow, "core governance workflow");
+    let core_events = mapping(
+        field(core_workflow, "on", "core governance workflow"),
+        "core governance workflow events",
+    );
+    assert!(core_events.contains_key(Value::String("pull_request_target".to_owned())));
+    let core_serialized = match serde_yaml::to_string(&core_workflow) {
+        Ok(value) => value,
+        Err(error) => panic!("cannot serialize Core governance workflow: {error}"),
+    };
+    for required in [
+        "persist-credentials",
+        "github.event.pull_request.base.sha",
+        "validate-core-approval.ps1",
+    ] {
+        assert!(
+            core_serialized.contains(required),
+            "trusted Core governance is missing '{required}'"
+        );
+    }
 
     let ci = yaml(".github/workflows/ci.yml");
     let ci = mapping(&ci, "workspace CI");
@@ -182,6 +205,11 @@ fn core_ownership_and_module_ci_cover_contract_boundary() {
         "CODEOWNERS must protect its own directory with both confirmed owners"
     );
     for protected in [
+        "Cargo.toml",
+        "docs/adr/",
+        "docs/collaboration/",
+        "docs/modules/",
+        "scripts/ci/",
         "schemas/cognitive/",
         "schemas/modules/",
         "crates/d2i-module-sdk/",
@@ -208,12 +236,63 @@ fn core_ownership_and_module_ci_cover_contract_boundary() {
         "untrusted_content",
         "replay_count",
         "licenses.json",
-        "Core-owned paths",
+        "Core-owned changes",
         "module/<issue-number>-<module-id>",
+        "Test-AllowedWorkspaceRegistration",
+        "ApprovedReviewersOverride",
+        "human approval is not required",
     ] {
         assert!(
             validator.contains(required),
             "module PR validator is missing '{required}'"
+        );
+    }
+}
+
+#[test]
+fn module_self_merge_policy_preserves_automated_protection() {
+    let ruleset = read(".github/main-ruleset.json");
+    for required in [
+        "\"required_approving_review_count\": 0",
+        "\"required_review_thread_resolution\": true",
+        "\"strict_required_status_checks_policy\": true",
+        "\"context\": \"ci / rust\"",
+        "\"context\": \"ci / workspace-test\"",
+        "\"context\": \"module-pr / module-governance\"",
+        "\"context\": \"core-governance / core-approval\"",
+        "\"type\": \"deletion\"",
+        "\"type\": \"non_fast_forward\"",
+        "\"bypass_actors\": []",
+    ] {
+        assert!(
+            ruleset.contains(required),
+            "main ruleset is missing '{required}'"
+        );
+    }
+
+    let workflow = read("docs/collaboration/module-development-workflow.md");
+    for required in [
+        "a third-party",
+        "approval is not a merge condition",
+        "Peer review remains available but is optional",
+        "current-head",
+        "approval from a non-author Core CODEOWNER",
+    ] {
+        assert!(
+            workflow.contains(required),
+            "module workflow is missing '{required}'"
+        );
+    }
+
+    let core_control = read("docs/collaboration/core-change-control.md");
+    for required in [
+        "review must bind to the current head commit",
+        "self-approval are not approval evidence",
+        "cargo metadata --locked",
+    ] {
+        assert!(
+            core_control.contains(required),
+            "Core change control is missing '{required}'"
         );
     }
 }

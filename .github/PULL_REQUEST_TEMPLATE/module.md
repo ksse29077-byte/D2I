@@ -62,7 +62,9 @@ Rollback:
 
 ## Author Checklist
 
-- [ ] Core-owned contract files are unchanged; otherwise this PR is stopped and a separate approved Core RFC is linked
+- [ ] Changes are limited to this module's owned directory and allowed workspace registration files
+- [ ] Core-owned files are unchanged
+- [ ] No Core contract or Module SDK public API changed
 - [ ] Module Manifest v1 and strict versioned input/output schemas are included
 - [ ] Artifact, manifest, and schema hashes validate
 - [ ] Normal, error, unsupported, deterministic replay, and security fixtures execute
@@ -81,3 +83,10 @@ Rollback:
 - [ ] `cargo build --workspace --release`
 - [ ] Every review conversation is resolved
 - [ ] Automatic merge is disabled
+- [ ] The module owner accepts post-merge maintenance responsibility
+
+Module-only PRs do not require a third-party approval after all required checks
+pass. The module author may perform the manual squash merge. If this PR changes
+any path in `.github/core-owned-paths.txt`, stop the module PR and use the
+separate Core RFC and Core-only PR flow; a current-head approval from a
+non-author Core CODEOWNER is required.

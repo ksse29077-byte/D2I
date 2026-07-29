@@ -1,0 +1,8 @@
+D2I deterministic Element Grounder reference module descriptor
+module_id=element-grounder
+module_version=1.0.0
+contract_version=1
+execution=in_process_rust_reference
+network=denied
+side_effect=false
+model=none

@@ -83,7 +83,8 @@ Hard constraints for the generated work order:
   replay, license evidence, and all workspace quality commands.
 - Forbid production loader integration, real PC side effects, hidden network,
   raw secrets, customer data, automatic merge, and hiding failed checks.
-- State that the total owner must approve this work order before Codex starts.
+- State that Codex may start when the Issue is READY and automated scope checks
+  confirm that the work order changes no Core-owned contract.
 
 Inputs:
 Assigned GitHub Issue URL or number: <ISSUE_URL_OR_NUMBER>

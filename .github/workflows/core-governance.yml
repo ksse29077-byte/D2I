@@ -1,0 +1,46 @@
+name: core-governance
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  pull_request_review:
+    types:
+      - submitted
+      - dismissed
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  core-approval:
+    if: github.event.pull_request.base.ref == 'main'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Fetch untrusted PR head as data only
+        shell: pwsh
+        run: >
+          git fetch --no-tags origin
+          'refs/pull/${{ github.event.pull_request.number }}/head:refs/remotes/pull/${{ github.event.pull_request.number }}/head'
+      - name: Require current-head Core approval when protected paths change
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: >
+          ./scripts/ci/validate-core-approval.ps1
+          -BaseSha '${{ github.event.pull_request.base.sha }}'
+          -HeadSha '${{ github.event.pull_request.head.sha }}'
+          -BranchName '${{ github.event.pull_request.head.ref }}'
+          -PullRequestNumber '${{ github.event.pull_request.number }}'
