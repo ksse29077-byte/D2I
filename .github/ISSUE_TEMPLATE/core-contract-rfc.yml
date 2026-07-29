@@ -1,0 +1,106 @@
+name: Core Contract RFC
+description: Request a separately reviewed change to a Core-owned contract.
+title: "[Core RFC] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Opening this RFC does not authorize Core changes. The blocked module PR must pause.
+        Core files may change only in a dedicated `core/<issue-number>-<change>` branch after
+        explicit Core-owner approval.
+
+  - type: input
+    id: blocked_issue
+    attributes:
+      label: Blocked module issue
+      description: Link the existing module issue and any paused PR.
+      placeholder: "Issue URL; PR URL if present"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_contract_gap
+    attributes:
+      label: Current contract and missing capability
+      description: Cite exact versions, paths, types, schemas, and the failure that blocks implementation.
+      placeholder: |
+        Baseline commit:
+        Current contract/version:
+        Relevant paths/types:
+        Missing capability:
+        Reproducible blocking case:
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Reason and minimum change
+      description: Explain why the module cannot remain within the current contract.
+      placeholder: |
+        Why change is required:
+        Minimum proposed change:
+        Why this is not module-local:
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Include no-change, fallback, and module-local options with rejection reasons.
+    validations:
+      required: true
+
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility, migration, and versioning
+      placeholder: |
+        Backward compatibility:
+        Migration plan:
+        Compatibility tests:
+        Contract/schema/capability version bump:
+        Rollback:
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Security, test, and module impact
+      placeholder: |
+        Trust/policy/activation/audit impact:
+        Network/side-effect/ABI/package impact:
+        Test and conformance impact:
+        Affected modules:
+        New dependencies or licenses:
+    validations:
+      required: true
+
+  - type: textarea
+    id: decision
+    attributes:
+      label: Core owner decision record
+      description: Leave as `Pending` until a Core owner records the decision and follow-up ADR/PR.
+      value: |
+        Status: Pending
+        Decision owner:
+        Decision:
+        Required ADR or contract revision:
+        Dedicated Core PR:
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: gate
+    attributes:
+      label: Submission gate
+      options:
+        - label: The module implementation is paused pending this RFC.
+          required: true
+        - label: This RFC will not be implemented inside the module feature PR.
+          required: true
+        - label: No Core-owned file has been changed before approval.
+          required: true

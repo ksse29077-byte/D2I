@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: D2I collaboration workflow
+    url: https://github.com/ksse29077-byte/D2I/blob/main/docs/collaboration/module-development-workflow.md
+    about: Read the assignment and contract-change workflow before opening an issue.

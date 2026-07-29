@@ -1,0 +1,166 @@
+name: Cognitive Module proposal
+description: Propose one bounded Cognitive Module against the Contract v1 baseline.
+title: "[Module] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use existing Cognitive IR v1, Module Contract v1, and Module Manifest v1 references.
+        Do not invent a new envelope or schema in this issue. Mark any missing contract as
+        `Core 또는 Schema 검토 필요`; implementation must wait for an approved Core RFC.
+
+  - type: input
+    id: module_name
+    attributes:
+      label: Module name
+      description: Human-readable module name.
+      placeholder: "Plan Ranker"
+    validations:
+      required: true
+
+  - type: input
+    id: module_id
+    attributes:
+      label: Module ID
+      description: Stable kebab-case ID that matches the module directory and manifest.
+      placeholder: "plan-ranker"
+    validations:
+      required: true
+
+  - type: input
+    id: assignee
+    attributes:
+      label: Assignee
+      description: GitHub ID or team member name. Also assign the issue in GitHub.
+      placeholder: "@github-id"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: classification
+    attributes:
+      label: Module classification
+      description: Model-backed and other classes require Core review before assignment.
+      options:
+        - "rule-based"
+        - "model-backed / Core review required"
+        - "other / Core review required"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "low"
+        - "medium"
+        - "high"
+        - "critical / Core review required"
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose, scenarios, and outcomes
+      description: State the business purpose, bounded scenarios, expected result, and exclusions.
+      placeholder: |
+        Purpose:
+        Scenarios:
+        Expected outcomes:
+        Out of scope:
+    validations:
+      required: true
+
+  - type: textarea
+    id: contract
+    attributes:
+      label: Existing contract references
+      description: Reference repository paths and IDs; do not paste a newly invented contract.
+      placeholder: |
+        Capability ID/version:
+        Input schema ID/version/path:
+        Output schema ID/version/path:
+        Cognitive IR types used:
+        Deterministic: yes/no and reason:
+        Confidence semantics:
+        Network: denied / Core review required:
+        Side effects: false / Core review required:
+        Unsupported-case policy:
+        Fallback policy:
+        New schema needed: no / Core 또는 Schema 검토 필요:
+    validations:
+      required: true
+
+  - type: textarea
+    id: limits
+    attributes:
+      label: Execution and persistence limits
+      description: Every limit must be finite and compatible with Module Manifest v1.
+      placeholder: |
+        Timeout:
+        Maximum input bytes:
+        Maximum output bytes:
+        Memory/logical-operation limits:
+        Retry policy and maximum:
+        Persistent data: none / Core review required:
+    validations:
+      required: true
+
+  - type: textarea
+    id: data_model_license
+    attributes:
+      label: Data, model, and license
+      description: Use `not applicable` explicitly where appropriate; unknown commercial rights block readiness.
+      placeholder: |
+        Rule-based or learned:
+        Data and source:
+        Data license/commercial use:
+        External model and version:
+        Model license/commercial use:
+        Model card path/status:
+        Data card path/status:
+    validations:
+      required: true
+
+  - type: textarea
+    id: evaluation_security
+    attributes:
+      label: Evaluation and security plan
+      description: Use synthetic data only and include a negative security fixture.
+      placeholder: |
+        Normal fixtures:
+        Error fixtures:
+        Unsupported fixtures:
+        Security fixtures:
+        Metrics and acceptance thresholds:
+        Critical error definition:
+        Benchmark baseline:
+        Untrusted-content handling:
+        Secret/file/process/network/personal-data handling:
+        Threat model path/status:
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: completion
+    attributes:
+      label: Definition of done
+      description: Check only items already agreed as required; completion is verified again in the PR.
+      options:
+        - label: I accept that completion requires a Module Manifest and strict versioned input/output schemas
+          required: true
+        - label: I accept that completion requires unit tests and normal/error/unsupported/security fixtures
+          required: true
+        - label: I accept that completion requires Conformance pass with deterministic replay and a fixture report
+          required: true
+        - label: I accept that completion requires an evaluation report, acceptance threshold, and benchmark
+          required: true
+        - label: I accept that completion requires license review, model/data cards, and a threat model
+          required: true
+        - label: I accept that completion requires full workspace checks and an approved pull request
+          required: true
+        - label: I will not add a production loader, hidden network, or unapproved side effect
+          required: true

@@ -1,0 +1,33 @@
+name: module-pr
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  module-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.86.0
+      - name: Validate module branch, issue, artifacts, fixtures, and Core boundary
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: >
+          ./scripts/ci/validate-module-pr.ps1
+          -BaseSha '${{ github.event.pull_request.base.sha }}'
+          -HeadSha '${{ github.event.pull_request.head.sha }}'
+          -BranchName '${{ github.head_ref }}'
+          -VerifyGitHubIssue
