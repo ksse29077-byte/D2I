@@ -316,6 +316,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "d2i-goal-compiler"
+version = "0.9.0"
+dependencies = [
+ "d2i-desktop",
+ "d2i-module-sdk",
+ "jsonschema",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "d2i-kernel"
 version = "0.9.0"
 dependencies = [

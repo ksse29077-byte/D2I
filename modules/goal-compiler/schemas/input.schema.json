@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/modules/goal-compilation-input-v1.schema.json",
+  "title": "Goal Compilation Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "instruction",
+    "locale",
+    "source_id",
+    "source_hash",
+    "scope_hints",
+    "explicit_constraints",
+    "success_criteria",
+    "confirmation_policy",
+    "trust_labels",
+    "replay_context"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "instruction": { "$ref": "#/$defs/text" },
+    "locale": { "$ref": "#/$defs/token" },
+    "source_id": { "$ref": "#/$defs/token" },
+    "source_hash": { "$ref": "#/$defs/hash" },
+    "scope_hints": {
+      "type": "object",
+      "maxProperties": 64
+    },
+    "explicit_constraints": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "success_criteria": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/postcondition" }
+    },
+    "confirmation_policy": {
+      "oneOf": [
+        { "$ref": "#/$defs/confirmation_policy" },
+        { "type": "null" }
+      ]
+    },
+    "trust_labels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/trust_label" }
+    },
+    "replay_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replay_id", "seed"],
+      "properties": {
+        "replay_id": { "$ref": "#/$defs/token" },
+        "seed": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "text": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-fA-F]{64}$" },
+    "value": true,
+    "confirmation_policy": {
+      "enum": ["never", "before_risky_action", "before_irreversible_action", "always"]
+    },
+    "comparison_op": {
+      "enum": ["equals", "not_equals", "contains", "exists", "greater_or_equal", "less_or_equal"]
+    },
+    "postcondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_state", "op", "expected_value", "required", "timeout_ms"],
+      "properties": {
+        "target_state": { "$ref": "#/$defs/token" },
+        "op": { "$ref": "#/$defs/comparison_op" },
+        "expected_value": { "$ref": "#/$defs/value" },
+        "required": { "type": "boolean" },
+        "timeout_ms": { "type": "integer", "minimum": 1, "maximum": 60000 }
+      }
+    },
+    "trust_label": {
+      "enum": [
+        "authenticated_user_instruction",
+        "approved_policy",
+        "approved_procedure",
+        "verified_operational_state",
+        "observed_ui_state",
+        "untrusted_web_content",
+        "untrusted_document_content",
+        "fixture"
+      ]
+    }
+  }
+}
