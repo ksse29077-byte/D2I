@@ -14,6 +14,8 @@ mod windows_binding;
 mod windows_deployment_audit;
 mod windows_egress;
 mod windows_keys;
+mod windows_observation;
+mod windows_observation_worker;
 mod windows_post_activation_self_test;
 mod windows_webdriver;
 mod windows_wfp_broker;
@@ -93,6 +95,10 @@ pub use windows_egress::{
 pub use windows_keys::{
     protect_windows_signing_key, unprotect_windows_signing_key, WindowsProtectedSigningKey,
     WindowsSigningKeyPurpose,
+};
+pub use windows_observation::{
+    ObservationLimits, WindowsUiaObservationProvider, WindowsUiaObservationTarget,
+    WindowsWebObservationProvider, WindowsWebObservationTarget,
 };
 pub use windows_post_activation_self_test::{
     run_windows_webdriver_post_activation_self_test, WindowsWebDriverPostActivationSelfTestReport,

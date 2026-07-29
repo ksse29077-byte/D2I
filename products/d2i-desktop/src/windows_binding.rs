@@ -1875,7 +1875,7 @@ fn validate_origin(value: &str) -> Result<(), DesktopError> {
     Ok(())
 }
 
-fn validate_loopback_origin(value: &str) -> Result<(), DesktopError> {
+pub(crate) fn validate_loopback_origin(value: &str) -> Result<(), DesktopError> {
     validate_origin(value)?;
     let authority = value
         .strip_prefix("https://")

@@ -247,6 +247,11 @@ pub fn process_image_path(process_id: u32) -> Result<PathBuf, WindowsHostError> 
     platform::process_image_path(process_id)
 }
 
+/// Resolves the Windows session that owns a process.
+pub fn process_session_id(process_id: u32) -> Result<u32, WindowsHostError> {
+    platform::process_session_id(process_id)
+}
+
 /// Returns the four-part product version embedded in a Windows executable.
 pub fn file_product_version(path: &Path) -> Result<String, WindowsHostError> {
     platform::file_product_version(path)
@@ -978,6 +983,18 @@ mod platform {
         result
     }
 
+    pub(super) fn process_session_id(process_id: u32) -> Result<u32, WindowsHostError> {
+        if process_id == 0 {
+            return Err(WindowsHostError::new("process id must be nonzero"));
+        }
+        let mut session_id = 0_u32;
+        // SAFETY: session_id is writable and the caller supplied a nonzero process ID.
+        unsafe { ProcessIdToSessionId(process_id, &raw mut session_id) }.map_err(|error| {
+            WindowsHostError::new(format!("ProcessIdToSessionId failed: {error}"))
+        })?;
+        Ok(session_id)
+    }
+
     pub(super) fn file_product_version(path: &Path) -> Result<String, WindowsHostError> {
         let path = wide_path(path)?;
         // SAFETY: `path` is NUL-terminated and all output pointers refer to
@@ -1484,6 +1501,10 @@ mod platform {
     }
 
     pub(super) fn process_image_path(_process_id: u32) -> Result<PathBuf, WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn process_session_id(_process_id: u32) -> Result<u32, WindowsHostError> {
         Err(unavailable())
     }
 
