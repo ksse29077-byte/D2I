@@ -1,10 +1,14 @@
 [CmdletBinding()]
 param(
-    [string]$RunnerPath = (Join-Path $PSScriptRoot 'run-windows-reproduction.ps1')
+    [string]$RunnerPath
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+if ([string]::IsNullOrWhiteSpace($RunnerPath)) {
+    $RunnerPath = Join-Path $PSScriptRoot 'run-windows-reproduction.ps1'
+}
 
 function Assert-True {
     param(
