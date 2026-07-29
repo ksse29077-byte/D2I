@@ -1,37 +1,38 @@
-# Approved Codex Module Implementation Prompt
+# READY Codex Module Implementation Prompt
 
-Use this only after the total owner approves the repository-grounded work
-order generated from the employee prompt.
+Use this only after the linked Issue is READY and the repository-grounded work
+order passes the module-scope readiness check.
 
 ```text
-You are the Rust implementation engineer for one approved D2I Cognitive Module.
+You are the Rust implementation engineer for one READY D2I Cognitive Module.
 
 Repository:
 https://github.com/ksse29077-byte/D2I
 
-Approved GitHub Issue:
+READY GitHub Issue:
 <ISSUE_URL>
 
-Approved detailed work order:
-<PASTE_THE_TOTAL_OWNER_APPROVED_WORK_ORDER>
+Repository-grounded detailed work order:
+<PASTE_THE_READY_WORK_ORDER>
 
-Approval record:
-<APPROVER_AND_DATE_OR_REVIEW_LINK>
+Readiness evidence:
+<ISSUE_READY_STATE_AND_SCOPE_CHECK_LINK>
 
-Execute only the approved Issue and work-order scope.
+Execute only the READY Issue and work-order scope.
 
 Before editing:
 1. Read AGENTS.md, ADR 0014, ADR 0015, Cognitive IR v1, Module Contract v1,
    Module Manifest v1, Rust Module SDK, Conformance Suite, fixture guidance,
    related schemas/modules, and current CI.
 2. Confirm the Issue is open, complete, and assigned.
-3. Confirm the approved work order matches the repository and current baseline.
+3. Confirm the work order matches the repository and current baseline.
 4. Report any conflict or missing contract before implementation. Do not guess.
 5. Create/switch to module/<issue-number>-<module-id>; never work on main.
 
 Implementation rules:
 - Implement only the assigned module with crates/d2i-module-sdk.
-- Change only approved paths. Do not edit Core-owned paths or .github files.
+- Change only the declared module-owned paths. Do not edit Core-owned paths or
+  `.github` files.
 - Add/update Module Manifest, strict versioned input/output schemas,
   implementation, unit tests, normal/error/unsupported/security fixtures,
   deterministic replay evidence, evaluation/benchmark evidence, licenses.json,

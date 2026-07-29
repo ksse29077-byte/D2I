@@ -1,12 +1,15 @@
 # PowerShell wildcard patterns, repository-relative and slash-normalized.
 .github/**
-docs/adr/0014-contract-governed-cognitive-task-runtime.md
-docs/adr/0015-versioned-cognitive-module-contract-and-conformance-platform.md
+AGENTS.md
+D2I_COMPILER_MASTER_WORK_ORDER.md
+Cargo.toml
+docs/architecture.md
+docs/adr/**
+docs/collaboration/**
 docs/cognitive-ir-v1.md
-docs/modules/cognitive-module-contract-v1.md
-docs/modules/module-manifest-v1.md
-docs/modules/conformance-suite.md
-docs/modules/versioning-compatibility.md
+docs/modules/**
+scripts/ci/**
+crates/d2i-cli/tests/github_governance.rs
 schemas/cognitive/**
 schemas/modules/**
 crates/d2i-module-sdk/**

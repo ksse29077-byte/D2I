@@ -14,6 +14,9 @@
 
 ## Peer Reviewer
 
+Peer review is optional for a module-only PR. Use this checklist when another
+developer volunteers a review or when the author requests one.
+
 - [ ] Capability behavior matches the linked issue and existing schemas
 - [ ] Unsupported and fallback behavior fails closed
 - [ ] Error codes, confidence semantics, provenance, and result binding are correct
@@ -34,9 +37,9 @@ move to its own approved Core RFC and PR.
 ## Final Merge
 
 - [ ] Required CI status checks pass on the current head
-- [ ] Required peer and CODEOWNERS approvals exist
-- [ ] Stale approvals were dismissed after material changes
+- [ ] The PR is ready, conflict-free, and limited to one module plus allowed workspace registration
+- [ ] No Core approval is required, or a non-author Core CODEOWNER approved the current head
 - [ ] Every review conversation is resolved
 - [ ] No automatic merge is configured
 - [ ] PR title follows `<type>(<scope>): <summary>`
-- [ ] Maintainer performs a manual squash merge
+- [ ] The module author or maintainer performs a manual squash merge
