@@ -5,6 +5,7 @@ D2I_COMPILER_MASTER_WORK_ORDER.md
 Cargo.toml
 Cargo.lock
 docs/architecture.md
+docs/application-semantics-v1.md
 docs/adr/**
 docs/collaboration/**
 docs/cognitive-ir-v1.md
@@ -17,6 +18,7 @@ schemas/cognitive/**
 schemas/modules/**
 crates/d2i-module-sdk/**
 crates/d2i-cognitive-ir/**
+crates/d2i-application-semantics/**
 products/d2i-desktop/Cargo.toml
 products/d2i-desktop/src/lib.rs
 products/d2i-desktop/src/cognitive.rs

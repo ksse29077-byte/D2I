@@ -127,6 +127,26 @@ the latest conformance report hash is
 - stable conformance report and exit codes
 - starter and reference module deterministic replay
 
+## Application Semantics Status
+
+Implemented in `crates/d2i-application-semantics`:
+
+- strict Application Pack v1 Rust and JSON Schema contracts
+- immutable pack identity and canonical SHA-256 verification
+- exact UIA/Web source and target-binding admission
+- bounded semantic targets, aliases, kinds, and term constraints
+- deterministic `ObservationFixture` to Cognitive IR v1 snapshot conversion
+- Element Grounder v1 module-owned payload bridge without a module dependency
+- UIA/Web fixture, schema compatibility, replay, stale, tamper, ambiguity,
+  redaction, secret, and untrusted-content tests
+- concrete `d2i-desktop` UIA observation-to-payload integration coverage
+- bounded, read-only-only WebDriver observation retry for transient Windows
+  loopback aborts; mutation requests remain excluded and fail closed
+
+Cognitive IR v1, Module Contract v1, Module SDK, Element Grounder v1, package
+data, Runtime ABI, Windows observation schemas, and action execution remain
+unchanged.
+
 ## Verification
 
 Passed:
@@ -153,9 +173,8 @@ cargo build --workspace --release
 
 ## Next Task
 
-`Application Semantics Contract v1 및 Element Grounder·Application
-Pack·Observation Fixture Bridge`
+`Action Candidate Provider v1 계약 검토 및 semantic target →
+capability-bound ActionProposal fixture bridge`
 
-Do not start it until Repository Decoupling v1 is merged and Issue #23 is
-closed. Do not start a production loader, Runtime ABI, package embedding, or
-concrete policy/activation/audit integration as part of repository decoupling.
+Do not start production module loading, action execution, Runtime ABI, or
+package embedding as part of Application Semantics v1.

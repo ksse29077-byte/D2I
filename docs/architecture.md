@@ -127,6 +127,13 @@ Cognitive modules are independent one-package workspaces under `modules/`,
 each with a local lockfile. The root workspace excludes them, and Core has no
 dependency on a module implementation or registry.
 
+`d2i-application-semantics` owns additive Application Pack v1 and synthetic
+observation-fixture contracts. It binds an immutable application vocabulary to
+an existing Cognitive IR v1 observation and emits a schema-pinned,
+side-effect-free Element Grounder v1 JSON payload. It does not invoke or link
+the standalone module, does not add executable selectors to semantic metadata,
+and does not change Cognitive IR, the Module SDK, package data, or Runtime ABI.
+
 Phase 6 adds:
 
 ```text

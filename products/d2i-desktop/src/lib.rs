@@ -56,6 +56,14 @@ pub use contract::{
     BrowserInteraction, DesktopActionIntent, DesktopCapability, DesktopOperation, RiskClass,
     UiInteraction, WindowIdentity,
 };
+pub use d2i_application_semantics::{
+    bridge_observation_fixture, build_element_grounder_payload, ApplicationPack,
+    ApplicationPackProvenance, ApplicationSemanticTarget, ApplicationSemanticsError,
+    BridgedGroundingCase, ElementGrounderBridgeRequest, ElementGrounderPayload, ObservationFixture,
+    ObservationFixtureBridge, ObservationGroundingCase, APPLICATION_SEMANTICS_SCHEMA_VERSION,
+    APPLICATION_SEMANTICS_V1_SCHEMA, ELEMENT_GROUNDER_INPUT_SCHEMA_ID,
+    ELEMENT_GROUNDER_INPUT_SCHEMA_VERSION,
+};
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,

@@ -1,16 +1,17 @@
 #![cfg(windows)]
 
 use d2i_desktop::{
-    activate_certified_windows_binding, certify_windows_binding,
+    activate_certified_windows_binding, build_element_grounder_payload, certify_windows_binding,
     create_windows_browser_egress_evidence, initialize_audit_ledger,
     initialize_windows_activation_ledger, initialize_windows_deployment_audit,
     run_windows_wfp_browser_egress_self_test, sign_approval, unprotect_windows_signing_key,
     verify_audit_ledger, verify_signed_windows_certification, verify_windows_activation_ledger,
-    verify_windows_deployment_audit, ActivatedWindowsBinding, AllowedExecutable,
-    BrowserInteraction, CognitiveRiskClass, ComparisonOp, ConcreteWindowsRuntimeBindingProbe,
-    ConfirmationPolicy, DesktopActionIntent, DesktopActor, DesktopAdapter, DesktopCapability,
-    DesktopExecutor, DesktopOperation, DesktopPolicy, GoalSpec, ObservationLimits,
-    ObservationProvider, Postcondition, Provenance, RiskClass, SignedWindowsCertification,
+    verify_windows_deployment_audit, ActivatedWindowsBinding, AllowedExecutable, ApplicationPack,
+    ApplicationPackProvenance, ApplicationSemanticTarget, BrowserInteraction, CognitiveRiskClass,
+    ComparisonOp, ConcreteWindowsRuntimeBindingProbe, ConfirmationPolicy, DesktopActionIntent,
+    DesktopActor, DesktopAdapter, DesktopCapability, DesktopExecutor, DesktopOperation,
+    DesktopPolicy, ElementGrounderBridgeRequest, GoalSpec, ObservationLimits, ObservationProvider,
+    ObservationSourceKind, Postcondition, Provenance, RiskClass, SignedWindowsCertification,
     TrustLabel, UiInteraction, WindowIdentity, WindowsActivationLedgerPolicy,
     WindowsActivationRecord, WindowsAdapterConfiguration, WindowsAdapterKind,
     WindowsBindingEvidence, WindowsBrowserEgressInput, WindowsBrowserEgressRequirement,
@@ -1145,6 +1146,56 @@ fn activated_uia_observer_reads_actual_fixture_without_side_effects() {
         !output_path.exists(),
         "read-only UIA observation mutated the fixture"
     );
+
+    let application_pack = ok(ApplicationPack {
+        schema_version: 1,
+        pack_id: "windows-uia-observation-fixture".to_owned(),
+        pack_version: "1.0.0".to_owned(),
+        application_id: "d2i-windows-uia-fixture".to_owned(),
+        display_name: "D2I Windows UIA Fixture".to_owned(),
+        supported_source_kinds: vec![ObservationSourceKind::Uia],
+        required_target_binding: BTreeMap::from([(
+            "integration_id".to_owned(),
+            "windows-uia-observation".to_owned(),
+        )]),
+        targets: vec![ApplicationSemanticTarget {
+            target_id: "disabled-action".to_owned(),
+            canonical_label: "Disabled action".to_owned(),
+            aliases: vec!["Unavailable action".to_owned()],
+            expected_kinds: vec!["uia.button".to_owned()],
+            required_terms: Vec::new(),
+            excluded_terms: Vec::new(),
+            context_terms: vec!["fixture".to_owned()],
+        }],
+        provenance: ApplicationPackProvenance {
+            source_id: "windows-uia-observation-test".to_owned(),
+            source_sha256: fixed_hash(150),
+            producer: "d2i-desktop-tests".to_owned(),
+        },
+        pack_sha256: fixed_hash(0),
+    }
+    .seal());
+    assert!(first
+        .observable_elements
+        .iter()
+        .any(|element| element.kind == "uia.button" && element.label == "Disabled action"));
+    let grounding_payload = ok(build_element_grounder_payload(
+        &application_pack,
+        &first,
+        &ElementGrounderBridgeRequest {
+            schema_version: 1,
+            application_pack_sha256: application_pack.pack_sha256.clone(),
+            semantic_target_id: "disabled-action".to_owned(),
+            target_text: "Disabled action".to_owned(),
+            goal_id: "goal-observation".to_owned(),
+            plan_generation_id: "plan-observation".to_owned(),
+            max_candidates: 8,
+            replay_id: "uia-observation-replay".to_owned(),
+            replay_seed: 1,
+        },
+    ));
+    validate_element_grounder_payload_schema(&grounding_payload.payload);
+    assert_eq!(grounding_payload.source_observation_hash, first.state_hash);
 
     let audit_verification = ok(verify_windows_deployment_audit(&audit_root));
     assert!(audit_verification.record_count >= 10);
@@ -2396,6 +2447,24 @@ fn validate_cognitive_observation_schema(instance: &impl Serialize) {
     assert!(
         errors.is_empty(),
         "Cognitive ObservationSnapshot schema errors: {errors:?}"
+    );
+}
+
+fn validate_element_grounder_payload_schema(instance: &impl Serialize) {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../modules/element-grounder/schemas/input.schema.json");
+    let schema: Value = ok(serde_json::from_slice(&ok(fs::read(path))));
+    let compiled = ok(JSONSchema::options()
+        .with_draft(Draft::Draft202012)
+        .compile(&schema));
+    let value = ok(serde_json::to_value(instance));
+    let errors = match compiled.validate(&value) {
+        Ok(()) => Vec::new(),
+        Err(errors) => errors.map(|error| error.to_string()).collect::<Vec<_>>(),
+    };
+    assert!(
+        errors.is_empty(),
+        "Element Grounder payload schema errors: {errors:?}"
     );
 }
 
