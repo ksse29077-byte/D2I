@@ -100,8 +100,14 @@ try {
         [IO.File]::WriteAllText($fixture.FullName, $content, [Text.UTF8Encoding]::new($false))
     }
 
+    $cargoManifestPath = Join-Path $destination 'Cargo.toml'
+    cargo fmt --manifest-path $cargoManifestPath --all
+    if ($LASTEXITCODE -ne 0) {
+        throw 'cannot format the generated standalone module'
+    }
+
     Remove-Item -LiteralPath (Join-Path $destination 'Cargo.lock') -Force -ErrorAction SilentlyContinue
-    cargo generate-lockfile --manifest-path (Join-Path $destination 'Cargo.toml')
+    cargo generate-lockfile --manifest-path $cargoManifestPath
     if ($LASTEXITCODE -ne 0) {
         throw 'cannot generate the module-local Cargo.lock'
     }
