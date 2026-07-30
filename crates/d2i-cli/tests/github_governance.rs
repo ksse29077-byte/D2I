@@ -206,12 +206,16 @@ fn core_ownership_and_module_ci_cover_contract_boundary() {
     );
     for protected in [
         "Cargo.toml",
+        "Cargo.lock",
         "docs/adr/",
         "docs/collaboration/",
         "docs/modules/",
         "scripts/ci/",
+        "scripts/modules/",
+        "templates/cognitive-module/",
         "schemas/cognitive/",
         "schemas/modules/",
+        "crates/d2i-cognitive-ir/",
         "crates/d2i-module-sdk/",
         "products/d2i-desktop/src/cognitive.rs",
         "crates/d2i-runtime-api/",
@@ -230,17 +234,14 @@ fn core_ownership_and_module_ci_cover_contract_boundary() {
 
     let validator = read("scripts/ci/validate-module-pr.ps1");
     for required in [
-        "'module', 'validate'",
-        "'--test', 'conformance'",
-        "fixtures/$kind",
-        "untrusted_content",
+        "classify-change.ps1",
+        "check-module.ps1",
+        "Cargo.lock",
+        "exactly one modules/<module-id>",
         "replay_count",
         "licenses.json",
-        "Core-owned changes",
         "module/<issue-number>-<module-id>",
-        "Test-AllowedWorkspaceRegistration",
-        "ApprovedReviewersOverride",
-        "human approval is not required",
+        "Core workflows own this change",
     ] {
         assert!(
             validator.contains(required),
@@ -256,10 +257,10 @@ fn module_self_merge_policy_preserves_automated_protection() {
         "\"required_approving_review_count\": 0",
         "\"required_review_thread_resolution\": true",
         "\"strict_required_status_checks_policy\": true",
-        "\"context\": \"ci / rust\"",
-        "\"context\": \"ci / workspace-test\"",
-        "\"context\": \"module-pr / module-governance\"",
-        "\"context\": \"core-governance / core-approval\"",
+        "\"context\": \"rust\"",
+        "\"context\": \"workspace-test\"",
+        "\"context\": \"module-governance\"",
+        "\"context\": \"core-approval\"",
         "\"type\": \"deletion\"",
         "\"type\": \"non_fast_forward\"",
         "\"bypass_actors\": []",
@@ -288,11 +289,77 @@ fn module_self_merge_policy_preserves_automated_protection() {
     for required in [
         "review must bind to the current head commit",
         "self-approval are not approval evidence",
-        "cargo metadata --locked",
+        "root `Cargo.toml` and root `Cargo.lock` are always Core-owned",
     ] {
         assert!(
             core_control.contains(required),
             "Core change control is missing '{required}'"
+        );
+    }
+}
+
+#[test]
+fn standalone_module_workspaces_are_decoupled_from_core() {
+    let root_manifest = read("Cargo.toml");
+    assert!(root_manifest.contains("exclude = [\"modules/*\"]"));
+    for module in [
+        "example-module",
+        "rule-based-work-reporter",
+        "goal-compiler",
+        "element-grounder",
+    ] {
+        assert!(
+            !root_manifest.contains(&format!("\"modules/{module}\"")),
+            "{module} must not be a root workspace member"
+        );
+        let manifest = read(&format!("modules/{module}/Cargo.toml"));
+        assert!(
+            manifest.starts_with("[workspace]"),
+            "{module} is not a standalone workspace"
+        );
+        assert!(
+            repo_root()
+                .join(format!("modules/{module}/Cargo.lock"))
+                .is_file(),
+            "{module} is missing its local Cargo.lock"
+        );
+        for forbidden in [
+            "d2i-desktop",
+            "d2i-runtime",
+            "d2i-cli",
+            "d2i-ffi",
+            "d2i-windows",
+        ] {
+            assert!(
+                !manifest.contains(forbidden),
+                "{module} directly depends on forbidden Core package {forbidden}"
+            );
+        }
+    }
+
+    let cli_manifest = read("crates/d2i-cli/Cargo.toml");
+    for module_package in [
+        "d2i-example-module",
+        "d2i-rule-based-work-reporter",
+        "d2i-goal-compiler",
+        "d2i-element-grounder",
+    ] {
+        assert!(
+            !cli_manifest.contains(module_package),
+            "Core CLI must not link {module_package}"
+        );
+    }
+
+    let ci = read(".github/workflows/ci.yml");
+    for required in [
+        "module_only",
+        "core_contract",
+        "mixed_core_migration",
+        "check-all-modules.ps1",
+    ] {
+        assert!(
+            ci.contains(required),
+            "CI is missing decoupling contract '{required}'"
         );
     }
 }

@@ -175,6 +175,19 @@ impl Display for DesktopError {
 
 impl Error for DesktopError {}
 
+impl From<d2i_cognitive_ir::CognitiveIrError> for DesktopError {
+    fn from(error: d2i_cognitive_ir::CognitiveIrError) -> Self {
+        match error {
+            d2i_cognitive_ir::CognitiveIrError::Invalid(message) => Self::Invalid(message),
+            d2i_cognitive_ir::CognitiveIrError::Integrity(message) => Self::Integrity(message),
+            d2i_cognitive_ir::CognitiveIrError::AccessDenied(message) => {
+                Self::AccessDenied(message)
+            }
+            d2i_cognitive_ir::CognitiveIrError::Json(message) => Self::Json(message),
+        }
+    }
+}
+
 fn json_bytes<T: serde::Serialize>(value: &T) -> Result<Vec<u8>, DesktopError> {
     let bytes = serde_json::to_vec(value).map_err(|error| DesktopError::Json(error.to_string()))?;
     if bytes.len() > MAX_JSON_BYTES {

@@ -5,11 +5,14 @@
 /AGENTS.md @ksse29077-byte @graykavinjeo
 /D2I_COMPILER_MASTER_WORK_ORDER.md @ksse29077-byte @graykavinjeo
 /Cargo.toml @ksse29077-byte @graykavinjeo
+/Cargo.lock @ksse29077-byte @graykavinjeo
 /docs/architecture.md @ksse29077-byte @graykavinjeo
 /docs/adr/ @ksse29077-byte @graykavinjeo
 /docs/collaboration/ @ksse29077-byte @graykavinjeo
 /docs/modules/ @ksse29077-byte @graykavinjeo
 /scripts/ci/ @ksse29077-byte @graykavinjeo
+/scripts/modules/ @ksse29077-byte @graykavinjeo
+/templates/cognitive-module/ @ksse29077-byte @graykavinjeo
 /crates/d2i-cli/tests/github_governance.rs @ksse29077-byte @graykavinjeo
 /docs/adr/0014-contract-governed-cognitive-task-runtime.md @ksse29077-byte @graykavinjeo
 /docs/adr/0015-versioned-cognitive-module-contract-and-conformance-platform.md @ksse29077-byte @graykavinjeo
@@ -21,6 +24,9 @@
 /schemas/cognitive/ @ksse29077-byte @graykavinjeo
 /schemas/modules/ @ksse29077-byte @graykavinjeo
 /crates/d2i-module-sdk/ @ksse29077-byte @graykavinjeo
+/crates/d2i-cognitive-ir/ @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/Cargo.toml @ksse29077-byte @graykavinjeo
+/products/d2i-desktop/src/lib.rs @ksse29077-byte @graykavinjeo
 /products/d2i-desktop/src/cognitive.rs @ksse29077-byte @graykavinjeo
 /products/d2i-desktop/tests/cognitive_runtime.rs @ksse29077-byte @graykavinjeo
 /crates/d2i-compiler/src/package.rs @ksse29077-byte @graykavinjeo

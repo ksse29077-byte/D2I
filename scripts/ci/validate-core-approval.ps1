@@ -44,23 +44,6 @@ function Test-CoreOwnedPath([string]$Path) {
     return $false
 }
 
-function Test-AllowedWorkspaceRegistration([string]$ModuleId) {
-    $diff = @(git diff --unified=0 "$BaseSha...$HeadSha" -- Cargo.toml)
-    if ($LASTEXITCODE -ne 0) {
-        Fail 'cannot inspect Cargo.toml workspace registration'
-    }
-    $removed = @($diff | Where-Object {
-            $_.StartsWith('-') -and -not $_.StartsWith('---')
-        })
-    $added = @($diff | Where-Object {
-            $_.StartsWith('+') -and -not $_.StartsWith('+++')
-        })
-    if ($removed.Count -ne 0 -or $added.Count -ne 1) {
-        return $false
-    }
-    return $added[0] -match "^\+\s*`"modules/$([regex]::Escape($ModuleId))`",\s*$"
-}
-
 function Get-CodeOwnerLogins {
     $matches = [regex]::Matches(
         (Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.github/CODEOWNERS')),
@@ -166,7 +149,7 @@ try {
     }
     else {
         $changedFiles = @(
-            git diff --name-only --diff-filter=ACMRTUXB "$BaseSha...$HeadSha" |
+            git diff --name-only --diff-filter=ACDMRTUXB "$BaseSha...$HeadSha" |
                 ForEach-Object { $_.Trim().Replace('\', '/') } |
                 Where-Object { $_ }
         )
@@ -182,15 +165,11 @@ try {
     )
     $coreChanges = @($changedFiles | Where-Object { Test-CoreOwnedPath $_ })
 
-    $isModuleBranch = $BranchName -match '^module/[1-9][0-9]*-(?<module>[a-z0-9]+(?:-[a-z0-9]+)*)$'
-    if ($isModuleBranch -and $changedFiles -contains 'Cargo.toml' -and
-        (Test-AllowedWorkspaceRegistration -ModuleId $Matches.module)) {
-        $coreChanges = @($coreChanges | Where-Object { $_ -ne 'Cargo.toml' })
-    }
+    $isModuleBranch = $BranchName -match '^module/[1-9][0-9]*-[a-z0-9]+(?:-[a-z0-9]+)*$'
 
     if ($coreChanges.Count -eq 0) {
         Write-Output 'No Core-owned changes detected; Core approval is not required.'
-        exit 0
+        return
     }
     if ($isModuleBranch) {
         Fail @"

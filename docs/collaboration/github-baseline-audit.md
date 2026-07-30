@@ -44,7 +44,7 @@ Governance-branch runs exposed two baseline failures outside this task:
 
 No related source or test was changed, skipped, allowed to fail, or reported as
 passing. The split workflow keeps Windows fmt/Clippy/release and portable
-workspace test outcomes separately visible. `ci / workspace-test` must not
+workspace test outcomes separately visible. `workspace-test` must not
 become a required branch check until a dedicated Core-owned portability fix is
 approved. The module PR workflow has static and local execution evidence but
 cannot report on GitHub until a PR event exists.

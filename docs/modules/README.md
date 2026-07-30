@@ -15,10 +15,17 @@ Start with:
 
 Reference artifacts:
 
+- `crates/d2i-cognitive-ir`
 - `crates/d2i-module-sdk`
 - `modules/example-module`
 - `modules/rule-based-work-reporter`
+- `scripts/modules/check-module.ps1`
+- `templates/cognitive-module`
 - `schemas/modules`
+
+Each `modules/<module-id>` directory is an independent one-package Cargo
+workspace with its own `Cargo.lock`. It is excluded from the root workspace,
+so normal module development changes no shared Cargo manifest or lockfile.
 
 No module loader is connected to the production `CognitiveExecutor`. That
 integration requires a separate RFC.

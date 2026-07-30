@@ -1,6 +1,7 @@
 # Rust Module SDK
 
-Add `d2i-module-sdk` as a workspace path dependency and implement `Module`:
+Create a standalone workspace with `scripts/modules/new-module.ps1`. Add
+`d2i-module-sdk` as a path dependency and implement `Module`:
 
 ```rust
 pub trait Module {
@@ -41,3 +42,8 @@ the future isolated-process loader RFC.
 Do not add arbitrary I/O to `Module`. Declare a dependency or capability need
 in the manifest and return `DependencyUnavailable`, `NetworkProhibited`, or
 `UnsupportedInput` as appropriate.
+
+Modules that exchange Cognitive IR v1 data depend on the pure
+`d2i-cognitive-ir` crate. They do not depend on `d2i-desktop` or any runtime,
+adapter, CLI, FFI, Windows, UIA, WebDriver, WFP, policy, activation, or audit
+implementation.

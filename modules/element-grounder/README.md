@@ -69,3 +69,11 @@ preserved on candidates. Untrusted content never grants instruction or action
 authority. The module emits only stable rule identifiers and observation or
 element IDs as evidence; it never emits raw values. No wall clock, randomness,
 model, filesystem, process, UI, browser, or network API is used.
+
+Run its complete standalone gate from the repository root:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/element-grounder
+```

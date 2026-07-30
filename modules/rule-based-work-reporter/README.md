@@ -7,9 +7,10 @@ authority.
 
 Run its contract checks from the repository root:
 
-```text
-cargo run -p d2i-cli -- module validate modules/rule-based-work-reporter --json
-cargo run -p d2i-cli -- module conformance modules/rule-based-work-reporter --json
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/rule-based-work-reporter
 ```
 
 The module deliberately omits untrusted event summaries from

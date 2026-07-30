@@ -11,15 +11,13 @@ members = [
     "crates/d2i-kernel",
     "crates/d2i-learning",
     "crates/d2i-module-sdk",
+    "crates/d2i-cognitive-ir",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",
     "products/d2i-desktop",
-    "modules/example-module",
-    "modules/rule-based-work-reporter",
-    "modules/element-grounder",
-    "modules/goal-compiler",
 ]
+exclude = ["modules/*"]
 resolver = "2"
 
 [workspace.package]

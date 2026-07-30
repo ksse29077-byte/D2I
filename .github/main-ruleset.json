@@ -38,16 +38,16 @@
         "strict_required_status_checks_policy": true,
         "required_status_checks": [
           {
-            "context": "ci / rust"
+            "context": "rust"
           },
           {
-            "context": "ci / workspace-test"
+            "context": "workspace-test"
           },
           {
-            "context": "module-pr / module-governance"
+            "context": "module-governance"
           },
           {
-            "context": "core-governance / core-approval"
+            "context": "core-approval"
           }
         ]
       }

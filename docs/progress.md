@@ -62,6 +62,17 @@ Implemented in `crates/d2i-module-sdk`:
   untrusted-content guard
 - deterministic fixture runner and stable machine-readable conformance report
 
+Repository Decoupling v1:
+
+- pure Cognitive IR v1 contracts extracted to `crates/d2i-cognitive-ir`
+- `d2i-desktop` imports and re-exports the exact Core types
+- root Cargo workspace excludes `modules/*`
+- every module is a standalone workspace with a local `Cargo.lock`
+- Core crates and CLI have no dependency on a module implementation
+- dynamic module discovery and module-local locked quality checks
+- module-only/Core-only/Core-contract/mixed migration CI classification
+- synthetic parallel module merge/rebase and lockfile independence tests
+
 Reference module assets:
 
 - `modules/example-module` copyable starter
@@ -71,14 +82,16 @@ Reference module assets:
   deterministic replay fixtures
 - model/data cards, threat models, license declarations, and PR checklist
 
-CLI:
+Official module check:
 
-```text
-cargo run -p d2i-cli -- module validate modules/rule-based-work-reporter --json
-cargo run -p d2i-cli -- module conformance modules/rule-based-work-reporter --json
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/rule-based-work-reporter
 ```
 
-Both commands pass. The reference manifest hash is
+The Core CLI intentionally returns structured `unsupported` for module
+execution because it does not link standalone implementations. The reference manifest hash is
 `sha256:d2c404a923beb9327bc2c5a4f7efec4b2a365144e68b41a3e6821158a389dcca`;
 the latest conformance report hash is
 `sha256:d1d0d4452fa648047caf1489b0bd6934d6cf394abe16be5a603337b9cf5ae366`.
@@ -140,7 +153,9 @@ cargo build --workspace --release
 
 ## Next Task
 
-Define the parallel module-development operating model: GitHub Issue template,
-per-module work-order generation format, and branch, PR, and review rules. Do
-not start production loader, Runtime ABI, package embedding, or concrete
-policy/activation/audit integration.
+`Application Semantics Contract v1 및 Element Grounder·Application
+Pack·Observation Fixture Bridge`
+
+Do not start it until Repository Decoupling v1 is merged and Issue #23 is
+closed. Do not start a production loader, Runtime ABI, package embedding, or
+concrete policy/activation/audit integration as part of repository decoupling.

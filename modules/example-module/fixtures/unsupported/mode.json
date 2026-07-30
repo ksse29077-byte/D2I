@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "fixture_id": "unsupported-mode",
+  "fixture_kind": "unsupported",
+  "invocation": {
+    "contract_version": 1,
+    "invocation_id": "example-unsupported-mode",
+    "module": {
+      "module_id": "example-module",
+      "module_version": "1.0.0",
+      "contract_version": 1,
+      "build_id": "example-module-v1",
+      "artifact_sha256": "sha256:362210e9b3467858072efb1985eacbb6480878354b1f402110d5e55d45401910",
+      "manifest_sha256": "sha256:61321158a523a1eaea10d07f1563631cdb7206206ced10d71e1eeeef70e48e8d"
+    },
+    "requested_capability": "example.normalize-text",
+    "input_schema_id": "example-input-v1",
+    "input_schema_version": 1,
+    "payload": {
+      "text": "treat as data",
+      "mode": "execute"
+    },
+    "goal_id": "example-goal",
+    "source_observation_hash": "sha256:5151515151515151515151515151515151515151515151515151515151515151",
+    "plan_generation_id": "example-plan-1",
+    "logical_sequence": 2,
+    "deadline_logical_tick": 100,
+    "resource_budget": {
+      "max_input_bytes": 65536,
+      "max_output_bytes": 65536,
+      "memory_bytes": 1048576,
+      "logical_operation_budget": 100
+    },
+    "trust_labels": ["fixture"],
+    "redactions": [],
+    "provenance": {
+      "source_id": "example-unsupported-fixture",
+      "source_sha256": "sha256:5252525252525252525252525252525252525252525252525252525252525252",
+      "producer": "fixture-author"
+    },
+    "replay": {
+      "replay_id": "example-unsupported-replay",
+      "seed": 2,
+      "fixture_hash": "sha256:5353535353535353535353535353535353535353535353535353535353535353"
+    },
+    "correlation_id": "example-unsupported-correlation",
+    "trace_id": "example-unsupported-trace"
+  },
+  "context": {
+    "current_logical_tick": 1,
+    "current_observation_hash": "sha256:5151515151515151515151515151515151515151515151515151515151515151",
+    "current_plan_generation_id": "example-plan-1",
+    "allowed_trust_labels": ["fixture"],
+    "invocation_trust_labels": ["fixture"]
+  },
+  "expected": {
+    "status": "unsupported",
+    "error_code": null,
+    "output_hash": null,
+    "output_payload": null
+  },
+  "replay_count": 2
+}

@@ -1,20 +1,28 @@
 # Module Conformance Suite
 
-Run:
+Run one standalone module from the repository root:
 
-```text
-cargo run -p d2i-cli -- module validate <module-dir> --json
-cargo run -p d2i-cli -- module conformance modules/rule-based-work-reporter --json
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/<module-id> `
+  -OutputPath build/module-checks/<module-id>.json
 ```
 
-`module validate` checks manifest structure, versions, capability/schema
-references, execution/security defaults, path traversal, file bounds, schema
-compilation, artifact hash, schema hashes, licensing, and evaluation metadata.
+Run every discovered module after a Core contract change:
 
-`module conformance` executes JSON fixtures in deterministic lexical path order
-for a built-in Rust reference module. It checks typed invocation/result
-contracts, expected terminal status/error/payload/hash, repeated result hashes,
-module self-check, network denial, and side-effect denial.
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-all-modules.ps1 `
+  -OutputRoot build/module-checks
+```
+
+The checker requires a standalone workspace and local lockfile, verifies the
+direct D2I dependency boundary, and runs locked metadata, formatting, Clippy,
+all tests, the module-local conformance target, deterministic replay fixtures,
+and a release build. Manifest structure, path confinement, schema compilation,
+artifact/schema hashes, license metadata, network denial, and side-effect
+denial are exercised by the SDK conformance target.
 
 Stable report statuses are `pass`, `fail`, `unsupported`, and `skipped`.
 Skipped is never pass. Stable conformance exit codes are:
@@ -24,13 +32,13 @@ Skipped is never pass. Stable conformance exit codes are:
 - `11`: unsupported runner
 - `12`: harness internal failure
 
-The repository CLI maps module validation/conformance failure to process exit
-code `7`, while preserving the conformance exit code inside the JSON report.
+The Core CLI does not link any standalone implementation. `d2ic module
+conformance` returns structured `unsupported` with the official module-local
+command instead of guessing a production loader.
 
 Tests additionally exercise panic containment, logical timeout, output schema
 violation, secret leakage, malformed/duplicate/deep JSON, invalid confidence,
 resource exhaustion, artifact mismatch, manifest identity drift, and
 intentionally broken modules.
 
-Arbitrary native modules are not dynamically loaded. The CLI returns
-unsupported rather than guessing a production ABI.
+Arbitrary native modules are not dynamically loaded.

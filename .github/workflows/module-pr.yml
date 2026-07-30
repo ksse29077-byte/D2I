@@ -25,7 +25,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: 1.86.0
-      - name: Validate module branch, issue, artifacts, fixtures, and Core boundary
+          components: rustfmt, clippy
+      - name: Classify and validate standalone module-only changes
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}

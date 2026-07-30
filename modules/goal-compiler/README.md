@@ -49,4 +49,12 @@ low-confidence compilation.
 
 The module owns its boundary schemas. Its output `$defs/goal_spec` is compared
 field-for-field with the Core Cognitive IR v1 schema, and compiled JSON is
-round-tripped through the existing `d2i_desktop::GoalSpec` type in tests.
+round-tripped through `d2i_cognitive_ir::GoalSpec` in tests.
+
+Run its complete standalone gate from the repository root:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/goal-compiler
+```

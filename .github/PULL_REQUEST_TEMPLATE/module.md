@@ -62,7 +62,8 @@ Rollback:
 
 ## Author Checklist
 
-- [ ] Changes are limited to this module's owned directory and allowed workspace registration files
+- [ ] Changes are limited to exactly one `modules/<module-id>/` directory
+- [ ] Root `Cargo.toml` and root `Cargo.lock` are unchanged
 - [ ] Core-owned files are unchanged
 - [ ] No Core contract or Module SDK public API changed
 - [ ] Module Manifest v1 and strict versioned input/output schemas are included
@@ -77,10 +78,9 @@ Rollback:
 - [ ] No production loader or Runtime ABI connection is included
 - [ ] No actual side effect is included unless separately approved by Core and policy owners
 - [ ] Model card, data card, `licenses.json`, and threat model are present
-- [ ] `cargo fmt --all -- --check`
-- [ ] `cargo clippy --workspace --all-targets --all-features -- -D warnings`
-- [ ] `cargo test --workspace --all-features`
-- [ ] `cargo build --workspace --release`
+- [ ] Module-local `Cargo.lock` is committed
+- [ ] `scripts/modules/check-module.ps1` reports `pass`
+- [ ] Module-local fmt, Clippy `-D warnings`, tests, conformance, replay, and release build pass
 - [ ] Every review conversation is resolved
 - [ ] Automatic merge is disabled
 - [ ] The module owner accepts post-merge maintenance responsibility

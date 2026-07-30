@@ -9,7 +9,7 @@
 - [ ] Normal, error, unsupported, stale, boundary, and security behavior is tested
 - [ ] Untrusted content cannot become an instruction or action
 - [ ] Network, filesystem, process, secret, privilege, persistence, and side effects remain denied
-- [ ] Full workspace fmt, Clippy, tests, and release build pass
+- [ ] The official module-local checker reports fmt, Clippy, tests, conformance, replay, and release pass
 - [ ] No failure, skipped check, or unsupported runner is reported as pass
 
 ## Peer Reviewer
@@ -37,7 +37,7 @@ move to its own approved Core RFC and PR.
 ## Final Merge
 
 - [ ] Required CI status checks pass on the current head
-- [ ] The PR is ready, conflict-free, and limited to one module plus allowed workspace registration
+- [ ] The PR is ready, conflict-free, and limited to exactly one standalone module directory
 - [ ] No Core approval is required, or a non-author Core CODEOWNER approved the current head
 - [ ] Every review conversation is resolved
 - [ ] No automatic merge is configured

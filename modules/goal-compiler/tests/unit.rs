@@ -95,7 +95,7 @@ fn explicit_read_only_instruction_compiles_complete_core_goal() {
     assert!(goal_spec.goal_id.starts_with("goal-"));
 
     let serialized = ok(serde_json::to_value(&goal_spec));
-    let core: d2i_desktop::GoalSpec = ok(serde_json::from_value(serialized));
+    let core: d2i_cognitive_ir::GoalSpec = ok(serde_json::from_value(serialized));
     ok(core.validate());
 }
 

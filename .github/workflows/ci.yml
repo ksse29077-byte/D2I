@@ -9,22 +9,93 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: 1.86.0
           components: rustfmt, clippy
-      - run: cargo fmt --all -- --check
-      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
-      - run: cargo build --workspace --release
+      - name: Classify change
+        id: change
+        shell: pwsh
+        run: |
+          $base = '${{ github.event.pull_request.base.sha }}'
+          $head = '${{ github.event.pull_request.head.sha }}'
+          if (-not $base) {
+            $base = '${{ github.event.before }}'
+            $head = '${{ github.sha }}'
+          }
+          if (-not $base -or $base -match '^0+$') {
+            $classification = 'core_contract'
+          } else {
+            $classification = ./scripts/ci/classify-change.ps1 -BaseSha $base -HeadSha $head
+          }
+          "classification=$classification" >> $env:GITHUB_OUTPUT
+          "classification: $classification"
+      - name: Skip root Rust checks for module-only change
+        if: steps.change.outputs.classification == 'module_only'
+        shell: pwsh
+        run: Write-Output 'Root workspace is intentionally not evaluated for module-only changes.'
+      - name: Check root formatting
+        if: steps.change.outputs.classification != 'module_only'
+        run: cargo fmt --all -- --check
+      - name: Lint root workspace
+        if: steps.change.outputs.classification != 'module_only'
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - name: Build root workspace release
+        if: steps.change.outputs.classification != 'module_only'
+        run: cargo build --workspace --release
       - name: Test hermetic Windows reproduction runner
+        if: steps.change.outputs.classification != 'module_only'
         shell: pwsh
         run: ./scripts/ci/test-windows-reproduction.ps1
+      - name: Test repository decoupling and governance
+        if: steps.change.outputs.classification != 'module_only'
+        shell: pwsh
+        run: |
+          ./scripts/ci/test-repository-decoupling.ps1
+          ./scripts/ci/test-module-pr-governance.ps1
+          ./scripts/modules/test-module-tools.ps1
+      - name: Check every standalone module against changed Core contract
+        if: >
+          steps.change.outputs.classification == 'core_contract' ||
+          steps.change.outputs.classification == 'mixed_core_migration'
+        shell: pwsh
+        run: >
+          ./scripts/modules/check-all-modules.ps1
+          -OutputRoot '${{ runner.temp }}/d2i-module-checks'
+          -CargoTargetRoot '${{ runner.temp }}/d2i-module-targets'
 
   workspace-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: 1.86.0
-      - run: cargo test --workspace --all-features
+      - name: Classify change
+        id: change
+        shell: pwsh
+        run: |
+          $base = '${{ github.event.pull_request.base.sha }}'
+          $head = '${{ github.event.pull_request.head.sha }}'
+          if (-not $base) {
+            $base = '${{ github.event.before }}'
+            $head = '${{ github.sha }}'
+          }
+          if (-not $base -or $base -match '^0+$') {
+            $classification = 'core_contract'
+          } else {
+            $classification = ./scripts/ci/classify-change.ps1 -BaseSha $base -HeadSha $head
+          }
+          "classification=$classification" >> $env:GITHUB_OUTPUT
+          "classification: $classification"
+      - name: Skip root tests for module-only change
+        if: steps.change.outputs.classification == 'module_only'
+        shell: pwsh
+        run: Write-Output 'Root workspace tests are intentionally not evaluated for module-only changes.'
+      - name: Test root workspace
+        if: steps.change.outputs.classification != 'module_only'
+        run: cargo test --workspace --all-features

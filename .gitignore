@@ -1,4 +1,6 @@
 /target/
+/modules/*/target/
+/templates/cognitive-module/target/
 /build/
 /.idea/
 /.vscode/
