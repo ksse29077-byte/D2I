@@ -101,5 +101,51 @@ if ($LASTEXITCODE -ne 0) {
     throw 'trusted Core governance must accept a non-author CODEOWNER approval'
 }
 
+$staleApproval = [pscustomobject]@{
+    commit_id = '0000000000000000000000000000000000000000'
+    state = 'APPROVED'
+    submitted_at = '2026-01-01T00:00:00Z'
+    user = [pscustomobject]@{ login = 'ksse29077-byte' }
+}
+$currentApproval = [pscustomobject]@{
+    commit_id = $head
+    state = 'APPROVED'
+    submitted_at = '2026-01-01T00:01:00Z'
+    user = [pscustomobject]@{ login = 'ksse29077-byte' }
+}
+& $coreValidator `
+    -BaseSha $head `
+    -HeadSha $head `
+    -BranchName 'core/99-governance-test' `
+    -ChangedFilesOverride '.github/workflows/module-pr.yml' `
+    -PullRequestAuthorOverride 'graykavinjeo' `
+    -ReviewRecordsOverride @($staleApproval, $currentApproval)
+if ($LASTEXITCODE -ne 0) {
+    throw 'trusted Core governance must enumerate stale and current-head review records'
+}
+
+$currentChangeRequest = [pscustomobject]@{
+    commit_id = $head
+    state = 'CHANGES_REQUESTED'
+    submitted_at = '2026-01-01T00:02:00Z'
+    user = [pscustomobject]@{ login = 'ksse29077-byte' }
+}
+$ErrorActionPreference = 'Continue'
+$output = & $engine `
+    -NoProfile `
+    -ExecutionPolicy Bypass `
+    -File $coreValidator `
+    -BaseSha $head `
+    -HeadSha $head `
+    -BranchName 'core/99-governance-test' `
+    -ChangedFilesOverride '.github/workflows/module-pr.yml' `
+    -PullRequestAuthorOverride 'graykavinjeo' `
+    -ReviewRecordsOverride @($currentApproval, $currentChangeRequest) 2>&1
+$status = $LASTEXITCODE
+$ErrorActionPreference = 'Stop'
+if ($status -eq 0) {
+    throw 'a later current-head change request must supersede approval'
+}
+
 Write-Output 'Module-only and Core approval governance tests passed.'
 exit 0
