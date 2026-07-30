@@ -16,6 +16,9 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
       - run: cargo build --workspace --release
+      - name: Test hermetic Windows reproduction runner
+        shell: pwsh
+        run: ./scripts/ci/test-windows-reproduction.ps1
 
   workspace-test:
     runs-on: ubuntu-latest

@@ -15,6 +15,7 @@ Read in this order:
 8. [Branch protection manual](branch-protection.md)
 9. [Employee GPT work-order prompt](prompts/employee-gpt-work-order.md)
 10. [Approved Codex implementation prompt](prompts/codex-module-implementation.md)
+11. [Windows reproduction runner](windows-reproduction-runner.md)
 
 These documents govern development and conformance only. They do not authorize
 a production module loader, Runtime ABI change, network access, or host side
