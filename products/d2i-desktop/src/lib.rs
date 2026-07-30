@@ -4,6 +4,7 @@ mod adapter;
 mod approval;
 mod audit;
 mod cognitive;
+mod cognitive_verification_v2;
 mod contract;
 mod executor;
 mod policy;
@@ -44,6 +45,12 @@ pub use cognitive::{
     PostconditionVerifier, Provenance, RecoveryDecision, RecoveryPolicy, RedactionMetadata,
     Reversibility, TrustLabel, VerificationResult, WorkReport, WorldFact, WorldFactKind,
     WorldState, WorldStateReducer,
+};
+pub use cognitive_verification_v2::{
+    BoundActionExecutionV2, PostconditionResultV2, PostconditionVerifierV2,
+    VerifiableObservationFieldV2, VerifiablePostconditionV2, VerificationActionProposalV2,
+    VerificationConfidenceV2, VerificationGoalSpecV2, VerificationRequestV2, VerificationResultV2,
+    VerificationTargetV2, VerificationVerdictV2,
 };
 pub use contract::{
     BrowserInteraction, DesktopActionIntent, DesktopCapability, DesktopOperation, RiskClass,

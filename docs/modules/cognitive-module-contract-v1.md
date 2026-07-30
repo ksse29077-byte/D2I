@@ -97,3 +97,11 @@ Future adapters may implement existing `ActionCandidateProvider`,
 invoking a module through this contract. The adapter must validate lifecycle
 bindings and may not expose raw executor authority. Production integration is
 not part of v1.
+
+Verifier modules that require execution, proposal, goal, plan, and
+pre/post-observation binding use the additive Cognitive Verification Contract
+v2 payload defined in `docs/cognitive-verification-v2.md` and ADR 0018. The
+Module Contract envelope remains version 1. Its goal, current observation, and
+plan bindings must match the v2 payload, and its invocation hash covers the
+complete payload. Cognitive IR v1 verifier values are not implicitly upgraded
+because their missing bindings cannot be reconstructed safely.
