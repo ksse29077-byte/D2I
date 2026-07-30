@@ -6,6 +6,7 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $classifier = Join-Path $PSScriptRoot 'classify-change.ps1'
 $validator = Join-Path $PSScriptRoot 'validate-module-pr.ps1'
 $coreValidator = Join-Path $PSScriptRoot 'validate-core-approval.ps1'
+$engine = (Get-Process -Id $PID).Path
 $head = (& git -C $repoRoot rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0) {
     throw 'cannot resolve repository HEAD'
