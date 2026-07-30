@@ -780,12 +780,16 @@ fn signed_process_binding_manages_only_its_child() {
         configuration.clone(),
         now + 2,
     ));
-    let ping = ok(fs::canonicalize(
+    // Keep the child alive without relying on network access that the
+    // zero-capability AppContainer intentionally does not have.
+    let powershell = ok(fs::canonicalize(
         Path::new(&std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_owned()))
             .join("System32")
-            .join("ping.exe"),
+            .join("WindowsPowerShell")
+            .join("v1.0")
+            .join("powershell.exe"),
     ));
-    let executable_hash = sha(&ok(fs::read(&ping)));
+    let executable_hash = sha(&ok(fs::read(&powershell)));
     let working_directory = ok(fs::canonicalize(temp.path()));
     ok(d2i_windows_host::grant_appcontainer_path_access(
         configuration
@@ -797,7 +801,13 @@ fn signed_process_binding_manages_only_its_child() {
         d2i_windows_host::WindowsAppContainerPathAccess::ReadWrite,
         true,
     ));
-    let arguments = vec!["-n".to_owned(), "30".to_owned(), "127.0.0.1".to_owned()];
+    let arguments = vec![
+        "-NoLogo".to_owned(),
+        "-NoProfile".to_owned(),
+        "-NonInteractive".to_owned(),
+        "-Command".to_owned(),
+        "Start-Sleep -Seconds 30".to_owned(),
+    ];
     let approval_key = SigningKey::from_bytes(&[42_u8; 32]);
     let policy = policy(
         &adapter,
@@ -806,7 +816,8 @@ fn signed_process_binding_manages_only_its_child() {
             DesktopCapability::TerminateProcess,
         ]),
         vec![
-            ping.parent()
+            powershell
+                .parent()
                 .map(Path::to_path_buf)
                 .unwrap_or_else(|| PathBuf::from("C:\\Windows\\System32"))
                 .display()
@@ -815,7 +826,7 @@ fn signed_process_binding_manages_only_its_child() {
         ],
         Vec::new(),
         vec![AllowedExecutable {
-            path: ping.display().to_string(),
+            path: powershell.display().to_string(),
             content_hash: executable_hash.clone(),
             arguments_prefix: arguments.clone(),
             may_request_network: false,
@@ -839,7 +850,7 @@ fn signed_process_binding_manages_only_its_child() {
     ));
     let launch = intent(
         DesktopOperation::LaunchProcess {
-            executable: ping.display().to_string(),
+            executable: powershell.display().to_string(),
             executable_hash: executable_hash.clone(),
             arguments,
             working_directory: working_directory.display().to_string(),
