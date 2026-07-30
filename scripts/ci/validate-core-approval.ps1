@@ -18,6 +18,8 @@ param(
 
     [string[]]$ApprovedReviewersOverride,
 
+    [object[]]$ReviewRecordsOverride,
+
     [string]$PullRequestAuthorOverride
 )
 
@@ -25,6 +27,7 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $script:authorOverrideProvided = $PSBoundParameters.ContainsKey('PullRequestAuthorOverride')
 $script:reviewersOverrideProvided = $PSBoundParameters.ContainsKey('ApprovedReviewersOverride')
+$script:reviewRecordsOverrideProvided = $PSBoundParameters.ContainsKey('ReviewRecordsOverride')
 $script:pullRequestNumberProvided = $PSBoundParameters.ContainsKey('PullRequestNumber')
 Push-Location $repoRoot
 
@@ -99,16 +102,22 @@ function Assert-CoreApproval([string[]]$CoreChanges) {
         $approvedReviewers = @($ApprovedReviewersOverride)
     }
     else {
-        $headers = @{
-            Authorization = "Bearer $env:GH_TOKEN"
-            Accept = 'application/vnd.github+json'
-            'X-GitHub-Api-Version' = '2022-11-28'
+        if ($script:reviewRecordsOverrideProvided) {
+            $reviews = @($ReviewRecordsOverride | ForEach-Object { $_ })
         }
-        $reviews = @(
-            Invoke-RestMethod `
-                -Uri "https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls/$PullRequestNumber/reviews?per_page=100" `
-                -Headers $headers
-        )
+        else {
+            $headers = @{
+                Authorization = "Bearer $env:GH_TOKEN"
+                Accept = 'application/vnd.github+json'
+                'X-GitHub-Api-Version' = '2022-11-28'
+            }
+            $reviews = @(
+                Invoke-RestMethod `
+                    -Uri "https://api.github.com/repos/$env:GITHUB_REPOSITORY/pulls/$PullRequestNumber/reviews?per_page=100" `
+                    -Headers $headers |
+                    ForEach-Object { $_ }
+            )
+        }
         $decisionByReviewer = @{}
         foreach ($review in @($reviews | Sort-Object submitted_at)) {
             if ($review.commit_id -eq $HeadSha -and
