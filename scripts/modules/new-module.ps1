@@ -85,9 +85,32 @@ try {
     $manifest = $manifest.Replace($oldSchemaHashes[0], $inputHash)
     $manifest = $manifest.Replace($oldSchemaHashes[1], $outputHash)
     [IO.File]::WriteAllText($manifestPath, $manifest, [Text.UTF8Encoding]::new($false))
-    $manifestHash = 'sha256:' + (
-        Get-FileHash -Algorithm SHA256 -LiteralPath $manifestPath
-    ).Hash.ToLowerInvariant()
+    $manifestValidationOutput = @(
+        cargo run `
+            --locked `
+            --quiet `
+            --manifest-path (Join-Path $repoRoot 'Cargo.toml') `
+            -p d2i-cli `
+            -- module validate --json $destination
+    )
+    if ($LASTEXITCODE -ne 0) {
+        throw 'cannot validate the generated module manifest'
+    }
+    try {
+        $manifestValidation = (
+            $manifestValidationOutput -join [Environment]::NewLine
+        ) | ConvertFrom-Json
+    }
+    catch {
+        throw 'generated module manifest validation did not return JSON'
+    }
+    $manifestHash = [string]$manifestValidation.manifest_sha256
+    if (
+        $manifestValidation.status -ne 'pass' -or
+        $manifestHash -notmatch '^sha256:[0-9a-f]{64}$'
+    ) {
+        throw 'generated module manifest validation did not return a canonical hash'
+    }
 
     foreach ($fixture in Get-ChildItem -LiteralPath (Join-Path $destination 'fixtures') -Filter '*.json' -File -Recurse) {
         $content = [IO.File]::ReadAllText($fixture.FullName)
