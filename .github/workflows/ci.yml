@@ -25,7 +25,17 @@ jobs:
             $base = '${{ github.event.before }}'
             $head = '${{ github.sha }}'
           }
-          if (-not $base -or $base -match '^0+$') {
+          $rangeAvailable = $base -and $base -notmatch '^0+$'
+          if ($rangeAvailable) {
+            git cat-file -e "$base^{commit}" 2>$null
+            $rangeAvailable = $LASTEXITCODE -eq 0
+          }
+          if ($rangeAvailable) {
+            $null = git merge-base $base $head 2>$null
+            $rangeAvailable = $LASTEXITCODE -eq 0
+          }
+          if (-not $rangeAvailable) {
+            # A force-pushed before SHA may be unreachable. Run every Core check.
             $classification = 'core_contract'
           } else {
             $classification = ./scripts/ci/classify-change.ps1 -BaseSha $base -HeadSha $head
@@ -85,7 +95,17 @@ jobs:
             $base = '${{ github.event.before }}'
             $head = '${{ github.sha }}'
           }
-          if (-not $base -or $base -match '^0+$') {
+          $rangeAvailable = $base -and $base -notmatch '^0+$'
+          if ($rangeAvailable) {
+            git cat-file -e "$base^{commit}" 2>$null
+            $rangeAvailable = $LASTEXITCODE -eq 0
+          }
+          if ($rangeAvailable) {
+            $null = git merge-base $base $head 2>$null
+            $rangeAvailable = $LASTEXITCODE -eq 0
+          }
+          if (-not $rangeAvailable) {
+            # A force-pushed before SHA may be unreachable. Run every Core check.
             $classification = 'core_contract'
           } else {
             $classification = ./scripts/ci/classify-change.ps1 -BaseSha $base -HeadSha $head

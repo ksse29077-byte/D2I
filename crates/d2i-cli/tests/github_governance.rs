@@ -362,4 +362,15 @@ fn standalone_module_workspaces_are_decoupled_from_core() {
             "CI is missing decoupling contract '{required}'"
         );
     }
+    for required in [
+        "git cat-file -e",
+        "git merge-base",
+        "A force-pushed before SHA may be unreachable",
+    ] {
+        assert_eq!(
+            ci.matches(required).count(),
+            2,
+            "both CI jobs must contain force-push fallback '{required}'"
+        );
+    }
 }
