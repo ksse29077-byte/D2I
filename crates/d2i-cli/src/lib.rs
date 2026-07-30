@@ -5,8 +5,7 @@ use d2i_compiler::{
 };
 use d2i_core::{validate_source_pack, write_source_lock, Diagnostic, Severity, ValidationReport};
 use d2i_eval::{benchmark_runtime, BenchmarkMetadata, RuntimeBenchmarkReport};
-use d2i_module_sdk::{load_module_manifest, run_fixture_suite, ConformanceStatus};
-use d2i_rule_based_work_reporter::{RuleBasedWorkReporter, MODULE_ID as WORK_REPORTER_MODULE_ID};
+use d2i_module_sdk::load_module_manifest;
 use d2i_runtime_adapter::{
     check_package_compatibility, phase5_abi_mapping, run_conformance, AdapterContract,
     ConformanceOptions, MockRuntimeAdapter,
@@ -1010,67 +1009,27 @@ fn execute_module<O: Write, E: Write>(options: ModuleOptions, out: &mut O, err: 
             }
         }
         ModuleCommand::Conformance => {
-            if loaded.identifier.module_id != WORK_REPORTER_MODULE_ID {
-                let value = json!({
-                    "command": "module conformance",
-                    "status": "unsupported",
-                    "module": loaded.identifier,
-                    "reason": "no production loader exists; only the built-in Rust reference module is executable"
-                });
-                let written = if options.json {
-                    write_json(out, &value)
-                } else {
-                    writeln!(
-                        out,
-                        "module conformance: unsupported\nreason: no reference runner for module '{}'",
-                        loaded.identifier.module_id
-                    )
-                };
-                return if written.is_ok() {
-                    EXIT_MODULE
-                } else {
-                    EXIT_IO
-                };
-            }
-            let report = match run_fixture_suite(&RuleBasedWorkReporter, &options.root) {
-                Ok(report) => report,
-                Err(error) => {
-                    return write_command_error(
-                        options.json,
-                        out,
-                        err,
-                        "D2IM9001",
-                        &error.to_string(),
-                        EXIT_MODULE,
-                    )
-                }
-            };
-            let success = report.status == ConformanceStatus::Pass;
+            let script = "scripts/modules/check-module.ps1";
             let written = if options.json {
                 write_json(
                     out,
                     &json!({
                         "command": "module conformance",
-                        "success": success,
-                        "report": report
+                        "status": "unsupported",
+                        "module": loaded.identifier,
+                        "reason": "Core CLI does not link standalone module implementations",
+                        "module_local_command": script
                     }),
                 )
             } else {
                 writeln!(
                     out,
-                    "module conformance: {:?}\npassed: {}\nfailed: {}\nunsupported: {}\nskipped: {}\nreport hash: {}",
-                    report.status,
-                    report.passed,
-                    report.failed,
-                    report.unsupported,
-                    report.skipped,
-                    report.report_hash
+                    "module conformance: unsupported\nreason: Core CLI does not link standalone modules\nrun: {script} -ModulePath {}",
+                    options.root.display()
                 )
             };
             if written.is_err() {
                 EXIT_IO
-            } else if success {
-                EXIT_SUCCESS
             } else {
                 EXIT_MODULE
             }

@@ -100,6 +100,24 @@ Commands never perform network requests. The compiler CLI uses exit codes
 `0/2/3/4/5/6`, where `6` is an evaluation regression. The runtime uses `6` for
 execution failures and `7` for replay mismatches.
 
+## Standalone Cognitive Modules
+
+The root Cargo workspace excludes `modules/*`. Create and check modules without
+changing the root manifest or lockfile:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/new-module.ps1 `
+  -ModuleId my-module
+
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/my-module
+```
+
+Use `scripts/modules/check-all-modules.ps1` after a Core Cognitive IR, Module
+SDK, schema, or module tooling change.
+
 ## Checks
 
 ```text
@@ -108,3 +126,6 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo build --workspace --release
 ```
+
+These commands cover the Core workspace. Standalone modules are covered by
+their module-local checker and local `Cargo.lock`.

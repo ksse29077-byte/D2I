@@ -73,14 +73,15 @@ The work order must contain these numbered sections:
 
 Hard constraints for the generated work order:
 - Use branch module/<issue-number>-<module-id>.
-- Limit normal edits to one modules/<module-id>/ directory. Mention workspace
-  member registration separately if a new crate requires it.
+- Limit normal edits to one standalone `modules/<module-id>/` directory,
+  including its local Cargo manifest and lockfile. Forbid root workspace
+  registration and root lockfile changes.
 - Forbid changes to Cognitive IR, Module Contract, Manifest schema, SDK public
   API, canonical hash, Conformance verdict/error/exit codes, CognitiveExecutor,
   ADR 0014/0015, production package, Runtime ABI, policy, activation, audit,
   WFP, Windows adapters, and .github governance.
 - Require Module SDK use, strict Manifest/Schema, fixture suite, deterministic
-  replay, license evidence, and all workspace quality commands.
+  replay, license evidence, and the official module-local checker.
 - Forbid production loader integration, real PC side effects, hidden network,
   raw secrets, customer data, automatic merge, and hiding failed checks.
 - State that Codex may start when the Issue is READY and automated scope checks

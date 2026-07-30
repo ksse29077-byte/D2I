@@ -7,6 +7,7 @@ Core ownership covers:
 - Cognitive IR v1 public types and schema
 - Module Contract public types and Module Manifest v1 schema
 - Module SDK public traits and envelopes
+- standalone workspace policy, root `Cargo.toml`, and root `Cargo.lock`
 - canonical JSON and stable hash rules
 - Conformance Suite verdicts, stable errors, and stable exit codes
 - CognitiveExecutor execution laws
@@ -40,12 +41,10 @@ An RFC in `Pending` state grants no permission. The module author must not edit
 Core files, weaken tests, copy a Core type locally, or silently introduce a
 parallel schema. A Core change and module implementation never share a PR.
 
-The root `Cargo.toml` is Core-owned except for one exact addition of an
-approved `modules/<module-id>` workspace member on that module's branch. The
-governance validator checks the diff and rejects dependency, profile, lint,
-patch, resolver, workspace-policy, removal, or multi-line manifest changes.
-`Cargo.lock` may accompany a module change but must remain synchronized under
-`cargo metadata --locked`.
+The root `Cargo.toml` and root `Cargo.lock` are always Core-owned. Modules are
+standalone workspaces under `modules/<module-id>` and use only their local
+manifest and lockfile. The governance validator rejects any root file on a
+module branch.
 
 New schemas, capability categories, confidence semantics, network or side
 effects, model-backed behavior, external dependencies, trust-boundary changes,

@@ -31,10 +31,10 @@ plan does not expose rulesets, configure equivalent branch protection.
 - [ ] Do not make CODEOWNERS review a repository-wide branch rule
 - [ ] Require all conversations to be resolved
 - [ ] Require status checks to pass and require the branch to be up to date
-- [ ] Require `ci / rust`
-- [ ] Require `ci / workspace-test`
-- [ ] Require `module-pr / module-governance`
-- [ ] Require `core-governance / core-approval`
+- [ ] Require `rust`
+- [ ] Require `workspace-test`
+- [ ] Require `module-governance`
+- [ ] Require `core-approval`
 - [ ] Block force pushes
 - [ ] Block branch deletion
 - [ ] Require linear history
@@ -42,16 +42,16 @@ plan does not expose rulesets, configure equivalent branch protection.
 
 The general approval count is zero so a validated module-only PR can be
 manually merged by its author. Core protection is not removed:
-`core-governance / core-approval` runs only the trusted base-branch script,
+`core-approval` runs only the trusted base-branch script,
 classifies Core-owned paths without executing PR code, and requires an
 `APPROVED` GitHub review from a non-author CODEOWNER for the exact current
-head. `module-pr / module-governance` continues module artifact, fixture,
+head. `module-governance` continues module artifact, fixture,
 conformance, replay, and trust-boundary validation. CODEOWNERS requests the
 appropriate reviewers, while the trusted workflow makes path-specific approval
 enforceable.
 
 The earlier Linux path-validation blocker was fixed by PR #3, and
-`ci / workspace-test` has reported successfully on subsequent PRs. Do not
+`workspace-test` has reported successfully on subsequent PRs. Do not
 remove, waive, or disguise this required check.
 
 ## Bypass And Administration
@@ -77,7 +77,7 @@ After saving the rules:
 2. Open a module-only PR and confirm all four required checks report.
 3. Confirm the module-only PR is mergeable with zero approvals after checks
    pass and conversations are resolved.
-4. Touch a Core-owned path and confirm `core-governance / core-approval` fails
+4. Touch a Core-owned path and confirm `core-approval` fails
    with the file, approvers, approval method, and policy path.
 5. Submit a non-author CODEOWNER approval on the current head and confirm the
    governance check reruns and succeeds.

@@ -2,7 +2,10 @@
 
 ## Current Locked Dependencies
 
-All versions are exact workspace pins and are also recorded in `Cargo.lock`.
+Core versions are exact workspace pins and are recorded in the root
+`Cargo.lock`. Every standalone Cognitive Module declares exact direct
+third-party versions and records its resolution in
+`modules/<module-id>/Cargo.lock`.
 
 | Crate | Version | License | Purpose | Offline and replacement strategy |
 | --- | --- | --- | --- | --- |

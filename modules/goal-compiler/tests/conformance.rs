@@ -81,7 +81,7 @@ fn compiled_goal_schema_has_no_core_drift_and_round_trips_core_rust_type() {
 
     let result = invoke_fixture("fixtures/valid/read-only.json");
     let goal = result.payload.unwrap_or(Value::Null)["goal_spec"].clone();
-    let core: d2i_desktop::GoalSpec = ok(serde_json::from_value(goal));
+    let core: d2i_cognitive_ir::GoalSpec = ok(serde_json::from_value(goal));
     ok(core.validate());
 }
 

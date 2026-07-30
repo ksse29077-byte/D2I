@@ -160,7 +160,7 @@ body:
           required: true
         - label: I accept that completion requires license review, model/data cards, and a threat model
           required: true
-        - label: I accept that completion requires full workspace checks and a merge-ready pull request
+        - label: I accept that completion requires the standalone module checker and a merge-ready pull request
           required: true
         - label: I will not add a production loader, hidden network, or unapproved side effect
           required: true

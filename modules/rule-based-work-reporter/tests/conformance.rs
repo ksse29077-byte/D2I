@@ -1,4 +1,4 @@
-use d2i_desktop::WorkReport;
+use d2i_cognitive_ir::WorkReport;
 use d2i_module_sdk::{
     invoke_module, load_module_manifest, parse_json_strict, run_fixture_suite,
     validate_result_binding, ConformanceReport, ConformanceStatus, FixtureSpec, InvocationContext,

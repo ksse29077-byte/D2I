@@ -17,7 +17,7 @@ fn parse(bytes: &[u8]) -> Value {
 }
 
 #[test]
-fn module_validate_and_reference_conformance_are_machine_readable() {
+fn module_validation_is_machine_readable() {
     let root = module_root("rule-based-work-reporter");
     let mut out = Vec::new();
     let mut err = Vec::new();
@@ -45,34 +45,11 @@ fn module_validate_and_reference_conformance_are_machine_readable() {
     );
     assert_eq!(validation["network_requirement"], "denied");
     assert_eq!(validation["side_effect"], false);
-
-    out.clear();
-    err.clear();
-    assert_eq!(
-        run_with_io(
-            [
-                OsString::from("d2ic"),
-                OsString::from("module"),
-                OsString::from("conformance"),
-                root.into_os_string(),
-                OsString::from("--json"),
-            ],
-            &mut out,
-            &mut err,
-        ),
-        EXIT_SUCCESS,
-        "{}",
-        String::from_utf8_lossy(&err)
-    );
-    let conformance = parse(&out);
-    assert_eq!(conformance["success"], true);
-    assert_eq!(conformance["report"]["status"], "pass");
-    assert_eq!(conformance["report"]["skipped"], 0);
 }
 
 #[test]
-fn arbitrary_module_execution_is_explicitly_unsupported() {
-    let root = module_root("example-module");
+fn standalone_module_execution_is_explicitly_unsupported() {
+    let root = module_root("rule-based-work-reporter");
     let mut out = Vec::new();
     let mut err = Vec::new();
     assert_eq!(
@@ -91,5 +68,9 @@ fn arbitrary_module_execution_is_explicitly_unsupported() {
     );
     let report = parse(&out);
     assert_eq!(report["status"], "unsupported");
+    assert_eq!(
+        report["module_local_command"],
+        "scripts/modules/check-module.ps1"
+    );
     assert!(err.is_empty());
 }

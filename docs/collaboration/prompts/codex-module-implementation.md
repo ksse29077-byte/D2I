@@ -30,7 +30,8 @@ Before editing:
 5. Create/switch to module/<issue-number>-<module-id>; never work on main.
 
 Implementation rules:
-- Implement only the assigned module with crates/d2i-module-sdk.
+- Implement only the assigned standalone module with `crates/d2i-module-sdk`
+  and, when required, `crates/d2i-cognitive-ir`.
 - Change only the declared module-owned paths. Do not edit Core-owned paths or
   `.github` files.
 - Add/update Module Manifest, strict versioned input/output schemas,
@@ -50,12 +51,10 @@ Implementation rules:
   Core RFC requirement. Do not include it in the module PR.
 
 Verification:
-cargo run -p d2i-cli -- module validate modules/<module-id> --json
-cargo test --manifest-path modules/<module-id>/Cargo.toml --test conformance --all-features
-cargo fmt --all -- --check
-cargo clippy --workspace --all-targets --all-features -- -D warnings
-cargo test --workspace --all-features
-cargo build --workspace --release
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/modules/check-module.ps1 `
+  -ModulePath modules/<module-id> `
+  -OutputPath build/module-checks/<module-id>.json
 
 Completion:
 - Review the diff for unrelated and Core-owned changes.

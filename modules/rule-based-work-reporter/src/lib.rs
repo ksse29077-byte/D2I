@@ -1,6 +1,6 @@
 //! Deterministic `RuleBasedWorkReporter` reference module.
 
-use d2i_desktop::{
+use d2i_cognitive_ir::{
     CognitiveRecoveryKind, CognitiveTiming, GoalProgress, GoalSpec, RecoveryDecision, TrustLabel,
     VerificationResult, WorkReport,
 };

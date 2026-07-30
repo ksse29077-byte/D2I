@@ -17,12 +17,13 @@
 - [ ] No hidden network, filesystem, environment, privilege, or side effect
 - [ ] No raw secret input or output
 - [ ] Deterministic replay hashes match when determinism is declared
-- [ ] `cargo fmt --all -- --check` passes
-- [ ] workspace Clippy with `-D warnings` passes
-- [ ] workspace tests and release build pass
+- [ ] module-local `Cargo.lock` is committed and `--locked` metadata passes
+- [ ] `scripts/modules/check-module.ps1` reports `pass`
+- [ ] module-local fmt, Clippy `-D warnings`, tests, conformance, replay, and release build pass
 - [ ] Review conversations are resolved and the PR is conflict-free
 - [ ] No Core-owned path changed, or a separate Core PR has a current-head non-author CODEOWNER approval
 - [ ] PR is not configured for automatic merge
+- [ ] root `Cargo.toml` and root `Cargo.lock` are unchanged
 
 Module-only PRs may be manually squash-merged by their author without a
 third-party approval. Optional reviewers must treat `skipped` as unresolved,

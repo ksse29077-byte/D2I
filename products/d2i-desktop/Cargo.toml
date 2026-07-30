@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+d2i-cognitive-ir = { path = "../../crates/d2i-cognitive-ir" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-windows-host = { path = "../../crates/d2i-windows-host" }
 ed25519-dalek.workspace = true

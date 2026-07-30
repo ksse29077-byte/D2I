@@ -120,6 +120,13 @@ implementation, nonfunctional proprietary placeholder, compatibility checker,
 ABI mapping metadata, and conformance runner. No native ABI or dynamic module
 loading is introduced.
 
+`d2i-cognitive-ir` owns only Cognitive IR v1 data types, pure validation,
+canonical hashing, and schema compatibility. `d2i-desktop` imports and
+re-exports those exact types while retaining executors and platform behavior.
+Cognitive modules are independent one-package workspaces under `modules/`,
+each with a local lockfile. The root workspace excludes them, and Core has no
+dependency on a module implementation or registry.
+
 Phase 6 adds:
 
 ```text

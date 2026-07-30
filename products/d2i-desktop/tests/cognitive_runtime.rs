@@ -615,6 +615,9 @@ fn cognitive_ir_round_trip_schema_and_stable_hash() {
     validate_schema("cognitive/cognitive-ir-v1.schema.json", &value);
     let round_trip: CognitiveIrBundle = ok(serde_json::from_value(value));
     assert_eq!(bundle, round_trip);
+    let pure_core_goal: d2i_cognitive_ir::GoalSpec = bundle.goal_spec.clone();
+    let desktop_reexport: GoalSpec = pure_core_goal;
+    assert_eq!(desktop_reexport, bundle.goal_spec);
 
     let same_state = observation(
         99,
