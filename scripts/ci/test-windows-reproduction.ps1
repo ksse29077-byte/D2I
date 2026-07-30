@@ -376,3 +376,5 @@ finally {
         Remove-Item -LiteralPath $resolvedTemporary -Recurse -Force
     }
 }
+
+exit 0
