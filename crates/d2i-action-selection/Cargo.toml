@@ -1,0 +1,20 @@
+[package]
+name = "d2i-action-selection"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+d2i-action-candidates = { path = "../d2i-action-candidates" }
+d2i-application-semantics = { path = "../d2i-application-semantics" }
+d2i-cognitive-ir = { path = "../d2i-cognitive-ir" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true

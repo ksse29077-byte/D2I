@@ -1,6 +1,6 @@
 # D2I Progress Snapshot
 
-Date: 2026-07-28
+Date: 2026-07-31
 
 ## Current Completed Scope
 
@@ -168,6 +168,30 @@ Cognitive IR v1, `ActionCandidateProvider`, Module Contract v1, Module SDK,
 Application Semantics v1, package data, Runtime ABI, policy, activation,
 approval, and action execution remain unchanged.
 
+## Cognitive Action Selection Pipeline v1 Status
+
+Implemented in `crates/d2i-action-selection`:
+
+- strict actual Element Grounder v1 result mirror and duplicate-key parser
+- unique grounding validation against Application Pack and Observation
+- fixture-oracle-independent `GroundedTargetBindingV1`
+- additive sealed `ActionSelectionContextV1` for an unbound
+  `SelectCapability` node
+- sealed Plan Ranker ranking and trusted pre-admission profiles
+- deterministic one-to-64 capability-bound proposal generation
+- canonical candidate set and structured capability-only exclusions
+- exact metadata-only Plan Ranker v1 input payload and proposal index
+- complete external Plan Ranker output validation with no omitted candidates
+- exact rank-1 proposal rebinding and stale/substitution rejection
+- non-authoritative `PolicyReadyActionV1`
+- strict Draft 2020-12 schema and canonical lowercase SHA-256 contracts
+- actual Element Grounder and Plan Ranker schema/fixture compatibility tests
+
+The pipeline performs no module invocation, module loading, policy evaluation,
+confirmation request, activation, desktop mapping, adapter preparation or
+commit, UI action, re-observation, verification, recovery, process,
+filesystem, or network side effect.
+
 ## Verification
 
 Passed:
@@ -194,8 +218,9 @@ cargo build --workspace --release
 
 ## Next Task
 
-`Action Candidate Provider v1 standalone deterministic module and conformance fixtures`
+`Cognitive Policy Admission v1: PolicyReadyAction -> PolicyDecision,
+ConfirmationRequirement, and Activation admission fixture contract`
 
 Do not start production module loading, proposal-to-DesktopOperation mapping,
-action execution, Runtime ABI, or package embedding as part of the fixture
-contract.
+action execution, Runtime ABI, package embedding, or the policy-admission
+contract as part of Action Selection Pipeline v1.

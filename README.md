@@ -37,6 +37,9 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   deterministic UIA/Web observation-to-Element-Grounder payload bridges.
 - `crates/d2i-action-candidates`: sealed semantic-target/capability bindings
   and deterministic fixture bridges to Cognitive IR v1 `ActionProposal`.
+- `crates/d2i-action-selection`: actual Grounder-result validation,
+  deterministic multi-candidate generation, Plan Ranker metadata bridges,
+  selected-proposal rebinding, and non-authoritative policy-ready actions.
 - `products/d2i-embodied`: separate robot integration contracts, simulation
   replay, safety-gated hardware boundary, robot memory, and fleet promotion.
 - `products/d2i-desktop`: separate PC autonomy contracts, capability policy,

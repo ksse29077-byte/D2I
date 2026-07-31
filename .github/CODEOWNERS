@@ -8,6 +8,7 @@
 /Cargo.lock @ksse29077-byte @graykavinjeo
 /docs/architecture.md @ksse29077-byte @graykavinjeo
 /docs/application-semantics-v1.md @ksse29077-byte @graykavinjeo
+/docs/cognitive-action-selection-pipeline-v1.md @ksse29077-byte @graykavinjeo
 /docs/adr/ @ksse29077-byte @graykavinjeo
 /docs/collaboration/ @ksse29077-byte @graykavinjeo
 /docs/modules/ @ksse29077-byte @graykavinjeo
@@ -27,6 +28,7 @@
 /crates/d2i-module-sdk/ @ksse29077-byte @graykavinjeo
 /crates/d2i-cognitive-ir/ @ksse29077-byte @graykavinjeo
 /crates/d2i-application-semantics/ @ksse29077-byte @graykavinjeo
+/crates/d2i-action-selection/ @ksse29077-byte @graykavinjeo
 /products/d2i-desktop/Cargo.toml @ksse29077-byte @graykavinjeo
 /products/d2i-desktop/src/lib.rs @ksse29077-byte @graykavinjeo
 /products/d2i-desktop/src/cognitive.rs @ksse29077-byte @graykavinjeo

@@ -1,0 +1,1084 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/cognitive/action-selection-pipeline-v1.schema.json",
+  "title": "D2I Cognitive Action Selection Pipeline v1",
+  "oneOf": [
+    { "$ref": "#/$defs/element_grounding_result" },
+    { "$ref": "#/$defs/grounded_target_binding" },
+    { "$ref": "#/$defs/validated_grounding_selection" },
+    { "$ref": "#/$defs/action_selection_context" },
+    { "$ref": "#/$defs/ranking_profile" },
+    { "$ref": "#/$defs/admission_profile" },
+    { "$ref": "#/$defs/grounded_action_proposal_spec" },
+    { "$ref": "#/$defs/candidate_generation_spec" },
+    { "$ref": "#/$defs/candidate_build_outcome" },
+    { "$ref": "#/$defs/action_candidate_set" },
+    { "$ref": "#/$defs/plan_ranker_payload" },
+    { "$ref": "#/$defs/plan_ranker_input_bridge" },
+    { "$ref": "#/$defs/plan_ranking_output" },
+    { "$ref": "#/$defs/validated_plan_ranking" },
+    { "$ref": "#/$defs/bound_selected_action" },
+    { "$ref": "#/$defs/policy_ready_action" }
+  ],
+  "$defs": {
+    "version": { "const": 1 },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$"
+    },
+    "ranker_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "source_kind": { "enum": ["uia", "web_driver"] },
+    "trust_label": {
+      "enum": [
+        "authenticated_user_instruction",
+        "approved_policy",
+        "approved_procedure",
+        "verified_operational_state",
+        "observed_ui_state",
+        "untrusted_web_content",
+        "untrusted_document_content",
+        "fixture"
+      ]
+    },
+    "trust_labels": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/trust_label" }
+    },
+    "id_array": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "text_array": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "risk": {
+      "enum": ["read_only", "reversible", "business_state_change", "high_criticality"]
+    },
+    "reversibility": { "enum": ["reversible", "irreversible"] },
+    "confirmation_requirement": {
+      "enum": ["none", "required", "unsupported_irreversible"]
+    },
+    "comparison_op": {
+      "enum": [
+        "equals",
+        "not_equals",
+        "contains",
+        "exists",
+        "greater_or_equal",
+        "less_or_equal"
+      ]
+    },
+    "postcondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_state", "op", "expected_value", "required", "timeout_ms"],
+      "properties": {
+        "target_state": { "$ref": "#/$defs/id" },
+        "op": { "$ref": "#/$defs/comparison_op" },
+        "expected_value": {},
+        "required": { "type": "boolean" },
+        "timeout_ms": { "type": "integer", "minimum": 1, "maximum": 60000 }
+      }
+    },
+    "postconditions": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/postcondition" }
+    },
+    "required_postconditions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/postcondition" }
+    },
+    "grounding_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "element_id",
+        "kind",
+        "label",
+        "score",
+        "matched_features",
+        "evidence",
+        "trust_labels"
+      ],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/id" },
+        "kind": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/text" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "matched_features": { "$ref": "#/$defs/text_array" },
+        "evidence": { "$ref": "#/$defs/text_array" },
+        "trust_labels": { "$ref": "#/$defs/trust_labels" }
+      }
+    },
+    "element_grounding_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "goal_id",
+        "source_observation_hash",
+        "plan_generation_id",
+        "target_text",
+        "status",
+        "selected_element_id",
+        "candidates",
+        "ambiguity_reason",
+        "user_confirmation_required",
+        "evidence",
+        "warnings"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "target_text": { "$ref": "#/$defs/text" },
+        "status": { "enum": ["unique_match", "ambiguous", "not_found", "unsupported"] },
+        "selected_element_id": {
+          "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }]
+        },
+        "candidates": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/grounding_candidate" }
+        },
+        "ambiguity_reason": {
+          "oneOf": [{ "$ref": "#/$defs/text" }, { "type": "null" }]
+        },
+        "user_confirmation_required": { "type": "boolean" },
+        "evidence": { "$ref": "#/$defs/text_array" },
+        "warnings": { "$ref": "#/$defs/text_array" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "unique_match" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": { "selected_element_id": { "$ref": "#/$defs/id" } }
+          },
+          "else": {
+            "properties": { "selected_element_id": { "type": "null" } }
+          }
+        }
+      ]
+    },
+    "grounded_target_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "application_pack_sha256",
+        "observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "grounding_result_sha256",
+        "goal_id",
+        "plan_generation_id",
+        "semantic_target_id",
+        "selected_element_id",
+        "selected_element_kind",
+        "source_kind",
+        "trust_labels",
+        "evidence_ids",
+        "binding_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "application_pack_sha256": { "$ref": "#/$defs/hash" },
+        "observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "grounding_result_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "selected_element_id": { "$ref": "#/$defs/id" },
+        "selected_element_kind": { "$ref": "#/$defs/id" },
+        "source_kind": { "$ref": "#/$defs/source_kind" },
+        "trust_labels": { "$ref": "#/$defs/trust_labels" },
+        "evidence_ids": { "$ref": "#/$defs/id_array" },
+        "binding_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "validated_grounding_selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "grounding_result_sha256", "grounded_target"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "grounding_result_sha256": { "$ref": "#/$defs/hash" },
+        "grounded_target": { "$ref": "#/$defs/grounded_target_binding" }
+      }
+    },
+    "action_selection_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "goal_id",
+        "plan_generation_id",
+        "current_step",
+        "allowed_capability_ids",
+        "context_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "current_step": { "$ref": "#/$defs/id" },
+        "allowed_capability_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "context_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "gate_status": { "enum": ["passed", "failed", "unknown"] },
+    "gate_results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "activation",
+        "binding",
+        "input_schema",
+        "output_schema",
+        "risk",
+        "side_effect",
+        "network",
+        "credential",
+        "capability",
+        "quality"
+      ],
+      "properties": {
+        "policy": { "$ref": "#/$defs/gate_status" },
+        "activation": { "$ref": "#/$defs/gate_status" },
+        "binding": { "$ref": "#/$defs/gate_status" },
+        "input_schema": { "$ref": "#/$defs/gate_status" },
+        "output_schema": { "$ref": "#/$defs/gate_status" },
+        "risk": { "$ref": "#/$defs/gate_status" },
+        "side_effect": { "$ref": "#/$defs/gate_status" },
+        "network": { "$ref": "#/$defs/gate_status" },
+        "credential": { "$ref": "#/$defs/gate_status" },
+        "capability": { "$ref": "#/$defs/gate_status" },
+        "quality": { "$ref": "#/$defs/gate_status" }
+      }
+    },
+    "gate_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "activation",
+        "binding",
+        "input_schema",
+        "output_schema",
+        "risk",
+        "side_effect",
+        "network",
+        "credential",
+        "capability",
+        "quality"
+      ],
+      "properties": {
+        "policy": { "$ref": "#/$defs/id_array" },
+        "activation": { "$ref": "#/$defs/id_array" },
+        "binding": { "$ref": "#/$defs/id_array" },
+        "input_schema": { "$ref": "#/$defs/id_array" },
+        "output_schema": { "$ref": "#/$defs/id_array" },
+        "risk": { "$ref": "#/$defs/id_array" },
+        "side_effect": { "$ref": "#/$defs/id_array" },
+        "network": { "$ref": "#/$defs/id_array" },
+        "credential": { "$ref": "#/$defs/id_array" },
+        "capability": { "$ref": "#/$defs/id_array" },
+        "quality": { "$ref": "#/$defs/id_array" }
+      }
+    },
+    "ranking_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "proposal_id",
+        "proposal_sha256",
+        "capability_id",
+        "capability_binding_sha256",
+        "goal_id",
+        "plan_generation_id",
+        "source_observation_hash",
+        "capability_version",
+        "input_schema_id",
+        "input_schema_version",
+        "output_schema_id",
+        "output_schema_version",
+        "normalized_cost_millionths",
+        "success_likelihood_millionths",
+        "ranking_profile_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "capability_version": { "$ref": "#/$defs/semver" },
+        "input_schema_id": { "$ref": "#/$defs/ranker_id" },
+        "input_schema_version": { "type": "integer", "minimum": 1 },
+        "output_schema_id": { "$ref": "#/$defs/ranker_id" },
+        "output_schema_version": { "type": "integer", "minimum": 1 },
+        "normalized_cost_millionths": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "success_likelihood_millionths": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "ranking_profile_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "admission_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "proposal_id",
+        "proposal_sha256",
+        "capability_id",
+        "capability_binding_sha256",
+        "goal_id",
+        "plan_generation_id",
+        "source_observation_hash",
+        "trusted_source_id",
+        "trusted_source_sha256",
+        "gate_results",
+        "gate_evidence",
+        "admission_profile_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "trusted_source_id": { "$ref": "#/$defs/id" },
+        "trusted_source_sha256": { "$ref": "#/$defs/hash" },
+        "gate_results": { "$ref": "#/$defs/gate_results" },
+        "gate_evidence": { "$ref": "#/$defs/gate_evidence" },
+        "admission_profile_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "candidate_action_input": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "invoke" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "text_hash"],
+          "properties": {
+            "kind": { "enum": ["set_text", "type_text"] },
+            "text_hash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "desired"],
+          "properties": {
+            "kind": { "const": "toggle" },
+            "desired": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "click" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value_hash"],
+          "properties": {
+            "kind": { "const": "select" },
+            "value_hash": { "$ref": "#/$defs/hash" }
+          }
+        }
+      ]
+    },
+    "grounded_action_proposal_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "capability_binding_sha256",
+        "input",
+        "preconditions",
+        "expected_postconditions",
+        "confidence"
+      ],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "input": { "$ref": "#/$defs/candidate_action_input" },
+        "preconditions": { "$ref": "#/$defs/postconditions" },
+        "expected_postconditions": { "$ref": "#/$defs/required_postconditions" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "candidate_generation_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["proposal", "ranking_profile", "admission_profile"],
+      "properties": {
+        "proposal": { "$ref": "#/$defs/grounded_action_proposal_spec" },
+        "ranking_profile": { "$ref": "#/$defs/ranking_profile" },
+        "admission_profile": { "$ref": "#/$defs/admission_profile" }
+      }
+    },
+    "capability_descriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "operation",
+        "risk_class",
+        "reversible",
+        "confirmation_requirement",
+        "retry_limit"
+      ],
+      "properties": {
+        "capability_id": { "$ref": "#/$defs/id" },
+        "operation": { "$ref": "#/$defs/id" },
+        "risk_class": { "$ref": "#/$defs/risk" },
+        "reversible": { "type": "boolean" },
+        "confirmation_requirement": { "$ref": "#/$defs/confirmation_requirement" },
+        "retry_limit": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "action_capability_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "binding_id",
+        "application_pack_sha256",
+        "semantic_target_id",
+        "source_kind",
+        "allowed_element_kinds",
+        "action_kind",
+        "capability",
+        "binding_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "binding_id": { "$ref": "#/$defs/id" },
+        "application_pack_sha256": { "$ref": "#/$defs/hash" },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "source_kind": { "$ref": "#/$defs/source_kind" },
+        "allowed_element_kinds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "action_kind": {
+          "enum": ["invoke", "set_text", "toggle", "click", "type_text", "select"]
+        },
+        "capability": { "$ref": "#/$defs/capability_descriptor" },
+        "binding_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "grounded_action_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "operation", "target", "input"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "operation": { "$ref": "#/$defs/id" },
+        "target": { "$ref": "#/$defs/grounded_target_binding" },
+        "input": { "$ref": "#/$defs/candidate_action_input" }
+      }
+    },
+    "action_proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "proposal_id",
+        "goal_id",
+        "plan_generation_id",
+        "source_observation_hash",
+        "capability_id",
+        "semantic_target",
+        "arguments",
+        "preconditions",
+        "expected_postconditions",
+        "risk",
+        "reversibility",
+        "confirmation_requirement",
+        "confidence",
+        "evidence",
+        "valid_until_sequence"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "semantic_target": { "$ref": "#/$defs/text" },
+        "arguments": { "$ref": "#/$defs/grounded_action_arguments" },
+        "preconditions": { "$ref": "#/$defs/postconditions" },
+        "expected_postconditions": { "$ref": "#/$defs/required_postconditions" },
+        "risk": { "$ref": "#/$defs/risk" },
+        "reversibility": { "$ref": "#/$defs/reversibility" },
+        "confirmation_requirement": { "$ref": "#/$defs/confirmation_requirement" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "$ref": "#/$defs/text_array" },
+        "valid_until_sequence": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "candidate_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "candidate_hash",
+        "proposal_id",
+        "proposal_sha256",
+        "capability_binding_sha256",
+        "ranking_profile_sha256",
+        "admission_profile_sha256",
+        "capability_binding",
+        "ranking_profile",
+        "admission_profile",
+        "proposal",
+        "evidence_ids"
+      ],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "candidate_hash": { "$ref": "#/$defs/hash" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "ranking_profile_sha256": { "$ref": "#/$defs/hash" },
+        "admission_profile_sha256": { "$ref": "#/$defs/hash" },
+        "capability_binding": { "$ref": "#/$defs/action_capability_binding" },
+        "ranking_profile": { "$ref": "#/$defs/ranking_profile" },
+        "admission_profile": { "$ref": "#/$defs/admission_profile" },
+        "proposal": { "$ref": "#/$defs/action_proposal" },
+        "evidence_ids": { "$ref": "#/$defs/id_array" }
+      }
+    },
+    "rejected_build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "capability_binding_sha256",
+        "reason_code",
+        "evidence_ids"
+      ],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "reason_code": {
+          "enum": ["capability_not_allowed", "capability_unavailable"]
+        },
+        "evidence_ids": { "$ref": "#/$defs/id_array" }
+      }
+    },
+    "action_candidate_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "candidate_set_id",
+        "goal_id",
+        "world_state_id",
+        "plan_generation_id",
+        "observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "application_pack_sha256",
+        "grounding_result_sha256",
+        "semantic_target_id",
+        "grounded_target_binding_sha256",
+        "candidates",
+        "rejected_builds",
+        "set_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "candidate_set_id": { "$ref": "#/$defs/ranker_id" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "world_state_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "application_pack_sha256": { "$ref": "#/$defs/hash" },
+        "grounding_result_sha256": { "$ref": "#/$defs/hash" },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "grounded_target_binding_sha256": { "$ref": "#/$defs/hash" },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/candidate_record" }
+        },
+        "rejected_builds": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/rejected_build" }
+        },
+        "set_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "candidate_build_outcome": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "candidate_set"],
+          "properties": {
+            "status": { "const": "candidates" },
+            "candidate_set": { "$ref": "#/$defs/action_candidate_set" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "rejected_builds"],
+          "properties": {
+            "status": { "const": "no_candidates" },
+            "rejected_builds": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 64,
+              "items": { "$ref": "#/$defs/rejected_build" }
+            }
+          }
+        }
+      ]
+    },
+    "plan_ranker_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "candidate_hash",
+        "capability_id",
+        "capability_version",
+        "input_schema_id",
+        "input_schema_version",
+        "output_schema_id",
+        "output_schema_version",
+        "normalized_cost_millionths",
+        "success_likelihood_millionths",
+        "gate_results",
+        "evidence_ids"
+      ],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "candidate_hash": { "$ref": "#/$defs/hash" },
+        "capability_id": { "$ref": "#/$defs/ranker_id" },
+        "capability_version": { "$ref": "#/$defs/semver" },
+        "input_schema_id": { "$ref": "#/$defs/ranker_id" },
+        "input_schema_version": { "type": "integer", "minimum": 1 },
+        "output_schema_id": { "$ref": "#/$defs/ranker_id" },
+        "output_schema_version": { "type": "integer", "minimum": 1 },
+        "normalized_cost_millionths": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "success_likelihood_millionths": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "gate_results": { "$ref": "#/$defs/gate_results" },
+        "evidence_ids": { "$ref": "#/$defs/id_array" }
+      }
+    },
+    "plan_ranker_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "candidates"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/plan_ranker_candidate" }
+        }
+      }
+    },
+    "candidate_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "candidate_hash",
+        "proposal_id",
+        "proposal_sha256",
+        "capability_binding_sha256",
+        "ranking_profile_sha256",
+        "admission_profile_sha256"
+      ],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "candidate_hash": { "$ref": "#/$defs/hash" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "ranking_profile_sha256": { "$ref": "#/$defs/hash" },
+        "admission_profile_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "plan_ranker_input_bridge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "candidate_set_sha256",
+        "payload",
+        "payload_sha256",
+        "candidate_index",
+        "bridge_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "candidate_set_sha256": { "$ref": "#/$defs/hash" },
+        "payload": { "$ref": "#/$defs/plan_ranker_payload" },
+        "payload_sha256": { "$ref": "#/$defs/hash" },
+        "candidate_index": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/candidate_index" }
+        },
+        "bridge_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "gate_rejection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate", "status"],
+      "properties": {
+        "gate": {
+          "enum": [
+            "policy",
+            "activation",
+            "binding",
+            "input_schema",
+            "output_schema",
+            "risk",
+            "side_effect",
+            "network",
+            "credential",
+            "capability",
+            "quality"
+          ]
+        },
+        "status": { "enum": ["failed", "unknown"] }
+      }
+    },
+    "ranked_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "candidate_id",
+        "candidate_hash",
+        "normalized_cost_millionths",
+        "success_likelihood_millionths"
+      ],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "candidate_hash": { "$ref": "#/$defs/hash" },
+        "normalized_cost_millionths": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "success_likelihood_millionths": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        }
+      }
+    },
+    "rejected_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "candidate_hash", "reasons"],
+      "properties": {
+        "candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "candidate_hash": { "$ref": "#/$defs/hash" },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 11,
+          "items": { "$ref": "#/$defs/gate_rejection" }
+        }
+      }
+    },
+    "plan_ranking_output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "ranking_policy_version",
+        "outcome",
+        "selected_candidate_id",
+        "selected_candidate_hash",
+        "ranked_candidates",
+        "rejected_candidates"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "ranking_policy_version": { "const": 1 },
+        "outcome": { "enum": ["ranked", "no_eligible_candidate"] },
+        "selected_candidate_id": {
+          "oneOf": [{ "$ref": "#/$defs/ranker_id" }, { "type": "null" }]
+        },
+        "selected_candidate_hash": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "ranked_candidates": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/ranked_candidate" }
+        },
+        "rejected_candidates": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "$ref": "#/$defs/rejected_candidate" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "outcome": { "const": "ranked" } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "properties": {
+              "selected_candidate_id": { "$ref": "#/$defs/ranker_id" },
+              "selected_candidate_hash": { "$ref": "#/$defs/hash" },
+              "ranked_candidates": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "outcome": { "const": "no_eligible_candidate" } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "properties": {
+              "selected_candidate_id": { "type": "null" },
+              "selected_candidate_hash": { "type": "null" },
+              "ranked_candidates": { "maxItems": 0 }
+            }
+          }
+        }
+      ]
+    },
+    "validated_plan_ranking": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "candidate_set_sha256",
+        "plan_ranker_input_sha256",
+        "plan_ranker_output_sha256",
+        "output",
+        "validation_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "candidate_set_sha256": { "$ref": "#/$defs/hash" },
+        "plan_ranker_input_sha256": { "$ref": "#/$defs/hash" },
+        "plan_ranker_output_sha256": { "$ref": "#/$defs/hash" },
+        "output": { "$ref": "#/$defs/plan_ranking_output" },
+        "validation_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "bound_selected_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "selection_id",
+        "candidate_set_sha256",
+        "plan_ranker_input_sha256",
+        "plan_ranker_output_sha256",
+        "selected_candidate_id",
+        "selected_candidate_hash",
+        "selected_proposal_id",
+        "selected_proposal_sha256",
+        "goal_id",
+        "world_state_id",
+        "plan_generation_id",
+        "observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "application_pack_sha256",
+        "grounding_result_sha256",
+        "semantic_target_id",
+        "selected_element_id",
+        "selected_element_kind",
+        "capability_binding_sha256",
+        "ranking_profile_sha256",
+        "admission_profile_sha256",
+        "proposal",
+        "evidence_ids",
+        "selection_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "selection_id": { "$ref": "#/$defs/ranker_id" },
+        "candidate_set_sha256": { "$ref": "#/$defs/hash" },
+        "plan_ranker_input_sha256": { "$ref": "#/$defs/hash" },
+        "plan_ranker_output_sha256": { "$ref": "#/$defs/hash" },
+        "selected_candidate_id": { "$ref": "#/$defs/ranker_id" },
+        "selected_candidate_hash": { "$ref": "#/$defs/hash" },
+        "selected_proposal_id": { "$ref": "#/$defs/id" },
+        "selected_proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "world_state_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "application_pack_sha256": { "$ref": "#/$defs/hash" },
+        "grounding_result_sha256": { "$ref": "#/$defs/hash" },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "selected_element_id": { "$ref": "#/$defs/id" },
+        "selected_element_kind": { "$ref": "#/$defs/id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "ranking_profile_sha256": { "$ref": "#/$defs/hash" },
+        "admission_profile_sha256": { "$ref": "#/$defs/hash" },
+        "proposal": { "$ref": "#/$defs/action_proposal" },
+        "evidence_ids": { "$ref": "#/$defs/id_array" },
+        "selection_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "policy_ready_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "selection_id",
+        "selection_sha256",
+        "candidate_set_sha256",
+        "goal_id",
+        "world_state_id",
+        "plan_generation_id",
+        "observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "application_pack_sha256",
+        "grounding_result_sha256",
+        "semantic_target_id",
+        "selected_element_id",
+        "selected_element_kind",
+        "capability_id",
+        "capability_binding_sha256",
+        "proposal",
+        "risk",
+        "reversibility",
+        "confirmation_requirement",
+        "expected_postconditions",
+        "evidence_ids",
+        "policy_input_sha256",
+        "policy_ready_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "selection_id": { "$ref": "#/$defs/ranker_id" },
+        "selection_sha256": { "$ref": "#/$defs/hash" },
+        "candidate_set_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "world_state_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "application_pack_sha256": { "$ref": "#/$defs/hash" },
+        "grounding_result_sha256": { "$ref": "#/$defs/hash" },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "selected_element_id": { "$ref": "#/$defs/id" },
+        "selected_element_kind": { "$ref": "#/$defs/id" },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "proposal": { "$ref": "#/$defs/action_proposal" },
+        "risk": { "$ref": "#/$defs/risk" },
+        "reversibility": { "$ref": "#/$defs/reversibility" },
+        "confirmation_requirement": { "$ref": "#/$defs/confirmation_requirement" },
+        "expected_postconditions": { "$ref": "#/$defs/required_postconditions" },
+        "evidence_ids": { "$ref": "#/$defs/id_array" },
+        "policy_input_sha256": { "$ref": "#/$defs/hash" },
+        "policy_ready_sha256": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

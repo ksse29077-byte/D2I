@@ -14,6 +14,7 @@ members = [
     "crates/d2i-cognitive-ir",
     "crates/d2i-application-semantics",
     "crates/d2i-action-candidates",
+    "crates/d2i-action-selection",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

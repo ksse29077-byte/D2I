@@ -7,6 +7,7 @@ Cargo.lock
 docs/architecture.md
 docs/application-semantics-v1.md
 docs/action-candidate-provider-v1.md
+docs/cognitive-action-selection-pipeline-v1.md
 docs/adr/**
 docs/collaboration/**
 docs/cognitive-ir-v1.md
@@ -21,6 +22,7 @@ crates/d2i-module-sdk/**
 crates/d2i-cognitive-ir/**
 crates/d2i-application-semantics/**
 crates/d2i-action-candidates/**
+crates/d2i-action-selection/**
 products/d2i-desktop/Cargo.toml
 products/d2i-desktop/src/lib.rs
 products/d2i-desktop/src/cognitive.rs

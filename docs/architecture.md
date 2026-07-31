@@ -143,6 +143,17 @@ sequence metadata. The crate does not emit executable locators or
 `DesktopOperation`, invoke a module, or cross policy, activation, approval, or
 adapter boundaries.
 
+`d2i-action-selection` owns the additive Cognitive Action Selection Pipeline
+v1. It validates actual Element Grounder output, binds one uniquely observed
+target without a fixture oracle, generates a canonical set of
+capability-bound `ActionProposal` records, emits the exact metadata-only Plan
+Ranker v1 input, validates externally returned ranking output, reconnects rank
+1 to the immutable original proposal, and produces non-authoritative
+`PolicyReadyActionV1` data. A sealed additive selection context supports
+multiple capabilities at an unbound `SelectCapability` node without changing
+Cognitive IR v1. Core does not link either standalone module or cross policy,
+activation, approval, adapter, or execution boundaries.
+
 Phase 6 adds:
 
 ```text
