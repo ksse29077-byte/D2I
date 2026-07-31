@@ -134,6 +134,105 @@ impl ExecutionPermit {
 }
 
 #[derive(Serialize)]
+struct CognitivePermitDigest<'a> {
+    authority_kind: &'static str,
+    action_hash: &'a str,
+    bound_action_sha256: &'a str,
+    policy_decision_sha256: &'a str,
+    cognitive_admission_sha256: &'a str,
+    preparation_hash: &'a str,
+    adapter_descriptor_sha256: &'a str,
+    activation_record_hash: &'a str,
+    target_resolution_sha256: &'a str,
+    input_material_proof_sha256: Option<&'a str>,
+    expires_at_unix_ms: u64,
+}
+
+/// Mints the opaque legacy adapter permit from an exact Cognitive binding.
+///
+/// This is additive: the legacy permit digest and human-approval path are
+/// unchanged, while adapters continue checking action, preparation, descriptor,
+/// and expiry at commit time.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn authorize_cognitive_prepared(
+    action_hash: &str,
+    bound_action_sha256: &str,
+    policy_decision_sha256: &str,
+    cognitive_admission_sha256: &str,
+    prepared: &PreparedAction,
+    adapter_descriptor_sha256: &str,
+    activation_record_hash: &str,
+    target_resolution_sha256: &str,
+    input_material_proof_sha256: Option<&str>,
+    expires_at_unix_ms: u64,
+    now_unix_ms: u64,
+) -> Result<ExecutionPermit, DesktopError> {
+    prepared.validate()?;
+    for (value, label) in [
+        (action_hash, "cognitive permit action_hash"),
+        (bound_action_sha256, "cognitive permit bound_action_sha256"),
+        (
+            policy_decision_sha256,
+            "cognitive permit policy_decision_sha256",
+        ),
+        (
+            cognitive_admission_sha256,
+            "cognitive permit admission_sha256",
+        ),
+        (
+            adapter_descriptor_sha256,
+            "cognitive permit adapter_descriptor_sha256",
+        ),
+        (
+            activation_record_hash,
+            "cognitive permit activation_record_hash",
+        ),
+        (
+            target_resolution_sha256,
+            "cognitive permit target_resolution_sha256",
+        ),
+    ] {
+        validate_hash(value, label)?;
+    }
+    if let Some(hash) = input_material_proof_sha256 {
+        validate_hash(hash, "cognitive permit input_material_proof_sha256")?;
+    }
+    if prepared.action_hash != action_hash
+        || prepared.adapter_descriptor_hash != adapter_descriptor_sha256
+        || now_unix_ms < prepared.prepared_at_unix_ms
+        || now_unix_ms >= expires_at_unix_ms
+        || expires_at_unix_ms > prepared.expires_at_unix_ms
+    {
+        return Err(DesktopError::Approval(
+            "Cognitive permit inputs are expired or differ from preparation".to_owned(),
+        ));
+    }
+    let digest = CognitivePermitDigest {
+        authority_kind: "cognitive_activation_admission_v1",
+        action_hash,
+        bound_action_sha256,
+        policy_decision_sha256,
+        cognitive_admission_sha256,
+        preparation_hash: &prepared.preparation_hash,
+        adapter_descriptor_sha256,
+        activation_record_hash,
+        target_resolution_sha256,
+        input_material_proof_sha256,
+        expires_at_unix_ms,
+    };
+    let permit_hash = hash_value(&digest)?;
+    Ok(ExecutionPermit {
+        action_hash: action_hash.to_owned(),
+        policy_decision_hash: policy_decision_sha256.to_owned(),
+        preparation_hash: prepared.preparation_hash.clone(),
+        adapter_descriptor_hash: adapter_descriptor_sha256.to_owned(),
+        expires_at_unix_ms,
+        permit_hash,
+        approval_id: None,
+    })
+}
+
+#[derive(Serialize)]
 struct PermitDigest<'a> {
     action_hash: &'a str,
     policy_decision_hash: &'a str,

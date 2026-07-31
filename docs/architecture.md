@@ -154,6 +154,19 @@ multiple capabilities at an unbound `SelectCapability` node without changing
 Cognitive IR v1. Core does not link either standalone module or cross policy,
 activation, approval, adapter, or execution boundaries.
 
+`d2i-policy-admission` evaluates one exact policy-ready action against
+delegated authority, a trusted policy snapshot, optional bounded confirmation,
+and a read-only activation eligibility projection. Its terminal
+`CognitiveActivationAdmissionV1` is data, not an adapter token.
+
+`d2i-trusted-action-execution` owns the side-effect-free KRN-200 hashes,
+identities, lifetimes, target/input proofs, bound action, prepared binding, and
+terminal receipt. `d2i-desktop` owns the concrete target and payload material,
+consumes one actual `WindowsActivationAdmission`, starts the certified UIA or
+WebDriver worker, prepares without mutation, and commits exactly once. A
+successful receipt proves only adapter success; re-observation and
+postcondition verification remain a separate KRN-300 boundary.
+
 Phase 6 adds:
 
 ```text

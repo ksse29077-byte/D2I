@@ -1,0 +1,498 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/cognitive/trusted-action-execution-binding-v1.schema.json",
+  "title": "D2I Trusted Action Execution Binding v1",
+  "oneOf": [
+    { "$ref": "#/$defs/session" },
+    { "$ref": "#/$defs/request" },
+    { "$ref": "#/$defs/resolution" },
+    { "$ref": "#/$defs/inputProof" },
+    { "$ref": "#/$defs/boundAction" },
+    { "$ref": "#/$defs/prepared" },
+    { "$ref": "#/$defs/receipt" }
+  ],
+  "$defs": {
+    "version": { "const": 1 },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "adapterKind": {
+      "enum": ["uia", "web_driver"]
+    },
+    "sourceKind": {
+      "enum": ["uia", "web_driver"]
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "optionalHash": {
+      "oneOf": [
+        { "$ref": "#/$defs/hash" },
+        { "type": "null" }
+      ]
+    },
+    "platformActivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activation_ledger_id",
+        "activation_ledger_chain_head",
+        "integration_id",
+        "binding_id",
+        "activation_record_hash",
+        "runtime_binding_sha256",
+        "adapter_kind",
+        "adapter_descriptor_sha256",
+        "observed_at_unix_seconds",
+        "expires_at_unix_seconds"
+      ],
+      "properties": {
+        "activation_ledger_id": { "$ref": "#/$defs/id" },
+        "activation_ledger_chain_head": { "$ref": "#/$defs/hash" },
+        "integration_id": { "$ref": "#/$defs/id" },
+        "binding_id": { "$ref": "#/$defs/id" },
+        "activation_record_hash": { "$ref": "#/$defs/hash" },
+        "runtime_binding_sha256": { "$ref": "#/$defs/hash" },
+        "adapter_kind": { "$ref": "#/$defs/adapterKind" },
+        "adapter_descriptor_sha256": { "$ref": "#/$defs/hash" },
+        "observed_at_unix_seconds": { "type": "integer", "minimum": 0 },
+        "expires_at_unix_seconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "execution_session_id",
+        "action_sequence",
+        "runtime_build_id",
+        "runtime_package_sha256",
+        "generated_at_unix_ms",
+        "expires_at_unix_ms",
+        "expected_organization_id",
+        "expected_integration_id",
+        "expected_adapter_kind",
+        "expected_activation_ledger_id",
+        "expected_activation_ledger_chain_head",
+        "evidence_ids",
+        "session_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "execution_session_id": { "$ref": "#/$defs/id" },
+        "action_sequence": { "type": "integer", "minimum": 1 },
+        "runtime_build_id": { "$ref": "#/$defs/id" },
+        "runtime_package_sha256": { "$ref": "#/$defs/hash" },
+        "generated_at_unix_ms": { "type": "integer", "minimum": 0 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "expected_organization_id": { "$ref": "#/$defs/id" },
+        "expected_integration_id": { "$ref": "#/$defs/id" },
+        "expected_adapter_kind": { "$ref": "#/$defs/adapterKind" },
+        "expected_activation_ledger_id": { "$ref": "#/$defs/id" },
+        "expected_activation_ledger_chain_head": { "$ref": "#/$defs/hash" },
+        "evidence_ids": { "$ref": "#/$defs/evidence" },
+        "session_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "policy_ready_action",
+        "cognitive_activation_admission",
+        "activation_eligibility",
+        "execution_session",
+        "platform_activation",
+        "source_observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "source_target_binding_sha256",
+        "expected_grounded_target_binding_sha256",
+        "expected_capability_binding_sha256",
+        "expected_policy_decision_sha256",
+        "expected_activation_admission_sha256",
+        "request_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "policy_ready_action": { "type": "object" },
+        "cognitive_activation_admission": { "type": "object" },
+        "activation_eligibility": { "type": "object" },
+        "execution_session": { "$ref": "#/$defs/session" },
+        "platform_activation": { "$ref": "#/$defs/platformActivation" },
+        "source_observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "source_target_binding_sha256": { "$ref": "#/$defs/hash" },
+        "expected_grounded_target_binding_sha256": { "$ref": "#/$defs/hash" },
+        "expected_capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "expected_policy_decision_sha256": { "$ref": "#/$defs/hash" },
+        "expected_activation_admission_sha256": { "$ref": "#/$defs/hash" },
+        "request_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "resolution_id",
+        "request_sha256",
+        "proposal_sha256",
+        "grounded_target_binding_sha256",
+        "selected_element_id",
+        "selected_element_kind",
+        "source_kind",
+        "source_observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "fresh_resolution_observation_hash",
+        "runtime_binding_sha256",
+        "integration_id",
+        "binding_id",
+        "activation_record_hash",
+        "adapter_descriptor_sha256",
+        "target_material_sha256",
+        "unique_match_count",
+        "resolved_at_unix_ms",
+        "expires_at_unix_ms",
+        "evidence_ids",
+        "resolution_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "resolution_id": { "$ref": "#/$defs/id" },
+        "request_sha256": { "$ref": "#/$defs/hash" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "grounded_target_binding_sha256": { "$ref": "#/$defs/hash" },
+        "selected_element_id": { "$ref": "#/$defs/id" },
+        "selected_element_kind": { "$ref": "#/$defs/id" },
+        "source_kind": { "$ref": "#/$defs/sourceKind" },
+        "source_observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "fresh_resolution_observation_hash": { "$ref": "#/$defs/hash" },
+        "runtime_binding_sha256": { "$ref": "#/$defs/hash" },
+        "integration_id": { "$ref": "#/$defs/id" },
+        "binding_id": { "$ref": "#/$defs/id" },
+        "activation_record_hash": { "$ref": "#/$defs/hash" },
+        "adapter_descriptor_sha256": { "$ref": "#/$defs/hash" },
+        "target_material_sha256": { "$ref": "#/$defs/hash" },
+        "unique_match_count": { "const": 1 },
+        "resolved_at_unix_ms": { "type": "integer", "minimum": 0 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/evidence" },
+        "resolution_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "inputProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "material_id",
+        "request_sha256",
+        "proposal_sha256",
+        "input_kind",
+        "expected_content_sha256",
+        "supplied_content_sha256",
+        "byte_length",
+        "secret_classification",
+        "material_source_id",
+        "resolved_at_unix_ms",
+        "expires_at_unix_ms",
+        "evidence_ids",
+        "material_proof_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "material_id": { "$ref": "#/$defs/id" },
+        "request_sha256": { "$ref": "#/$defs/hash" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "input_kind": { "enum": ["set_text", "type_text", "select"] },
+        "expected_content_sha256": { "$ref": "#/$defs/hash" },
+        "supplied_content_sha256": { "$ref": "#/$defs/hash" },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8388608
+        },
+        "secret_classification": { "const": "non_secret" },
+        "material_source_id": { "$ref": "#/$defs/id" },
+        "resolved_at_unix_ms": { "type": "integer", "minimum": 0 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/evidence" },
+        "material_proof_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "boundAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "bound_action_id",
+        "trusted_execution_request_sha256",
+        "policy_ready_sha256",
+        "selection_sha256",
+        "proposal_id",
+        "proposal_sha256",
+        "goal_id",
+        "plan_generation_id",
+        "source_observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "semantic_target_id",
+        "selected_element_id",
+        "capability_id",
+        "capability_binding_sha256",
+        "policy_decision_sha256",
+        "cognitive_activation_admission_sha256",
+        "execution_session_sha256",
+        "target_resolution_sha256",
+        "input_material_proof_sha256",
+        "integration_id",
+        "binding_id",
+        "activation_record_hash",
+        "adapter_kind",
+        "adapter_descriptor_sha256",
+        "desktop_capability",
+        "desktop_operation_kind",
+        "desktop_operation_sha256",
+        "desktop_action_intent_sha256",
+        "generated_at_unix_ms",
+        "expires_at_unix_ms",
+        "evidence_ids",
+        "bound_action_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "bound_action_id": { "$ref": "#/$defs/id" },
+        "trusted_execution_request_sha256": { "$ref": "#/$defs/hash" },
+        "policy_ready_sha256": { "$ref": "#/$defs/hash" },
+        "selection_sha256": { "$ref": "#/$defs/hash" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "source_observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "selected_element_id": { "$ref": "#/$defs/id" },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "capability_binding_sha256": { "$ref": "#/$defs/hash" },
+        "policy_decision_sha256": { "$ref": "#/$defs/hash" },
+        "cognitive_activation_admission_sha256": { "$ref": "#/$defs/hash" },
+        "execution_session_sha256": { "$ref": "#/$defs/hash" },
+        "target_resolution_sha256": { "$ref": "#/$defs/hash" },
+        "input_material_proof_sha256": { "$ref": "#/$defs/optionalHash" },
+        "integration_id": { "$ref": "#/$defs/id" },
+        "binding_id": { "$ref": "#/$defs/id" },
+        "activation_record_hash": { "$ref": "#/$defs/hash" },
+        "adapter_kind": { "$ref": "#/$defs/adapterKind" },
+        "adapter_descriptor_sha256": { "$ref": "#/$defs/hash" },
+        "desktop_capability": { "enum": ["ui_interact", "browser_interact"] },
+        "desktop_operation_kind": {
+          "enum": [
+            "uia_invoke",
+            "uia_set_value",
+            "uia_toggle",
+            "web_driver_click",
+            "web_driver_type",
+            "web_driver_select"
+          ]
+        },
+        "desktop_operation_sha256": { "$ref": "#/$defs/hash" },
+        "desktop_action_intent_sha256": { "$ref": "#/$defs/hash" },
+        "generated_at_unix_ms": { "type": "integer", "minimum": 0 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/evidence" },
+        "bound_action_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "prepared": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "bound_action_sha256",
+        "desktop_action_intent_sha256",
+        "desktop_operation_sha256",
+        "adapter_descriptor_sha256",
+        "target_resolution_sha256",
+        "input_material_proof_sha256",
+        "prepared_action_hash",
+        "precondition_hash",
+        "prepared_at_unix_ms",
+        "expires_at_unix_ms",
+        "reversible",
+        "evidence_ids",
+        "prepared_binding_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "bound_action_sha256": { "$ref": "#/$defs/hash" },
+        "desktop_action_intent_sha256": { "$ref": "#/$defs/hash" },
+        "desktop_operation_sha256": { "$ref": "#/$defs/hash" },
+        "adapter_descriptor_sha256": { "$ref": "#/$defs/hash" },
+        "target_resolution_sha256": { "$ref": "#/$defs/hash" },
+        "input_material_proof_sha256": { "$ref": "#/$defs/optionalHash" },
+        "prepared_action_hash": { "$ref": "#/$defs/hash" },
+        "precondition_hash": { "$ref": "#/$defs/hash" },
+        "prepared_at_unix_ms": { "type": "integer", "minimum": 0 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "reversible": { "type": "boolean" },
+        "evidence_ids": { "$ref": "#/$defs/evidence" },
+        "prepared_binding_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "execution_id",
+        "status",
+        "bound_action_sha256",
+        "prepared_binding_sha256",
+        "policy_ready_sha256",
+        "proposal_id",
+        "proposal_sha256",
+        "goal_id",
+        "plan_generation_id",
+        "source_observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "capability_id",
+        "semantic_target_id",
+        "cognitive_activation_admission_sha256",
+        "policy_decision_sha256",
+        "confirmation_grant_sha256",
+        "activation_record_hash",
+        "runtime_binding_sha256",
+        "adapter_descriptor_sha256",
+        "desktop_action_intent_sha256",
+        "desktop_operation_sha256",
+        "target_resolution_sha256",
+        "input_material_proof_sha256",
+        "preparation_hash",
+        "precondition_hash",
+        "execution_permit_sha256",
+        "adapter_outcome_status",
+        "adapter_output_sha256",
+        "adapter_output_bytes",
+        "started_at_unix_ms",
+        "completed_at_unix_ms",
+        "warnings",
+        "evidence_ids",
+        "receipt_sha256"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "execution_id": { "$ref": "#/$defs/id" },
+        "status": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "cancelled",
+            "denied_before_commit",
+            "aborted"
+          ]
+        },
+        "bound_action_sha256": { "$ref": "#/$defs/hash" },
+        "prepared_binding_sha256": { "$ref": "#/$defs/optionalHash" },
+        "policy_ready_sha256": { "$ref": "#/$defs/hash" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "source_observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "semantic_target_id": { "$ref": "#/$defs/id" },
+        "cognitive_activation_admission_sha256": { "$ref": "#/$defs/hash" },
+        "policy_decision_sha256": { "$ref": "#/$defs/hash" },
+        "confirmation_grant_sha256": { "$ref": "#/$defs/optionalHash" },
+        "activation_record_hash": { "$ref": "#/$defs/hash" },
+        "runtime_binding_sha256": { "$ref": "#/$defs/hash" },
+        "adapter_descriptor_sha256": { "$ref": "#/$defs/hash" },
+        "desktop_action_intent_sha256": { "$ref": "#/$defs/hash" },
+        "desktop_operation_sha256": { "$ref": "#/$defs/hash" },
+        "target_resolution_sha256": { "$ref": "#/$defs/hash" },
+        "input_material_proof_sha256": { "$ref": "#/$defs/optionalHash" },
+        "preparation_hash": { "$ref": "#/$defs/optionalHash" },
+        "precondition_hash": { "$ref": "#/$defs/optionalHash" },
+        "execution_permit_sha256": { "$ref": "#/$defs/optionalHash" },
+        "adapter_outcome_status": {
+          "oneOf": [
+            { "enum": ["succeeded", "failed"] },
+            { "type": "null" }
+          ]
+        },
+        "adapter_output_sha256": { "$ref": "#/$defs/optionalHash" },
+        "adapter_output_bytes": { "type": "integer", "minimum": 0 },
+        "started_at_unix_ms": {
+          "oneOf": [
+            { "type": "integer", "minimum": 0 },
+            { "type": "null" }
+          ]
+        },
+        "completed_at_unix_ms": { "type": "integer", "minimum": 0 },
+        "warnings": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "evidence_ids": { "$ref": "#/$defs/evidence" },
+        "receipt_sha256": { "$ref": "#/$defs/hash" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": { "enum": ["succeeded", "failed"] }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "prepared_binding_sha256": { "$ref": "#/$defs/hash" },
+              "preparation_hash": { "$ref": "#/$defs/hash" },
+              "precondition_hash": { "$ref": "#/$defs/hash" },
+              "execution_permit_sha256": { "$ref": "#/$defs/hash" },
+              "adapter_outcome_status": { "enum": ["succeeded", "failed"] },
+              "adapter_output_sha256": { "$ref": "#/$defs/hash" },
+              "started_at_unix_ms": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "else": {
+            "properties": {
+              "adapter_outcome_status": { "type": "null" },
+              "adapter_output_sha256": { "type": "null" },
+              "adapter_output_bytes": { "const": 0 },
+              "started_at_unix_ms": { "type": "null" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

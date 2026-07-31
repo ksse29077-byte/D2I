@@ -315,6 +315,7 @@ dependencies = [
  "d2i-cognitive-ir",
  "d2i-policy-admission",
  "d2i-runtime-api",
+ "d2i-trusted-action-execution",
  "d2i-windows-host",
  "ed25519-dalek",
  "jsonschema",
@@ -448,6 +449,20 @@ version = "0.9.0"
 dependencies = [
  "planus",
  "serde",
+]
+
+[[package]]
+name = "d2i-trusted-action-execution"
+version = "0.9.0"
+dependencies = [
+ "d2i-action-candidates",
+ "d2i-action-selection",
+ "d2i-cognitive-ir",
+ "d2i-policy-admission",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

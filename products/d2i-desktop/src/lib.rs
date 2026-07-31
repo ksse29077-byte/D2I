@@ -8,6 +8,7 @@ mod cognitive_verification_v2;
 mod contract;
 mod executor;
 mod policy;
+mod trusted_execution;
 mod windows_activation;
 mod windows_adapters;
 mod windows_attestation;
@@ -70,10 +71,26 @@ pub use d2i_application_semantics::{
     APPLICATION_SEMANTICS_V1_SCHEMA, ELEMENT_GROUNDER_INPUT_SCHEMA_ID,
     ELEMENT_GROUNDER_INPUT_SCHEMA_VERSION,
 };
+pub use d2i_trusted_action_execution::{
+    canonical_sha256 as trusted_execution_sha256, expected_input as trusted_expected_input,
+    operation_kind as trusted_operation_kind, BoundDesktopActionV1, InputMaterialKindV1,
+    InputMaterialProofV1, PolicyReadyActionV1, PreparedBoundActionV1, SecretClassificationV1,
+    TargetResolutionProofV1, TrustedActionExecutionReceiptV1, TrustedAdapterOutcomeStatusV1,
+    TrustedDesktopCapabilityV1, TrustedDesktopOperationKindV1, TrustedExecutionBindingRequestV1,
+    TrustedExecutionError, TrustedExecutionSessionV1, TrustedExecutionStatusV1,
+    TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
+    TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+};
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,
     PolicyDecisionStatus,
+};
+pub use trusted_execution::{
+    build_cognitive_desktop_action_intent, project_windows_activation,
+    to_verification_bound_execution_v2, validate_cognitive_desktop_action_intent,
+    CognitiveTrustedExecutionCoordinator, EphemeralActionPayload, ResolvedTargetMaterial,
+    TrustedDesktopExecutionPlan, TrustedTargetResolverInput,
 };
 pub use windows_activation::{
     activate_certified_windows_binding, initialize_windows_activation_ledger,

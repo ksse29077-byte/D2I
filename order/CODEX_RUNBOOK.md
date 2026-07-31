@@ -10,8 +10,8 @@ Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure
 ## Track K - Safe Execution Kernel Closure
 
 - `D2I-KRN-100` Cognitive Policy Admission v1 - **complete**
-- `D2I-KRN-200` Trusted Action Execution Binding v1 - **active**
-- `D2I-KRN-300` Reobserve and Cognitive Verifier v2
+- `D2I-KRN-200` Trusted Action Execution Binding v1 - **complete**
+- `D2I-KRN-300` Reobserve and Cognitive Verifier v2 - **active**
 - `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
 - `D2I-KRN-500` First Complete Verified Single-Task E2E
 
@@ -45,10 +45,9 @@ commit한다. 최신 `origin/main`에 rebase하고 검사를 다시 실행한 �
 force 없이 `git push origin HEAD:main`한다. PR, 승인 대기, 웹 병합은
 완료조건이 아니다. 의미 충돌이 있으면 push를 중단한다.
 
-`D2I-KRN-100` 완료 후 next prompt는 `D2I-KRN-200`이며, exact
-`PolicyReadyActionV1`, `CognitiveActivationAdmissionV1`, one-shot
-`ActivatedWindowsBinding`을 capability-specific `DesktopOperation`과
-prepare/commit 경계로 결합한다.
+`D2I-KRN-200` 완료 후 next prompt는 `D2I-KRN-300`이며, terminal
+`TrustedActionExecutionReceiptV1`과 exact source target을 새 read-only
+observation 및 Cognitive Verification Contract v2에 결합한다.
 
 ---
 

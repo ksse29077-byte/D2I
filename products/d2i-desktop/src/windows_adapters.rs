@@ -26,6 +26,10 @@ struct WindowsWorkerAdapter {
 }
 
 impl WindowsWorkerAdapter {
+    pub(crate) fn worker_process_id(&self) -> u32 {
+        self.worker.process_id()
+    }
+
     fn bind(
         activation: ActivatedWindowsBinding,
         configuration: WindowsAdapterConfiguration,
@@ -124,6 +128,25 @@ impl WindowsWorkerAdapter {
         }
         let precondition_hash = self.worker.snapshot(&intent.operation)?;
         PreparedAction::create(intent, &self.descriptor, precondition_hash, now_unix_ms)
+    }
+
+    fn trusted_resolution_snapshot(
+        &mut self,
+        operation: &crate::DesktopOperation,
+        now_unix_ms: u64,
+    ) -> Result<String, DesktopError> {
+        self.validate_lifetime(now_unix_ms)?;
+        self.verify_live_egress(now_unix_ms / 1_000)?;
+        if !self
+            .descriptor
+            .capabilities
+            .contains(&operation.capability())
+        {
+            return Err(DesktopError::AdapterUnavailable(
+                "Windows adapter capability mismatch during trusted resolution".to_owned(),
+            ));
+        }
+        self.worker.snapshot(operation)
     }
 
     fn execute(
@@ -481,6 +504,19 @@ windows_adapter!(WindowsFileWriteAdapter, WindowsAdapterKind::FileWrite);
 windows_adapter!(WindowsProcessAdapter, WindowsAdapterKind::Process);
 
 impl WindowsUiAutomationAdapter {
+    pub(crate) fn worker_process_id(&self) -> u32 {
+        self.inner.worker_process_id()
+    }
+
+    pub(crate) fn trusted_resolution_snapshot(
+        &mut self,
+        operation: &crate::DesktopOperation,
+        now_unix_ms: u64,
+    ) -> Result<String, DesktopError> {
+        self.inner
+            .trusted_resolution_snapshot(operation, now_unix_ms)
+    }
+
     pub(crate) fn validate_uia_observation_target(
         &self,
         target: &WindowsUiaObservationTarget,
@@ -503,6 +539,19 @@ impl WindowsUiAutomationAdapter {
 }
 
 impl WindowsWebDriverAdapter {
+    pub(crate) fn worker_process_id(&self) -> u32 {
+        self.inner.worker_process_id()
+    }
+
+    pub(crate) fn trusted_resolution_snapshot(
+        &mut self,
+        operation: &crate::DesktopOperation,
+        now_unix_ms: u64,
+    ) -> Result<String, DesktopError> {
+        self.inner
+            .trusted_resolution_snapshot(operation, now_unix_ms)
+    }
+
     pub(crate) fn validate_web_observation_target(
         &self,
         target: &WindowsWebObservationTarget,

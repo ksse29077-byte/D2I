@@ -180,5 +180,6 @@ prepare/commit, UI action, re-observation, verification, recovery, replan,
 filesystem access, process launch, network access, or Runtime ABI/package
 change.
 
-The next contract is Cognitive Policy Admission v1. It is not implemented by
-this pipeline.
+Downstream Cognitive Policy Admission v1 and Trusted Action Execution Binding
+v1 are now implemented as separate contracts. They remain outside this
+pipeline.

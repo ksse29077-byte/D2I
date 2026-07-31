@@ -83,9 +83,8 @@ organization, and timing exactly. Confirmation cannot override deny or
 escalate.
 
 `GrantConsumptionLedgerV1` rejects reuse within one bounded in-memory artifact
-lifecycle. Durable replay prevention across process restarts is not provided in
-v1; `D2I-KRN-200` must join grant consumption to the durable one-shot Windows
-activation ledger.
+lifecycle. Completed `D2I-KRN-200` joins admission to the durable one-shot
+Windows activation ledger; the policy crate itself remains side-effect free.
 
 ## Eligibility and Admission
 
@@ -96,8 +95,9 @@ expected runtime/ledger/adapter values, scope, capability, and freshness.
 
 An admission contains IDs and hashes only. It has no selector, locator,
 coordinate, raw input, credential, token, adapter handle, or operation payload.
-Actual execution authority exists only after `D2I-KRN-200` combines it with an
-exact one-shot `ActivatedWindowsBinding`.
+Actual execution authority exists only after completed `D2I-KRN-200` combines
+it with an exact one-shot `ActivatedWindowsBinding`. Re-observation and
+postcondition verification remain in `D2I-KRN-300`.
 
 ## Canonical JSON
 

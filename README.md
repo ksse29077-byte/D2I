@@ -40,6 +40,12 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
 - `crates/d2i-action-selection`: actual Grounder-result validation,
   deterministic multi-candidate generation, Plan Ranker metadata bridges,
   selected-proposal rebinding, and non-authoritative policy-ready actions.
+- `crates/d2i-policy-admission`: delegated authority, trusted policy,
+  bounded confirmation, activation eligibility, and non-executable Cognitive
+  admission contracts.
+- `crates/d2i-trusted-action-execution`: audit-safe binding of one admitted
+  Cognitive action to an exact target, input hash, preparation, and terminal
+  adapter-attempt receipt.
 - `products/d2i-embodied`: separate robot integration contracts, simulation
   replay, safety-gated hardware boundary, robot memory, and fleet promotion.
 - `products/d2i-desktop`: separate PC autonomy contracts, capability policy,

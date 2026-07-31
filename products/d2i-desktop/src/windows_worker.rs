@@ -154,6 +154,10 @@ impl IsolatedWindowsWorker {
         })
     }
 
+    pub(crate) fn process_id(&self) -> u32 {
+        self.child.id()
+    }
+
     pub(crate) fn probe(&mut self) -> Result<Vec<u8>, DesktopError> {
         self.request(WorkerCommand::Probe, None)
     }

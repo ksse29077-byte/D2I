@@ -305,3 +305,19 @@ untrusted native modules are supported.
   WFP provider intentionally supports loopback-only deployments.
 - Secure-desktop behavior, credential-provider integration, and clipboard
   policy where those capabilities are later required.
+## Trusted Action Execution Binding v1
+
+The KRN-200 boundary treats Cognitive actions, policy records, source
+observations, UI/Web content, target hints, and payload sources as untrusted
+until their exact hashes and authority intersections are validated.
+
+Mitigations include one-shot Windows activation consumption, a closed
+six-operation mapping, exact process/session/origin/image binding, read-only
+fresh target snapshots, prepare/commit precondition equality, bounded
+non-secret payloads with drop-time clearing, a separate Cognitive permit
+digest, protected hash-only audit, and terminal worker cleanup.
+
+Residual risk remains between adapter commit and the independent observation
+required to prove the requested outcome. An adapter-success receipt must not
+be treated as verified closure. KRN-300 owns that independent re-observation
+and verifier boundary.

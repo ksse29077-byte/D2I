@@ -28,8 +28,8 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 ## Track K - Safe Execution Kernel Closure
 
 - [x] `D2I-KRN-100` Cognitive Policy Admission v1
-- [ ] `D2I-KRN-200` Trusted Action Execution Binding v1 - **first active task**
-- [ ] `D2I-KRN-300` Reobserve and Cognitive Verifier v2
+- [x] `D2I-KRN-200` Trusted Action Execution Binding v1
+- [ ] `D2I-KRN-300` Reobserve and Cognitive Verifier v2 - **first active task**
 - [ ] `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
 - [ ] `D2I-KRN-500` First Complete Verified Single-Task E2E
 

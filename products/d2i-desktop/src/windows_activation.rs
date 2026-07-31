@@ -100,6 +100,26 @@ impl ActivatedWindowsBinding {
     pub const fn adapter_kind(&self) -> WindowsAdapterKind {
         self.adapter_kind
     }
+
+    /// Returns the certified worker configuration digest.
+    pub fn configuration_hash(&self) -> &str {
+        &self.configuration_hash
+    }
+
+    /// Returns the immutable adapter descriptor covered by certification.
+    pub fn adapter_descriptor(&self) -> &DesktopAdapterDescriptor {
+        &self.adapter_descriptor
+    }
+
+    /// Returns the start of the certified activation lifetime.
+    pub const fn observed_at_unix_seconds(&self) -> u64 {
+        self.observed_at_unix_seconds
+    }
+
+    /// Returns the exclusive end of the certified activation lifetime.
+    pub const fn expires_at_unix_seconds(&self) -> u64 {
+        self.expires_at_unix_seconds
+    }
 }
 
 /// Persistent admission result and its one-shot adapter authority.

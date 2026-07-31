@@ -192,6 +192,45 @@ confirmation request, activation, desktop mapping, adapter preparation or
 commit, UI action, re-observation, verification, recovery, process,
 filesystem, or network side effect.
 
+## Cognitive Policy Admission v1 Status
+
+Implemented in `crates/d2i-policy-admission`:
+
+- exact delegated authority and trusted policy evaluation
+- closed allow, confirmation, deny, and escalation outcomes
+- bounded one-time confirmation challenge and grant contracts
+- activation eligibility bound to integration, runtime, ledger, capability,
+  and source observation
+- non-executable `CognitiveActivationAdmissionV1`
+
+The policy crate has no adapter, filesystem, process, network, UI, or token
+authority.
+
+## Trusted Action Execution Binding v1 Status
+
+Implemented in `crates/d2i-trusted-action-execution` and
+`products/d2i-desktop/src/trusted_execution.rs`:
+
+- strict Core session, request, target proof, input proof, bound action,
+  prepared binding, and terminal receipt contracts
+- exact six-operation UIA/WebDriver mapping with no fallback
+- complete PolicyReady, Cognitive admission, eligibility, source observation,
+  platform activation, ledger, adapter, target, input, and time intersection
+- non-cloneable and non-serializable raw target and payload ownership
+- fresh read-only target resolution and prepare-time precondition equality
+- additive Cognitive permit digest checked by the existing adapter boundary
+- one-shot Windows activation consumption and one adapter commit
+- protected binding, target, preparation, permit, commit, terminal, cancel,
+  and abort audit events
+- deterministic projection to existing `BoundActionExecutionV2` without a
+  verification verdict
+- actual signed Windows UIA SetValue fixture with side-effect-free
+  bind/prepare and zero residual owned worker or execution material
+
+Adapter success means only that an action attempt succeeded. KRN-200 performs
+no re-observation, postcondition verification, verified closure, recovery, or
+production CognitiveExecutor connection.
+
 ## Verification
 
 Passed:
@@ -207,8 +246,8 @@ cargo build --workspace --release
 
 - No natural-language model implementation.
 - No GUI implementation.
-- No real UIA/Web observation implementation.
-- No real WebDriver execution implementation.
+- No KRN-300 re-observation or postcondition-verifier integration.
+- No production CognitiveExecutor-to-KRN-200 connection.
 - No external network feature.
 - No production package format or Runtime ABI change.
 - No concrete WFP, Windows adapter, activation ledger, or protected audit
@@ -218,9 +257,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`Cognitive Policy Admission v1: PolicyReadyAction -> PolicyDecision,
-ConfirmationRequirement, and Activation admission fixture contract`
+`D2I-KRN-300 - Reobserve and Cognitive Verifier v2`
 
-Do not start production module loading, proposal-to-DesktopOperation mapping,
-action execution, Runtime ABI, package embedding, or the policy-admission
-contract as part of Action Selection Pipeline v1.
+Do not start recovery, retry, replan, first complete E2E closure, production
+module loading, Runtime ABI changes, or package embedding as part of KRN-300.

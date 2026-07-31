@@ -1,0 +1,21 @@
+[package]
+name = "d2i-trusted-action-execution"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+d2i-action-candidates = { path = "../d2i-action-candidates" }
+d2i-action-selection = { path = "../d2i-action-selection" }
+d2i-cognitive-ir = { path = "../d2i-cognitive-ir" }
+d2i-policy-admission = { path = "../d2i-policy-admission" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true

@@ -9,6 +9,7 @@ d2i-action-candidates = { path = "../../crates/d2i-action-candidates" }
 d2i-application-semantics = { path = "../../crates/d2i-application-semantics" }
 d2i-cognitive-ir = { path = "../../crates/d2i-cognitive-ir" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
+d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }
 d2i-windows-host = { path = "../../crates/d2i-windows-host" }
 ed25519-dalek.workspace = true
 serde.workspace = true

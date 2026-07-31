@@ -8,6 +8,9 @@ docs/architecture.md
 docs/application-semantics-v1.md
 docs/action-candidate-provider-v1.md
 docs/cognitive-action-selection-pipeline-v1.md
+docs/cognitive-policy-admission-v1.md
+docs/trusted-action-execution-binding-v1.md
+docs/product/**
 docs/adr/**
 docs/collaboration/**
 docs/cognitive-ir-v1.md
@@ -23,10 +26,14 @@ crates/d2i-cognitive-ir/**
 crates/d2i-application-semantics/**
 crates/d2i-action-candidates/**
 crates/d2i-action-selection/**
+crates/d2i-policy-admission/**
+crates/d2i-trusted-action-execution/**
 products/d2i-desktop/Cargo.toml
 products/d2i-desktop/src/lib.rs
 products/d2i-desktop/src/cognitive.rs
+products/d2i-desktop/src/trusted_execution.rs
 products/d2i-desktop/tests/cognitive_runtime.rs
+products/d2i-desktop/tests/trusted_execution.rs
 crates/d2i-compiler/src/package.rs
 schemas/flatbuffers/**
 crates/d2i-runtime-api/**

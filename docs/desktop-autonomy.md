@@ -375,3 +375,20 @@ normal policy, preparation, approval, permit, commit, and audit protocol.
   separation of attestor/certifier accounts remain deployment controls.
 - Protected local storage does not replace external chain-head anchoring,
   backup, retention, and crash reconciliation.
+## Trusted Cognitive Execution
+
+KRN-200 adds a separate `CognitiveTrustedExecutionCoordinator` without
+changing the Decision Envelope, Human Approval, or `DesktopExecutor` paths.
+It consumes a complete one-shot `WindowsActivationAdmission`, resolves one
+exact UIA or loopback WebDriver target through the existing read-only worker,
+prepares without mutation, mints a Cognitive-bound permit, and commits at most
+once.
+
+Raw AutomationIds, Web locators, and non-secret input bytes remain inside a
+non-cloneable, non-serializable plan. Durable contracts and protected audit
+contain only bounded IDs and canonical hashes. Terminal success, failure,
+cancellation, or drop removes the plan, payload, and worker.
+
+A successful `TrustedActionExecutionReceiptV1` is an adapter-attempt result,
+not proof of a postcondition or completed goal. Re-observation and verification
+remain the next KRN-300 boundary.

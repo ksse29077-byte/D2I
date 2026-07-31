@@ -59,6 +59,15 @@ pub enum WindowsDeploymentAuditEventKind {
     ObservationStaleTargetRejected,
     ObservationProcessHashRejected,
     ObservationOriginRejected,
+    CognitiveBindingCreated,
+    TrustedTargetResolved,
+    TrustedActionPrepared,
+    CognitivePermitMinted,
+    TrustedCommitStarted,
+    TrustedExecutionSucceeded,
+    TrustedExecutionFailed,
+    TrustedExecutionCancelled,
+    TrustedExecutionAborted,
 }
 
 /// Outcome classification with no unrestricted payload.
@@ -168,6 +177,18 @@ impl WindowsDeploymentAuditLedger {
             manifest,
             verification,
         })
+    }
+
+    /// Returns the protected audit session identity.
+    #[must_use]
+    pub fn session_id(&self) -> &str {
+        &self.manifest.session_id
+    }
+
+    /// Returns the current verified record count.
+    #[must_use]
+    pub const fn record_count(&self) -> u64 {
+        self.verification.record_count
     }
 
     /// Appends one hash-chained event under an exclusive filesystem lock.
