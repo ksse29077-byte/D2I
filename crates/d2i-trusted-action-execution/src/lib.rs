@@ -5,6 +5,7 @@
 //! execution permits remain in the product integration.
 
 use d2i_action_candidates::{CandidateActionArguments, CandidateActionInput};
+use d2i_action_selection::GroundedActionArgumentsV1;
 pub use d2i_action_selection::PolicyReadyActionV1;
 use d2i_cognitive_ir::{ObservationSnapshot, Reversibility};
 pub use d2i_policy_admission::AdapterKindV1;
@@ -473,6 +474,9 @@ impl TrustedExecutionBindingRequestV1 {
             return integrity("eligibility, session, admission, or platform activation differs");
         }
         let operation = operation_kind(ready)?;
+        if self.expected_grounded_target_binding_sha256 != grounded_target_binding_sha256(ready)? {
+            return integrity("expected grounded target differs from proposal arguments");
+        }
         if operation.adapter_kind() != platform.adapter_kind
             || operation.adapter_kind() != admission.adapter_kind
         {
@@ -1230,11 +1234,11 @@ impl TrustedActionExecutionReceiptV1 {
 pub fn operation_kind(
     ready: &PolicyReadyActionV1,
 ) -> Result<TrustedDesktopOperationKindV1, TrustedExecutionError> {
-    let arguments = candidate_arguments(ready)?;
+    let arguments = action_arguments(ready)?;
     let kind = match (
-        &arguments.input,
+        arguments.input(),
         ready.capability_id.as_str(),
-        arguments.operation.as_str(),
+        arguments.operation(),
     ) {
         (CandidateActionInput::Invoke, "uia.invoke", "uia.invoke") => {
             TrustedDesktopOperationKindV1::UiaInvoke
@@ -1267,8 +1271,7 @@ pub fn operation_kind(
 pub fn expected_input(
     ready: &PolicyReadyActionV1,
 ) -> Result<(Option<InputMaterialKindV1>, Option<String>), TrustedExecutionError> {
-    let arguments = candidate_arguments(ready)?;
-    let value = match arguments.input {
+    let value = match action_input(ready)? {
         CandidateActionInput::SetText { text_hash } => {
             (Some(InputMaterialKindV1::SetText), Some(text_hash))
         }
@@ -1283,6 +1286,24 @@ pub fn expected_input(
         | CandidateActionInput::Click => (None, None),
     };
     Ok(value)
+}
+
+/// Returns the exact typed input carried by either supported v1 proposal bridge.
+pub fn action_input(
+    ready: &PolicyReadyActionV1,
+) -> Result<CandidateActionInput, TrustedExecutionError> {
+    Ok(action_arguments(ready)?.input().clone())
+}
+
+/// Returns the proposal's exact grounded-target digest.
+///
+/// Native Action Selection proposals carry a self-hashed grounded target. The
+/// earlier fixture bridge is retained for compatibility and uses the canonical
+/// digest of its closed target object.
+pub fn grounded_target_binding_sha256(
+    ready: &PolicyReadyActionV1,
+) -> Result<String, TrustedExecutionError> {
+    action_arguments(ready)?.grounded_target_binding_sha256()
 }
 
 /// Strictly parses JSON with duplicate-key, size, depth, and node limits.
@@ -1314,12 +1335,67 @@ pub fn sha256_bytes(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
 }
 
-fn candidate_arguments(
+enum ActionArgumentsV1 {
+    Fixture(Box<CandidateActionArguments>),
+    Grounded(GroundedActionArgumentsV1),
+}
+
+impl ActionArgumentsV1 {
+    fn operation(&self) -> &str {
+        match self {
+            Self::Fixture(arguments) => &arguments.operation,
+            Self::Grounded(arguments) => &arguments.operation,
+        }
+    }
+
+    fn input(&self) -> &CandidateActionInput {
+        match self {
+            Self::Fixture(arguments) => &arguments.input,
+            Self::Grounded(arguments) => &arguments.input,
+        }
+    }
+
+    fn grounded_target_binding_sha256(&self) -> Result<String, TrustedExecutionError> {
+        match self {
+            Self::Fixture(arguments) => canonical_sha256(&arguments.target),
+            Self::Grounded(arguments) => Ok(arguments.target.binding_sha256.clone()),
+        }
+    }
+}
+
+fn action_arguments(
     ready: &PolicyReadyActionV1,
-) -> Result<CandidateActionArguments, TrustedExecutionError> {
+) -> Result<ActionArgumentsV1, TrustedExecutionError> {
+    if let Ok(arguments) =
+        serde_json::from_value::<GroundedActionArgumentsV1>(ready.proposal.arguments.clone())
+    {
+        if arguments.schema_version != TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION {
+            return invalid("grounded action arguments schema_version must be 1");
+        }
+        arguments
+            .target
+            .validate()
+            .map_err(|error| TrustedExecutionError::Integrity(error.to_string()))?;
+        validate_operation_and_input(&arguments.operation, &arguments.input)?;
+        if arguments.target.application_pack_sha256 != ready.application_pack_sha256
+            || arguments.target.observation_id != ready.observation_id
+            || arguments.target.source_observation_hash != ready.source_observation_hash
+            || arguments.target.source_observation_sequence != ready.source_observation_sequence
+            || arguments.target.grounding_result_sha256 != ready.grounding_result_sha256
+            || arguments.target.goal_id != ready.goal_id
+            || arguments.target.plan_generation_id != ready.plan_generation_id
+            || arguments.target.semantic_target_id != ready.semantic_target_id
+            || arguments.target.selected_element_id != ready.selected_element_id
+            || arguments.target.selected_element_kind != ready.selected_element_kind
+        {
+            return integrity("grounded arguments differ from policy-ready bindings");
+        }
+        return Ok(ActionArgumentsV1::Grounded(arguments));
+    }
+
     let arguments: CandidateActionArguments =
         serde_json::from_value(ready.proposal.arguments.clone())
-            .map_err(|error| json_error("decode candidate action arguments", error))?;
+            .map_err(|error| json_error("decode action arguments", error))?;
     arguments
         .validate()
         .map_err(|error| TrustedExecutionError::Integrity(error.to_string()))?;
@@ -1332,9 +1408,28 @@ fn candidate_arguments(
         || arguments.target.element_kind != ready.selected_element_kind
         || arguments.target.capability_binding_sha256 != ready.capability_binding_sha256
     {
-        return integrity("candidate arguments differ from policy-ready bindings");
+        return integrity("fixture arguments differ from policy-ready bindings");
     }
-    Ok(arguments)
+    Ok(ActionArgumentsV1::Fixture(Box::new(arguments)))
+}
+
+fn validate_operation_and_input(
+    operation: &str,
+    input: &CandidateActionInput,
+) -> Result<(), TrustedExecutionError> {
+    validate_id(operation, "action arguments operation")?;
+    match input {
+        CandidateActionInput::SetText { text_hash }
+        | CandidateActionInput::TypeText { text_hash } => {
+            validate_hash(text_hash, "action arguments text_hash")
+        }
+        CandidateActionInput::Select { value_hash } => {
+            validate_hash(value_hash, "action arguments value_hash")
+        }
+        CandidateActionInput::Invoke
+        | CandidateActionInput::Toggle { .. }
+        | CandidateActionInput::Click => Ok(()),
+    }
 }
 
 fn validate_policy_ready(ready: &PolicyReadyActionV1) -> Result<(), TrustedExecutionError> {

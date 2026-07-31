@@ -7,7 +7,7 @@ identity:
   contract_version: 1
   build_id: plan-ranker-v1
   artifact_filename: artifacts/plan-ranker.ref
-  artifact_sha256: sha256:c23e5733970c18c53c4028bf7067b536fc1c70bcfcdfe9fcd765e50301a80867
+  artifact_sha256: sha256:6927702fbe54cb77c0e0e1ec2a41db2826bbaccba88a76d166cec33605b48b2b
   author: D2I Cognitive Module Platform
   maintainer: ksse29077-byte
 capabilities:

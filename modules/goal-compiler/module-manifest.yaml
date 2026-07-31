@@ -7,7 +7,7 @@ identity:
   contract_version: 1
   build_id: goal-compiler-v1
   artifact_filename: artifacts/goal-compiler.ref
-  artifact_sha256: sha256:17f6d475a1f5930deded0d42333def58e7d3e0e8fe69e5cdc9d81aaf2eb8194c
+  artifact_sha256: sha256:0f2e9c09488c592b3c812297df565dcddcb97da793a06321d72c01929fd06b29
   author: D2I Cognitive Module Platform
   maintainer: D2I Cognitive Module Platform
 capabilities:

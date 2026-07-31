@@ -248,6 +248,26 @@ Implemented in `products/d2i-desktop/src/cognitive_reobserve_verify.rs`:
 Adapter success and state-hash inequality never imply a passed verdict. The
 result is not Case closure and carries no retry, replan, or escalation authority.
 
+## First Complete Verified Single-Task E2E Status
+
+Implemented in `products/d2i-desktop/src/cognitive_kernel_task.rs`, the
+`d2i-kernel-e2e` runner, and repository-owned Windows fixtures:
+
+- authenticated, TTL-bound task instruction and ordered stage hash chain
+- actual out-of-process Goal Compiler, Element Grounder, and Plan Ranker
+- immutable Application Pack and two-step validated PlanGraph
+- actual UIA SetValue and Invoke through distinct policy/admission/activation
+  chains
+- independent per-action verification and terminal stability verification
+- bounded failed-first recovery, unsafe escalation, and no-mutation
+  clarification
+- final `GoalProgress::Complete`, `WorkReport`, and immutable task run record
+- deterministic normalized replay and zero process/worker/activation/payload
+  residuals
+
+The module hosts are test/evaluation transport only. Core links no standalone
+module implementation.
+
 ## Verification
 
 Passed:
@@ -263,7 +283,6 @@ cargo build --workspace --release
 
 - No natural-language model implementation.
 - No GUI implementation.
-- No KRN-500 complete Goal-to-WorkReport integration.
 - No production CognitiveExecutor-to-KRN-200 connection.
 - No external network feature.
 - No production package format or Runtime ABI change.
@@ -274,17 +293,12 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-KRN-500 - First Complete Verified Single-Task E2E`
+`D2I-WORK-100 - Role Contract v1`
 
-KRN-400 is complete with deterministic failure classification, atomic recovery
-budgets, bounded replay-safe history, a fresh-cycle decision matrix, typed
-replan/clarification/escalation artifacts, a protected durable Desktop ledger,
-restart-safe coordination, and actual failed-first/recovered-second plus
-unsafe-to-escalation Windows UIA fixtures.
+KRN-500 is complete with actual module process invocation, two real UIA action
+cycles, per-action policy and activation, independent verification, bounded
+recovery, unsafe escalation, clarification without mutation, final verified
+closure, deterministic normalized replay, and zero residual execution state.
 
-The opened E2E gate is: a failed or inconclusive action can be safely
-re-observed, retried through a wholly fresh trust chain, replanned, clarified,
-escalated, or stopped without blind replay.
-
-Do not start production module loading, Runtime ABI changes, package embedding,
-an external planner, or escalation-recipient routing as part of KRN-500.
+Track K is complete. Do not add a KRN-600 task. The next active work begins the
+Workforce Layer without implementing Work Radar or Case Queue in WORK-100.

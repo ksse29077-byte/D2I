@@ -58,3 +58,17 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/modules/check-module.ps1 `
   -ModulePath modules/goal-compiler
 ```
+
+## E2E Host Boundary
+
+`e2e-host` is test/evaluation transport for KRN-500. It reads one bounded
+Module Contract v1 invocation from stdin, calls this module's actual
+implementation once, writes one canonical result envelope, and exits. It is
+not a production loader, Core dependency, package ABI, or execution authority.
+
+## E2E Host Boundary
+
+`e2e-host` is test/evaluation transport for KRN-500. It reads one bounded
+Module Contract v1 invocation from stdin, calls this module's actual
+implementation once, writes one canonical result envelope, and exits. It is
+not a production loader, Core dependency, package ABI, or execution authority.

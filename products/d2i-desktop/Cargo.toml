@@ -6,9 +6,12 @@ license.workspace = true
 
 [dependencies]
 d2i-action-candidates = { path = "../../crates/d2i-action-candidates" }
+d2i-action-selection = { path = "../../crates/d2i-action-selection" }
 d2i-application-semantics = { path = "../../crates/d2i-application-semantics" }
 d2i-cognitive-ir = { path = "../../crates/d2i-cognitive-ir" }
 d2i-cognitive-recovery = { path = "../../crates/d2i-cognitive-recovery" }
+d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
+d2i-policy-admission = { path = "../../crates/d2i-policy-admission" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }
 d2i-windows-host = { path = "../../crates/d2i-windows-host" }
@@ -21,7 +24,6 @@ sha2.workspace = true
 uiautomation.workspace = true
 
 [dev-dependencies]
-d2i-policy-admission = { path = "../../crates/d2i-policy-admission" }
 jsonschema.workspace = true
 
 [lints]
@@ -34,3 +36,7 @@ path = "src/bin/d2i-desktop.rs"
 [[bin]]
 name = "d2i-wfp-verifier-broker"
 path = "src/bin/d2i-wfp-verifier-broker.rs"
+
+[[bin]]
+name = "d2i-kernel-e2e"
+path = "src/bin/d2i-kernel-e2e.rs"

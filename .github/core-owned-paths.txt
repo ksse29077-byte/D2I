@@ -14,6 +14,10 @@ docs/cognitive-policy-admission-v1.md
 docs/trusted-action-execution-binding-v1.md
 docs/cognitive-reobserve-verifier-v2.md
 docs/cognitive-recovery-control-v1.md
+docs/first-complete-kernel-e2e-v1.md
+docs/first-kernel-e2e-runbook.md
+docs/first-complete-kernel-e2e-v1.md
+docs/first-kernel-e2e-runbook.md
 docs/product/**
 docs/adr/**
 docs/collaboration/**
@@ -21,6 +25,8 @@ docs/cognitive-ir-v1.md
 docs/modules/**
 scripts/ci/**
 scripts/modules/**
+scripts/e2e/**
+scripts/e2e/**
 templates/cognitive-module/**
 crates/d2i-cli/tests/github_governance.rs
 schemas/cognitive/**
@@ -39,6 +45,14 @@ products/d2i-desktop/src/cognitive.rs
 products/d2i-desktop/src/trusted_execution.rs
 products/d2i-desktop/src/cognitive_reobserve_verify.rs
 products/d2i-desktop/src/cognitive_recovery.rs
+products/d2i-desktop/src/cognitive_kernel_task.rs
+products/d2i-desktop/src/bin/d2i-kernel-e2e.rs
+products/d2i-desktop/tests/support/kernel_e2e_name_save_fixture.ps1
+examples/kernel-e2e/**
+products/d2i-desktop/src/cognitive_kernel_task.rs
+products/d2i-desktop/src/bin/d2i-kernel-e2e.rs
+products/d2i-desktop/tests/support/kernel_e2e_name_save_fixture.ps1
+examples/kernel-e2e/**
 products/d2i-desktop/src/cognitive_verification_v2.rs
 products/d2i-desktop/tests/cognitive_runtime.rs
 products/d2i-desktop/tests/trusted_execution.rs

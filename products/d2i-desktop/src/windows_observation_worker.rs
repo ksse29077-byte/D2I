@@ -443,7 +443,14 @@ fn collect_web_node(
     let accessible_name_text = computed_label
         .filter(|value| !value.is_empty())
         .or(aria_label)
-        .unwrap_or_else(|| rendered_text.text.clone());
+        .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| {
+            if rendered_text.text.is_empty() {
+                format!("Unnamed {role}")
+            } else {
+                rendered_text.text.clone()
+            }
+        });
     let accessible_name =
         bounded_text(&accessible_name_text, context.limits.max_element_text_bytes);
     context.record_text(&accessible_name);
@@ -1125,7 +1132,15 @@ mod platform_ui {
         let raw_automation_id = element.get_automation_id().unwrap_or_default();
         let raw_class_name = element.get_classname().unwrap_or_default();
         let raw_framework_id = element.get_framework_id().unwrap_or_default();
-        let accessible_name = bounded_text(&raw_name, context.limits.max_element_text_bytes);
+        let accessible_name_source = if raw_name.is_empty() {
+            format!("Unnamed {control_type}")
+        } else {
+            raw_name.clone()
+        };
+        let accessible_name = bounded_text(
+            &accessible_name_source,
+            context.limits.max_element_text_bytes,
+        );
         context.record_text(&accessible_name);
         let automation_id = nonempty_bounded(&raw_automation_id, context);
         let class_name = nonempty_bounded(&raw_class_name, context);

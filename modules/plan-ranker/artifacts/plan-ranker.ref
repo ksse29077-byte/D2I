@@ -6,3 +6,4 @@ execution=in_process_rust_reference
 network=denied
 side_effect=false
 ranking_policy_version=1
+e2e_host=single_invocation_test_only

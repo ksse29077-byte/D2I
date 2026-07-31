@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "pack_id": "kernel-e2e-name-save",
+  "pack_version": "1.0.0",
+  "application_id": "d2i-winforms-kernel-e2e",
+  "display_name": "D2I Verified Name Save Fixture",
+  "supported_source_kinds": [
+    "uia"
+  ],
+  "required_target_binding": {
+    "integration_id": "windows-kernel-e2e"
+  },
+  "targets": [
+    {
+      "target_id": "employee_name_input",
+      "canonical_label": "Employee name input",
+      "aliases": [
+        "Employee name"
+      ],
+      "expected_kinds": [
+        "uia.edit"
+      ],
+      "required_terms": [],
+      "excluded_terms": [
+        "protected"
+      ],
+      "context_terms": [
+        "employee"
+      ]
+    },
+    {
+      "target_id": "save_button",
+      "canonical_label": "Save employee",
+      "aliases": [
+        "Save"
+      ],
+      "expected_kinds": [
+        "uia.button"
+      ],
+      "required_terms": [],
+      "excluded_terms": [
+        "delete"
+      ],
+      "context_terms": [
+        "employee"
+      ]
+    },
+    {
+      "target_id": "saved_name",
+      "canonical_label": "Saved name",
+      "aliases": [
+        "Committed name"
+      ],
+      "expected_kinds": [
+        "uia.edit"
+      ],
+      "required_terms": [],
+      "excluded_terms": [],
+      "context_terms": [
+        "committed"
+      ]
+    },
+    {
+      "target_id": "save_revision",
+      "canonical_label": "Save revision",
+      "aliases": [
+        "Revision"
+      ],
+      "expected_kinds": [
+        "uia.edit"
+      ],
+      "required_terms": [],
+      "excluded_terms": [],
+      "context_terms": [
+        "committed"
+      ]
+    },
+    {
+      "target_id": "save_status",
+      "canonical_label": "Save status",
+      "aliases": [
+        "Status"
+      ],
+      "expected_kinds": [
+        "uia.edit"
+      ],
+      "required_terms": [],
+      "excluded_terms": [],
+      "context_terms": [
+        "committed"
+      ]
+    },
+    {
+      "target_id": "protected_checkbox",
+      "canonical_label": "Protected checkbox",
+      "aliases": [
+        "Protected"
+      ],
+      "expected_kinds": [
+        "uia.check_box"
+      ],
+      "required_terms": [],
+      "excluded_terms": [],
+      "context_terms": [
+        "protected"
+      ]
+    }
+  ],
+  "provenance": {
+    "source_id": "kernel-e2e-name-save-source",
+    "source_sha256": "sha256:8c3217456e8c26aee403dcf4477f2c8d74cb9a6e17a2d4aa6e47564e8cc31ab7",
+    "producer": "d2i-kernel-e2e"
+  },
+  "pack_sha256": "sha256:63af89c06cb5a7b6623e1619718a9a4f3d8346d1387acb52ea339b8ad710411e"
+}

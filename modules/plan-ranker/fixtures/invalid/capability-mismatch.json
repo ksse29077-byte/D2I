@@ -9,8 +9,8 @@
                                       "module_version":  "1.0.0",
                                       "contract_version":  1,
                                       "build_id":  "plan-ranker-v1",
-                                      "artifact_sha256":  "sha256:c23e5733970c18c53c4028bf7067b536fc1c70bcfcdfe9fcd765e50301a80867",
-                                      "manifest_sha256":  "sha256:d9560e047a24be96a8f37d8f074b7e409d9528b3a4919ea729f1c3bcf31f9300"
+                                      "artifact_sha256":  "sha256:6927702fbe54cb77c0e0e1ec2a41db2826bbaccba88a76d166cec33605b48b2b",
+                                      "manifest_sha256":  "sha256:c0308825f59aa89e7a0821db8fd1849d336699418abe396634c6723587e1aa6a"
                                   },
                        "requested_capability":  "cognitive.execute-side-effect",
                        "input_schema_id":  "cognitive-plan-ranking-input-v1",

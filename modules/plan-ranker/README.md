@@ -62,3 +62,13 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 The reference implementation is development and conformance infrastructure. It
 is not connected to a production loader, package, Runtime ABI, or executor.
+
+`e2e-host` retains that boundary. It handles one bounded Module Contract v1
+invocation for KRN-500 test/evaluation, calls the actual deterministic ranker,
+returns one canonical result, and exits without gaining policy or execution
+authority.
+
+`e2e-host` retains that boundary. It handles one bounded Module Contract v1
+invocation for KRN-500 test/evaluation, calls the actual deterministic ranker,
+returns one canonical result, and exits without gaining policy or execution
+authority.

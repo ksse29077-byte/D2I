@@ -172,7 +172,9 @@ asset, completed Case, SLA, or verified cost/risk reduction.
 - `D2I-KRN-200`: Trusted Action Execution Binding v1. **Complete**
 - `D2I-KRN-300`: Reobserve and Cognitive Verifier v2. **Complete**
 - `D2I-KRN-400`: Recovery, Retry, Replan, Clarification and Escalation. **Complete**
-- `D2I-KRN-500`: First Complete Verified Single-Task E2E. **Active**
+- `D2I-KRN-500`: First Complete Verified Single-Task E2E. **Complete**
+
+**Track K is complete.**
 
 The first E2E changes and saves a name field in a local test form through Goal
 Compiler, Observation, Application Semantics, Element Grounder, Action
@@ -184,7 +186,7 @@ state.
 
 ### Track W - Autonomous Workforce Layer
 
-- `D2I-WORK-100`: Role Contract v1.
+- `D2I-WORK-100`: Role Contract v1. **First active task**
 - `D2I-WORK-200`: Work Item / Case Contract v1.
 - `D2I-WORK-300`: Work Radar and Work Intake.
 - `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership.
@@ -242,4 +244,7 @@ replan, clarification, escalation, or stop. The protected Desktop recovery
 ledger persists each authority-sensitive transition before mutation and
 restores exact budget/history state after restart.
 
-The active next task is `D2I-KRN-500`.
+KRN-500 now proves the complete authenticated task path through actual
+standalone modules, two real UIA actions, independent verification, bounded
+recovery, final goal verification, WorkReport, deterministic replay, and zero
+residual authority or process state. The active next task is `D2I-WORK-100`.

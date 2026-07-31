@@ -2387,12 +2387,30 @@ fn secret_like(value: &str) -> bool {
 fn json_contains_secret(value: &Value) -> bool {
     match value {
         Value::Object(object) => object.iter().any(|(key, child)| {
-            forbidden_key(&key.to_ascii_lowercase()) || json_contains_secret(child)
+            secret_field_key(&key.to_ascii_lowercase()) || json_contains_secret(child)
         }),
         Value::Array(values) => values.iter().any(json_contains_secret),
         Value::String(text) => secret_like(text),
         _ => false,
     }
+}
+
+fn secret_field_key(key: &str) -> bool {
+    [
+        "password",
+        "passwd",
+        "api_key",
+        "apikey",
+        "secret",
+        "access_token",
+        "refresh_token",
+        "authorization",
+        "cookie",
+        "credential",
+        "private_key",
+    ]
+    .iter()
+    .any(|marker| key.contains(marker))
 }
 
 fn invalid<T>(message: &str) -> Result<T, ActionSelectionError> {

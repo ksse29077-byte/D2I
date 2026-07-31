@@ -57,6 +57,9 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   re-observation and Verification v2. KRN-400 adds a protected durable recovery
   ledger and coordinator that persists bounded decisions before mutation,
   rejects replay, and requires wholly fresh retry trust chains.
+  KRN-500 adds the first complete authenticated single-task runtime through
+  actual standalone modules, UIA execution, independent verification, bounded
+  recovery, final goal verification, and a machine-verifiable WorkReport.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -144,6 +147,14 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 Use `scripts/modules/check-all-modules.ps1` after a Core Cognitive IR, Module
 SDK, schema, or module tooling change.
+
+Run the complete Windows Safe Execution Kernel product gate with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/e2e/run-first-kernel-e2e.ps1 `
+  -Mode All
+```
 
 ## Checks
 

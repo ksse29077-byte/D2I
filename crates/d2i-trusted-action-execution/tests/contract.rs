@@ -1,7 +1,10 @@
 use d2i_action_candidates::{
     CandidateActionArguments, CandidateActionInput, CandidateTargetBinding,
 };
-use d2i_action_selection::{canonical_sha256 as selection_sha256, PolicyReadyActionV1};
+use d2i_action_selection::{
+    canonical_sha256 as selection_sha256, GroundedActionArgumentsV1, GroundedTargetBindingV1,
+    PolicyReadyActionV1,
+};
 use d2i_cognitive_ir::{
     ActionProposal, CognitiveRiskClass, ComparisonOp, ConfirmationPolicy, ConfirmationRequirement,
     GoalSpec, ObservableElement, ObservationSnapshot, ObservationSourceKind, Postcondition,
@@ -14,9 +17,9 @@ use d2i_policy_admission::{
     TrustedPolicySnapshotV1, TrustedPolicyStateV1, POLICY_ADMISSION_SCHEMA_VERSION,
 };
 use d2i_trusted_action_execution::{
-    canonical_sha256, expected_input, operation_kind, parse_json_strict, sha256_bytes,
-    AdapterKindV1, BoundDesktopActionV1, InputMaterialKindV1, InputMaterialProofV1,
-    PreparedBoundActionV1, SecretClassificationV1, TargetResolutionProofV1,
+    action_input, canonical_sha256, expected_input, grounded_target_binding_sha256, operation_kind,
+    parse_json_strict, sha256_bytes, AdapterKindV1, BoundDesktopActionV1, InputMaterialKindV1,
+    InputMaterialProofV1, PreparedBoundActionV1, SecretClassificationV1, TargetResolutionProofV1,
     TrustedActionExecutionReceiptV1, TrustedAdapterOutcomeStatusV1, TrustedDesktopOperationKindV1,
     TrustedExecutionBindingRequestV1, TrustedExecutionSessionV1, TrustedExecutionStatusV1,
     TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
@@ -762,6 +765,9 @@ fn binding_request_rejects_every_lifecycle_substitution_and_stale_state() {
         Box::new(|value| value.policy_ready_action.semantic_target_id = "profile.other".to_owned()),
         Box::new(|value| value.policy_ready_action.selected_element_id = "element-2".to_owned()),
         Box::new(|value| value.policy_ready_action.application_pack_sha256 = digest("pack-2")),
+        Box::new(|value| {
+            value.expected_grounded_target_binding_sha256 = digest("grounded-target-2")
+        }),
         Box::new(|value| value.expected_policy_decision_sha256 = digest("decision-2")),
         Box::new(|value| value.expected_activation_admission_sha256 = digest("admission-2")),
         Box::new(|value| value.platform_activation.integration_id = "desktop-other".to_owned()),
@@ -786,6 +792,62 @@ fn binding_request_rejects_every_lifecycle_substitution_and_stale_state() {
         .request
         .validate_source_observation(&substituted_observation)
         .is_err());
+}
+
+#[test]
+fn native_grounded_action_arguments_are_bound_without_weakening_fixture_compatibility() {
+    for kind in [
+        OperationFixture::UiaInvoke,
+        OperationFixture::UiaSetValue,
+        OperationFixture::UiaToggle,
+        OperationFixture::WebClick,
+        OperationFixture::WebType,
+        OperationFixture::WebSelect,
+    ] {
+        let observation = observation(kind);
+        let mut ready = policy_ready(kind, &observation);
+        let source_kind = match kind.adapter() {
+            AdapterKindV1::Uia => ObservationSourceKind::Uia,
+            AdapterKindV1::WebDriver => ObservationSourceKind::WebDriver,
+        };
+        let mut target = GroundedTargetBindingV1 {
+            schema_version: 1,
+            application_pack_sha256: ready.application_pack_sha256.clone(),
+            observation_id: ready.observation_id.clone(),
+            source_observation_hash: ready.source_observation_hash.clone(),
+            source_observation_sequence: ready.source_observation_sequence,
+            grounding_result_sha256: ready.grounding_result_sha256.clone(),
+            goal_id: ready.goal_id.clone(),
+            plan_generation_id: ready.plan_generation_id.clone(),
+            semantic_target_id: ready.semantic_target_id.clone(),
+            selected_element_id: ready.selected_element_id.clone(),
+            selected_element_kind: ready.selected_element_kind.clone(),
+            source_kind,
+            trust_labels: BTreeSet::from([TrustLabel::ObservedUiState]),
+            evidence_ids: vec!["actual-grounding-result".to_owned()],
+            binding_sha256: empty_hash(),
+        };
+        target.binding_sha256 = ok(target.compute_binding_sha256());
+        ok(target.validate());
+        let arguments = GroundedActionArgumentsV1 {
+            schema_version: 1,
+            operation: kind.capability().to_owned(),
+            target: target.clone(),
+            input: kind.input(),
+        };
+        ready.proposal.arguments = ok(serde_json::to_value(arguments));
+
+        assert_eq!(ok(operation_kind(&ready)), kind.operation());
+        assert_eq!(ok(action_input(&ready)), kind.input());
+        assert_eq!(
+            ok(grounded_target_binding_sha256(&ready)),
+            target.binding_sha256
+        );
+
+        let mut changed = ready;
+        changed.proposal.arguments["target"]["binding_sha256"] = json!(digest("substituted"));
+        assert!(operation_kind(&changed).is_err());
+    }
 }
 
 #[test]

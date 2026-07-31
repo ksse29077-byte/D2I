@@ -77,3 +77,17 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/modules/check-module.ps1 `
   -ModulePath modules/element-grounder
 ```
+
+## E2E Host Boundary
+
+`e2e-host` is a one-invocation test/evaluation transport used by KRN-500. It
+exposes the actual module implementation only through bounded Module Contract
+v1 JSON. It has no adapter, UI, network, policy, activation, or production
+loader authority.
+
+## E2E Host Boundary
+
+`e2e-host` is a one-invocation test/evaluation transport used by KRN-500. It
+exposes the actual module implementation only through bounded Module Contract
+v1 JSON. It has no adapter, UI, network, policy, activation, or production
+loader authority.

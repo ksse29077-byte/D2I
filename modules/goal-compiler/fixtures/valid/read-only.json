@@ -10,8 +10,8 @@
       "module_version": "1.0.0",
       "contract_version": 1,
       "build_id": "goal-compiler-v1",
-      "artifact_sha256": "sha256:17f6d475a1f5930deded0d42333def58e7d3e0e8fe69e5cdc9d81aaf2eb8194c",
-      "manifest_sha256": "sha256:2eaab21fe32fcffd0d8814ccaab7db320d50c6568b6a861c90e6e8e0129212d8"
+      "artifact_sha256": "sha256:0f2e9c09488c592b3c812297df565dcddcb97da793a06321d72c01929fd06b29",
+      "manifest_sha256": "sha256:781ba48f6dbfa6b31ff02c46db1a41c9ea2c120075a8c2ec394a14f2d0c67af7"
     },
     "requested_capability": "cognitive.goal-compile",
     "input_schema_id": "goal-compilation-input-v1",

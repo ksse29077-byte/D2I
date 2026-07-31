@@ -186,6 +186,17 @@ Every mutating retry must create new proposal, policy, admission, activation,
 execution, re-observation, and verification evidence; unsafe outcomes can only
 escalate or stop.
 
+KRN-500 closes the first complete single-task product path in `d2i-desktop`.
+`CognitiveKernelTaskRuntimeV1` chains an authenticated instruction, actual
+standalone Goal Compiler/Element Grounder/Plan Ranker process invocations,
+actual UIA observation and one-shot actions, per-action policy and activation,
+independent verification, bounded recovery, final stability verification,
+`WorkReport`, and `KernelTaskRunRecordV1`. Module implementations remain
+outside the root dependency graph and communicate through one bounded Module
+Contract v1 JSON exchange using test/evaluation-only hosts. Task completion is
+permitted only after final criteria and protected invariants pass. This closes
+Track K but does not implement Role or Case autonomy.
+
 Phase 6 adds:
 
 ```text

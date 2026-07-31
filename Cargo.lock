@@ -322,9 +322,11 @@ name = "d2i-desktop"
 version = "0.9.0"
 dependencies = [
  "d2i-action-candidates",
+ "d2i-action-selection",
  "d2i-application-semantics",
  "d2i-cognitive-ir",
  "d2i-cognitive-recovery",
+ "d2i-module-sdk",
  "d2i-policy-admission",
  "d2i-runtime-api",
  "d2i-trusted-action-execution",

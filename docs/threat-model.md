@@ -356,3 +356,25 @@ budget, truncation, or audit failure stops before mutation. Remaining risks
 include external audit-chain anchoring, production escalation-recipient
 routing, and user-facing clarification transport; those do not grant fallback
 execution authority.
+
+## First Complete Single-Task Kernel E2E
+
+KRN-500 addresses cross-boundary substitution, fake module output, stage
+skipping, false task completion, transport nondeterminism, and residual
+authority across the complete task. Module identities, manifests, schemas,
+host binaries, resource bounds, and invocation IDs are pinned. Core invokes
+the actual standalone implementations only through bounded one-shot Module
+Contract v1 processes and never links them.
+
+Every action has a new policy admission and Windows activation. Verification
+uses a separate read-only activation after the mutation worker exits. Final
+completion additionally requires a newer stability observation, all goal
+criteria and protected invariants passed, complete goal progress, and an exact
+WorkReport hash. Unsafe outcomes cannot retry; clarification cannot activate
+or mutate. Core artifacts reject raw locators, payloads, credentials, and
+absolute paths. Terminal cleanup requires zero module host, worker, app,
+activation, payload, and temporary-state residuals.
+
+Remaining risk is intentionally outside Track K: KRN-500 is one fixed local
+fixture task and does not establish persistent Role/Case ownership, general
+module loading, arbitrary application control, or production model planning.

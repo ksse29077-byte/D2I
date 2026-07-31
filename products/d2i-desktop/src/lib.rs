@@ -4,6 +4,7 @@ mod adapter;
 mod approval;
 mod audit;
 mod cognitive;
+mod cognitive_kernel_task;
 mod cognitive_recovery;
 mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
@@ -48,6 +49,14 @@ pub use cognitive::{
     PostconditionVerifier, Provenance, RecoveryDecision, RecoveryPolicy, RedactionMetadata,
     Reversibility, TrustLabel, VerificationResult, WorkReport, WorldFact, WorldFactKind,
     WorldState, WorldStateReducer,
+};
+pub use cognitive_kernel_task::{
+    parse_authenticated_task_instruction_v1, ActionCycleRecordV1, AuthenticatedTaskInstructionV1,
+    CognitiveKernelTaskRuntimeV1, FinalCriterionResultV1, FinalGoalVerificationV1,
+    FinalVerificationVerdictV1, KernelFinalOutcomeV1, KernelTaskRunRecordV1,
+    KernelTaskRuntimeStateV1, KernelTaskStageRecordV1, KernelTaskStageStatusV1,
+    ModuleHostBindingV1, ModuleInvocationCoordinatorV1, ModuleInvocationRecordV1,
+    ModuleInvocationTerminalStatusV1, KERNEL_TASK_RUNTIME_BUILD_ID, KERNEL_TASK_SCHEMA_VERSION,
 };
 pub use cognitive_recovery::{
     initialize_recovery_ledger, verify_recovery_ledger, CognitiveRecoveryCoordinatorStateV1,
@@ -109,12 +118,12 @@ pub use d2i_cognitive_recovery::{
 };
 pub use d2i_trusted_action_execution::{
     canonical_sha256 as trusted_execution_sha256, expected_input as trusted_expected_input,
-    operation_kind as trusted_operation_kind, BoundDesktopActionV1, InputMaterialKindV1,
-    InputMaterialProofV1, PolicyReadyActionV1, PreparedBoundActionV1, SecretClassificationV1,
-    TargetResolutionProofV1, TrustedActionExecutionReceiptV1, TrustedAdapterOutcomeStatusV1,
-    TrustedDesktopCapabilityV1, TrustedDesktopOperationKindV1, TrustedExecutionBindingRequestV1,
-    TrustedExecutionError, TrustedExecutionSessionV1, TrustedExecutionStatusV1,
-    TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
+    grounded_target_binding_sha256, operation_kind as trusted_operation_kind, BoundDesktopActionV1,
+    InputMaterialKindV1, InputMaterialProofV1, PolicyReadyActionV1, PreparedBoundActionV1,
+    SecretClassificationV1, TargetResolutionProofV1, TrustedActionExecutionReceiptV1,
+    TrustedAdapterOutcomeStatusV1, TrustedDesktopCapabilityV1, TrustedDesktopOperationKindV1,
+    TrustedExecutionBindingRequestV1, TrustedExecutionError, TrustedExecutionSessionV1,
+    TrustedExecutionStatusV1, TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
     TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
 pub use executor::{DesktopActionPreparation, DesktopExecutor};

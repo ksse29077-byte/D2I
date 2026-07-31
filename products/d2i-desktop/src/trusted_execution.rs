@@ -8,15 +8,15 @@ use crate::{
     WindowsDeploymentAuditStatus, WindowsUiAutomationAdapter, WindowsUiaObservationTarget,
     WindowsWebDriverAdapter, WindowsWebObservationTarget,
 };
-use d2i_action_candidates::{CandidateActionArguments, CandidateActionInput};
+use d2i_action_candidates::CandidateActionInput;
 use d2i_cognitive_ir::{ObservationSnapshot, ObservationSourceKind};
 use d2i_trusted_action_execution::{
-    canonical_sha256, expected_input, operation_kind, sha256_bytes as canonical_sha256_bytes,
-    AdapterKindV1, BoundDesktopActionV1, InputMaterialProofV1, PreparedBoundActionV1,
-    SecretClassificationV1, TargetResolutionProofV1, TrustedActionExecutionReceiptV1,
-    TrustedAdapterOutcomeStatusV1, TrustedDesktopOperationKindV1, TrustedExecutionBindingRequestV1,
-    TrustedExecutionStatusV1, TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
-    TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+    action_input, canonical_sha256, expected_input, operation_kind,
+    sha256_bytes as canonical_sha256_bytes, AdapterKindV1, BoundDesktopActionV1,
+    InputMaterialProofV1, PreparedBoundActionV1, SecretClassificationV1, TargetResolutionProofV1,
+    TrustedActionExecutionReceiptV1, TrustedAdapterOutcomeStatusV1, TrustedDesktopOperationKindV1,
+    TrustedExecutionBindingRequestV1, TrustedExecutionStatusV1, TrustedPlatformActivationV1,
+    TrustedTargetSourceKindV1, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
 use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
@@ -1423,10 +1423,8 @@ fn desktop_operation(
     target: &ResolvedTargetMaterial,
     input: Option<&InputMaterialProofV1>,
 ) -> Result<DesktopOperation, DesktopError> {
-    let arguments: CandidateActionArguments =
-        serde_json::from_value(request.policy_ready_action.proposal.arguments.clone())
-            .map_err(|error| DesktopError::Json(error.to_string()))?;
-    let operation = match (operation, target, &arguments.input, input) {
+    let action_input = action_input(&request.policy_ready_action).map_err(contract_error)?;
+    let operation = match (operation, target, &action_input, input) {
         (
             TrustedDesktopOperationKindV1::UiaInvoke,
             ResolvedTargetMaterial::Uia {

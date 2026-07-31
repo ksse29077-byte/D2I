@@ -683,6 +683,27 @@ fn grounding_adapter_rejects_redacted_status_and_secret_elements_but_ignores_pro
     ));
     assert!(valid.is_some(), "unselected prompt injection remains data");
 
+    let mut operational = base_observation.clone();
+    operational.observable_elements[1].value = json!({
+        "enabled": true,
+        "locator_hints": {
+            "automation_id": "submit-button",
+            "control_type": "button"
+        }
+    });
+    operational.state_hash = ok(operational.compute_state_hash());
+    let mut operational_result = grounding(&operational);
+    operational_result.source_observation_hash = operational.state_hash.clone();
+    assert!(ok(validate_element_grounding_result(
+        &pack,
+        &operational,
+        "submit",
+        "goal-1",
+        "plan-1",
+        &operational_result,
+    ))
+    .is_some());
+
     let mut status_result = base_result;
     status_result.selected_element_id = Some("observation.status".to_owned());
     status_result.candidates = vec![ElementGroundingCandidateV1 {

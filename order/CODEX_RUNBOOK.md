@@ -13,7 +13,9 @@ Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure
 - `D2I-KRN-200` Trusted Action Execution Binding v1 - **complete**
 - `D2I-KRN-300` Reobserve and Cognitive Verifier v2 - **complete**
 - `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation - **complete**
-- `D2I-KRN-500` First Complete Verified Single-Task E2E - **active**
+- `D2I-KRN-500` First Complete Verified Single-Task E2E - **complete**
+
+Track K is complete. Do not create KRN-600.
 
 첫 E2E는 로컬 테스트 폼의 이름 필드 변경과 저장이다. stale target
 거부, 정확한 element, state hash 변화, postcondition, audit evidence,
@@ -21,7 +23,7 @@ Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure
 
 ## Track W - Autonomous Workforce Layer
 
-- `D2I-WORK-100` Role Contract v1
+- `D2I-WORK-100` Role Contract v1 - **active**
 - `D2I-WORK-200` Work Item / Case Contract v1
 - `D2I-WORK-300` Work Radar and Work Intake
 - `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
@@ -48,7 +50,9 @@ force 없이 `git push origin HEAD:main`한다. PR, 승인 대기, 웹 병합은
 `D2I-KRN-400` completes deterministic bounded recovery over KRN-100 through
 KRN-300 evidence. It persists budget and replay state before mutation and
 requires a wholly fresh trust chain for retry. The next prompt is
-`D2I-KRN-500`; it assembles the first complete verified single-task E2E.
+`D2I-KRN-500` now assembles the first complete verified single-task E2E.
+The next prompt is `D2I-WORK-100`; it defines Role Contract v1 without starting
+Work Radar or Case Queue.
 
 ---
 
