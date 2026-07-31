@@ -168,8 +168,8 @@ asset, completed Case, SLA, or verified cost/risk reduction.
 
 ### Track K - Safe Execution Kernel Closure
 
-- `D2I-KRN-100`: Cognitive Policy Admission v1.
-- `D2I-KRN-200`: Trusted Action Execution Binding v1.
+- `D2I-KRN-100`: Cognitive Policy Admission v1. **Complete**
+- `D2I-KRN-200`: Trusted Action Execution Binding v1. **Active**
 - `D2I-KRN-300`: Reobserve and Cognitive Verifier v2.
 - `D2I-KRN-400`: Recovery, Retry, Replan, Clarification and Escalation.
 - `D2I-KRN-500`: First Complete Verified Single-Task E2E.
@@ -217,7 +217,8 @@ packages, or move physical emergency control into the Cognitive Core.
 
 ## 20. Current Technical Baseline
 
-At baseline commit `866a53926016824f2664dfab4e9bc600fade1cc6`, D2I has
+At the pre-KRN-100 baseline commit
+`866a53926016824f2664dfab4e9bc600fade1cc6`, D2I has
 Cognitive IR v1, deterministic model-free CognitiveExecutor, Module Contract
 v1, Module SDK and Conformance Suite, Repository Decoupling v1, Windows trust
 and activation/WFP/audit foundations, read-only UIA/Web Observation Plane, Goal
@@ -225,5 +226,7 @@ Compiler, Application Semantics v1, Element Grounder v1, Action Candidate
 Provider v1, Plan Ranker v1, and Cognitive Action Selection Pipeline v1.
 
 The terminal `PolicyReadyActionV1` contains no policy decision, confirmation,
-activation, adapter authority, credential, or raw locator. The active task is
-`D2I-KRN-100`; its successor is `D2I-KRN-200`.
+activation, adapter authority, credential, or raw locator. Cognitive Policy
+Admission v1 now resolves delegated authority, trusted policy, bounded
+confirmation, and activation eligibility without creating execution authority.
+The active next task is `D2I-KRN-200`.

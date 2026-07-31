@@ -19,6 +19,7 @@ sha2.workspace = true
 uiautomation.workspace = true
 
 [dev-dependencies]
+d2i-policy-admission = { path = "../../crates/d2i-policy-admission" }
 jsonschema.workspace = true
 
 [lints]

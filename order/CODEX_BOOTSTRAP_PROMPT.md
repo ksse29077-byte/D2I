@@ -24,8 +24,8 @@ git worktree list
 6. 의미 충돌이 있을 때만 push를 중단하고 정확한 충돌을 보고한다.
 7. 완료 후 정확한 다음 작업을 기록하되 시작하지 않는다.
 
-현재 active task는 `D2I-KRN-100 - Cognitive Policy Admission v1`이다.
-완료되면 다음 작업은 `D2I-KRN-200 - Trusted Action Execution Binding
+`D2I-KRN-100 - Cognitive Policy Admission v1`은 완료됐다. 현재 첫
+미완료 active task는 `D2I-KRN-200 - Trusted Action Execution Binding
 v1`이다.
 
 ---

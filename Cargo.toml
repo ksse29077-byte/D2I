@@ -15,6 +15,7 @@ members = [
     "crates/d2i-application-semantics",
     "crates/d2i-action-candidates",
     "crates/d2i-action-selection",
+    "crates/d2i-policy-admission",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

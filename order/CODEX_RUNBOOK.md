@@ -9,8 +9,8 @@ Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure
 
 ## Track K - Safe Execution Kernel Closure
 
-- `D2I-KRN-100` Cognitive Policy Admission v1 - **active**
-- `D2I-KRN-200` Trusted Action Execution Binding v1
+- `D2I-KRN-100` Cognitive Policy Admission v1 - **complete**
+- `D2I-KRN-200` Trusted Action Execution Binding v1 - **active**
 - `D2I-KRN-300` Reobserve and Cognitive Verifier v2
 - `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
 - `D2I-KRN-500` First Complete Verified Single-Task E2E

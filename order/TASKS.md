@@ -2,15 +2,17 @@
 
 ## Current Completed Baseline
 
-기준 commit `866a53926016824f2664dfab4e9bc600fade1cc6`까지 Cognitive IR
+작업 시작 기준 commit `866a53926016824f2664dfab4e9bc600fade1cc6`까지 Cognitive IR
 v1, deterministic CognitiveExecutor, Module Contract/SDK/Conformance,
 Repository Decoupling, Windows trust/activation/WFP/audit, read-only
 UIA/Web Observation Plane, Goal Compiler, Application Semantics, Element
 Grounder, Action Candidate Provider, Plan Ranker, Cognitive Action Selection
 Pipeline이 완료됐다.
 
-`PolicyReadyActionV1`은 policy, confirmation, activation, adapter execution
-authority를 포함하지 않는다.
+`D2I-KRN-100` Cognitive Policy Admission v1도 완료됐다.
+`PolicyReadyActionV1`, `PolicyDecisionV1`, confirmation, eligibility,
+`CognitiveActivationAdmissionV1` 어느 것도 adapter execution authority를
+포함하지 않는다.
 
 ## Human Dependency Gate
 
@@ -25,8 +27,8 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 
 ## Track K - Safe Execution Kernel Closure
 
-- [ ] `D2I-KRN-100` Cognitive Policy Admission v1 - **first active task**
-- [ ] `D2I-KRN-200` Trusted Action Execution Binding v1
+- [x] `D2I-KRN-100` Cognitive Policy Admission v1
+- [ ] `D2I-KRN-200` Trusted Action Execution Binding v1 - **first active task**
 - [ ] `D2I-KRN-300` Reobserve and Cognitive Verifier v2
 - [ ] `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
 - [ ] `D2I-KRN-500` First Complete Verified Single-Task E2E

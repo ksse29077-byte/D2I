@@ -25,14 +25,16 @@ Role Contract -> Work Radar -> Work Intake -> Case/Work Queue
 -> Exception Escalation -> Role-level Report
 ```
 
-현재 완료 기준선은 Cognitive IR v1, model-free CognitiveExecutor,
+이번 작업 시작 기준선
+`866a53926016824f2664dfab4e9bc600fade1cc6`까지의 완료 범위는 Cognitive
+IR v1, model-free CognitiveExecutor,
 Module Contract/SDK/Conformance, Repository Decoupling, Windows
 trust/activation/WFP/audit, read-only UIA/Web Observation Plane, Goal
 Compiler, Application Semantics v1, Element Grounder v1, Action Candidate
 Provider v1, Plan Ranker v1, Cognitive Action Selection Pipeline v1이다.
-기준 commit은 `866a53926016824f2664dfab4e9bc600fade1cc6`이다.
-
-현재 active task는 `D2I-KRN-100 - Cognitive Policy Admission v1`이다.
+`D2I-KRN-100 - Cognitive Policy Admission v1`도 additive Core 경계로
+완료됐다. 현재 active next task는
+`D2I-KRN-200 - Trusted Action Execution Binding v1`이다.
 기존 C0 및 초기 Cognitive Phase 프롬프트는 historical reference이며
 active prompt가 아니다.
 
