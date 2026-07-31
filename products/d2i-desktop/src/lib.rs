@@ -56,6 +56,12 @@ pub use contract::{
     BrowserInteraction, DesktopActionIntent, DesktopCapability, DesktopOperation, RiskClass,
     UiInteraction, WindowIdentity,
 };
+pub use d2i_action_candidates::{
+    bridge_fixture_action_candidate, ActionCandidateBridgeRequest, ActionCandidateError,
+    ActionCapabilityBinding, CandidateActionArguments, CandidateActionInput, CandidateActionKind,
+    CandidateTargetBinding, CapabilityBoundActionProposal, ACTION_CANDIDATE_PROVIDER_V1_SCHEMA,
+    ACTION_CANDIDATE_SCHEMA_VERSION,
+};
 pub use d2i_application_semantics::{
     bridge_observation_fixture, build_element_grounder_payload, ApplicationPack,
     ApplicationPackProvenance, ApplicationSemanticTarget, ApplicationSemanticsError,

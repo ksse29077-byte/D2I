@@ -1,0 +1,756 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/cognitive/action-candidate-provider-v1.schema.json",
+  "title": "D2I Action Candidate Provider Contract v1",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/action_capability_binding"
+    },
+    {
+      "$ref": "#/$defs/action_candidate_bridge_request"
+    },
+    {
+      "$ref": "#/$defs/capability_bound_action_proposal"
+    }
+  ],
+  "$defs": {
+    "version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,127}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "source_kind": {
+      "enum": [
+        "uia",
+        "web_driver"
+      ]
+    },
+    "risk": {
+      "enum": [
+        "read_only",
+        "reversible",
+        "business_state_change",
+        "high_criticality"
+      ]
+    },
+    "confirmation_requirement": {
+      "enum": [
+        "none",
+        "required",
+        "unsupported_irreversible"
+      ]
+    },
+    "reversibility": {
+      "enum": [
+        "reversible",
+        "irreversible"
+      ]
+    },
+    "comparison_op": {
+      "enum": [
+        "equals",
+        "not_equals",
+        "contains",
+        "exists",
+        "greater_or_equal",
+        "less_or_equal"
+      ]
+    },
+    "action_kind": {
+      "enum": [
+        "invoke",
+        "set_text",
+        "toggle",
+        "click",
+        "type_text",
+        "select"
+      ]
+    },
+    "id_array": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "string_array": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    },
+    "capability_descriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "operation",
+        "risk_class",
+        "reversible",
+        "confirmation_requirement",
+        "retry_limit"
+      ],
+      "properties": {
+        "capability_id": {
+          "$ref": "#/$defs/id"
+        },
+        "operation": {
+          "$ref": "#/$defs/id"
+        },
+        "risk_class": {
+          "$ref": "#/$defs/risk"
+        },
+        "reversible": {
+          "const": true
+        },
+        "confirmation_requirement": {
+          "enum": [
+            "none",
+            "required"
+          ]
+        },
+        "retry_limit": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "action_capability_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "binding_id",
+        "application_pack_sha256",
+        "semantic_target_id",
+        "source_kind",
+        "allowed_element_kinds",
+        "action_kind",
+        "capability",
+        "binding_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/version"
+        },
+        "binding_id": {
+          "$ref": "#/$defs/id"
+        },
+        "application_pack_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "semantic_target_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_kind": {
+          "$ref": "#/$defs/source_kind"
+        },
+        "allowed_element_kinds": {
+          "$ref": "#/$defs/id_array"
+        },
+        "action_kind": {
+          "$ref": "#/$defs/action_kind"
+        },
+        "capability": {
+          "$ref": "#/$defs/capability_descriptor"
+        },
+        "binding_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "enum": [
+                  "invoke",
+                  "set_text",
+                  "toggle"
+                ]
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_kind": {
+                "const": "uia"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "source_kind": {
+                "const": "web_driver"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "const": "invoke"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "capability": {
+                "properties": {
+                  "operation": {
+                    "const": "uia.invoke"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "const": "set_text"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "capability": {
+                "properties": {
+                  "operation": {
+                    "const": "uia.set_value"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "const": "toggle"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "capability": {
+                "properties": {
+                  "operation": {
+                    "const": "uia.toggle"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "const": "click"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "capability": {
+                "properties": {
+                  "operation": {
+                    "const": "webdriver.click"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "const": "type_text"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "capability": {
+                "properties": {
+                  "operation": {
+                    "const": "webdriver.type"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action_kind": {
+                "const": "select"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "capability": {
+                "properties": {
+                  "operation": {
+                    "const": "webdriver.select"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "action_input": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "invoke"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text_hash"
+          ],
+          "properties": {
+            "kind": {
+              "const": "set_text"
+            },
+            "text_hash": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "desired"
+          ],
+          "properties": {
+            "kind": {
+              "const": "toggle"
+            },
+            "desired": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "const": "click"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text_hash"
+          ],
+          "properties": {
+            "kind": {
+              "const": "type_text"
+            },
+            "text_hash": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value_hash"
+          ],
+          "properties": {
+            "kind": {
+              "const": "select"
+            },
+            "value_hash": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        }
+      ]
+    },
+    "postcondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_state",
+        "op",
+        "expected_value",
+        "required",
+        "timeout_ms"
+      ],
+      "properties": {
+        "target_state": {
+          "$ref": "#/$defs/id"
+        },
+        "op": {
+          "$ref": "#/$defs/comparison_op"
+        },
+        "expected_value": true,
+        "required": {
+          "type": "boolean"
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 60000
+        }
+      }
+    },
+    "optional_conditions": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/postcondition"
+      }
+    },
+    "required_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/postcondition"
+      }
+    },
+    "action_candidate_bridge_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "application_pack_sha256",
+        "observation_bridge_sha256",
+        "grounding_case_id",
+        "capability_binding_sha256",
+        "goal_id",
+        "world_state_id",
+        "plan_generation_id",
+        "input",
+        "preconditions",
+        "expected_postconditions",
+        "confidence"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/version"
+        },
+        "application_pack_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "observation_bridge_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "grounding_case_id": {
+          "$ref": "#/$defs/id"
+        },
+        "capability_binding_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "goal_id": {
+          "$ref": "#/$defs/id"
+        },
+        "world_state_id": {
+          "$ref": "#/$defs/id"
+        },
+        "plan_generation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "input": {
+          "$ref": "#/$defs/action_input"
+        },
+        "preconditions": {
+          "$ref": "#/$defs/optional_conditions"
+        },
+        "expected_postconditions": {
+          "$ref": "#/$defs/required_conditions"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "candidate_target_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "application_pack_sha256",
+        "observation_bridge_sha256",
+        "observation_id",
+        "source_observation_hash",
+        "source_observation_sequence",
+        "grounding_case_id",
+        "semantic_target_id",
+        "element_id",
+        "element_kind",
+        "capability_binding_sha256"
+      ],
+      "properties": {
+        "application_pack_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "observation_bridge_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "observation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_observation_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "source_observation_sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "grounding_case_id": {
+          "$ref": "#/$defs/id"
+        },
+        "semantic_target_id": {
+          "$ref": "#/$defs/id"
+        },
+        "element_id": {
+          "$ref": "#/$defs/id"
+        },
+        "element_kind": {
+          "$ref": "#/$defs/id"
+        },
+        "capability_binding_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "candidate_action_arguments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "operation",
+        "target",
+        "input"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/version"
+        },
+        "operation": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "$ref": "#/$defs/candidate_target_binding"
+        },
+        "input": {
+          "$ref": "#/$defs/action_input"
+        }
+      }
+    },
+    "action_proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "proposal_id",
+        "goal_id",
+        "plan_generation_id",
+        "source_observation_hash",
+        "capability_id",
+        "semantic_target",
+        "arguments",
+        "preconditions",
+        "expected_postconditions",
+        "risk",
+        "reversibility",
+        "confirmation_requirement",
+        "confidence",
+        "evidence",
+        "valid_until_sequence"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/version"
+        },
+        "proposal_id": {
+          "$ref": "#/$defs/id"
+        },
+        "goal_id": {
+          "$ref": "#/$defs/id"
+        },
+        "plan_generation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_observation_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "capability_id": {
+          "$ref": "#/$defs/id"
+        },
+        "semantic_target": {
+          "$ref": "#/$defs/id"
+        },
+        "arguments": {
+          "$ref": "#/$defs/candidate_action_arguments"
+        },
+        "preconditions": {
+          "$ref": "#/$defs/optional_conditions"
+        },
+        "expected_postconditions": {
+          "$ref": "#/$defs/required_conditions"
+        },
+        "risk": {
+          "$ref": "#/$defs/risk"
+        },
+        "reversibility": {
+          "const": "reversible"
+        },
+        "confirmation_requirement": {
+          "enum": [
+            "none",
+            "required"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/string_array"
+        },
+        "valid_until_sequence": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "capability_bound_action_proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "application_pack_sha256",
+        "observation_bridge_sha256",
+        "observation_id",
+        "source_observation_sequence",
+        "grounding_case_id",
+        "semantic_target_id",
+        "selected_element_id",
+        "world_state_id",
+        "capability_binding",
+        "proposal",
+        "proposal_sha256",
+        "bridge_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/version"
+        },
+        "application_pack_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "observation_bridge_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "observation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_observation_sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "grounding_case_id": {
+          "$ref": "#/$defs/id"
+        },
+        "semantic_target_id": {
+          "$ref": "#/$defs/id"
+        },
+        "selected_element_id": {
+          "$ref": "#/$defs/id"
+        },
+        "world_state_id": {
+          "$ref": "#/$defs/id"
+        },
+        "capability_binding": {
+          "$ref": "#/$defs/action_capability_binding"
+        },
+        "proposal": {
+          "$ref": "#/$defs/action_proposal"
+        },
+        "proposal_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "bridge_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    }
+  }
+}

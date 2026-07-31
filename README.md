@@ -35,6 +35,8 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   builder, offline evaluation gates, and signed promotion ledger.
 - `crates/d2i-application-semantics`: immutable application packs and
   deterministic UIA/Web observation-to-Element-Grounder payload bridges.
+- `crates/d2i-action-candidates`: sealed semantic-target/capability bindings
+  and deterministic fixture bridges to Cognitive IR v1 `ActionProposal`.
 - `products/d2i-embodied`: separate robot integration contracts, simulation
   replay, safety-gated hardware boundary, robot memory, and fleet promotion.
 - `products/d2i-desktop`: separate PC autonomy contracts, capability policy,

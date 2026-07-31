@@ -221,6 +221,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "d2i-action-candidates"
+version = "0.9.0"
+dependencies = [
+ "d2i-application-semantics",
+ "d2i-cognitive-ir",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "d2i-application-semantics"
 version = "0.9.0"
 dependencies = [
@@ -285,6 +297,7 @@ dependencies = [
 name = "d2i-desktop"
 version = "0.9.0"
 dependencies = [
+ "d2i-action-candidates",
  "d2i-application-semantics",
  "d2i-cognitive-ir",
  "d2i-runtime-api",

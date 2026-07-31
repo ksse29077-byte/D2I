@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+d2i-action-candidates = { path = "../../crates/d2i-action-candidates" }
 d2i-application-semantics = { path = "../../crates/d2i-application-semantics" }
 d2i-cognitive-ir = { path = "../../crates/d2i-cognitive-ir" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }

@@ -147,6 +147,27 @@ Cognitive IR v1, Module Contract v1, Module SDK, Element Grounder v1, package
 data, Runtime ABI, Windows observation schemas, and action execution remain
 unchanged.
 
+## Action Candidate Provider v1 Status
+
+Implemented in `crates/d2i-action-candidates`:
+
+- sealed semantic-target to `CapabilityDescriptor` bindings
+- exact UIA/Web source, observed-kind, operation, Registry, and current plan
+  node admission
+- closed invoke/set-text/toggle/click/type/select inputs with hash-only text
+  values
+- deterministic fixture bridge to the existing Cognitive IR v1
+  `ActionProposal`
+- source-observation-sequence validity, safe identifier/hash evidence, and
+  canonical binding/proposal/bridge hashes
+- Cognitive IR schema drift, deterministic replay, stale, tamper,
+  unsupported capability, secret, untrusted-content, and locator-injection
+  tests
+
+Cognitive IR v1, `ActionCandidateProvider`, Module Contract v1, Module SDK,
+Application Semantics v1, package data, Runtime ABI, policy, activation,
+approval, and action execution remain unchanged.
+
 ## Verification
 
 Passed:
@@ -173,8 +194,8 @@ cargo build --workspace --release
 
 ## Next Task
 
-`Action Candidate Provider v1 계약 검토 및 semantic target →
-capability-bound ActionProposal fixture bridge`
+`Action Candidate Provider v1 standalone deterministic module and conformance fixtures`
 
-Do not start production module loading, action execution, Runtime ABI, or
-package embedding as part of Application Semantics v1.
+Do not start production module loading, proposal-to-DesktopOperation mapping,
+action execution, Runtime ABI, or package embedding as part of the fixture
+contract.

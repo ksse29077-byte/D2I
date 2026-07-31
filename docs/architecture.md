@@ -134,6 +134,15 @@ side-effect-free Element Grounder v1 JSON payload. It does not invoke or link
 the standalone module, does not add executable selectors to semantic metadata,
 and does not change Cognitive IR, the Module SDK, package data, or Runtime ABI.
 
+`d2i-action-candidates` owns the additive Action Candidate Provider v1 fixture
+contract. It binds one validated semantic target and grounding oracle to an
+exact Registry capability, goal/world/plan lifecycle, and observation
+sequence, then emits an existing Cognitive IR v1 `ActionProposal`. Typed
+arguments contain only closed action variants, stable IDs, hashes, and
+sequence metadata. The crate does not emit executable locators or
+`DesktopOperation`, invoke a module, or cross policy, activation, approval, or
+adapter boundaries.
+
 Phase 6 adds:
 
 ```text
