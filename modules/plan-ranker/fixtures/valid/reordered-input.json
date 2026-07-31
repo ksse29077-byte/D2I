@@ -1,0 +1,194 @@
+{
+    "schema_version":  1,
+    "fixture_id":  "reordered-input",
+    "invocation":  {
+                       "contract_version":  1,
+                       "invocation_id":  "invoke-reordered-input",
+                       "module":  {
+                                      "module_id":  "plan-ranker",
+                                      "module_version":  "1.0.0",
+                                      "contract_version":  1,
+                                      "build_id":  "plan-ranker-v1",
+                                      "artifact_sha256":  "sha256:c23e5733970c18c53c4028bf7067b536fc1c70bcfcdfe9fcd765e50301a80867",
+                                      "manifest_sha256":  "sha256:d9560e047a24be96a8f37d8f074b7e409d9528b3a4919ea729f1c3bcf31f9300"
+                                  },
+                       "requested_capability":  "cognitive.plan-rank",
+                       "input_schema_id":  "cognitive-plan-ranking-input-v1",
+                       "input_schema_version":  1,
+                       "payload":  {
+                                       "schema_version":  1,
+                                       "candidates":  [
+                                                          {
+                                                              "candidate_id":  "candidate-02",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000002",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  50,
+                                                              "success_likelihood_millionths":  200,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-02"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-01",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  100,
+                                                              "success_likelihood_millionths":  500,
+                                                              "gate_results":  {
+                                                                                   "policy":  "passed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "passed",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-01"
+                                                                               ]
+                                                          },
+                                                          {
+                                                              "candidate_id":  "candidate-03",
+                                                              "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+                                                              "capability_id":  "desktop.read",
+                                                              "capability_version":  "1.0.0",
+                                                              "input_schema_id":  "desktop-read-input-v1",
+                                                              "input_schema_version":  1,
+                                                              "output_schema_id":  "desktop-read-output-v1",
+                                                              "output_schema_version":  1,
+                                                              "normalized_cost_millionths":  1,
+                                                              "success_likelihood_millionths":  999,
+                                                              "gate_results":  {
+                                                                                   "policy":  "failed",
+                                                                                   "activation":  "passed",
+                                                                                   "binding":  "passed",
+                                                                                   "input_schema":  "passed",
+                                                                                   "output_schema":  "passed",
+                                                                                   "risk":  "passed",
+                                                                                   "side_effect":  "passed",
+                                                                                   "network":  "unknown",
+                                                                                   "credential":  "passed",
+                                                                                   "capability":  "passed",
+                                                                                   "quality":  "passed"
+                                                                               },
+                                                              "evidence_ids":  [
+                                                                                   "evidence-03"
+                                                                               ]
+                                                          }
+                                                      ]
+                                   },
+                       "goal_id":  "plan-ranking-goal",
+                       "source_observation_hash":  "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                       "plan_generation_id":  "plan-generation-1",
+                       "logical_sequence":  1,
+                       "deadline_logical_tick":  100,
+                       "resource_budget":  {
+                                               "max_input_bytes":  1048576,
+                                               "max_output_bytes":  1048576,
+                                               "memory_bytes":  8388608,
+                                               "logical_operation_budget":  4096
+                                           },
+                       "trust_labels":  [
+                                            "fixture"
+                                        ],
+                       "redactions":  [
+
+                                      ],
+                       "provenance":  {
+                                          "source_id":  "reordered-input-fixture",
+                                          "source_sha256":  "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                                          "producer":  "fixture-author"
+                                      },
+                       "replay":  {
+                                      "replay_id":  "reordered-input-replay",
+                                      "seed":  1,
+                                      "fixture_hash":  "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                                  },
+                       "correlation_id":  "reordered-input-correlation",
+                       "trace_id":  "reordered-input-trace"
+                   },
+    "expected":  {
+                     "status":  "succeeded",
+                     "error_code":  null,
+                     "output_hash":  null,
+                     "output_payload":  {
+                                            "schema_version":  1,
+                                            "ranking_policy_version":  1,
+                                            "outcome":  "ranked",
+                                            "selected_candidate_id":  "candidate-02",
+                                            "selected_candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000002",
+                                            "ranked_candidates":  [
+                                                                      {
+                                                                          "rank":  1,
+                                                                          "candidate_id":  "candidate-02",
+                                                                          "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000002",
+                                                                          "normalized_cost_millionths":  50,
+                                                                          "success_likelihood_millionths":  200
+                                                                      },
+                                                                      {
+                                                                          "rank":  2,
+                                                                          "candidate_id":  "candidate-01",
+                                                                          "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+                                                                          "normalized_cost_millionths":  100,
+                                                                          "success_likelihood_millionths":  500
+                                                                      }
+                                                                  ],
+                                            "rejected_candidates":  [
+                                                                        {
+                                                                            "candidate_id":  "candidate-03",
+                                                                            "candidate_hash":  "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+                                                                            "reasons":  [
+                                                                                            {
+                                                                                                "gate":  "policy",
+                                                                                                "status":  "failed"
+                                                                                            },
+                                                                                            {
+                                                                                                "gate":  "network",
+                                                                                                "status":  "unknown"
+                                                                                            }
+                                                                                        ]
+                                                                        }
+                                                                    ]
+                                        }
+                 },
+    "context":  {
+                    "current_logical_tick":  1,
+                    "current_observation_hash":  "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "current_plan_generation_id":  "plan-generation-1",
+                    "allowed_trust_labels":  [
+                                                 "fixture"
+                                             ],
+                    "invocation_trust_labels":  [
+                                                    "fixture"
+                                                ]
+                },
+    "replay_count":  3,
+    "fixture_kind":  "deterministic_replay"
+}

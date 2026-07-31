@@ -1,0 +1,8 @@
+D2I deterministic Plan Ranker reference module descriptor
+module_id=plan-ranker
+module_version=1.0.0
+contract_version=1
+execution=in_process_rust_reference
+network=denied
+side_effect=false
+ranking_policy_version=1
