@@ -188,6 +188,10 @@ impl WindowsWorkerAdapter {
         &self.descriptor
     }
 
+    fn shutdown_worker(&mut self) -> Result<(), DesktopError> {
+        self.worker.shutdown()
+    }
+
     fn verify_live_egress(&mut self, now_unix_seconds: u64) -> Result<(), DesktopError> {
         let host = crate::current_windows_host_binding()?;
         let _ = crate::windows_egress::verify_configured_windows_browser_egress(
@@ -536,6 +540,10 @@ impl WindowsUiAutomationAdapter {
     ) -> Result<ObservationAdapterResult, DesktopError> {
         self.inner.observe_read_only(request, now_unix_seconds)
     }
+
+    pub(crate) fn shutdown_observation_worker(&mut self) -> Result<(), DesktopError> {
+        self.inner.shutdown_worker()
+    }
 }
 
 impl WindowsWebDriverAdapter {
@@ -570,5 +578,9 @@ impl WindowsWebDriverAdapter {
         now_unix_seconds: u64,
     ) -> Result<ObservationAdapterResult, DesktopError> {
         self.inner.observe_read_only(request, now_unix_seconds)
+    }
+
+    pub(crate) fn shutdown_observation_worker(&mut self) -> Result<(), DesktopError> {
+        self.inner.shutdown_worker()
     }
 }

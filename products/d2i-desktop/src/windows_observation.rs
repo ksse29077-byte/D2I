@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 const MAX_OBSERVATION_ELEMENTS: usize = 10_000;
 const MAX_OBSERVATION_DEPTH: usize = 64;
@@ -160,6 +160,25 @@ pub struct WindowsUiaObservationProvider {
     audit: WindowsDeploymentAuditLedger,
 }
 
+/// Runtime-only result from one explicitly terminated read-only worker.
+///
+/// This value is not serializable. Public verification artifacts retain only
+/// its bounded hashes and status fields.
+#[derive(Debug, Clone)]
+pub struct CompletedReadOnlyObservation {
+    pub snapshot: ObservationSnapshot,
+    pub observation_duration_ms: u64,
+    pub read_only_side_effect_count: u64,
+    pub worker_exited_cleanly: bool,
+    pub worker_process_id: u32,
+    pub integration_id: String,
+    pub binding_id: String,
+    pub activation_record_hash: String,
+    pub runtime_binding_sha256: String,
+    pub adapter_descriptor_sha256: String,
+    pub transport_target_binding_sha256: String,
+}
+
 impl WindowsUiaObservationProvider {
     /// Binds one certified UIA adapter, exact target, limits, and protected audit ledger.
     pub fn new(
@@ -176,6 +195,45 @@ impl WindowsUiaObservationProvider {
             target,
             limits,
             audit,
+        })
+    }
+
+    /// Collects exactly one snapshot and waits for the isolated worker to exit.
+    pub fn observe_once(
+        mut self,
+        goal: &GoalSpec,
+        sequence: u64,
+    ) -> Result<CompletedReadOnlyObservation, DesktopError> {
+        let worker_process_id = self.adapter.worker_process_id();
+        let integration_id = self.adapter.integration_id().to_owned();
+        let binding_id = self.adapter.binding_id().to_owned();
+        let activation_record_hash = self.adapter.activation_record_hash().to_owned();
+        let runtime_binding_sha256 = self.adapter.configuration().configuration_hash()?;
+        let adapter_descriptor_sha256 = hash_value(&self.adapter.configuration().descriptor()?)?;
+        let started = Instant::now();
+        let snapshot = match self.observe(goal, sequence) {
+            Ok(snapshot) => snapshot,
+            Err(error) => {
+                let _ = self.adapter.shutdown_observation_worker();
+                return Err(error);
+            }
+        };
+        let observation_duration_ms =
+            u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
+        let transport_target_binding_sha256 = hash_value(&snapshot.target_binding)?;
+        self.adapter.shutdown_observation_worker()?;
+        Ok(CompletedReadOnlyObservation {
+            snapshot,
+            observation_duration_ms,
+            read_only_side_effect_count: 0,
+            worker_exited_cleanly: true,
+            worker_process_id,
+            integration_id,
+            binding_id,
+            activation_record_hash,
+            runtime_binding_sha256,
+            adapter_descriptor_sha256,
+            transport_target_binding_sha256,
         })
     }
 }
@@ -224,6 +282,45 @@ impl WindowsWebObservationProvider {
             target,
             limits,
             audit,
+        })
+    }
+
+    /// Collects exactly one snapshot and waits for the isolated worker to exit.
+    pub fn observe_once(
+        mut self,
+        goal: &GoalSpec,
+        sequence: u64,
+    ) -> Result<CompletedReadOnlyObservation, DesktopError> {
+        let worker_process_id = self.adapter.worker_process_id();
+        let integration_id = self.adapter.integration_id().to_owned();
+        let binding_id = self.adapter.binding_id().to_owned();
+        let activation_record_hash = self.adapter.activation_record_hash().to_owned();
+        let runtime_binding_sha256 = self.adapter.configuration().configuration_hash()?;
+        let adapter_descriptor_sha256 = hash_value(&self.adapter.configuration().descriptor()?)?;
+        let started = Instant::now();
+        let snapshot = match self.observe(goal, sequence) {
+            Ok(snapshot) => snapshot,
+            Err(error) => {
+                let _ = self.adapter.shutdown_observation_worker();
+                return Err(error);
+            }
+        };
+        let observation_duration_ms =
+            u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX);
+        let transport_target_binding_sha256 = hash_value(&snapshot.target_binding)?;
+        self.adapter.shutdown_observation_worker()?;
+        Ok(CompletedReadOnlyObservation {
+            snapshot,
+            observation_duration_ms,
+            read_only_side_effect_count: 0,
+            worker_exited_cleanly: true,
+            worker_process_id,
+            integration_id,
+            binding_id,
+            activation_record_hash,
+            runtime_binding_sha256,
+            adapter_descriptor_sha256,
+            transport_target_binding_sha256,
         })
     }
 }
@@ -743,7 +840,10 @@ fn build_snapshot(
     mut payload: ReadOnlyObservationPayload,
     limits: &ObservationLimits,
 ) -> Result<ObservationSnapshot, DesktopError> {
-    let target_binding_digest = hash_value(&target_binding)?;
+    let mut logical_target_binding = target_binding.clone();
+    logical_target_binding.remove("binding_id");
+    logical_target_binding.remove("activation_record_hash");
+    let target_binding_digest = hash_value(&logical_target_binding)?;
     let source_kind = payload.source_kind;
     loop {
         let mut observable_elements = Vec::with_capacity(payload.elements.len() + 1);

@@ -210,7 +210,14 @@ fn sort_node(node: &mut ObservationNodeDraft) -> Result<(), DesktopError> {
         .children
         .drain(..)
         .map(|child| {
-            let key = crate::hash_value(&child)?;
+            let key = crate::hash_value(&json!({
+                "role": &child.role,
+                "accessible_name": &child.accessible_name,
+                "automation_id": &child.automation_id,
+                "class_name": &child.class_name,
+                "framework_id": &child.framework_id,
+                "input_type": &child.input_type
+            }))?;
             Ok((key, child))
         })
         .collect::<Result<Vec<_>, DesktopError>>()?;

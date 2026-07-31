@@ -207,6 +207,53 @@ impl IsolatedWindowsWorker {
         )
     }
 
+    pub(crate) fn shutdown(&mut self) -> Result<(), DesktopError> {
+        if self.failed {
+            return Err(DesktopError::AdapterUnavailable(
+                "Windows worker cannot report a clean shutdown after protocol failure".to_owned(),
+            ));
+        }
+        let _ = self.request(WorkerCommand::Shutdown, None)?;
+        self.stdin.take();
+        let deadline = std::time::Instant::now()
+            .checked_add(Duration::from_millis(self.configuration.request_timeout_ms))
+            .ok_or_else(|| {
+                DesktopError::Invalid("Windows worker shutdown deadline overflowed".to_owned())
+            })?;
+        loop {
+            match self.child.try_wait() {
+                Ok(Some(status)) if status.success() => {
+                    self.failed = true;
+                    return Ok(());
+                }
+                Ok(Some(status)) => {
+                    self.failed = true;
+                    return Err(DesktopError::AdapterUnavailable(format!(
+                        "Windows worker exited abnormally during shutdown: {status}"
+                    )));
+                }
+                Ok(None) if std::time::Instant::now() < deadline => {
+                    std::thread::sleep(Duration::from_millis(5));
+                }
+                Ok(None) => {
+                    self.failed = true;
+                    let _ = self.job.terminate();
+                    let _ = self.child.kill();
+                    let _ = self.child.wait();
+                    return Err(DesktopError::AdapterUnavailable(
+                        "Windows worker did not exit within its certified timeout".to_owned(),
+                    ));
+                }
+                Err(error) => {
+                    self.failed = true;
+                    return Err(DesktopError::AdapterUnavailable(format!(
+                        "Windows worker shutdown status is unavailable: {error}"
+                    )));
+                }
+            }
+        }
+    }
+
     fn request(
         &mut self,
         command: WorkerCommand,

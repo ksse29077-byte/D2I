@@ -109,7 +109,7 @@ postcondition passed, the goal completed, or verified closure was reached.
 
 `to_verification_bound_execution_v2` performs a closed projection into the
 existing `BoundActionExecutionV2`. It creates no verification verdict.
-Re-observation and postcondition verification belong to D2I-KRN-300.
+Re-observation and postcondition verification were implemented by D2I-KRN-300.
 
 ## Audit
 
@@ -138,7 +138,7 @@ Rejected. Durable locators and handles expand replay and leakage surfaces.
 ### Verify Postconditions During Commit
 
 Rejected. It would collapse execution and independent verification. KRN-300
-owns re-observation and verification.
+owns the now-implemented re-observation and verification boundary.
 
 ## Security Consequences
 

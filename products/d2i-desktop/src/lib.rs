@@ -4,6 +4,7 @@ mod adapter;
 mod approval;
 mod audit;
 mod cognitive;
+mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
 mod executor;
@@ -46,6 +47,19 @@ pub use cognitive::{
     PostconditionVerifier, Provenance, RecoveryDecision, RecoveryPolicy, RedactionMetadata,
     Reversibility, TrustLabel, VerificationResult, WorkReport, WorldFact, WorldFactKind,
     WorldState, WorldStateReducer,
+};
+pub use cognitive_reobserve_verify::{
+    analyze_observation_delta, bind_actual_source_observation, parse_reobserve_json,
+    CognitiveReobserveCoordinator, CognitiveVerificationCoordinatorV2,
+    DeterministicPostconditionVerifierV2, FreshObservationBundleV1, FreshObservationProofV1,
+    FreshObservationWorkerExitStatusV1, IgnoredVolatileTargetV1, ObservationDeltaKindV1,
+    ObservationDeltaV1, ObservationElementDeltaV1, ProtectedInvariantSeverityV1,
+    ProtectedInvariantV1, ReobservationPolicyV1, ReobservationRequestV1,
+    TrustedReadOnlyObservationConfiguration, VerificationConsumptionLedgerV1,
+    VerificationGuardFieldV1, VerificationGuardProfileV1, VerificationGuardTargetV1,
+    VerificationSpecAdaptationV1, VerificationSpecAdapterV1, VerificationSpecBindingV1,
+    VerifiedActionResultV1, COGNITIVE_REOBSERVE_SCHEMA_VERSION,
+    COGNITIVE_REOBSERVE_VERIFIER_V2_SCHEMA,
 };
 pub use cognitive_verification_v2::{
     BoundActionExecutionV2, PostconditionResultV2, PostconditionVerifierV2,
@@ -135,8 +149,8 @@ pub use windows_keys::{
     WindowsSigningKeyPurpose,
 };
 pub use windows_observation::{
-    ObservationLimits, WindowsUiaObservationProvider, WindowsUiaObservationTarget,
-    WindowsWebObservationProvider, WindowsWebObservationTarget,
+    CompletedReadOnlyObservation, ObservationLimits, WindowsUiaObservationProvider,
+    WindowsUiaObservationTarget, WindowsWebObservationProvider, WindowsWebObservationTarget,
 };
 pub use windows_post_activation_self_test::{
     run_windows_webdriver_post_activation_self_test, WindowsWebDriverPostActivationSelfTestReport,

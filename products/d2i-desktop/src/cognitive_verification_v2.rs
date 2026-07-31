@@ -776,7 +776,7 @@ fn compare_observed(
 ) -> (VerificationVerdictV2, Option<Value>) {
     let verdict = match op {
         ComparisonOp::Equals => match observed.as_ref() {
-            Some(actual) => verdict_from_bool(actual == expected),
+            Some(actual) => verdict_from_bool(sealed_value_equals(actual, expected)),
             None => VerificationVerdictV2::Inconclusive,
         },
         ComparisonOp::NotEquals => match observed.as_ref() {
@@ -821,6 +821,19 @@ fn json_integer(value: &Value) -> Option<i128> {
         .or_else(|| value.as_u64().map(i128::from))
 }
 
+fn sealed_value_equals(actual: &Value, expected: &Value) -> bool {
+    if matches!(actual, Value::Object(_) | Value::Array(_)) {
+        if let Some(expected_hash) = expected
+            .as_str()
+            .filter(|value| value.starts_with("sha256:"))
+        {
+            return validate_hash(expected_hash, "sealed expected observation value").is_ok()
+                && hash_value(actual).is_ok_and(|actual_hash| actual_hash == expected_hash);
+        }
+    }
+    actual == expected
+}
+
 fn verdict_from_bool(value: bool) -> VerificationVerdictV2 {
     if value {
         VerificationVerdictV2::Passed
@@ -834,18 +847,26 @@ fn expected_action_verdict(
     results: &[PostconditionResultV2],
     unexpected_changes: &[String],
 ) -> VerificationVerdictV2 {
-    if execution_status == ExecutionStatus::Unsupported {
-        return VerificationVerdictV2::Unsupported;
-    }
-    if execution_status != ExecutionStatus::Succeeded {
-        return VerificationVerdictV2::Failed;
-    }
-    if !unexpected_changes.is_empty()
+    if unexpected_changes
+        .iter()
+        .any(|value| !value.starts_with("fail:"))
         || results
             .iter()
             .any(|result| result.required && result.verdict == VerificationVerdictV2::Unsafe)
     {
         return VerificationVerdictV2::Unsafe;
+    }
+    if execution_status == ExecutionStatus::Unsupported {
+        return VerificationVerdictV2::Unsupported;
+    }
+    if execution_status == ExecutionStatus::Timeout {
+        return VerificationVerdictV2::Inconclusive;
+    }
+    if execution_status != ExecutionStatus::Succeeded {
+        return VerificationVerdictV2::Failed;
+    }
+    if !unexpected_changes.is_empty() {
+        return VerificationVerdictV2::Failed;
     }
     for verdict in [
         VerificationVerdictV2::Unsupported,

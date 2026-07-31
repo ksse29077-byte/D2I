@@ -96,8 +96,8 @@ expected runtime/ledger/adapter values, scope, capability, and freshness.
 An admission contains IDs and hashes only. It has no selector, locator,
 coordinate, raw input, credential, token, adapter handle, or operation payload.
 Actual execution authority exists only after completed `D2I-KRN-200` combines
-it with an exact one-shot `ActivatedWindowsBinding`. Re-observation and
-postcondition verification remain in `D2I-KRN-300`.
+it with an exact one-shot `ActivatedWindowsBinding`. Completed `D2I-KRN-300`
+then performs independent re-observation and postcondition verification.
 
 ## Canonical JSON
 

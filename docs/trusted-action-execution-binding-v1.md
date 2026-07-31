@@ -95,9 +95,9 @@ KRN-200 never fabricates approval.
 ## Verification Boundary
 
 The receipt can be projected to existing `BoundActionExecutionV2`, but the
-projection is not a verification verdict. KRN-300 must independently
-re-observe the target and verify postconditions before any verified closure or
-goal-complete claim.
+projection is not a verification verdict. The completed KRN-300 path
+independently re-observes the target and verifies postconditions before any
+verified closure or goal-complete claim.
 
 ## Focused Checks
 

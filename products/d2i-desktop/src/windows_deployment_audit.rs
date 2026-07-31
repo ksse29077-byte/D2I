@@ -68,6 +68,17 @@ pub enum WindowsDeploymentAuditEventKind {
     TrustedExecutionFailed,
     TrustedExecutionCancelled,
     TrustedExecutionAborted,
+    ReobservationRequested,
+    ReobservationStarted,
+    FreshObservationCollected,
+    ObservationDeltaComputed,
+    VerificationStarted,
+    VerificationPassed,
+    VerificationFailed,
+    VerificationInconclusive,
+    VerificationUnsupported,
+    VerificationUnsafe,
+    VerificationAborted,
 }
 
 /// Outcome classification with no unrestricted payload.

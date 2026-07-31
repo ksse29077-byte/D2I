@@ -50,7 +50,9 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   replay, safety-gated hardware boundary, robot memory, and fleet promotion.
 - `products/d2i-desktop`: separate PC autonomy contracts, capability policy,
   signed approval, hash-chain audit, signed Windows runtime binding, and
-  capability-isolated adapters.
+  capability-isolated adapters. KRN-300 adds independent one-shot UIA/WebDriver
+  re-observation, protected-invariant delta analysis, deterministic
+  Verification v2, and hash-bound verified-action evidence.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -77,6 +79,10 @@ isolation. Browser bindings require signed egress evidence and can pin the
 concrete Windows WFP loopback-only provider to an exact browser image. A
 deployment self-test launches the pinned Edge/EdgeDriver pair and requires
 loopback delivery plus non-loopback denial before functional attestation.
+After an admitted mutation, the mutation worker is not reused for verification.
+A new read-only activation must produce a fresh exact-target observation before
+the action can be classified as passed, failed, inconclusive, unsupported, or
+unsafe.
 
 ## CLI
 

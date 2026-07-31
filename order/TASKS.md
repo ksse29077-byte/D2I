@@ -29,8 +29,8 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 
 - [x] `D2I-KRN-100` Cognitive Policy Admission v1
 - [x] `D2I-KRN-200` Trusted Action Execution Binding v1
-- [ ] `D2I-KRN-300` Reobserve and Cognitive Verifier v2 - **first active task**
-- [ ] `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
+- [x] `D2I-KRN-300` Reobserve and Cognitive Verifier v2
+- [ ] `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation - **first active task**
 - [ ] `D2I-KRN-500` First Complete Verified Single-Task E2E
 
 첫 E2E는 로컬 테스트 폼 이름 필드 변경/저장이다. stale target 거부,

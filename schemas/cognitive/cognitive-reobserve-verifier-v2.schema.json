@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/cognitive/cognitive-reobserve-verifier-v2.schema.json",
+  "title": "D2I Cognitive Re-observation and Verification Additive Artifacts",
+  "oneOf": [
+    { "$ref": "#/$defs/verificationSpecBinding" },
+    { "$ref": "#/$defs/reobservationRequest" },
+    { "$ref": "#/$defs/freshObservationProof" },
+    { "$ref": "#/$defs/guardProfile" },
+    { "$ref": "#/$defs/observationDelta" },
+    { "$ref": "#/$defs/verifiedActionResult" }
+  ],
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "tokens": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/token" }
+    },
+    "sourceKind": {
+      "enum": ["fixture", "uia", "web_driver", "file_metadata", "process"]
+    },
+    "executionStatus": {
+      "enum": ["succeeded", "failed", "denied", "unsupported", "timeout"]
+    },
+    "verdict": {
+      "enum": ["passed", "failed", "inconclusive", "unsupported", "unsafe"]
+    },
+    "goalProgress": {
+      "enum": ["not_started", "in_progress", "complete", "blocked"]
+    },
+    "guardField": {
+      "enum": ["exists", "value", "kind"]
+    },
+    "guardTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "field"],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/token" },
+        "field": { "$ref": "#/$defs/guardField" }
+      }
+    },
+    "verificationSpecBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "binding_id", "policy_ready_sha256", "proposal_sha256",
+        "goal_sha256", "source_observation_id", "source_observation_hash",
+        "source_observation_sequence", "execution_receipt_sha256",
+        "bound_execution_sha256", "verification_goal_sha256",
+        "verification_action_proposal_sha256", "goal_criterion_ids",
+        "action_criterion_ids", "evidence_ids", "binding_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "binding_id": { "$ref": "#/$defs/token" },
+        "policy_ready_sha256": { "$ref": "#/$defs/hash" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_sha256": { "$ref": "#/$defs/hash" },
+        "source_observation_id": { "$ref": "#/$defs/token" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "execution_receipt_sha256": { "$ref": "#/$defs/hash" },
+        "bound_execution_sha256": { "$ref": "#/$defs/hash" },
+        "verification_goal_sha256": { "$ref": "#/$defs/hash" },
+        "verification_action_proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_criterion_ids": { "$ref": "#/$defs/tokens" },
+        "action_criterion_ids": { "$ref": "#/$defs/tokens" },
+        "evidence_ids": { "$ref": "#/$defs/tokens" },
+        "binding_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "reobservationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "reobservation_id", "execution_receipt_sha256",
+        "bound_execution_hash", "execution_status", "policy", "proposal_id",
+        "proposal_sha256", "goal_id", "plan_generation_id",
+        "source_observation_id", "source_observation_hash",
+        "source_observation_sequence", "integration_id", "source_kind",
+        "source_target_binding_sha256", "runtime_binding_sha256",
+        "adapter_descriptor_sha256", "activation_record_hash",
+        "requested_at_unix_ms", "expires_at_unix_ms", "evidence_ids",
+        "request_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "reobservation_id": { "$ref": "#/$defs/token" },
+        "execution_receipt_sha256": { "$ref": "#/$defs/hash" },
+        "bound_execution_hash": { "$ref": "#/$defs/hash" },
+        "execution_status": { "$ref": "#/$defs/executionStatus" },
+        "policy": { "enum": ["required", "optional_confirmation", "no_execution"] },
+        "proposal_id": { "$ref": "#/$defs/token" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/token" },
+        "plan_generation_id": { "$ref": "#/$defs/token" },
+        "source_observation_id": { "$ref": "#/$defs/token" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "integration_id": { "$ref": "#/$defs/token" },
+        "source_kind": { "$ref": "#/$defs/sourceKind" },
+        "source_target_binding_sha256": { "$ref": "#/$defs/hash" },
+        "runtime_binding_sha256": { "$ref": "#/$defs/hash" },
+        "adapter_descriptor_sha256": { "$ref": "#/$defs/hash" },
+        "activation_record_hash": { "$ref": "#/$defs/hash" },
+        "requested_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/tokens" },
+        "request_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "freshObservationProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "reobservation_request_sha256",
+        "execution_receipt_sha256", "fresh_observation_id",
+        "fresh_observation_hash", "fresh_observation_sequence",
+        "source_observation_id", "source_observation_hash",
+        "source_observation_sequence", "source_kind", "target_binding_sha256",
+        "observation_transport_binding_sha256",
+        "observation_activation_record_hash", "integration_id",
+        "runtime_binding_sha256", "process_or_session_binding_sha256",
+        "origin_or_window_binding_sha256", "observed_at_unix_ms",
+        "observation_duration_ms", "read_only_side_effect_count",
+        "worker_exit_status", "evidence_ids", "proof_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "reobservation_request_sha256": { "$ref": "#/$defs/hash" },
+        "execution_receipt_sha256": { "$ref": "#/$defs/hash" },
+        "fresh_observation_id": { "$ref": "#/$defs/token" },
+        "fresh_observation_hash": { "$ref": "#/$defs/hash" },
+        "fresh_observation_sequence": { "type": "integer", "minimum": 1 },
+        "source_observation_id": { "$ref": "#/$defs/token" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "source_kind": { "$ref": "#/$defs/sourceKind" },
+        "target_binding_sha256": { "$ref": "#/$defs/hash" },
+        "observation_transport_binding_sha256": { "$ref": "#/$defs/hash" },
+        "observation_activation_record_hash": { "$ref": "#/$defs/hash" },
+        "integration_id": { "$ref": "#/$defs/token" },
+        "runtime_binding_sha256": { "$ref": "#/$defs/hash" },
+        "process_or_session_binding_sha256": { "$ref": "#/$defs/hash" },
+        "origin_or_window_binding_sha256": { "$ref": "#/$defs/hash" },
+        "observed_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "observation_duration_ms": { "type": "integer", "minimum": 0, "maximum": 60000 },
+        "read_only_side_effect_count": { "const": 0 },
+        "worker_exit_status": { "const": "clean" },
+        "evidence_ids": { "$ref": "#/$defs/tokens" },
+        "proof_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "protectedInvariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "expected_source_value_hash", "severity", "reason_code"],
+      "properties": {
+        "target": { "$ref": "#/$defs/guardTarget" },
+        "expected_source_value_hash": { "$ref": "#/$defs/hash" },
+        "severity": { "enum": ["fail", "unsafe"] },
+        "reason_code": { "$ref": "#/$defs/token" }
+      }
+    },
+    "ignoredVolatile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "approved_reason_code", "evidence_id"],
+      "properties": {
+        "target": { "$ref": "#/$defs/guardTarget" },
+        "approved_reason_code": { "$ref": "#/$defs/token" },
+        "evidence_id": { "$ref": "#/$defs/token" }
+      }
+    },
+    "guardProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "profile_id", "proposal_sha256",
+        "source_observation_hash", "expected_change_targets",
+        "allowed_change_targets", "protected_invariants",
+        "ignored_volatile_targets", "maximum_unexpected_changes",
+        "evidence_ids", "profile_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "profile_id": { "$ref": "#/$defs/token" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "expected_change_targets": {
+          "type": "array", "maxItems": 256, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/guardTarget" }
+        },
+        "allowed_change_targets": {
+          "type": "array", "maxItems": 256, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/guardTarget" }
+        },
+        "protected_invariants": {
+          "type": "array", "maxItems": 256, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/protectedInvariant" }
+        },
+        "ignored_volatile_targets": {
+          "type": "array", "maxItems": 256, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ignoredVolatile" }
+        },
+        "maximum_unexpected_changes": { "type": "integer", "minimum": 0, "maximum": 256 },
+        "evidence_ids": { "$ref": "#/$defs/tokens" },
+        "profile_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "elementDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delta_id", "target", "kind", "before_sha256", "after_sha256",
+        "before_type", "after_type", "reason_code"
+      ],
+      "properties": {
+        "delta_id": { "$ref": "#/$defs/token" },
+        "target": {
+          "oneOf": [{ "$ref": "#/$defs/guardTarget" }, { "type": "null" }]
+        },
+        "kind": {
+          "enum": [
+            "element_added", "element_removed", "value_changed", "kind_changed",
+            "trust_labels_changed", "redaction_changed", "target_binding_changed",
+            "expected_change_missing", "unexpected_limit_exceeded"
+          ]
+        },
+        "before_sha256": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "after_sha256": {
+          "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }]
+        },
+        "before_type": {
+          "oneOf": [{ "$ref": "#/$defs/token" }, { "type": "null" }]
+        },
+        "after_type": {
+          "oneOf": [{ "$ref": "#/$defs/token" }, { "type": "null" }]
+        },
+        "reason_code": { "$ref": "#/$defs/token" }
+      }
+    },
+    "deltas": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/elementDelta" }
+    },
+    "observationDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "source_observation_hash", "fresh_observation_hash",
+        "guard_profile_sha256", "expected_changes", "allowed_changes",
+        "protected_invariant_violations", "unexpected_changes",
+        "ignored_volatile_changes", "security_relevant_changes",
+        "missing_expected_changes", "unexpected_limit_exceeded", "delta_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "fresh_observation_hash": { "$ref": "#/$defs/hash" },
+        "guard_profile_sha256": { "$ref": "#/$defs/hash" },
+        "expected_changes": { "$ref": "#/$defs/deltas" },
+        "allowed_changes": { "$ref": "#/$defs/deltas" },
+        "protected_invariant_violations": { "$ref": "#/$defs/deltas" },
+        "unexpected_changes": { "$ref": "#/$defs/deltas" },
+        "ignored_volatile_changes": { "$ref": "#/$defs/deltas" },
+        "security_relevant_changes": { "$ref": "#/$defs/deltas" },
+        "missing_expected_changes": {
+          "type": "array", "maxItems": 256, "uniqueItems": true,
+          "items": { "$ref": "#/$defs/guardTarget" }
+        },
+        "unexpected_limit_exceeded": { "type": "boolean" },
+        "delta_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "verifiedActionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "verified_action_id", "execution_receipt_sha256",
+        "bound_execution_hash", "reobservation_request_sha256",
+        "fresh_observation_proof_sha256", "source_observation_id",
+        "source_observation_hash", "source_observation_sequence",
+        "fresh_observation_id", "fresh_observation_hash",
+        "fresh_observation_sequence", "proposal_id", "proposal_sha256",
+        "goal_id", "plan_generation_id", "execution_id", "execution_status",
+        "verification_request_sha256", "verification_result_sha256",
+        "action_verdict", "goal_progress", "guard_profile_sha256",
+        "observation_delta_sha256", "protected_violation_count",
+        "unexpected_change_count", "observed_at_unix_ms",
+        "verified_at_unix_ms", "evidence_ids", "warnings", "result_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "verified_action_id": { "$ref": "#/$defs/token" },
+        "execution_receipt_sha256": { "$ref": "#/$defs/hash" },
+        "bound_execution_hash": { "$ref": "#/$defs/hash" },
+        "reobservation_request_sha256": { "$ref": "#/$defs/hash" },
+        "fresh_observation_proof_sha256": { "$ref": "#/$defs/hash" },
+        "source_observation_id": { "$ref": "#/$defs/token" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "fresh_observation_id": { "$ref": "#/$defs/token" },
+        "fresh_observation_hash": { "$ref": "#/$defs/hash" },
+        "fresh_observation_sequence": { "type": "integer", "minimum": 1 },
+        "proposal_id": { "$ref": "#/$defs/token" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/token" },
+        "plan_generation_id": { "$ref": "#/$defs/token" },
+        "execution_id": { "$ref": "#/$defs/token" },
+        "execution_status": { "$ref": "#/$defs/executionStatus" },
+        "verification_request_sha256": { "$ref": "#/$defs/hash" },
+        "verification_result_sha256": { "$ref": "#/$defs/hash" },
+        "action_verdict": { "$ref": "#/$defs/verdict" },
+        "goal_progress": { "$ref": "#/$defs/goalProgress" },
+        "guard_profile_sha256": { "$ref": "#/$defs/hash" },
+        "observation_delta_sha256": { "$ref": "#/$defs/hash" },
+        "protected_violation_count": { "type": "integer", "minimum": 0, "maximum": 256 },
+        "unexpected_change_count": { "type": "integer", "minimum": 0, "maximum": 256 },
+        "observed_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "verified_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/tokens" },
+        "warnings": { "$ref": "#/$defs/tokens" },
+        "result_sha256": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

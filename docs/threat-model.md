@@ -317,7 +317,20 @@ fresh target snapshots, prepare/commit precondition equality, bounded
 non-secret payloads with drop-time clearing, a separate Cognitive permit
 digest, protected hash-only audit, and terminal worker cleanup.
 
-Residual risk remains between adapter commit and the independent observation
-required to prove the requested outcome. An adapter-success receipt must not
-be treated as verified closure. KRN-300 owns that independent re-observation
-and verifier boundary.
+An adapter-success receipt must not be treated as verified closure.
+
+## Re-observation and Verification v2
+
+KRN-300 addresses substitution, stale evidence, worker-authority reuse,
+collateral UI changes, false completion, and verification replay. It requires
+a separately activated read-only worker, a newer observation ID and sequence,
+the same logical process/session/window or browser-session/origin, zero
+observation side effects, clean worker exit, exact element-ID joins, a
+non-empty disjoint guard profile, protected security invariants, canonical
+value hashes, protected hash-only audit, and one receipt consumption.
+
+Unexpected or identity-relevant changes are unsafe even if execution failed.
+Adapter success and state-hash inequality do not imply a passed verdict. The
+terminal artifact has no adapter, filesystem, process, network, retry, replan,
+or case-closure authority. Durable cross-process recovery and escalation
+remain KRN-400 controls.

@@ -231,6 +231,23 @@ Adapter success means only that an action attempt succeeded. KRN-200 performs
 no re-observation, postcondition verification, verified closure, recovery, or
 production CognitiveExecutor connection.
 
+## Reobserve and Cognitive Verifier v2 Status
+
+Implemented in `products/d2i-desktop/src/cognitive_reobserve_verify.rs`:
+
+- strict Cognitive IR v1 to existing Verification v2 adaptation
+- closed element target grammar and sealed expected-value comparison
+- receipt-bound re-observation requests and fresh UIA/WebDriver proof
+- separately activated read-only observation worker with explicit shutdown
+- expected, allowed, protected, unexpected, security, and volatile delta sets
+- deterministic five-verdict postcondition verification
+- immutable `VerifiedActionResultV1`, protected audit, and receipt replay guard
+- actual WinForms SetValue, fresh UIA re-observation, protected-field check,
+  unsafe negative snapshot, and zero residual owned workers
+
+Adapter success and state-hash inequality never imply a passed verdict. The
+result is not Case closure and carries no retry, replan, or escalation authority.
+
 ## Verification
 
 Passed:
@@ -246,7 +263,7 @@ cargo build --workspace --release
 
 - No natural-language model implementation.
 - No GUI implementation.
-- No KRN-300 re-observation or postcondition-verifier integration.
+- No KRN-400 recovery, retry, replan, clarification, or escalation integration.
 - No production CognitiveExecutor-to-KRN-200 connection.
 - No external network feature.
 - No production package format or Runtime ABI change.
@@ -257,7 +274,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-KRN-300 - Reobserve and Cognitive Verifier v2`
+`D2I-KRN-400 - Recovery, Retry, Replan, Clarification and Escalation`
 
-Do not start recovery, retry, replan, first complete E2E closure, production
-module loading, Runtime ABI changes, or package embedding as part of KRN-300.
+Do not start first complete E2E closure, production module loading, Runtime ABI
+changes, or package embedding as part of KRN-400.

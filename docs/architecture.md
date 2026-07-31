@@ -165,7 +165,14 @@ terminal receipt. `d2i-desktop` owns the concrete target and payload material,
 consumes one actual `WindowsActivationAdmission`, starts the certified UIA or
 WebDriver worker, prepares without mutation, and commits exactly once. A
 successful receipt proves only adapter success; re-observation and
-postcondition verification remain a separate KRN-300 boundary.
+postcondition verification remain a separate boundary. KRN-300 implements
+that boundary in `d2i-desktop`: the mutation worker exits, a separately
+activated UIA/WebDriver read-only worker collects a fresh observation, and a
+deterministic protected-invariant verifier emits the existing
+`VerificationResultV2` plus an additive `VerifiedActionResultV1`. Exact target
+identity, expected and protected deltas, zero observation side effects, worker
+cleanup, protected audit, and receipt replay consumption are mandatory. The
+terminal result is not case closure or recovery authority.
 
 Phase 6 adds:
 

@@ -390,5 +390,18 @@ contain only bounded IDs and canonical hashes. Terminal success, failure,
 cancellation, or drop removes the plan, payload, and worker.
 
 A successful `TrustedActionExecutionReceiptV1` is an adapter-attempt result,
-not proof of a postcondition or completed goal. Re-observation and verification
-remain the next KRN-300 boundary.
+not proof of a postcondition or completed goal.
+
+## Independent Cognitive Re-observation
+
+KRN-300 terminates the mutation worker and starts a separately activated
+read-only UIA or WebDriver worker. The fresh observation must retain the exact
+logical process/session/window or browser-session/origin binding, use a newer
+sequence and different observation ID, report zero side effects, and exit
+cleanly. Expected and protected changes are evaluated by exact element ID;
+changed values are represented in delta and audit records by canonical hashes.
+
+The resulting `VerifiedActionResultV1` binds the existing Verification v2
+request/result to the execution receipt, fresh proof, guard, and delta. It is
+not Case closure, retry authority, or recovery authority. Those decisions are
+the KRN-400 boundary.

@@ -5,11 +5,14 @@ D2I_COMPILER_MASTER_WORK_ORDER.md
 Cargo.toml
 Cargo.lock
 docs/architecture.md
+docs/desktop-autonomy.md
+docs/threat-model.md
 docs/application-semantics-v1.md
 docs/action-candidate-provider-v1.md
 docs/cognitive-action-selection-pipeline-v1.md
 docs/cognitive-policy-admission-v1.md
 docs/trusted-action-execution-binding-v1.md
+docs/cognitive-reobserve-verifier-v2.md
 docs/product/**
 docs/adr/**
 docs/collaboration/**
@@ -32,8 +35,11 @@ products/d2i-desktop/Cargo.toml
 products/d2i-desktop/src/lib.rs
 products/d2i-desktop/src/cognitive.rs
 products/d2i-desktop/src/trusted_execution.rs
+products/d2i-desktop/src/cognitive_reobserve_verify.rs
+products/d2i-desktop/src/cognitive_verification_v2.rs
 products/d2i-desktop/tests/cognitive_runtime.rs
 products/d2i-desktop/tests/trusted_execution.rs
+products/d2i-desktop/tests/cognitive_reobserve_verify.rs
 crates/d2i-compiler/src/package.rs
 schemas/flatbuffers/**
 crates/d2i-runtime-api/**

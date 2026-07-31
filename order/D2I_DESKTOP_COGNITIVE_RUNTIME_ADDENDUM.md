@@ -35,7 +35,11 @@ Provider v1, Plan Ranker v1, Cognitive Action Selection Pipeline v1이다.
 `D2I-KRN-100 - Cognitive Policy Admission v1`과 `D2I-KRN-200 -
 Trusted Action Execution Binding v1`도 additive Core/Product 경계로
 완료됐다. 현재 active next task는
-`D2I-KRN-300 - Reobserve and Cognitive Verifier v2`이다.
+`D2I-KRN-300 - Reobserve and Cognitive Verifier v2`도 완료되었다. 별도
+read-only UIA/WebDriver worker, fresh observation proof, protected-invariant
+delta, 기존 Verification v2 result, replay 방지 및 protected audit를
+결합한다. 현재 first active task는 `D2I-KRN-400 - Recovery, Retry, Replan,
+Clarification and Escalation`이다.
 기존 C0 및 초기 Cognitive Phase 프롬프트는 historical reference이며
 active prompt가 아니다.
 
