@@ -332,5 +332,27 @@ value hashes, protected hash-only audit, and one receipt consumption.
 Unexpected or identity-relevant changes are unsafe even if execution failed.
 Adapter success and state-hash inequality do not imply a passed verdict. The
 terminal artifact has no adapter, filesystem, process, network, retry, replan,
-or case-closure authority. Durable cross-process recovery and escalation
-remain KRN-400 controls.
+or case-closure authority.
+
+## Bounded Cognitive Recovery Control v1
+
+KRN-400 addresses blind replay, stale trust-chain reuse, retry storms,
+authority widening, arbitrary ambiguity resolution, unsafe automatic
+compensation, ledger rollback, and restart budget reset. Recovery is decided
+by a closed deterministic matrix with unsafe/security priority. Total cycles,
+fresh retries, read-only re-observations, replans, clarification requests, and
+deadline are independently bounded and consumed atomically.
+
+Proposal, admission, activation, and execution-receipt identities are one-use.
+A mutating retry requires a wholly fresh KRN-100 through KRN-300 trust chain.
+Replans must remain within the original goal, authority, policy, and bounded
+acyclic graph. Clarification is typed and one-shot; escalation is hash-only.
+Raw secrets, untrusted instructions, locators, payloads, and absolute paths are
+rejected from recovery artifacts and protected audit.
+
+The Desktop coordinator writes its protected hash-chained recovery ledger and
+audit intent before invoking a mutation closure. ACL, parse, chain, replay,
+budget, truncation, or audit failure stops before mutation. Remaining risks
+include external audit-chain anchoring, production escalation-recipient
+routing, and user-facing clarification transport; those do not grant fallback
+execution authority.

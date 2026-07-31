@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/cognitive/cognitive-recovery-control-v1.schema.json",
+  "title": "D2I Cognitive Recovery Control v1",
+  "oneOf": [
+    { "$ref": "#/$defs/recovery_trigger" },
+    { "$ref": "#/$defs/recovery_classification" },
+    { "$ref": "#/$defs/recovery_budget" },
+    { "$ref": "#/$defs/recovery_history" },
+    { "$ref": "#/$defs/recovery_policy_profile" },
+    { "$ref": "#/$defs/recovery_decision" },
+    { "$ref": "#/$defs/fresh_cycle_request" },
+    { "$ref": "#/$defs/fresh_cycle_evidence" },
+    { "$ref": "#/$defs/replan_request" },
+    { "$ref": "#/$defs/replan_result" },
+    { "$ref": "#/$defs/clarification_request" },
+    { "$ref": "#/$defs/clarification_response" },
+    { "$ref": "#/$defs/escalation_request" },
+    { "$ref": "#/$defs/recovery_cycle_result" }
+  ],
+  "$defs": {
+    "version": { "type": "integer", "const": 1 },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.:/-]+$"
+    },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "nullable_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+    "nullable_hash": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }] },
+    "ids": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "hashes": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/hash" }
+    },
+    "stage": {
+      "enum": ["observation", "grounding", "candidate_generation", "ranking", "policy", "confirmation", "activation", "target_resolution", "preparation", "execution", "verification"]
+    },
+    "reason": {
+      "enum": ["no_failure", "observation_unavailable", "stale_binding", "ambiguous_target", "no_candidate", "no_eligible_candidate", "unsupported_capability", "policy_denied", "policy_unknown", "authority_exceeded", "confirmation_missing", "activation_unavailable", "target_resolution_failed", "preparation_failed", "execution_failed", "execution_timeout_or_unknown", "execution_aborted_after_commit", "postcondition_failed", "expected_change_missing", "verification_inconclusive", "verification_unsupported", "unsafe_side_effect", "protected_invariant_violation", "clarification_required", "evidence_conflict", "budget_exhausted", "unrecoverable"]
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/reason" }
+    },
+    "failure_class": {
+      "enum": ["no_failure", "transient_observation_failure", "stale_binding", "ambiguous_target", "no_candidate", "no_eligible_candidate", "unsupported_capability", "policy_denied", "policy_unknown", "authority_exceeded", "confirmation_missing", "activation_unavailable", "target_resolution_failed", "preparation_failed", "execution_failed", "execution_timeout_or_unknown", "postcondition_failed", "expected_change_missing", "verification_inconclusive", "verification_unsupported", "unsafe_side_effect", "protected_invariant_violation", "clarification_required", "budget_exhausted", "unrecoverable"]
+    },
+    "failure_classes": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/failure_class" }
+    },
+    "recovery_trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "trigger_id", "stage", "goal_id", "plan_generation_id", "proposal_id", "proposal_sha256", "capability_id", "source_observation_id", "source_observation_hash", "source_observation_sequence", "fresh_observation_id", "fresh_observation_hash", "fresh_observation_sequence", "execution_receipt_sha256", "verified_action_result_sha256", "policy_decision_sha256", "activation_admission_sha256", "reason_codes", "evidence_ids", "detected_at_unix_ms", "trigger_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "trigger_id": { "$ref": "#/$defs/id" },
+        "stage": { "$ref": "#/$defs/stage" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "plan_generation_id": { "$ref": "#/$defs/nullable_id" },
+        "proposal_id": { "$ref": "#/$defs/nullable_id" },
+        "proposal_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "capability_id": { "$ref": "#/$defs/nullable_id" },
+        "source_observation_id": { "$ref": "#/$defs/id" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "fresh_observation_id": { "$ref": "#/$defs/nullable_id" },
+        "fresh_observation_hash": { "$ref": "#/$defs/nullable_hash" },
+        "fresh_observation_sequence": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] },
+        "execution_receipt_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "verified_action_result_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "policy_decision_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "activation_admission_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "reason_codes": { "$ref": "#/$defs/reasons" },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "detected_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "trigger_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "recovery_classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "trigger_sha256", "primary_class", "secondary_classes", "retryability", "safety_severity", "authority_impact", "information_gap", "reason_codes", "classification_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "trigger_sha256": { "$ref": "#/$defs/hash" },
+        "primary_class": { "$ref": "#/$defs/failure_class" },
+        "secondary_classes": { "$ref": "#/$defs/failure_classes" },
+        "retryability": { "enum": ["none", "reobserve_only", "fresh_cycle", "alternate_or_replan"] },
+        "safety_severity": { "enum": ["none", "operational", "elevated", "unsafe"] },
+        "authority_impact": { "enum": ["none", "within_authority", "requires_escalation"] },
+        "information_gap": { "enum": ["none", "bounded_user_fact", "ambiguous_target", "conflicting_evidence"] },
+        "reason_codes": { "$ref": "#/$defs/reasons" },
+        "classification_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "recovery_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "budget_id", "goal_id", "maximum_total_cycles", "remaining_total_cycles", "maximum_reobservations", "remaining_reobservations", "maximum_fresh_retries", "remaining_fresh_retries", "maximum_alternate_capability_attempts", "remaining_alternate_capability_attempts", "maximum_replans", "remaining_replans", "maximum_clarifications", "remaining_clarifications", "started_at_unix_ms", "deadline_unix_ms", "evidence_ids", "budget_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "budget_id": { "$ref": "#/$defs/id" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "maximum_total_cycles": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "remaining_total_cycles": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "maximum_reobservations": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "remaining_reobservations": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "maximum_fresh_retries": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "remaining_fresh_retries": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "maximum_alternate_capability_attempts": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "remaining_alternate_capability_attempts": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "maximum_replans": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "remaining_replans": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "maximum_clarifications": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "remaining_clarifications": { "type": "integer", "minimum": 0, "maximum": 64 },
+        "started_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "deadline_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "budget_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "history_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "cycle_index", "trigger_sha256", "classification_sha256", "decision_sha256", "plan_generation_id", "proposal_id", "proposal_sha256", "capability_id", "input_sha256", "source_observation_hash", "source_observation_sequence", "fresh_observation_hash", "fresh_observation_sequence", "policy_decision_sha256", "cognitive_admission_sha256", "activation_record_hash", "execution_receipt_sha256", "verified_action_result_sha256", "terminal_outcome", "evidence_ids", "entry_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "cycle_index": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "trigger_sha256": { "$ref": "#/$defs/hash" },
+        "classification_sha256": { "$ref": "#/$defs/hash" },
+        "decision_sha256": { "$ref": "#/$defs/hash" },
+        "plan_generation_id": { "$ref": "#/$defs/nullable_id" },
+        "proposal_id": { "$ref": "#/$defs/nullable_id" },
+        "proposal_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "capability_id": { "$ref": "#/$defs/nullable_id" },
+        "input_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "source_observation_hash": { "$ref": "#/$defs/hash" },
+        "source_observation_sequence": { "type": "integer", "minimum": 0 },
+        "fresh_observation_hash": { "$ref": "#/$defs/nullable_hash" },
+        "fresh_observation_sequence": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }] },
+        "policy_decision_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "cognitive_admission_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "activation_record_hash": { "$ref": "#/$defs/nullable_hash" },
+        "execution_receipt_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "verified_action_result_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "terminal_outcome": { "enum": ["passed", "failed", "inconclusive", "unsupported", "unsafe", "clarification_pending", "escalated", "stopped"] },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "entry_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "recovery_history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "history_id", "goal_id", "entries", "consumed_proposal_ids", "consumed_proposal_hashes", "consumed_admission_hashes", "consumed_activation_record_hashes", "consumed_execution_receipt_hashes", "history_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "history_id": { "$ref": "#/$defs/id" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "entries": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/history_entry" } },
+        "consumed_proposal_ids": { "$ref": "#/$defs/ids" },
+        "consumed_proposal_hashes": { "$ref": "#/$defs/hashes" },
+        "consumed_admission_hashes": { "$ref": "#/$defs/hashes" },
+        "consumed_activation_record_hashes": { "$ref": "#/$defs/hashes" },
+        "consumed_execution_receipt_hashes": { "$ref": "#/$defs/hashes" },
+        "history_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "alternate_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["group_id", "capability_ids"],
+      "properties": {
+        "group_id": { "$ref": "#/$defs/id" },
+        "capability_ids": { "$ref": "#/$defs/ids" }
+      }
+    },
+    "recovery_policy_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile_id", "policy_set_sha256", "authority_sha256", "retryable_failure_classes", "reobservable_failure_classes", "alternate_capability_failure_classes", "replannable_failure_classes", "clarifiable_failure_classes", "mandatory_escalation_failure_classes", "forbidden_automatic_failure_classes", "retryable_capability_ids", "alternate_capability_groups", "maximum_same_capability_attempts", "allow_replan", "allow_clarification", "escalation_risk_threshold", "evidence_ids", "profile_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "profile_id": { "$ref": "#/$defs/id" },
+        "policy_set_sha256": { "$ref": "#/$defs/hash" },
+        "authority_sha256": { "$ref": "#/$defs/hash" },
+        "retryable_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "reobservable_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "alternate_capability_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "replannable_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "clarifiable_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "mandatory_escalation_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "forbidden_automatic_failure_classes": { "$ref": "#/$defs/failure_classes" },
+        "retryable_capability_ids": { "$ref": "#/$defs/ids" },
+        "alternate_capability_groups": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "$ref": "#/$defs/alternate_group" } },
+        "maximum_same_capability_attempts": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "allow_replan": { "type": "boolean" },
+        "allow_clarification": { "type": "boolean" },
+        "escalation_risk_threshold": { "enum": ["read_only", "reversible", "business_state_change", "high_criticality"] },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "profile_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "decision_kind": { "enum": ["continue_execution", "no_recovery_complete", "reobserve", "retry_fresh_cycle", "select_alternate_capability", "replan", "request_clarification", "escalate", "stop"] },
+    "recovery_decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "recovery_id", "trigger_sha256", "classification_sha256", "budget_before_sha256", "budget_after", "history_sha256", "decision_kind", "reason_codes", "excluded_proposal_ids", "excluded_proposal_hashes", "excluded_capability_ids", "required_new_observation", "required_new_selection", "required_new_policy_admission", "required_new_platform_activation", "required_new_plan_generation", "clarification_request_sha256", "escalation_request_sha256", "replan_request_sha256", "evidence_ids", "decided_at_unix_ms", "decision_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "recovery_id": { "$ref": "#/$defs/id" },
+        "trigger_sha256": { "$ref": "#/$defs/hash" },
+        "classification_sha256": { "$ref": "#/$defs/hash" },
+        "budget_before_sha256": { "$ref": "#/$defs/hash" },
+        "budget_after": { "$ref": "#/$defs/recovery_budget" },
+        "history_sha256": { "$ref": "#/$defs/hash" },
+        "decision_kind": { "$ref": "#/$defs/decision_kind" },
+        "reason_codes": { "$ref": "#/$defs/reasons" },
+        "excluded_proposal_ids": { "$ref": "#/$defs/ids" },
+        "excluded_proposal_hashes": { "$ref": "#/$defs/hashes" },
+        "excluded_capability_ids": { "$ref": "#/$defs/ids" },
+        "required_new_observation": { "type": "boolean" },
+        "required_new_selection": { "type": "boolean" },
+        "required_new_policy_admission": { "type": "boolean" },
+        "required_new_platform_activation": { "type": "boolean" },
+        "required_new_plan_generation": { "type": "boolean" },
+        "clarification_request_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "escalation_request_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "replan_request_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "decided_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "decision_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "fresh_cycle_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "cycle_id", "parent_recovery_decision_sha256", "goal_id", "previous_plan_generation_id", "previous_proposal_sha256", "previous_capability_id", "latest_observation_id", "latest_observation_hash", "latest_observation_sequence", "excluded_proposal_ids", "excluded_proposal_hashes", "excluded_capability_ids", "required_strategy", "budget_sha256", "history_sha256", "authority_sha256", "policy_snapshot_sha256", "requested_at_unix_ms", "expires_at_unix_ms", "evidence_ids", "cycle_request_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "cycle_id": { "$ref": "#/$defs/id" },
+        "parent_recovery_decision_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "previous_plan_generation_id": { "$ref": "#/$defs/id" },
+        "previous_proposal_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "previous_capability_id": { "$ref": "#/$defs/nullable_id" },
+        "latest_observation_id": { "$ref": "#/$defs/id" },
+        "latest_observation_hash": { "$ref": "#/$defs/hash" },
+        "latest_observation_sequence": { "type": "integer", "minimum": 0 },
+        "excluded_proposal_ids": { "$ref": "#/$defs/ids" },
+        "excluded_proposal_hashes": { "$ref": "#/$defs/hashes" },
+        "excluded_capability_ids": { "$ref": "#/$defs/ids" },
+        "required_strategy": { "enum": ["retry_same_capability", "alternate_capability", "replan"] },
+        "budget_sha256": { "$ref": "#/$defs/hash" },
+        "history_sha256": { "$ref": "#/$defs/hash" },
+        "authority_sha256": { "$ref": "#/$defs/hash" },
+        "policy_snapshot_sha256": { "$ref": "#/$defs/hash" },
+        "requested_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "cycle_request_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "verification_verdict": { "enum": ["passed", "failed", "inconclusive", "unsupported", "unsafe"] },
+    "fresh_cycle_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "cycle_request_sha256", "observation_id", "observation_hash", "observation_sequence", "plan_generation_id", "proposal_id", "proposal_sha256", "capability_id", "input_sha256", "policy_decision_sha256", "cognitive_admission_sha256", "activation_record_hash", "execution_receipt_sha256", "verified_action_result_sha256", "verification_verdict"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "cycle_request_sha256": { "$ref": "#/$defs/hash" },
+        "observation_id": { "$ref": "#/$defs/id" },
+        "observation_hash": { "$ref": "#/$defs/hash" },
+        "observation_sequence": { "type": "integer", "minimum": 0 },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "proposal_id": { "$ref": "#/$defs/id" },
+        "proposal_sha256": { "$ref": "#/$defs/hash" },
+        "capability_id": { "$ref": "#/$defs/id" },
+        "input_sha256": { "$ref": "#/$defs/hash" },
+        "policy_decision_sha256": { "$ref": "#/$defs/hash" },
+        "cognitive_admission_sha256": { "$ref": "#/$defs/hash" },
+        "activation_record_hash": { "$ref": "#/$defs/hash" },
+        "execution_receipt_sha256": { "$ref": "#/$defs/hash" },
+        "verified_action_result_sha256": { "$ref": "#/$defs/hash" },
+        "verification_verdict": { "$ref": "#/$defs/verification_verdict" }
+      }
+    },
+    "replan_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "replan_id", "recovery_decision_sha256", "goal_id", "old_plan_generation_id", "old_plan_sha256", "latest_observation_id", "latest_observation_hash", "latest_observation_sequence", "failure_class", "excluded_proposal_ids", "excluded_capability_ids", "authority_sha256", "policy_snapshot_sha256", "constraints", "evidence_ids", "request_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "replan_id": { "$ref": "#/$defs/id" },
+        "recovery_decision_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "old_plan_generation_id": { "$ref": "#/$defs/id" },
+        "old_plan_sha256": { "$ref": "#/$defs/hash" },
+        "latest_observation_id": { "$ref": "#/$defs/id" },
+        "latest_observation_hash": { "$ref": "#/$defs/hash" },
+        "latest_observation_sequence": { "type": "integer", "minimum": 0 },
+        "failure_class": { "$ref": "#/$defs/failure_class" },
+        "excluded_proposal_ids": { "$ref": "#/$defs/ids" },
+        "excluded_capability_ids": { "$ref": "#/$defs/ids" },
+        "authority_sha256": { "$ref": "#/$defs/hash" },
+        "policy_snapshot_sha256": { "$ref": "#/$defs/hash" },
+        "constraints": { "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": { "enum": ["preserve_goal", "stay_within_authority", "exclude_failed_proposal", "exclude_failed_capability", "reversible_only", "bounded_loops_only"] } },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "request_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "plan_node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "kind", "capability_id", "loop_bound"],
+      "properties": {
+        "node_id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["observe", "interpret", "select_capability", "propose_action", "policy_gate", "activation_gate", "execute", "verify", "branch", "loop_bounded", "recover", "human_review", "return"] },
+        "capability_id": { "$ref": "#/$defs/nullable_id" },
+        "loop_bound": { "oneOf": [{ "type": "integer", "minimum": 1, "maximum": 64 }, { "type": "null" }] }
+      }
+    },
+    "plan_edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "kind", "condition"],
+      "properties": {
+        "from": { "$ref": "#/$defs/id" },
+        "to": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["sequence", "branch_true", "branch_false", "recovery", "human_review"] },
+        "condition": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] }
+      }
+    },
+    "plan_graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "plan_generation_id", "entry_node", "nodes", "edges"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "plan_generation_id": { "$ref": "#/$defs/id" },
+        "entry_node": { "$ref": "#/$defs/id" },
+        "nodes": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/plan_node" } },
+        "edges": { "type": "array", "maxItems": 512, "items": { "$ref": "#/$defs/plan_edge" } }
+      }
+    },
+    "replan_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "replan_id", "request_sha256", "new_plan_generation_id", "new_plan", "new_plan_sha256", "planner_id", "planner_contract_version", "rationale_code", "evidence_ids", "result_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "replan_id": { "$ref": "#/$defs/id" },
+        "request_sha256": { "$ref": "#/$defs/hash" },
+        "new_plan_generation_id": { "$ref": "#/$defs/id" },
+        "new_plan": { "$ref": "#/$defs/plan_graph" },
+        "new_plan_sha256": { "$ref": "#/$defs/hash" },
+        "planner_id": { "$ref": "#/$defs/id" },
+        "planner_contract_version": { "$ref": "#/$defs/id" },
+        "rationale_code": { "enum": ["remove_failed_capability", "replace_unavailable_step", "resolve_no_eligible_candidate", "preserve_safe_goal_path"] },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "result_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "clarification_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "clarification_id", "recovery_decision_sha256", "goal_id", "question_code", "question_kind", "prompt_template_id", "allowed_options", "value_schema_id", "maximum_text_bytes", "sensitive_input_allowed", "blocks_capability_ids", "requested_at_unix_ms", "expires_at_unix_ms", "evidence_ids", "request_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "clarification_id": { "$ref": "#/$defs/id" },
+        "recovery_decision_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "question_code": { "enum": ["confirm_target_exists", "choose_semantic_target", "provide_bounded_non_secret_value", "confirm_goal_constraint"] },
+        "question_kind": { "enum": ["boolean", "choose_one", "bounded_non_secret_text"] },
+        "prompt_template_id": { "$ref": "#/$defs/id" },
+        "allowed_options": { "$ref": "#/$defs/ids" },
+        "value_schema_id": { "$ref": "#/$defs/id" },
+        "maximum_text_bytes": { "type": "integer", "minimum": 1, "maximum": 1024 },
+        "sensitive_input_allowed": { "const": false },
+        "blocks_capability_ids": { "$ref": "#/$defs/ids" },
+        "requested_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "request_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "clarification_answer": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["kind", "value"], "properties": { "kind": { "const": "boolean" }, "value": { "type": "boolean" } } },
+        { "type": "object", "additionalProperties": false, "required": ["kind", "value"], "properties": { "kind": { "const": "choose_one" }, "value": { "$ref": "#/$defs/id" } } },
+        { "type": "object", "additionalProperties": false, "required": ["kind", "value"], "properties": { "kind": { "const": "bounded_non_secret_text" }, "value": { "type": "string", "minLength": 1, "maxLength": 1024 } } }
+      ]
+    },
+    "clarification_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "response_id", "clarification_request_sha256", "goal_id", "authenticated_instruction_provenance_sha256", "answer", "responded_at_unix_ms", "response_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "response_id": { "$ref": "#/$defs/id" },
+        "clarification_request_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "authenticated_instruction_provenance_sha256": { "$ref": "#/$defs/hash" },
+        "answer": { "$ref": "#/$defs/clarification_answer" },
+        "responded_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "response_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "escalation_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "escalation_id", "recovery_decision_sha256", "goal_id", "severity", "reason_codes", "originating_stage", "required_authority_class", "blocked_capability_ids", "policy_set_sha256", "authority_sha256", "latest_observation_hash", "verified_action_result_sha256", "protected_violation_count", "unexpected_change_count", "safe_state_summary_codes", "recommended_next_action_codes", "evidence_ids", "raised_at_unix_ms", "escalation_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "escalation_id": { "$ref": "#/$defs/id" },
+        "recovery_decision_sha256": { "$ref": "#/$defs/hash" },
+        "goal_id": { "$ref": "#/$defs/id" },
+        "severity": { "enum": ["operational", "elevated", "high", "critical"] },
+        "reason_codes": { "$ref": "#/$defs/reasons" },
+        "originating_stage": { "$ref": "#/$defs/stage" },
+        "required_authority_class": { "enum": ["operational_owner", "policy_owner", "security_owner", "legal_or_organizational_owner"] },
+        "blocked_capability_ids": { "$ref": "#/$defs/ids" },
+        "policy_set_sha256": { "$ref": "#/$defs/hash" },
+        "authority_sha256": { "$ref": "#/$defs/hash" },
+        "latest_observation_hash": { "$ref": "#/$defs/hash" },
+        "verified_action_result_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "protected_violation_count": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "unexpected_change_count": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "safe_state_summary_codes": { "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": { "enum": ["automatic_mutation_blocked", "last_observation_retained", "protected_invariant_violated", "state_unknown_after_commit"] } },
+        "recommended_next_action_codes": { "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": { "enum": ["inspect_protected_evidence", "resolve_policy_conflict", "review_authority_scope", "determine_safe_manual_disposition"] } },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "raised_at_unix_ms": { "type": "integer", "minimum": 1 },
+        "escalation_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "recovery_cycle_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "recovery_id", "outcome", "trigger_sha256", "classification_sha256", "decision_sha256", "budget_before_sha256", "budget_after_sha256", "history_before_sha256", "history_after_sha256", "fresh_cycle_request_sha256", "replan_result_sha256", "clarification_sha256", "escalation_sha256", "new_proposal_sha256", "new_admission_sha256", "new_activation_record_hash", "new_execution_receipt_sha256", "new_verification_result_sha256", "terminal_verified_result_sha256", "evidence_ids", "result_sha256"],
+      "properties": {
+        "schema_version": { "$ref": "#/$defs/version" },
+        "recovery_id": { "$ref": "#/$defs/id" },
+        "outcome": { "enum": ["completed", "continue_plan", "recovered", "clarification_pending", "escalated", "stopped", "budget_exhausted", "failed"] },
+        "trigger_sha256": { "$ref": "#/$defs/hash" },
+        "classification_sha256": { "$ref": "#/$defs/hash" },
+        "decision_sha256": { "$ref": "#/$defs/hash" },
+        "budget_before_sha256": { "$ref": "#/$defs/hash" },
+        "budget_after_sha256": { "$ref": "#/$defs/hash" },
+        "history_before_sha256": { "$ref": "#/$defs/hash" },
+        "history_after_sha256": { "$ref": "#/$defs/hash" },
+        "fresh_cycle_request_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "replan_result_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "clarification_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "escalation_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "new_proposal_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "new_admission_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "new_activation_record_hash": { "$ref": "#/$defs/nullable_hash" },
+        "new_execution_receipt_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "new_verification_result_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "terminal_verified_result_sha256": { "$ref": "#/$defs/nullable_hash" },
+        "evidence_ids": { "$ref": "#/$defs/ids" },
+        "result_sha256": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

@@ -13,6 +13,7 @@ docs/cognitive-action-selection-pipeline-v1.md
 docs/cognitive-policy-admission-v1.md
 docs/trusted-action-execution-binding-v1.md
 docs/cognitive-reobserve-verifier-v2.md
+docs/cognitive-recovery-control-v1.md
 docs/product/**
 docs/adr/**
 docs/collaboration/**
@@ -31,15 +32,18 @@ crates/d2i-action-candidates/**
 crates/d2i-action-selection/**
 crates/d2i-policy-admission/**
 crates/d2i-trusted-action-execution/**
+crates/d2i-cognitive-recovery/**
 products/d2i-desktop/Cargo.toml
 products/d2i-desktop/src/lib.rs
 products/d2i-desktop/src/cognitive.rs
 products/d2i-desktop/src/trusted_execution.rs
 products/d2i-desktop/src/cognitive_reobserve_verify.rs
+products/d2i-desktop/src/cognitive_recovery.rs
 products/d2i-desktop/src/cognitive_verification_v2.rs
 products/d2i-desktop/tests/cognitive_runtime.rs
 products/d2i-desktop/tests/trusted_execution.rs
 products/d2i-desktop/tests/cognitive_reobserve_verify.rs
+products/d2i-desktop/tests/cognitive_recovery.rs
 crates/d2i-compiler/src/package.rs
 schemas/flatbuffers/**
 crates/d2i-runtime-api/**

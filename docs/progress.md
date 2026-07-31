@@ -263,7 +263,7 @@ cargo build --workspace --release
 
 - No natural-language model implementation.
 - No GUI implementation.
-- No KRN-400 recovery, retry, replan, clarification, or escalation integration.
+- No KRN-500 complete Goal-to-WorkReport integration.
 - No production CognitiveExecutor-to-KRN-200 connection.
 - No external network feature.
 - No production package format or Runtime ABI change.
@@ -274,7 +274,17 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-KRN-400 - Recovery, Retry, Replan, Clarification and Escalation`
+`D2I-KRN-500 - First Complete Verified Single-Task E2E`
 
-Do not start first complete E2E closure, production module loading, Runtime ABI
-changes, or package embedding as part of KRN-400.
+KRN-400 is complete with deterministic failure classification, atomic recovery
+budgets, bounded replay-safe history, a fresh-cycle decision matrix, typed
+replan/clarification/escalation artifacts, a protected durable Desktop ledger,
+restart-safe coordination, and actual failed-first/recovered-second plus
+unsafe-to-escalation Windows UIA fixtures.
+
+The opened E2E gate is: a failed or inconclusive action can be safely
+re-observed, retried through a wholly fresh trust chain, replanned, clarified,
+escalated, or stopped without blind replay.
+
+Do not start production module loading, Runtime ABI changes, package embedding,
+an external planner, or escalation-recipient routing as part of KRN-500.

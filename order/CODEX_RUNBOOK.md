@@ -12,8 +12,8 @@ Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure
 - `D2I-KRN-100` Cognitive Policy Admission v1 - **complete**
 - `D2I-KRN-200` Trusted Action Execution Binding v1 - **complete**
 - `D2I-KRN-300` Reobserve and Cognitive Verifier v2 - **complete**
-- `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation - **active**
-- `D2I-KRN-500` First Complete Verified Single-Task E2E
+- `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation - **complete**
+- `D2I-KRN-500` First Complete Verified Single-Task E2E - **active**
 
 첫 E2E는 로컬 테스트 폼의 이름 필드 변경과 저장이다. stale target
 거부, 정확한 element, state hash 변화, postcondition, audit evidence,
@@ -45,10 +45,10 @@ commit한다. 최신 `origin/main`에 rebase하고 검사를 다시 실행한 �
 force 없이 `git push origin HEAD:main`한다. PR, 승인 대기, 웹 병합은
 완료조건이 아니다. 의미 충돌이 있으면 push를 중단한다.
 
-`D2I-KRN-300` completes the independent read-only re-observation and existing
-Verification v2 boundary. The next prompt is `D2I-KRN-400`; it consumes the
-verified action, fresh observation, remaining budgets, authority, and policy
-to choose bounded recovery without blind retry or stale activation reuse.
+`D2I-KRN-400` completes deterministic bounded recovery over KRN-100 through
+KRN-300 evidence. It persists budget and replay state before mutation and
+requires a wholly fresh trust chain for retry. The next prompt is
+`D2I-KRN-500`; it assembles the first complete verified single-task E2E.
 
 ---
 

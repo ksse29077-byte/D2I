@@ -26,8 +26,9 @@ git worktree list
 
 `D2I-KRN-100 - Cognitive Policy Admission v1`, `D2I-KRN-200 - Trusted
 Action Execution Binding v1`, `D2I-KRN-300 - Reobserve and Cognitive
-Verifier v2`는 완료됐다. 현재 첫 미완료 active task는 `D2I-KRN-400 -
-Recovery, Retry, Replan, Clarification and Escalation`이다.
+Verifier v2`와 `D2I-KRN-400 - Recovery, Retry, Replan, Clarification and
+Escalation`은 완료됐다. 현재 첫 미완료 active task는 `D2I-KRN-500 - First
+Complete Verified Single-Task E2E`다.
 
 ---
 

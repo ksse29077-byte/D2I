@@ -174,6 +174,18 @@ identity, expected and protected deltas, zero observation side effects, worker
 cleanup, protected audit, and receipt replay consumption are mandatory. The
 terminal result is not case closure or recovery authority.
 
+`d2i-cognitive-recovery` owns the additive KRN-400 deterministic recovery
+contract. It normalizes lifecycle failures, applies unsafe-first
+classification, atomically consumes bounded budgets, records a replay-safe
+hash-only history, and selects complete, continue, read-only re-observation,
+wholly fresh trusted retry, equivalent alternate capability, bounded full
+graph replan, typed clarification, hash-only escalation, or stop. It does not
+change Cognitive IR v1 or own platform side effects. `d2i-desktop` owns the
+current-user protected recovery ledger and fail-before-mutation coordinator.
+Every mutating retry must create new proposal, policy, admission, activation,
+execution, re-observation, and verification evidence; unsafe outcomes can only
+escalate or stop.
+
 Phase 6 adds:
 
 ```text

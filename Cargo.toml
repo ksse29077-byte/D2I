@@ -17,6 +17,7 @@ members = [
     "crates/d2i-action-selection",
     "crates/d2i-policy-admission",
     "crates/d2i-trusted-action-execution",
+    "crates/d2i-cognitive-recovery",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

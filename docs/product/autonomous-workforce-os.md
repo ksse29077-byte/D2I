@@ -171,8 +171,8 @@ asset, completed Case, SLA, or verified cost/risk reduction.
 - `D2I-KRN-100`: Cognitive Policy Admission v1. **Complete**
 - `D2I-KRN-200`: Trusted Action Execution Binding v1. **Complete**
 - `D2I-KRN-300`: Reobserve and Cognitive Verifier v2. **Complete**
-- `D2I-KRN-400`: Recovery, Retry, Replan, Clarification and Escalation. **Active**
-- `D2I-KRN-500`: First Complete Verified Single-Task E2E.
+- `D2I-KRN-400`: Recovery, Retry, Replan, Clarification and Escalation. **Complete**
+- `D2I-KRN-500`: First Complete Verified Single-Task E2E. **Active**
 
 The first E2E changes and saves a name field in a local test form through Goal
 Compiler, Observation, Application Semantics, Element Grounder, Action
@@ -236,6 +236,10 @@ receipt, and removes raw target, input, and worker state. Adapter success is
 not verified closure. KRN-300 starts an independently activated read-only
 observer after the mutation worker exits, verifies exact postconditions and
 protected invariants, and emits replay-consumed, audit-bound verified-action
-evidence. It does not close a Case or authorize recovery.
+evidence. KRN-400 now consumes that evidence through deterministic
+classification, bounded budgets, replay-safe history, wholly fresh retry,
+replan, clarification, escalation, or stop. The protected Desktop recovery
+ledger persists each authority-sensitive transition before mutation and
+restores exact budget/history state after restart.
 
-The active next task is `D2I-KRN-400`.
+The active next task is `D2I-KRN-500`.

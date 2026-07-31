@@ -14,20 +14,27 @@ use d2i_desktop::{
     initialize_windows_deployment_audit, project_windows_activation,
     to_verification_bound_execution_v2, trusted_execution_sha256,
     verify_signed_windows_certification, verify_windows_activation_ledger,
-    verify_windows_deployment_audit, CognitiveTrustedExecutionCoordinator,
-    CognitiveVerificationCoordinatorV2, ConcreteWindowsRuntimeBindingProbe,
-    DeterministicPostconditionVerifierV2, EphemeralActionPayload, ExecutionStatus,
-    FreshObservationProofV1, FreshObservationWorkerExitStatusV1, GoalProgress,
-    IgnoredVolatileTargetV1, ObservationLimits, PolicyReadyActionV1, PostconditionVerifierV2,
-    ProtectedInvariantSeverityV1, ProtectedInvariantV1, ReobservationRequestV1,
-    TrustedExecutionBindingRequestV1, TrustedExecutionSessionV1, TrustedExecutionStatusV1,
-    TrustedReadOnlyObservationConfiguration, TrustedTargetResolverInput,
-    VerificationConsumptionLedgerV1, VerificationGuardFieldV1, VerificationGuardProfileV1,
-    VerificationGuardTargetV1, VerificationRequestV2, VerificationSpecAdapterV1,
-    VerificationVerdictV2, WindowsActivationAdmission, WindowsAdapterConfiguration,
-    WindowsAdapterKind, WindowsRuntimeBindingProbe, WindowsRuntimeManifest,
-    WindowsUiAutomationAdapter, WindowsUiaObservationProvider, WindowsUiaObservationTarget,
-    COGNITIVE_REOBSERVE_VERIFIER_V2_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+    verify_windows_deployment_audit, AlternateCapabilityGroupV1,
+    CognitiveRecoveryCoordinatorStateV1, CognitiveRecoveryCoordinatorV1,
+    CognitiveTrustedExecutionCoordinator, CognitiveVerificationCoordinatorV2,
+    ConcreteWindowsRuntimeBindingProbe, DeterministicPostconditionVerifierV2,
+    EphemeralActionPayload, EscalationRequestV1, EscalationSeverityV1, ExecutionStatus,
+    FreshObservationProofV1, FreshObservationWorkerExitStatusV1, FreshRecoveryCycleEvidenceV1,
+    FreshRecoveryCycleRequestV1, GoalProgress, IgnoredVolatileTargetV1, ObservationLimits,
+    PolicyReadyActionV1, PostconditionVerifierV2, ProtectedInvariantSeverityV1,
+    ProtectedInvariantV1, RecommendedNextActionCodeV1, RecoveryBudgetV1, RecoveryDecisionContextV1,
+    RecoveryDecisionKindV1, RecoveryFailureClassV1, RecoveryHistoryEntryV1,
+    RecoveryHistoryOutcomeV1, RecoveryHistoryV1, RecoveryPolicyProfileV1, RecoveryReasonCodeV1,
+    RecoveryStageV1, RecoveryTriggerV1, RecoveryVerificationVerdictV1, ReobservationRequestV1,
+    RequiredAuthorityClassV1, SafeStateSummaryCodeV1, TrustedExecutionBindingRequestV1,
+    TrustedExecutionSessionV1, TrustedExecutionStatusV1, TrustedReadOnlyObservationConfiguration,
+    TrustedTargetResolverInput, VerificationConsumptionLedgerV1, VerificationGuardFieldV1,
+    VerificationGuardProfileV1, VerificationGuardTargetV1, VerificationRequestV2,
+    VerificationSpecAdapterV1, VerificationVerdictV2, WindowsActivationAdmission,
+    WindowsAdapterConfiguration, WindowsAdapterKind, WindowsRuntimeBindingProbe,
+    WindowsRuntimeManifest, WindowsUiAutomationAdapter, WindowsUiaObservationProvider,
+    WindowsUiaObservationTarget, COGNITIVE_REOBSERVE_VERIFIER_V2_SCHEMA, RECOVERY_SCHEMA_VERSION,
+    TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
 use d2i_policy_admission::{
     admit_action, evaluate_policy, ActivationEligibilityContextV1, AdapterKindV1,
@@ -45,7 +52,7 @@ use std::fmt::Debug;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Mutex, MutexGuard};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
@@ -353,13 +360,31 @@ fn policy_ready_for_target(
     element_kind: &str,
     expected_postcondition: Postcondition,
 ) -> PolicyReadyActionV1 {
+    policy_ready_for_target_labeled(
+        observation,
+        payload,
+        element_id,
+        element_kind,
+        expected_postcondition,
+        "trusted-execution",
+    )
+}
+
+fn policy_ready_for_target_labeled(
+    observation: &ObservationSnapshot,
+    payload: &[u8],
+    element_id: &str,
+    element_kind: &str,
+    expected_postcondition: Postcondition,
+    label: &str,
+) -> PolicyReadyActionV1 {
     let target = CandidateTargetBinding {
         application_pack_sha256: digest("application-pack"),
         observation_bridge_sha256: digest("observation-bridge"),
         observation_id: observation.observation_id.clone(),
         source_observation_hash: observation.state_hash.clone(),
         source_observation_sequence: observation.sequence,
-        grounding_case_id: "grounding-case-1".to_owned(),
+        grounding_case_id: format!("grounding-case-{label}"),
         semantic_target_id: "profile.name".to_owned(),
         element_id: element_id.to_owned(),
         element_kind: element_kind.to_owned(),
@@ -376,9 +401,9 @@ fn policy_ready_for_target(
     ok(arguments.validate());
     let proposal = ActionProposal {
         schema_version: 1,
-        proposal_id: "proposal-trusted-execution".to_owned(),
+        proposal_id: format!("proposal-{label}"),
         goal_id: "goal-trusted-execution".to_owned(),
-        plan_generation_id: "plan-trusted-execution".to_owned(),
+        plan_generation_id: format!("plan-{label}"),
         source_observation_hash: observation.state_hash.clone(),
         capability_id: "uia.set_value".to_owned(),
         semantic_target: "profile.name".to_owned(),
@@ -394,17 +419,17 @@ fn policy_ready_for_target(
     };
     let mut ready = PolicyReadyActionV1 {
         schema_version: 1,
-        selection_id: "selection-trusted-execution".to_owned(),
-        selection_sha256: digest("selection"),
-        candidate_set_sha256: digest("candidate-set"),
+        selection_id: format!("selection-{label}"),
+        selection_sha256: digest(&format!("selection-{label}")),
+        candidate_set_sha256: digest(&format!("candidate-set-{label}")),
         goal_id: proposal.goal_id.clone(),
-        world_state_id: "world-trusted-execution".to_owned(),
+        world_state_id: format!("world-{label}"),
         plan_generation_id: proposal.plan_generation_id.clone(),
         observation_id: observation.observation_id.clone(),
         source_observation_hash: observation.state_hash.clone(),
         source_observation_sequence: observation.sequence,
         application_pack_sha256: digest("application-pack"),
-        grounding_result_sha256: digest("grounding-result"),
+        grounding_result_sha256: digest(&format!("grounding-result-{label}")),
         semantic_target_id: proposal.semantic_target.clone(),
         selected_element_id: element_id.to_owned(),
         selected_element_kind: element_kind.to_owned(),
@@ -415,8 +440,11 @@ fn policy_ready_for_target(
         reversibility: Reversibility::Reversible,
         confirmation_requirement: ConfirmationRequirement::None,
         expected_postconditions: vec![expected_postcondition],
-        evidence_ids: vec!["grounding-result".to_owned(), "selection-result".to_owned()],
-        policy_input_sha256: digest("policy-input"),
+        evidence_ids: vec![
+            format!("grounding-result-{label}"),
+            format!("selection-result-{label}"),
+        ],
+        policy_input_sha256: digest(&format!("policy-input-{label}")),
         policy_ready_sha256: empty_hash(),
     };
     ready.policy_ready_sha256 = ok(ready.compute_policy_ready_sha256());
@@ -439,6 +467,19 @@ fn policy_artifacts_for_goal(
     activation: &d2i_desktop::TrustedPlatformActivationV1,
     now: u64,
     goal: GoalSpec,
+) -> (
+    d2i_policy_admission::CognitiveActivationAdmissionV1,
+    ActivationEligibilityContextV1,
+) {
+    policy_artifacts_for_goal_labeled(ready, activation, now, goal, "trusted-execution")
+}
+
+fn policy_artifacts_for_goal_labeled(
+    ready: PolicyReadyActionV1,
+    activation: &d2i_desktop::TrustedPlatformActivationV1,
+    now: u64,
+    goal: GoalSpec,
+    label: &str,
 ) -> (
     d2i_policy_admission::CognitiveActivationAdmissionV1,
     ActivationEligibilityContextV1,
@@ -505,7 +546,7 @@ fn policy_artifacts_for_goal(
     let decision = ok(evaluate_policy(&request));
     let eligibility = ok(ActivationEligibilityContextV1 {
         schema_version: POLICY_ADMISSION_SCHEMA_VERSION,
-        eligibility_id: "eligibility-trusted-execution".to_owned(),
+        eligibility_id: format!("eligibility-{label}"),
         organization_id: "organization-1".to_owned(),
         integration_id: activation.integration_id.clone(),
         application_pack_sha256: ready.application_pack_sha256.clone(),
@@ -533,7 +574,7 @@ fn policy_artifacts_for_goal(
         &eligibility,
         &mut GrantConsumptionLedgerV1::new(),
         AdmissionIssuanceV1 {
-            admission_id: "admission-trusted-execution".to_owned(),
+            admission_id: format!("admission-{label}"),
             admitted_at_unix_seconds: now + 2,
             expires_at_unix_seconds: now + 250,
             expected_runtime_binding_sha256: eligibility.runtime_binding_sha256.clone(),
@@ -555,6 +596,1093 @@ fn process_exists(process_id: u32) -> bool {
         ])
         .status()
         .is_ok_and(|status| status.success())
+}
+
+#[derive(Debug)]
+struct ActualVerifiedCycle {
+    source: ObservationSnapshot,
+    fresh: ObservationSnapshot,
+    proposal_id: String,
+    proposal_sha256: String,
+    plan_generation_id: String,
+    policy_decision_sha256: String,
+    admission_sha256: String,
+    activation_record_hash: String,
+    receipt_sha256: String,
+    verified_result_sha256: String,
+    verdict: VerificationVerdictV2,
+}
+
+#[allow(clippy::too_many_arguments)]
+fn run_actual_text_cycle(
+    temp: &TempDirectory,
+    configuration: &WindowsAdapterConfiguration,
+    target_template: &WindowsUiaObservationTarget,
+    source_snapshot: &ObservationSnapshot,
+    payload_bytes: &[u8],
+    expected_bytes: &[u8],
+    label: &str,
+    action_sequence: u64,
+    now: u64,
+    time_offset_ms: u64,
+) -> ActualVerifiedCycle {
+    let now_ms = now.saturating_mul(1_000).saturating_add(time_offset_ms);
+    let (execution_admission, session_id) =
+        certified_admission_labeled(configuration, temp, now, &format!("{label}-mutation"));
+    let platform_activation = ok(project_windows_activation(
+        &execution_admission,
+        configuration,
+    ));
+    let source = ok(bind_actual_source_observation(
+        source_snapshot,
+        &platform_activation,
+    ));
+    let text_element = source
+        .observable_elements
+        .iter()
+        .find(|element| {
+            element
+                .value
+                .pointer("/automation_id/text")
+                .and_then(Value::as_str)
+                == Some("D2IText")
+        })
+        .unwrap_or_else(|| panic!("actual recovery text element is absent"));
+    let protected_element = source
+        .observable_elements
+        .iter()
+        .find(|element| {
+            element
+                .value
+                .pointer("/automation_id/text")
+                .and_then(Value::as_str)
+                == Some("D2ICheckbox")
+        })
+        .unwrap_or_else(|| panic!("actual recovery protected checkbox is absent"));
+    let expected_text = std::str::from_utf8(expected_bytes)
+        .unwrap_or_else(|error| panic!("expected fixture text is not UTF-8: {error}"));
+    let mut expected_value = text_element.value.clone();
+    *expected_value
+        .pointer_mut("/current_value")
+        .unwrap_or_else(|| panic!("recovery text current_value is absent")) = json!({
+        "status": "present",
+        "value": {
+            "text": expected_text,
+            "text_hash": sha(expected_bytes),
+            "truncated": false
+        }
+    });
+    let expected_postcondition = Postcondition {
+        target_state: format!("element:{}:value", text_element.element_id),
+        op: ComparisonOp::Equals,
+        expected_value: ok(trusted_execution_sha256(&expected_value)).into(),
+        required: true,
+        timeout_ms: 5_000,
+    };
+    let verification_goal = GoalSpec {
+        schema_version: 1,
+        goal_id: "goal-trusted-execution".to_owned(),
+        objective: "Recover one local fixture value through a fresh trust chain".to_owned(),
+        scope: BTreeMap::from([("fixture".to_owned(), json!("windows-uia"))]),
+        required_outcomes: vec!["fresh observation contains the expected value".to_owned()],
+        constraints: vec!["protected checkbox remains unchanged".to_owned()],
+        success_criteria: vec![expected_postcondition.clone()],
+        risk_class: CognitiveRiskClass::Reversible,
+        confirmation_policy: ConfirmationPolicy::Never,
+        provenance: Provenance {
+            source: "trusted recovery integration fixture".to_owned(),
+            source_hash: digest(&format!("recovery-goal-{label}")),
+            module_id: "cognitive-recovery-test".to_owned(),
+        },
+    };
+    let ready = policy_ready_for_target_labeled(
+        &source,
+        payload_bytes,
+        &text_element.element_id,
+        &text_element.kind,
+        expected_postcondition,
+        label,
+    );
+    let proposal_sha256 = ok(trusted_execution_sha256(&ready.proposal));
+    let arguments: CandidateActionArguments =
+        ok(serde_json::from_value(ready.proposal.arguments.clone()));
+    let grounded_target_sha256 = ok(trusted_execution_sha256(&arguments.target));
+    let (cognitive_admission, eligibility) = policy_artifacts_for_goal_labeled(
+        ready.clone(),
+        &platform_activation,
+        now,
+        verification_goal.clone(),
+        label,
+    );
+    let policy_decision_sha256 = cognitive_admission.policy_decision_sha256.clone();
+    let admission_sha256 = cognitive_admission.admission_sha256.clone();
+    let session = ok(TrustedExecutionSessionV1 {
+        schema_version: TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+        execution_session_id: format!("recovery-session-{label}"),
+        action_sequence,
+        runtime_build_id: "runtime-build-recovery".to_owned(),
+        runtime_package_sha256: digest("runtime-package-recovery"),
+        generated_at_unix_ms: now_ms.saturating_add(1_000),
+        expires_at_unix_ms: now_ms.saturating_add(120_000),
+        expected_organization_id: "organization-1".to_owned(),
+        expected_integration_id: platform_activation.integration_id.clone(),
+        expected_adapter_kind: AdapterKindV1::Uia,
+        expected_activation_ledger_id: platform_activation.activation_ledger_id.clone(),
+        expected_activation_ledger_chain_head: platform_activation
+            .activation_ledger_chain_head
+            .clone(),
+        evidence_ids: vec![format!("runtime-package-{label}")],
+        session_sha256: empty_hash(),
+    }
+    .seal());
+    let execution_binding = ok(TrustedExecutionBindingRequestV1::new(
+        ready.clone(),
+        cognitive_admission,
+        eligibility,
+        session,
+        platform_activation.clone(),
+        &source,
+        grounded_target_sha256,
+    ));
+    let execution_target = WindowsUiaObservationTarget {
+        session_id,
+        runtime_binding_digest: ok(configuration.configuration_hash()),
+        ..target_template.clone()
+    };
+    let mutation_audit_root = temp.path().join(format!("{label}-mutation-audit"));
+    let mutation_audit = ok(initialize_windows_deployment_audit(
+        &mutation_audit_root,
+        &format!("{label}-mutation-audit"),
+        &format!("recovery-session-{label}"),
+        64,
+        now_ms.max(1),
+    ));
+    let payload = ok(EphemeralActionPayload::new(
+        format!("recovery-input-{label}"),
+        payload_bytes.to_vec(),
+        now_ms.saturating_add(1_000),
+        now_ms.saturating_add(60_000),
+    ));
+    let mut executor = ok(CognitiveTrustedExecutionCoordinator::bind(
+        execution_binding.clone(),
+        &source,
+        execution_admission,
+        configuration.clone(),
+        TrustedTargetResolverInput::Uia {
+            target: execution_target,
+        },
+        Some(payload),
+        mutation_audit,
+        now_ms.saturating_add(2_000),
+    ));
+    let mutation_worker_id = executor
+        .owned_worker_process_id()
+        .unwrap_or_else(|| panic!("recovery mutation worker PID is absent"));
+    let preparation = ok(executor.prepare(now_ms.saturating_add(3_000)));
+    let receipt = ok(executor.commit(&preparation, now_ms.saturating_add(4_000)));
+    assert_eq!(receipt.status, TrustedExecutionStatusV1::Succeeded);
+    let execution = ok(to_verification_bound_execution_v2(&receipt));
+    drop(executor);
+    assert!(!process_exists(mutation_worker_id));
+
+    let reobservation_request = ok(ReobservationRequestV1::new(
+        &execution_binding,
+        &receipt,
+        &execution,
+        &source,
+        now_ms.saturating_add(5_000),
+        now_ms.saturating_add(90_000),
+    ));
+    let guard = ok(VerificationGuardProfileV1::new(
+        format!("guard-{label}"),
+        &ready.proposal,
+        &source,
+        vec![VerificationGuardTargetV1 {
+            element_id: text_element.element_id.clone(),
+            field: VerificationGuardFieldV1::Value,
+        }],
+        Vec::new(),
+        vec![ProtectedInvariantV1 {
+            target: VerificationGuardTargetV1 {
+                element_id: protected_element.element_id.clone(),
+                field: VerificationGuardFieldV1::Value,
+            },
+            expected_source_value_hash: ok(trusted_execution_sha256(&protected_element.value)),
+            severity: ProtectedInvariantSeverityV1::Unsafe,
+            reason_code: "protected-checkbox-stable".to_owned(),
+        }],
+        vec![IgnoredVolatileTargetV1 {
+            target: VerificationGuardTargetV1 {
+                element_id: "observation.status".to_owned(),
+                field: VerificationGuardFieldV1::Value,
+            },
+            approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
+            evidence_id: "windows-observation-contract".to_owned(),
+        }],
+        0,
+        vec![format!("actual-recovery-{label}")],
+    ));
+    let (fresh_admission, fresh_session_id) =
+        certified_admission_labeled(configuration, temp, now, &format!("{label}-observer"));
+    let fresh_adapter = ok(WindowsUiAutomationAdapter::bind(
+        fresh_admission.activation,
+        configuration.clone(),
+        now + 2,
+    ));
+    let fresh_audit_root = temp.path().join(format!("{label}-observation-audit"));
+    let fresh_audit = ok(initialize_windows_deployment_audit(
+        &fresh_audit_root,
+        &format!("{label}-observation-audit"),
+        &format!("{label}-observation-session"),
+        64,
+        now_ms.max(1),
+    ));
+    let fresh_provider = ok(WindowsUiaObservationProvider::new(
+        fresh_adapter,
+        WindowsUiaObservationTarget {
+            session_id: fresh_session_id,
+            runtime_binding_digest: ok(configuration.configuration_hash()),
+            ..target_template.clone()
+        },
+        ObservationLimits::default(),
+        fresh_audit,
+    ));
+    let verification_audit_root = temp.path().join(format!("{label}-verification-audit"));
+    let verification_audit = ok(initialize_windows_deployment_audit(
+        &verification_audit_root,
+        &format!("{label}-verification-audit"),
+        &format!("recovery-session-{label}"),
+        64,
+        now_ms.max(1),
+    ));
+    let mut consumption = VerificationConsumptionLedgerV1::default();
+    let mut verifier = ok(CognitiveVerificationCoordinatorV2::begin(
+        execution_binding,
+        verification_goal,
+        ready.clone(),
+        receipt.clone(),
+        execution,
+        source.clone(),
+        reobservation_request,
+        guard,
+        verification_audit,
+        &mut consumption,
+        now_ms.saturating_add(5_000),
+    ));
+    let _ = ok(verifier.reobserve(
+        TrustedReadOnlyObservationConfiguration::Uia(fresh_provider),
+        now_ms.saturating_add(6_000),
+    ));
+    let fresh = verifier
+        .fresh_observation()
+        .cloned()
+        .unwrap_or_else(|| panic!("recovery fresh observation is absent"));
+    let fresh_worker_id = verifier
+        .observation_worker_process_id()
+        .unwrap_or_else(|| panic!("recovery observation worker PID is absent"));
+    let _ = ok(verifier.analyze_delta(now_ms.saturating_add(7_000)));
+    let _ = ok(verifier.build_verification_request());
+    let result = ok(verifier.verify(now_ms.saturating_add(8_000))).clone();
+    let terminal = ok(verifier.finalize(now_ms.saturating_add(9_000)));
+    drop(verifier);
+    assert!(!process_exists(fresh_worker_id));
+    assert_eq!(terminal.action_verdict, result.action_verdict);
+    ActualVerifiedCycle {
+        source,
+        fresh,
+        proposal_id: ready.proposal.proposal_id,
+        proposal_sha256,
+        plan_generation_id: ready.proposal.plan_generation_id,
+        policy_decision_sha256,
+        admission_sha256,
+        activation_record_hash: platform_activation.activation_record_hash,
+        receipt_sha256: receipt.receipt_sha256,
+        verified_result_sha256: terminal.result_sha256,
+        verdict: terminal.action_verdict,
+    }
+}
+
+fn run_actual_unsafe_toggle(
+    temp: &TempDirectory,
+    configuration: &WindowsAdapterConfiguration,
+    target_template: &WindowsUiaObservationTarget,
+    source_snapshot: &ObservationSnapshot,
+    now: u64,
+) -> ActualVerifiedCycle {
+    let now_ms = now.saturating_mul(1_000).saturating_add(10_000);
+    let label = "actual-unsafe-toggle";
+    let (execution_admission, session_id) =
+        certified_admission_labeled(configuration, temp, now, "unsafe-toggle-mutation");
+    let platform_activation = ok(project_windows_activation(
+        &execution_admission,
+        configuration,
+    ));
+    let source = ok(bind_actual_source_observation(
+        source_snapshot,
+        &platform_activation,
+    ));
+    let protected_element = source
+        .observable_elements
+        .iter()
+        .find(|element| {
+            element
+                .value
+                .pointer("/automation_id/text")
+                .and_then(Value::as_str)
+                == Some("D2ICheckbox")
+        })
+        .unwrap_or_else(|| panic!("actual protected checkbox is absent"));
+    let source_toggle_state = protected_element
+        .value
+        .pointer("/toggle_state")
+        .and_then(Value::as_str)
+        .unwrap_or_else(|| panic!("actual protected checkbox state is absent"));
+    let desired = source_toggle_state != "on";
+    let mut expected_value = protected_element.value.clone();
+    expected_value
+        .as_object_mut()
+        .unwrap_or_else(|| panic!("protected checkbox value is not an object"))
+        .insert(
+            "toggle_state".to_owned(),
+            Value::String(if desired { "on" } else { "off" }.to_owned()),
+        );
+    let postcondition = Postcondition {
+        target_state: format!("element:{}:value", protected_element.element_id),
+        op: ComparisonOp::Equals,
+        expected_value: ok(trusted_execution_sha256(&expected_value)).into(),
+        required: true,
+        timeout_ms: 5_000,
+    };
+    let verification_goal = GoalSpec {
+        schema_version: 1,
+        goal_id: "goal-trusted-execution".to_owned(),
+        objective: "Detect one actual protected invariant mutation".to_owned(),
+        scope: BTreeMap::from([("fixture".to_owned(), json!("windows-uia"))]),
+        required_outcomes: vec!["protected mutation is classified unsafe".to_owned()],
+        constraints: vec!["no automatic second mutation".to_owned()],
+        success_criteria: vec![postcondition.clone()],
+        risk_class: CognitiveRiskClass::Reversible,
+        confirmation_policy: ConfirmationPolicy::Never,
+        provenance: Provenance {
+            source: "trusted unsafe recovery fixture".to_owned(),
+            source_hash: digest("unsafe-recovery-goal"),
+            module_id: "cognitive-recovery-test".to_owned(),
+        },
+    };
+    let target = CandidateTargetBinding {
+        application_pack_sha256: digest("application-pack"),
+        observation_bridge_sha256: digest("observation-bridge"),
+        observation_id: source.observation_id.clone(),
+        source_observation_hash: source.state_hash.clone(),
+        source_observation_sequence: source.sequence,
+        grounding_case_id: "grounding-case-unsafe-toggle".to_owned(),
+        semantic_target_id: "fixture.protected_checkbox".to_owned(),
+        element_id: protected_element.element_id.clone(),
+        element_kind: protected_element.kind.clone(),
+        capability_binding_sha256: digest("capability-binding-unsafe-toggle"),
+    };
+    let arguments = CandidateActionArguments {
+        schema_version: 1,
+        operation: "uia.toggle".to_owned(),
+        target,
+        input: CandidateActionInput::Toggle { desired },
+    };
+    ok(arguments.validate());
+    let proposal = ActionProposal {
+        schema_version: 1,
+        proposal_id: "proposal-actual-unsafe-toggle".to_owned(),
+        goal_id: "goal-trusted-execution".to_owned(),
+        plan_generation_id: "plan-actual-unsafe-toggle".to_owned(),
+        source_observation_hash: source.state_hash.clone(),
+        capability_id: "uia.toggle".to_owned(),
+        semantic_target: "fixture.protected_checkbox".to_owned(),
+        arguments: ok(serde_json::to_value(arguments)),
+        preconditions: Vec::new(),
+        expected_postconditions: vec![postcondition.clone()],
+        risk: CognitiveRiskClass::Reversible,
+        reversibility: Reversibility::Reversible,
+        confirmation_requirement: ConfirmationRequirement::None,
+        confidence: 1.0,
+        evidence: vec!["actual protected toggle fixture".to_owned()],
+        valid_until_sequence: source.sequence,
+    };
+    let mut ready = PolicyReadyActionV1 {
+        schema_version: 1,
+        selection_id: "selection-actual-unsafe-toggle".to_owned(),
+        selection_sha256: digest("selection-actual-unsafe-toggle"),
+        candidate_set_sha256: digest("candidate-set-actual-unsafe-toggle"),
+        goal_id: proposal.goal_id.clone(),
+        world_state_id: "world-actual-unsafe-toggle".to_owned(),
+        plan_generation_id: proposal.plan_generation_id.clone(),
+        observation_id: source.observation_id.clone(),
+        source_observation_hash: source.state_hash.clone(),
+        source_observation_sequence: source.sequence,
+        application_pack_sha256: digest("application-pack"),
+        grounding_result_sha256: digest("grounding-result-actual-unsafe-toggle"),
+        semantic_target_id: proposal.semantic_target.clone(),
+        selected_element_id: protected_element.element_id.clone(),
+        selected_element_kind: protected_element.kind.clone(),
+        capability_id: proposal.capability_id.clone(),
+        capability_binding_sha256: digest("capability-binding-unsafe-toggle"),
+        proposal,
+        risk: CognitiveRiskClass::Reversible,
+        reversibility: Reversibility::Reversible,
+        confirmation_requirement: ConfirmationRequirement::None,
+        expected_postconditions: vec![postcondition],
+        evidence_ids: vec![
+            "grounding-result-actual-unsafe-toggle".to_owned(),
+            "selection-result-actual-unsafe-toggle".to_owned(),
+        ],
+        policy_input_sha256: digest("policy-input-actual-unsafe-toggle"),
+        policy_ready_sha256: empty_hash(),
+    };
+    ready.policy_ready_sha256 = ok(ready.compute_policy_ready_sha256());
+    let proposal_sha256 = ok(trusted_execution_sha256(&ready.proposal));
+    let arguments: CandidateActionArguments =
+        ok(serde_json::from_value(ready.proposal.arguments.clone()));
+    let grounded_target_sha256 = ok(trusted_execution_sha256(&arguments.target));
+    let (cognitive_admission, eligibility) = policy_artifacts_for_goal_labeled(
+        ready.clone(),
+        &platform_activation,
+        now,
+        verification_goal.clone(),
+        label,
+    );
+    let policy_decision_sha256 = cognitive_admission.policy_decision_sha256.clone();
+    let admission_sha256 = cognitive_admission.admission_sha256.clone();
+    let session = ok(TrustedExecutionSessionV1 {
+        schema_version: TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+        execution_session_id: "recovery-session-actual-unsafe-toggle".to_owned(),
+        action_sequence: 1,
+        runtime_build_id: "runtime-build-recovery".to_owned(),
+        runtime_package_sha256: digest("runtime-package-recovery"),
+        generated_at_unix_ms: now_ms.saturating_add(1_000),
+        expires_at_unix_ms: now_ms.saturating_add(120_000),
+        expected_organization_id: "organization-1".to_owned(),
+        expected_integration_id: platform_activation.integration_id.clone(),
+        expected_adapter_kind: AdapterKindV1::Uia,
+        expected_activation_ledger_id: platform_activation.activation_ledger_id.clone(),
+        expected_activation_ledger_chain_head: platform_activation
+            .activation_ledger_chain_head
+            .clone(),
+        evidence_ids: vec!["runtime-package-actual-unsafe-toggle".to_owned()],
+        session_sha256: empty_hash(),
+    }
+    .seal());
+    let execution_binding = ok(TrustedExecutionBindingRequestV1::new(
+        ready.clone(),
+        cognitive_admission,
+        eligibility,
+        session,
+        platform_activation.clone(),
+        &source,
+        grounded_target_sha256,
+    ));
+    let mutation_audit = ok(initialize_windows_deployment_audit(
+        &temp.path().join("actual-unsafe-toggle-mutation-audit"),
+        "actual-unsafe-toggle-mutation-audit",
+        "recovery-session-actual-unsafe-toggle",
+        64,
+        now_ms,
+    ));
+    let mut executor = ok(CognitiveTrustedExecutionCoordinator::bind(
+        execution_binding.clone(),
+        &source,
+        execution_admission,
+        configuration.clone(),
+        TrustedTargetResolverInput::Uia {
+            target: WindowsUiaObservationTarget {
+                session_id,
+                runtime_binding_digest: ok(configuration.configuration_hash()),
+                ..target_template.clone()
+            },
+        },
+        None,
+        mutation_audit,
+        now_ms.saturating_add(2_000),
+    ));
+    let mutation_worker_id = executor
+        .owned_worker_process_id()
+        .unwrap_or_else(|| panic!("unsafe mutation worker PID is absent"));
+    let preparation = ok(executor.prepare(now_ms.saturating_add(3_000)));
+    let receipt = ok(executor.commit(&preparation, now_ms.saturating_add(4_000)));
+    let execution = ok(to_verification_bound_execution_v2(&receipt));
+    drop(executor);
+    assert!(!process_exists(mutation_worker_id));
+
+    let reobservation_request = ok(ReobservationRequestV1::new(
+        &execution_binding,
+        &receipt,
+        &execution,
+        &source,
+        now_ms.saturating_add(5_000),
+        now_ms.saturating_add(90_000),
+    ));
+    let guard = ok(VerificationGuardProfileV1::new(
+        "guard-actual-unsafe-toggle".to_owned(),
+        &ready.proposal,
+        &source,
+        Vec::new(),
+        Vec::new(),
+        vec![ProtectedInvariantV1 {
+            target: VerificationGuardTargetV1 {
+                element_id: protected_element.element_id.clone(),
+                field: VerificationGuardFieldV1::Value,
+            },
+            expected_source_value_hash: ok(trusted_execution_sha256(&protected_element.value)),
+            severity: ProtectedInvariantSeverityV1::Unsafe,
+            reason_code: "protected-checkbox-stable".to_owned(),
+        }],
+        vec![IgnoredVolatileTargetV1 {
+            target: VerificationGuardTargetV1 {
+                element_id: "observation.status".to_owned(),
+                field: VerificationGuardFieldV1::Value,
+            },
+            approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
+            evidence_id: "windows-observation-contract".to_owned(),
+        }],
+        0,
+        vec!["actual-protected-toggle".to_owned()],
+    ));
+    let (fresh_admission, fresh_session_id) =
+        certified_admission_labeled(configuration, temp, now, "unsafe-toggle-observer");
+    let fresh_adapter = ok(WindowsUiAutomationAdapter::bind(
+        fresh_admission.activation,
+        configuration.clone(),
+        now + 2,
+    ));
+    let fresh_audit = ok(initialize_windows_deployment_audit(
+        &temp.path().join("actual-unsafe-toggle-observation-audit"),
+        "actual-unsafe-toggle-observation-audit",
+        "actual-unsafe-toggle-observation-session",
+        64,
+        now_ms,
+    ));
+    let fresh_provider = ok(WindowsUiaObservationProvider::new(
+        fresh_adapter,
+        WindowsUiaObservationTarget {
+            session_id: fresh_session_id,
+            runtime_binding_digest: ok(configuration.configuration_hash()),
+            ..target_template.clone()
+        },
+        ObservationLimits::default(),
+        fresh_audit,
+    ));
+    let verification_audit = ok(initialize_windows_deployment_audit(
+        &temp.path().join("actual-unsafe-toggle-verification-audit"),
+        "actual-unsafe-toggle-verification-audit",
+        "recovery-session-actual-unsafe-toggle",
+        64,
+        now_ms,
+    ));
+    let mut consumption = VerificationConsumptionLedgerV1::default();
+    let mut verifier = ok(CognitiveVerificationCoordinatorV2::begin(
+        execution_binding,
+        verification_goal,
+        ready.clone(),
+        receipt.clone(),
+        execution,
+        source.clone(),
+        reobservation_request,
+        guard,
+        verification_audit,
+        &mut consumption,
+        now_ms.saturating_add(5_000),
+    ));
+    let _ = ok(verifier.reobserve(
+        TrustedReadOnlyObservationConfiguration::Uia(fresh_provider),
+        now_ms.saturating_add(6_000),
+    ));
+    let fresh = verifier
+        .fresh_observation()
+        .cloned()
+        .unwrap_or_else(|| panic!("unsafe fresh observation is absent"));
+    let fresh_worker_id = verifier
+        .observation_worker_process_id()
+        .unwrap_or_else(|| panic!("unsafe observer worker PID is absent"));
+    let delta = ok(verifier.analyze_delta(now_ms.saturating_add(7_000))).clone();
+    assert_eq!(delta.protected_invariant_violations.len(), 1);
+    let _ = ok(verifier.build_verification_request());
+    let result = ok(verifier.verify(now_ms.saturating_add(8_000))).clone();
+    let terminal = ok(verifier.finalize(now_ms.saturating_add(9_000)));
+    drop(verifier);
+    assert!(!process_exists(fresh_worker_id));
+    assert_eq!(result.action_verdict, VerificationVerdictV2::Unsafe);
+    assert_eq!(terminal.action_verdict, VerificationVerdictV2::Unsafe);
+    ActualVerifiedCycle {
+        source,
+        fresh,
+        proposal_id: ready.proposal.proposal_id,
+        proposal_sha256,
+        plan_generation_id: ready.proposal.plan_generation_id,
+        policy_decision_sha256,
+        admission_sha256,
+        activation_record_hash: platform_activation.activation_record_hash,
+        receipt_sha256: receipt.receipt_sha256,
+        verified_result_sha256: terminal.result_sha256,
+        verdict: terminal.action_verdict,
+    }
+}
+
+fn actual_recovery_budget() -> RecoveryBudgetV1 {
+    ok(RecoveryBudgetV1 {
+        schema_version: RECOVERY_SCHEMA_VERSION,
+        budget_id: "actual-recovery-budget".to_owned(),
+        goal_id: "goal-trusted-execution".to_owned(),
+        maximum_total_cycles: 3,
+        remaining_total_cycles: 3,
+        maximum_reobservations: 1,
+        remaining_reobservations: 1,
+        maximum_fresh_retries: 1,
+        remaining_fresh_retries: 1,
+        maximum_alternate_capability_attempts: 1,
+        remaining_alternate_capability_attempts: 1,
+        maximum_replans: 1,
+        remaining_replans: 1,
+        maximum_clarifications: 1,
+        remaining_clarifications: 1,
+        started_at_unix_ms: 1,
+        deadline_unix_ms: u64::MAX - 1,
+        evidence_ids: vec!["actual-windows-recovery-budget".to_owned()],
+        budget_sha256: empty_hash(),
+    }
+    .seal())
+}
+
+fn actual_recovery_profile() -> RecoveryPolicyProfileV1 {
+    ok(RecoveryPolicyProfileV1 {
+        schema_version: RECOVERY_SCHEMA_VERSION,
+        profile_id: "actual-windows-recovery-profile".to_owned(),
+        policy_set_sha256: digest("policy-set"),
+        authority_sha256: digest("actual-recovery-authority"),
+        retryable_failure_classes: vec![RecoveryFailureClassV1::PostconditionFailed],
+        reobservable_failure_classes: vec![RecoveryFailureClassV1::VerificationInconclusive],
+        alternate_capability_failure_classes: vec![RecoveryFailureClassV1::PostconditionFailed],
+        replannable_failure_classes: vec![RecoveryFailureClassV1::PostconditionFailed],
+        clarifiable_failure_classes: Vec::new(),
+        mandatory_escalation_failure_classes: vec![
+            RecoveryFailureClassV1::ProtectedInvariantViolation,
+            RecoveryFailureClassV1::UnsafeSideEffect,
+        ],
+        forbidden_automatic_failure_classes: vec![
+            RecoveryFailureClassV1::ProtectedInvariantViolation,
+            RecoveryFailureClassV1::UnsafeSideEffect,
+        ],
+        retryable_capability_ids: vec!["uia.set_value".to_owned()],
+        alternate_capability_groups: vec![AlternateCapabilityGroupV1 {
+            group_id: "windows-text-entry".to_owned(),
+            capability_ids: vec!["uia.set_value".to_owned()],
+        }],
+        maximum_same_capability_attempts: 2,
+        allow_replan: true,
+        allow_clarification: true,
+        escalation_risk_threshold: CognitiveRiskClass::HighCriticality,
+        evidence_ids: vec!["actual-windows-policy-profile".to_owned()],
+        profile_sha256: empty_hash(),
+    }
+    .seal())
+}
+
+#[test]
+fn actual_windows_uia_failure_recovers_through_a_wholly_fresh_second_cycle() {
+    let _uia_fixture = lock_uia_fixture();
+    let temp = TempDirectory::new();
+    let now = now_seconds();
+    let now_ms = now.saturating_mul(1_000);
+    let system_root = std::env::var("SystemRoot").unwrap_or_else(|_| "C:\\Windows".to_owned());
+    let powershell = ok(fs::canonicalize(
+        Path::new(&system_root)
+            .join("System32")
+            .join("WindowsPowerShell")
+            .join("v1.0")
+            .join("powershell.exe"),
+    ));
+    let executable_hash = sha(&ok(fs::read(&powershell)));
+    let title = format!("D2I Actual Recovery {}", std::process::id());
+    let output_path = temp.path().join("actual-recovery-value.txt");
+    let script = ok(fs::canonicalize(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests")
+            .join("support")
+            .join("windows_ui_fixture.ps1"),
+    ));
+    let child = ok(Command::new(&powershell)
+        .args(["-NoProfile", "-STA", "-ExecutionPolicy", "Bypass", "-File"])
+        .arg(&script)
+        .arg("-WindowTitle")
+        .arg(&title)
+        .arg("-OutputPath")
+        .arg(&output_path)
+        .spawn());
+    let process_id = child.id();
+    let mut fixture_process = ChildGuard(child);
+    std::thread::sleep(Duration::from_millis(1_500));
+    assert!(ok(fixture_process.0.try_wait()).is_none());
+
+    let configuration = configuration(&executable_hash);
+    let configuration_hash = ok(configuration.configuration_hash());
+    let (source_admission, source_session_id) =
+        certified_admission_labeled(&configuration, &temp, now, "recovery-source");
+    let target = WindowsUiaObservationTarget {
+        schema_version: 1,
+        process_id,
+        executable_path: powershell.display().to_string(),
+        executable_hash,
+        window_title_hash: sha(title.as_bytes()),
+        session_id: source_session_id,
+        runtime_binding_digest: configuration_hash,
+    };
+    let source_adapter = ok(WindowsUiAutomationAdapter::bind(
+        source_admission.activation,
+        configuration.clone(),
+        now + 2,
+    ));
+    let source_audit = ok(initialize_windows_deployment_audit(
+        &temp.path().join("actual-recovery-source-audit"),
+        "actual-recovery-source-audit",
+        "actual-recovery-session",
+        64,
+        now_ms,
+    ));
+    let source_provider = ok(WindowsUiaObservationProvider::new(
+        source_adapter,
+        target.clone(),
+        ObservationLimits::default(),
+        source_audit,
+    ));
+    let source_completed = ok(source_provider.observe_once(&goal(), 11));
+    assert!(source_completed.worker_exited_cleanly);
+    assert_eq!(source_completed.read_only_side_effect_count, 0);
+    assert!(!process_exists(source_completed.worker_process_id));
+
+    let temporary_value = b"temporary fixture value";
+    let final_value = b"final recovery value";
+    let first = run_actual_text_cycle(
+        &temp,
+        &configuration,
+        &target,
+        &source_completed.snapshot,
+        temporary_value,
+        final_value,
+        "actual-cycle-1",
+        1,
+        now,
+        10_000,
+    );
+    assert_eq!(first.verdict, VerificationVerdictV2::Failed);
+    assert_ne!(first.source.state_hash, first.fresh.state_hash);
+    assert_eq!(ok(fs::read(&output_path)), temporary_value);
+
+    let trigger = ok(RecoveryTriggerV1 {
+        schema_version: RECOVERY_SCHEMA_VERSION,
+        trigger_id: "actual-recovery-trigger".to_owned(),
+        stage: RecoveryStageV1::Verification,
+        goal_id: "goal-trusted-execution".to_owned(),
+        plan_generation_id: Some(first.plan_generation_id.clone()),
+        proposal_id: Some(first.proposal_id.clone()),
+        proposal_sha256: Some(first.proposal_sha256.clone()),
+        capability_id: Some("uia.set_value".to_owned()),
+        source_observation_id: first.source.observation_id.clone(),
+        source_observation_hash: first.source.state_hash.clone(),
+        source_observation_sequence: first.source.sequence,
+        fresh_observation_id: Some(first.fresh.observation_id.clone()),
+        fresh_observation_hash: Some(first.fresh.state_hash.clone()),
+        fresh_observation_sequence: Some(first.fresh.sequence),
+        execution_receipt_sha256: Some(first.receipt_sha256.clone()),
+        verified_action_result_sha256: Some(first.verified_result_sha256.clone()),
+        policy_decision_sha256: Some(first.policy_decision_sha256.clone()),
+        activation_admission_sha256: Some(first.admission_sha256.clone()),
+        reason_codes: vec![RecoveryReasonCodeV1::PostconditionFailed],
+        evidence_ids: vec!["actual-first-verification".to_owned()],
+        detected_at_unix_ms: now_ms.saturating_add(20_000),
+        trigger_sha256: empty_hash(),
+    }
+    .seal());
+    let classification = ok(d2i_desktop::classify_recovery_trigger(&trigger));
+    let initial_history = ok(RecoveryHistoryV1::empty(
+        "actual-recovery-history".to_owned(),
+        "goal-trusted-execution".to_owned(),
+    ));
+    let initial_history = ok(initial_history.append(ok(RecoveryHistoryEntryV1 {
+        schema_version: RECOVERY_SCHEMA_VERSION,
+        cycle_index: 1,
+        trigger_sha256: trigger.trigger_sha256.clone(),
+        classification_sha256: classification.classification_sha256,
+        decision_sha256: digest("initial-action-decision"),
+        plan_generation_id: Some(first.plan_generation_id.clone()),
+        proposal_id: Some(first.proposal_id.clone()),
+        proposal_sha256: Some(first.proposal_sha256.clone()),
+        capability_id: Some("uia.set_value".to_owned()),
+        input_sha256: Some(sha(temporary_value)),
+        source_observation_hash: first.source.state_hash.clone(),
+        source_observation_sequence: first.source.sequence,
+        fresh_observation_hash: Some(first.fresh.state_hash.clone()),
+        fresh_observation_sequence: Some(first.fresh.sequence),
+        policy_decision_sha256: Some(first.policy_decision_sha256.clone()),
+        cognitive_admission_sha256: Some(first.admission_sha256.clone()),
+        activation_record_hash: Some(first.activation_record_hash.clone()),
+        execution_receipt_sha256: Some(first.receipt_sha256.clone()),
+        verified_action_result_sha256: Some(first.verified_result_sha256.clone()),
+        terminal_outcome: RecoveryHistoryOutcomeV1::Failed,
+        evidence_ids: vec!["actual-first-cycle".to_owned()],
+        entry_sha256: empty_hash(),
+    }
+    .seal())));
+    let recovery_ledger = ok(d2i_desktop::initialize_recovery_ledger(
+        &temp.path().join("actual-recovery-ledger"),
+        "actual-recovery-ledger",
+        "actual-recovery-session",
+        "goal-trusted-execution",
+        64,
+        now_ms,
+    ));
+    let recovery_audit = ok(initialize_windows_deployment_audit(
+        &temp.path().join("actual-recovery-audit"),
+        "actual-recovery-audit",
+        "actual-recovery-session",
+        128,
+        now_ms,
+    ));
+    let mut recovery = ok(CognitiveRecoveryCoordinatorV1::restore(
+        "goal-trusted-execution".to_owned(),
+        first.plan_generation_id.clone(),
+        actual_recovery_budget(),
+        initial_history,
+        actual_recovery_profile(),
+        recovery_ledger,
+        recovery_audit,
+    ));
+    ok(recovery.begin(trigger, now_ms.saturating_add(20_001)));
+    ok(recovery.classify(now_ms.saturating_add(20_002)));
+    let decision = ok(recovery.decide(
+        &RecoveryDecisionContextV1 {
+            verification_verdict: Some(RecoveryVerificationVerdictV1::Failed),
+            goal_progress: GoalProgress::InProgress,
+            latest_observation_trusted: true,
+            bounded_user_fact_missing: false,
+            same_failure_count: 1,
+            same_capability_attempts: 1,
+            current_proposal_id: Some(first.proposal_id.clone()),
+            current_proposal_sha256: Some(first.proposal_sha256.clone()),
+            current_capability_id: Some("uia.set_value".to_owned()),
+            current_risk: CognitiveRiskClass::Reversible,
+            alternate_capability_ids: Vec::new(),
+            replan_available: true,
+        },
+        now_ms.saturating_add(20_003),
+    ))
+    .clone();
+    assert_eq!(
+        decision.decision_kind,
+        RecoveryDecisionKindV1::RetryFreshCycle
+    );
+    let request = ok(FreshRecoveryCycleRequestV1::from_decision(
+        "actual-recovery-cycle-2".to_owned(),
+        &decision,
+        "goal-trusted-execution".to_owned(),
+        first.plan_generation_id.clone(),
+        Some(first.proposal_sha256.clone()),
+        Some("uia.set_value".to_owned()),
+        first.fresh.observation_id.clone(),
+        first.fresh.state_hash.clone(),
+        first.fresh.sequence,
+        recovery.history(),
+        digest("actual-recovery-authority"),
+        digest("policy-set"),
+        now_ms.saturating_add(20_004),
+        now_ms.saturating_add(120_000),
+        vec!["actual-fresh-second-cycle".to_owned()],
+    ));
+    let mut second = None;
+    let recovered =
+        ok(
+            recovery.execute_fresh_cycle(&request, now_ms.saturating_add(20_005), || {
+                let cycle = run_actual_text_cycle(
+                    &temp,
+                    &configuration,
+                    &target,
+                    &first.fresh,
+                    final_value,
+                    final_value,
+                    "actual-cycle-2",
+                    2,
+                    now,
+                    40_000,
+                );
+                let evidence = FreshRecoveryCycleEvidenceV1 {
+                    schema_version: RECOVERY_SCHEMA_VERSION,
+                    cycle_request_sha256: request.cycle_request_sha256.clone(),
+                    observation_id: cycle.fresh.observation_id.clone(),
+                    observation_hash: cycle.fresh.state_hash.clone(),
+                    observation_sequence: cycle.fresh.sequence,
+                    plan_generation_id: cycle.plan_generation_id.clone(),
+                    proposal_id: cycle.proposal_id.clone(),
+                    proposal_sha256: cycle.proposal_sha256.clone(),
+                    capability_id: "uia.set_value".to_owned(),
+                    input_sha256: sha(final_value),
+                    policy_decision_sha256: cycle.policy_decision_sha256.clone(),
+                    cognitive_admission_sha256: cycle.admission_sha256.clone(),
+                    activation_record_hash: cycle.activation_record_hash.clone(),
+                    execution_receipt_sha256: cycle.receipt_sha256.clone(),
+                    verified_action_result_sha256: cycle.verified_result_sha256.clone(),
+                    verification_verdict: match cycle.verdict {
+                        VerificationVerdictV2::Passed => RecoveryVerificationVerdictV1::Passed,
+                        VerificationVerdictV2::Failed => RecoveryVerificationVerdictV1::Failed,
+                        VerificationVerdictV2::Inconclusive => {
+                            RecoveryVerificationVerdictV1::Inconclusive
+                        }
+                        VerificationVerdictV2::Unsupported => {
+                            RecoveryVerificationVerdictV1::Unsupported
+                        }
+                        VerificationVerdictV2::Unsafe => RecoveryVerificationVerdictV1::Unsafe,
+                    },
+                };
+                second = Some(cycle);
+                Ok(evidence)
+            }),
+        );
+    let second = second.unwrap_or_else(|| panic!("second actual cycle was not retained"));
+    assert_eq!(second.verdict, VerificationVerdictV2::Passed);
+    assert_eq!(
+        recovered.outcome,
+        d2i_desktop::RecoveryCycleOutcomeV1::Recovered
+    );
+    assert_eq!(recovery.history().entries.len(), 2);
+    assert_eq!(recovery.budget().remaining_fresh_retries, 0);
+    assert_eq!(
+        recovery.state(),
+        CognitiveRecoveryCoordinatorStateV1::NextCycle
+    );
+    assert_ne!(first.proposal_id, second.proposal_id);
+    assert_ne!(first.proposal_sha256, second.proposal_sha256);
+    assert_ne!(first.admission_sha256, second.admission_sha256);
+    assert_ne!(first.activation_record_hash, second.activation_record_hash);
+    assert_ne!(first.receipt_sha256, second.receipt_sha256);
+    assert_eq!(ok(fs::read(&output_path)), final_value);
+
+    let unsafe_cycle = run_actual_unsafe_toggle(&temp, &configuration, &target, &second.fresh, now);
+    assert_eq!(unsafe_cycle.verdict, VerificationVerdictV2::Unsafe);
+    let unsafe_trigger = ok(RecoveryTriggerV1 {
+        schema_version: RECOVERY_SCHEMA_VERSION,
+        trigger_id: "actual-unsafe-recovery-trigger".to_owned(),
+        stage: RecoveryStageV1::Verification,
+        goal_id: "goal-trusted-execution".to_owned(),
+        plan_generation_id: Some(unsafe_cycle.plan_generation_id.clone()),
+        proposal_id: Some(unsafe_cycle.proposal_id.clone()),
+        proposal_sha256: Some(unsafe_cycle.proposal_sha256.clone()),
+        capability_id: Some("uia.toggle".to_owned()),
+        source_observation_id: unsafe_cycle.source.observation_id.clone(),
+        source_observation_hash: unsafe_cycle.source.state_hash.clone(),
+        source_observation_sequence: unsafe_cycle.source.sequence,
+        fresh_observation_id: Some(unsafe_cycle.fresh.observation_id.clone()),
+        fresh_observation_hash: Some(unsafe_cycle.fresh.state_hash.clone()),
+        fresh_observation_sequence: Some(unsafe_cycle.fresh.sequence),
+        execution_receipt_sha256: Some(unsafe_cycle.receipt_sha256.clone()),
+        verified_action_result_sha256: Some(unsafe_cycle.verified_result_sha256.clone()),
+        policy_decision_sha256: Some(unsafe_cycle.policy_decision_sha256.clone()),
+        activation_admission_sha256: Some(unsafe_cycle.admission_sha256.clone()),
+        reason_codes: vec![RecoveryReasonCodeV1::ProtectedInvariantViolation],
+        evidence_ids: vec!["actual-protected-invariant-violation".to_owned()],
+        detected_at_unix_ms: now_ms.saturating_add(80_000),
+        trigger_sha256: empty_hash(),
+    }
+    .seal());
+    let unsafe_ledger = ok(d2i_desktop::initialize_recovery_ledger(
+        &temp.path().join("actual-unsafe-recovery-ledger"),
+        "actual-unsafe-recovery-ledger",
+        "actual-unsafe-recovery-session",
+        "goal-trusted-execution",
+        64,
+        now_ms,
+    ));
+    let unsafe_audit = ok(initialize_windows_deployment_audit(
+        &temp.path().join("actual-unsafe-recovery-audit"),
+        "actual-unsafe-recovery-audit",
+        "actual-unsafe-recovery-session",
+        64,
+        now_ms,
+    ));
+    let mut unsafe_recovery = ok(CognitiveRecoveryCoordinatorV1::restore(
+        "goal-trusted-execution".to_owned(),
+        unsafe_cycle.plan_generation_id.clone(),
+        actual_recovery_budget(),
+        ok(RecoveryHistoryV1::empty(
+            "actual-unsafe-recovery-history".to_owned(),
+            "goal-trusted-execution".to_owned(),
+        )),
+        actual_recovery_profile(),
+        unsafe_ledger,
+        unsafe_audit,
+    ));
+    ok(unsafe_recovery.begin(unsafe_trigger, now_ms.saturating_add(80_001)));
+    ok(unsafe_recovery.classify(now_ms.saturating_add(80_002)));
+    let unsafe_decision = ok(unsafe_recovery.decide(
+        &RecoveryDecisionContextV1 {
+            verification_verdict: Some(RecoveryVerificationVerdictV1::Unsafe),
+            goal_progress: GoalProgress::InProgress,
+            latest_observation_trusted: true,
+            bounded_user_fact_missing: false,
+            same_failure_count: 1,
+            same_capability_attempts: 1,
+            current_proposal_id: Some(unsafe_cycle.proposal_id.clone()),
+            current_proposal_sha256: Some(unsafe_cycle.proposal_sha256.clone()),
+            current_capability_id: Some("uia.toggle".to_owned()),
+            current_risk: CognitiveRiskClass::Reversible,
+            alternate_capability_ids: Vec::new(),
+            replan_available: true,
+        },
+        now_ms.saturating_add(80_003),
+    ))
+    .clone();
+    assert_eq!(
+        unsafe_decision.decision_kind,
+        RecoveryDecisionKindV1::Escalate
+    );
+    let second_mutation_called = AtomicBool::new(false);
+    assert!(unsafe_recovery
+        .execute_fresh_cycle(&request, now_ms.saturating_add(80_004), || {
+            second_mutation_called.store(true, Ordering::SeqCst);
+            Err(d2i_desktop::DesktopError::AccessDenied(
+                "unsafe retry must never run".to_owned(),
+            ))
+        })
+        .is_err());
+    assert!(!second_mutation_called.load(Ordering::SeqCst));
+    let escalation = ok(EscalationRequestV1 {
+        schema_version: RECOVERY_SCHEMA_VERSION,
+        escalation_id: "actual-unsafe-escalation".to_owned(),
+        recovery_decision_sha256: unsafe_decision.decision_sha256,
+        goal_id: "goal-trusted-execution".to_owned(),
+        severity: EscalationSeverityV1::Critical,
+        reason_codes: vec![RecoveryReasonCodeV1::ProtectedInvariantViolation],
+        originating_stage: RecoveryStageV1::Verification,
+        required_authority_class: RequiredAuthorityClassV1::SecurityOwner,
+        blocked_capability_ids: vec!["uia.toggle".to_owned()],
+        policy_set_sha256: digest("policy-set"),
+        authority_sha256: digest("actual-recovery-authority"),
+        latest_observation_hash: unsafe_cycle.fresh.state_hash,
+        verified_action_result_sha256: Some(unsafe_cycle.verified_result_sha256),
+        protected_violation_count: 1,
+        unexpected_change_count: 0,
+        safe_state_summary_codes: vec![
+            SafeStateSummaryCodeV1::AutomaticMutationBlocked,
+            SafeStateSummaryCodeV1::ProtectedInvariantViolated,
+        ],
+        recommended_next_action_codes: vec![RecommendedNextActionCodeV1::InspectProtectedEvidence],
+        evidence_ids: vec!["actual-unsafe-verification".to_owned()],
+        raised_at_unix_ms: now_ms.saturating_add(80_005),
+        escalation_sha256: empty_hash(),
+    }
+    .seal());
+    let escalated = ok(unsafe_recovery.escalate(&escalation, now_ms.saturating_add(80_005)));
+    assert_eq!(
+        escalated.outcome,
+        d2i_desktop::RecoveryCycleOutcomeV1::Escalated
+    );
+    assert_eq!(
+        unsafe_recovery.state(),
+        CognitiveRecoveryCoordinatorStateV1::Terminal
+    );
 }
 
 #[test]

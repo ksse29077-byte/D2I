@@ -46,13 +46,17 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
 - `crates/d2i-trusted-action-execution`: audit-safe binding of one admitted
   Cognitive action to an exact target, input hash, preparation, and terminal
   adapter-attempt receipt.
+- `crates/d2i-cognitive-recovery`: deterministic failure classification,
+  bounded recovery budgets and history, fresh-cycle retry, replan,
+  clarification, escalation, terminal results, and legacy projection.
 - `products/d2i-embodied`: separate robot integration contracts, simulation
   replay, safety-gated hardware boundary, robot memory, and fleet promotion.
 - `products/d2i-desktop`: separate PC autonomy contracts, capability policy,
   signed approval, hash-chain audit, signed Windows runtime binding, and
   capability-isolated adapters. KRN-300 adds independent one-shot UIA/WebDriver
-  re-observation, protected-invariant delta analysis, deterministic
-  Verification v2, and hash-bound verified-action evidence.
+  re-observation and Verification v2. KRN-400 adds a protected durable recovery
+  ledger and coordinator that persists bounded decisions before mutation,
+  rejects replay, and requires wholly fresh retry trust chains.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -83,6 +87,10 @@ After an admitted mutation, the mutation worker is not reused for verification.
 A new read-only activation must produce a fresh exact-target observation before
 the action can be classified as passed, failed, inconclusive, unsupported, or
 unsafe.
+Recovery then deterministically chooses a budgeted read-only re-observation,
+wholly fresh trusted retry, equivalent alternate capability, bounded replan,
+typed clarification, hash-only escalation, completion, continuation, or stop.
+Unsafe outcomes never authorize an automatic second mutation.
 
 ## CLI
 

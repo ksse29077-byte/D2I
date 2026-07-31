@@ -4,6 +4,7 @@ mod adapter;
 mod approval;
 mod audit;
 mod cognitive;
+mod cognitive_recovery;
 mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
@@ -48,6 +49,11 @@ pub use cognitive::{
     Reversibility, TrustLabel, VerificationResult, WorkReport, WorldFact, WorldFactKind,
     WorldState, WorldStateReducer,
 };
+pub use cognitive_recovery::{
+    initialize_recovery_ledger, verify_recovery_ledger, CognitiveRecoveryCoordinatorStateV1,
+    CognitiveRecoveryCoordinatorV1, RecoveryLedgerEventKindV1, RecoveryLedgerRecordV1,
+    RecoveryLedgerV1, RecoveryLedgerVerificationV1,
+};
 pub use cognitive_reobserve_verify::{
     analyze_observation_delta, bind_actual_source_observation, parse_reobserve_json,
     CognitiveReobserveCoordinator, CognitiveVerificationCoordinatorV2,
@@ -84,6 +90,22 @@ pub use d2i_application_semantics::{
     ObservationFixtureBridge, ObservationGroundingCase, APPLICATION_SEMANTICS_SCHEMA_VERSION,
     APPLICATION_SEMANTICS_V1_SCHEMA, ELEMENT_GROUNDER_INPUT_SCHEMA_ID,
     ELEMENT_GROUNDER_INPUT_SCHEMA_VERSION,
+};
+pub use d2i_cognitive_recovery::{
+    classify_recovery_trigger, decide_recovery, project_legacy_decision,
+    AlternateCapabilityGroupV1, ClarificationAnswerV1, ClarificationQuestionCodeV1,
+    ClarificationQuestionKindV1, ClarificationRequestV1, ClarificationResponseV1,
+    DeterministicFixtureReplanner, EscalationRequestV1, EscalationSeverityV1,
+    FreshRecoveryCycleEvidenceV1, FreshRecoveryCycleRequestV1, FreshRecoveryStrategyV1,
+    RecommendedNextActionCodeV1, RecoveryAuthorityImpactV1, RecoveryBudgetV1,
+    RecoveryClassificationV1, RecoveryCycleOutcomeV1, RecoveryCycleResultV1,
+    RecoveryDecisionContextV1, RecoveryDecisionKindV1, RecoveryDecisionV1, RecoveryError,
+    RecoveryFailureClassV1, RecoveryHistoryEntryV1, RecoveryHistoryOutcomeV1, RecoveryHistoryV1,
+    RecoveryInformationGapV1, RecoveryPolicyProfileV1, RecoveryReasonCodeV1,
+    RecoveryRetryabilityV1, RecoverySafetySeverityV1, RecoveryStageV1, RecoveryTriggerV1,
+    RecoveryVerificationVerdictV1, ReplanConstraintCodeV1, ReplanRationaleCodeV1, ReplanRequestV1,
+    ReplanResultV1, RequiredAuthorityClassV1, SafeStateSummaryCodeV1,
+    COGNITIVE_RECOVERY_CONTROL_V1_SCHEMA, MAX_RECOVERY_CYCLES, RECOVERY_SCHEMA_VERSION,
 };
 pub use d2i_trusted_action_execution::{
     canonical_sha256 as trusted_execution_sha256, expected_input as trusted_expected_input,
@@ -229,6 +251,22 @@ impl From<d2i_cognitive_ir::CognitiveIrError> for DesktopError {
                 Self::AccessDenied(message)
             }
             d2i_cognitive_ir::CognitiveIrError::Json(message) => Self::Json(message),
+        }
+    }
+}
+
+impl From<d2i_cognitive_recovery::RecoveryError> for DesktopError {
+    fn from(error: d2i_cognitive_recovery::RecoveryError) -> Self {
+        match error {
+            d2i_cognitive_recovery::RecoveryError::Invalid(message) => Self::Invalid(message),
+            d2i_cognitive_recovery::RecoveryError::Integrity(message) => Self::Integrity(message),
+            d2i_cognitive_recovery::RecoveryError::AccessDenied(message) => {
+                Self::AccessDenied(message)
+            }
+            d2i_cognitive_recovery::RecoveryError::Unsupported(message) => {
+                Self::AdapterUnavailable(message)
+            }
+            d2i_cognitive_recovery::RecoveryError::Json(message) => Self::Json(message),
         }
     }
 }
