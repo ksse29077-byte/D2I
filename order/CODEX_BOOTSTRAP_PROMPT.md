@@ -1,5 +1,40 @@
-# Codex 첫 실행 프롬프트
-## D2I Compiler Phase 0 전용
+# Codex Resume Bootstrap
+
+이 프롬프트는 현재 저장소를 이어서 작업할 때 사용한다.
+
+```text
+git fetch origin
+git rev-parse origin/main
+git status
+git worktree list
+```
+
+1. `AGENTS.md`, `docs/product/autonomous-workforce-os.md`,
+   `order/D2I_COMPILER_MASTER_WORK_ORDER.md`,
+   `order/D2I_DESKTOP_COGNITIVE_RUNTIME_ADDENDUM.md`, `order/TASKS.md`,
+   관련 ADR을 읽는다.
+2. 최신 main에서 완료된 Core, Module, Runtime, Windows 신뢰 기준선을
+   탐지한다.
+3. `TASKS.md`의 첫 미완료 active task만 선택한다. Legacy Compiler
+   Track의 Phase 0부터 임의로 재시작하지 않는다.
+4. 작업별 독립 worktree/branch를 사용할 수 있다. 구현과 필수 검사가
+   끝나면 commit, `git fetch origin`, 최신 `origin/main` rebase,
+   회귀검사, 범위 확인 후 force 없이 `git push origin HEAD:main`한다.
+5. PR, 리뷰 요청, 승인 대기, GitHub 웹 병합은 현재 완료 절차가 아니다.
+6. 의미 충돌이 있을 때만 push를 중단하고 정확한 충돌을 보고한다.
+7. 완료 후 정확한 다음 작업을 기록하되 시작하지 않는다.
+
+현재 active task는 `D2I-KRN-100 - Cognitive Policy Admission v1`이다.
+완료되면 다음 작업은 `D2I-KRN-200 - Trusted Action Execution Binding
+v1`이다.
+
+---
+
+# Legacy Bootstrap Archive
+## D2I Compiler Phase 0 전용 기록
+
+아래 내용은 초기 저장소 생성 당시의 역사적 프롬프트다. 현재 active
+instruction이 아니며 이미 구현된 기능을 재생성하는 데 사용하지 않는다.
 
 아래 프롬프트를 D2I 저장소 루트에서 Codex에 입력한다.
 

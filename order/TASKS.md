@@ -1,4 +1,79 @@
-# D2I Compiler — Codex 단계별 작업 백로그
+# D2I Active Product Roadmap
+
+## Current Completed Baseline
+
+기준 commit `866a53926016824f2664dfab4e9bc600fade1cc6`까지 Cognitive IR
+v1, deterministic CognitiveExecutor, Module Contract/SDK/Conformance,
+Repository Decoupling, Windows trust/activation/WFP/audit, read-only
+UIA/Web Observation Plane, Goal Compiler, Application Semantics, Element
+Grounder, Action Candidate Provider, Plan Ranker, Cognitive Action Selection
+Pipeline이 완료됐다.
+
+`PolicyReadyActionV1`은 policy, confirmation, activation, adapter execution
+authority를 포함하지 않는다.
+
+## Human Dependency Gate
+
+사람은 Role, delegated authority, 금지사항, KPI, 위험 한도, 보고와
+escalation을 설계하고 법적·비가역·고위험·불확실·정책 충돌 예외에
+개입한다. 각 Case마다 업무 탐색, prompt, 자료 정리, 실행 판단, 결과
+검토, 완료 처리를 사람이 대신하는 의존성은 제거한다.
+
+모든 신규 Core 작업은 제거하는 human touch 또는 여는 E2E gate를
+기록해야 한다. 완료는 verified outcome과 audit evidence로 판정하며
+애매한 상태를 성공으로 보고하지 않는다.
+
+## Track K - Safe Execution Kernel Closure
+
+- [ ] `D2I-KRN-100` Cognitive Policy Admission v1 - **first active task**
+- [ ] `D2I-KRN-200` Trusted Action Execution Binding v1
+- [ ] `D2I-KRN-300` Reobserve and Cognitive Verifier v2
+- [ ] `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
+- [ ] `D2I-KRN-500` First Complete Verified Single-Task E2E
+
+첫 E2E는 로컬 테스트 폼 이름 필드 변경/저장이다. stale target 거부,
+잘못된 element 선택 0, state hash 변화, postcondition, audit evidence,
+잔류 process/credential/activation 0이 필수다.
+
+## Track W - Autonomous Workforce Layer
+
+- [ ] `D2I-WORK-100` Role Contract v1
+- [ ] `D2I-WORK-200` Work Item / Case Contract v1
+- [ ] `D2I-WORK-300` Work Radar and Work Intake
+- [ ] `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
+- [ ] `D2I-WORK-500` Situation Model and Adaptive Planner
+- [ ] `D2I-WORK-600` Episodic Memory and Case Learning Records
+- [ ] `D2I-WORK-700` Role-level Reporting, SLA and Escalation
+- [ ] `D2I-WORK-800` AI Safety Operations Employee Shadow Mode
+- [ ] `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
+
+## Track X - Industrial Execution Expansion
+
+- [ ] `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
+- [ ] `D2I-EDGE-200` Sensor / Camera / IoT observation planes
+- [ ] `D2I-EDGE-300` PLC / SCADA / OT supervised execution
+- [ ] `D2I-EDGE-400` Robot / AMR / Drone adapters
+
+## KPI
+
+기술 KPI: binding integrity, policy correctness, stale rejection,
+deterministic replay, verification accuracy, critical error rate, recovery
+success.
+
+사업 KPI: Autonomous Case Completion Rate, Human Touches/Minutes per Case,
+Verified Closure Rate, Reopen Rate, Exception Rate, Time to Resolution, Cost
+per Completed Case, Cases per Human Supervisor, SLA Compliance, False
+Completion Rate, New Workflow Onboarding Cost.
+
+핵심 방향 지표는 한 번의 사람 개입으로 verified closure에 도달하는
+Case 수다.
+
+---
+
+# Legacy Compiler Track - Codex 단계별 작업 백로그
+
+아래 Phase 0~9는 구현 역사와 회귀 참조다. Active Track K/W/X보다
+우선하지 않으며 이미 구현된 기능을 재생성하지 않는다.
 
 이 문서는 구현 순서를 통제한다.  
 각 Phase는 앞 Phase의 종료조건을 충족한 뒤 시작한다.

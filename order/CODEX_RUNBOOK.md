@@ -1,5 +1,62 @@
-# Codex 실행 런북
-## D2I Compiler를 단계적으로 구현하기 위한 복사·붙여넣기 프롬프트
+# Codex Active Roadmap Runbook
+
+## Current Product Direction
+
+D2I는 Industrial Autonomous Workforce OS다. Safe Execution Kernel은
+단일 작업을 안전하게 완료하는 하위 계층이고, Workforce Layer는 Role
+Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure까지
+소유하게 한다. 운영 원칙은 Human-by-exception이다.
+
+## Track K - Safe Execution Kernel Closure
+
+- `D2I-KRN-100` Cognitive Policy Admission v1 - **active**
+- `D2I-KRN-200` Trusted Action Execution Binding v1
+- `D2I-KRN-300` Reobserve and Cognitive Verifier v2
+- `D2I-KRN-400` Recovery, Retry, Replan, Clarification and Escalation
+- `D2I-KRN-500` First Complete Verified Single-Task E2E
+
+첫 E2E는 로컬 테스트 폼의 이름 필드 변경과 저장이다. stale target
+거부, 정확한 element, state hash 변화, postcondition, audit evidence,
+잔류 상태 0을 증명한다.
+
+## Track W - Autonomous Workforce Layer
+
+- `D2I-WORK-100` Role Contract v1
+- `D2I-WORK-200` Work Item / Case Contract v1
+- `D2I-WORK-300` Work Radar and Work Intake
+- `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
+- `D2I-WORK-500` Situation Model and Adaptive Planner
+- `D2I-WORK-600` Episodic Memory and Case Learning Records
+- `D2I-WORK-700` Role-level Reporting, SLA and Escalation
+- `D2I-WORK-800` AI Safety Operations Employee Shadow Mode
+- `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
+
+## Track X - Industrial Execution Expansion
+
+- `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
+- `D2I-EDGE-200` Sensor / Camera / IoT observation planes
+- `D2I-EDGE-300` PLC / SCADA / OT supervised execution
+- `D2I-EDGE-400` Robot / AMR / Drone adapters
+
+## Solo Direct-to-Main
+
+각 active task는 독립 worktree에서 범위 검사와 전체 검사를 마친 뒤
+commit한다. 최신 `origin/main`에 rebase하고 검사를 다시 실행한 다음
+force 없이 `git push origin HEAD:main`한다. PR, 승인 대기, 웹 병합은
+완료조건이 아니다. 의미 충돌이 있으면 push를 중단한다.
+
+`D2I-KRN-100` 완료 후 next prompt는 `D2I-KRN-200`이며, exact
+`PolicyReadyActionV1`, `CognitiveActivationAdmissionV1`, one-shot
+`ActivatedWindowsBinding`을 capability-specific `DesktopOperation`과
+prepare/commit 경계로 결합한다.
+
+---
+
+# Legacy Compiler Track Runbook
+## 이미 구현된 기능을 재생성하지 않기 위한 참조
+
+아래 Phase 1~8 프롬프트는 역사적 Compiler 구현 기록이다. 현재 active
+roadmap보다 우선하지 않는다.
 
 원칙:
 

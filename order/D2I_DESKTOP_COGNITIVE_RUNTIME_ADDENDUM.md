@@ -1,3 +1,56 @@
+# D2I Safe Execution Kernel and Autonomous Role Runtime
+
+## Active Product Goal
+
+단일 작업 수행은 하위 목표다. 최종 목표는 지속 실행되는 Role Instance가
+Work Radar와 Case Queue를 통해 승인된 업무를 감지하고, 각 Case를
+verified closure까지 소유하며, 법적·비가역·고위험·불확실·권한 밖
+예외만 사람에게 전달하는 것이다.
+
+Safe Execution Kernel:
+
+```text
+Goal -> Observation -> World State -> Action Candidates -> Ranking
+     -> Policy -> Confirmation when required -> Activation
+     -> Trusted Execution -> Re-observation -> Verification
+     -> Recovery -> Report
+```
+
+Workforce Layer:
+
+```text
+Role Contract -> Work Radar -> Work Intake -> Case/Work Queue
+-> Situation Model -> Adaptive Planner -> Safe Execution Kernel
+-> Verified Closure -> Episodic Memory -> SLA/Outcome Tracking
+-> Exception Escalation -> Role-level Report
+```
+
+현재 완료 기준선은 Cognitive IR v1, model-free CognitiveExecutor,
+Module Contract/SDK/Conformance, Repository Decoupling, Windows
+trust/activation/WFP/audit, read-only UIA/Web Observation Plane, Goal
+Compiler, Application Semantics v1, Element Grounder v1, Action Candidate
+Provider v1, Plan Ranker v1, Cognitive Action Selection Pipeline v1이다.
+기준 commit은 `866a53926016824f2664dfab4e9bc600fade1cc6`이다.
+
+현재 active task는 `D2I-KRN-100 - Cognitive Policy Admission v1`이다.
+기존 C0 및 초기 Cognitive Phase 프롬프트는 historical reference이며
+active prompt가 아니다.
+
+적용 우선순위:
+
+```text
+AGENTS.md
+-> 승인된 ADR
+-> docs/product/autonomous-workforce-os.md
+-> D2I_COMPILER_MASTER_WORK_ORDER.md
+-> 이 추가 작업지시서
+-> TASKS.md
+-> CODEX_RUNBOOK.md
+-> 구현 편의
+```
+
+---
+
 # D2I Desktop Cognitive Task Runtime
 ## Windows 자율 작업 지능 추가 작업지시서
 

@@ -1,3 +1,42 @@
+# D2I Industrial Autonomous Workforce OS - Compiler Subsystem
+
+## Product Context
+
+D2I는 고객 조직의 Domain, Role, Authority, Application Semantics,
+Organizational Memory와 실행 수단을 지속적으로 운영되는 자율 디지털
+직원으로 컴파일하고 실행하는 Industrial Autonomous Workforce OS다.
+
+D2IC는 전체 제품이 아니라 compile-time subsystem이다. 기존 Domain
+Source Pack과 Intelligence Package 계약을 보존하면서 다음 compile-time
+자산으로 확장한다.
+
+- Domain Pack
+- Role Pack
+- Application Pack
+- Policy and Authority Pack
+- Evaluation Pack
+- Runtime/Capability binding
+- Autonomous Workforce Package
+
+Runtime은 패키지로부터 Role Instance를 만들고 Work Radar와 Case Queue를
+통해 Case를 발견·소유한다. 완료는 생성된 보고서가 아니라 verified
+outcome과 audit evidence로 판정한다. 사람은 Role, 권한, 금지사항, KPI,
+위험 한도, 보고와 escalation을 설계하고 법적·비가역·고위험·불확실
+예외에 개입한다. 목표는 Human-in-every-loop가 아니라
+Human-by-exception이다.
+
+장기 핵심 자산은 Domain과 Skill뿐 아니라 Role, Case, Episode다. D2I
+Cognitive Control Plane은 Desktop/Enterprise Application,
+API/ERP/MES/CMMS, Camera/Sensor/IoT, PLC/SCADA/OT,
+Robot/AMR/Drone execution plane을 조율한다. PLC 안전제어, 모터제어,
+긴급정지는 각 전용 안전 계층에 남는다.
+
+이 제품 문맥은 아래 Compiler, runtime, package, ABI 불변조건을
+약화하거나 대체하지 않는다. 제품 방향의 canonical source는
+`docs/product/autonomous-workforce-os.md`다.
+
+---
+
 # Domain-to-Intelligence Compiler(D2IC)
 ## Codex 구현용 마스터 작업지시서
 
@@ -2064,6 +2103,12 @@ Codex는 한 번에 전체 시스템을 구현하지 않는다.
 - [ ] Codex review에서 critical finding이 없다.
 
 ---
+
+# Legacy Phase 0 Bootstrap Archive
+
+다음 Phase 0 파일 목록과 명령은 초기 Compiler 저장소를 만들던 역사적
+기록이다. 현재 active instruction이 아니며 완료된 저장소에서 다시
+실행하지 않는다.
 
 # 28. Phase 0에서 Codex가 생성해야 할 첫 파일
 

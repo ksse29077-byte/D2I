@@ -1,37 +1,31 @@
-# D2I Compiler Codex 작업지시서 패키지
+# D2I Repository Reading Order
 
-이 폴더는 Domain-to-Intelligence Compiler를 Codex로 단계적으로 구현하기 위한 문서 세트다.
+D2I is an Industrial Autonomous Workforce OS. The Compiler documents in this
+directory remain authoritative for the compile-time subsystem and preserve the
+legacy Compiler phase history.
 
-## 읽는 순서
+Read in this order:
 
-1. `D2I_COMPILER_MASTER_WORK_ORDER.md`  
-   제품 정의, 전체 구조, IR, 컴파일 패스, 런타임/ABI, 보안, 평가, 로드맵을 담은 기준 문서.
+1. `../AGENTS.md`
+2. `../docs/product/autonomous-workforce-os.md`
+3. `D2I_COMPILER_MASTER_WORK_ORDER.md`
+4. `D2I_DESKTOP_COGNITIVE_RUNTIME_ADDENDUM.md`
+5. `TASKS.md`
+6. `CODEX_RUNBOOK.md`
+7. `CODEX_BOOTSTRAP_PROMPT.md`
+8. Relevant ADRs and `../docs/architecture.md`
 
-2. `AGENTS.md`  
-   저장소 루트에 복사할 Codex 전용 불변 지침. 장문 설계서를 반복해 넣지 않고 구현 규칙과 금지사항을 유지한다.
+## Operating Rule
 
-3. `TASKS.md`  
-   Phase별 작업 ID와 종료조건.
+Use an isolated worktree when useful. After scoped and full checks, commit,
+fetch, rebase onto the latest `origin/main`, rerun required checks, and push
+without force using `git push origin HEAD:main`. Confirm local, tracking, and
+remote main SHAs and a clean worktree.
 
-4. `CODEX_BOOTSTRAP_PROMPT.md`  
-   새 저장소 또는 기존 저장소에서 Phase 0을 시작하는 첫 프롬프트.
+Pull requests, approval waits, and web merges are not completion gates for the
+current Solo Direct-to-Main workflow. Code review remains available when it
+adds value.
 
-5. `CODEX_RUNBOOK.md`  
-   Phase 1 이후를 순차 실행하기 위한 복사·붙여넣기 프롬프트.
-
-## 권장 사용법
-
-```text
-<repository-root>/
-├─ AGENTS.md
-├─ D2I_COMPILER_MASTER_WORK_ORDER.md
-├─ TASKS.md
-├─ CODEX_RUNBOOK.md
-└─ ...
-```
-
-- `AGENTS.md`는 저장소 루트에 둔다.
-- 마스터 작업지시서는 설계 기준 문서로 유지한다.
-- Codex에는 한 번에 한 Phase만 지시한다.
-- 각 Phase 완료 뒤 Git checkpoint와 코드 리뷰를 수행한다.
-- 기존 독자 고효율 런타임이 이미 있다면 이를 재작성하지 않고 `RuntimeAdapter` 경계로 연결한다.
+Do not restart a legacy Compiler phase or rewrite an existing proprietary
+runtime. Select the first incomplete active task in `TASKS.md` and preserve
+unknown integrations behind a narrow `RuntimeAdapter` or equivalent boundary.
