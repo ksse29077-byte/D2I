@@ -2,13 +2,16 @@
 
 ## Workforce Status Addendum
 
-`D2I-WORK-100 - Role Contract v1` is complete. The platform now has
+`D2I-WORK-100 - Role Contract v1` and `D2I-WORK-200 - Work Item / Case
+Contract v1` are complete. The platform now has
 deterministic immutable Role contracts, exact organization approval, bounded
 signed delegation, persistent protected Role Instances, one-time task
 admission, existing authority/recovery projections, and a role-bound KRN-500
-Windows E2E. The active next task is `D2I-WORK-200 - Work Item / Case Contract
-v1`. Work Radar, Queue, Scheduler, and production AI Safety execution remain
-unimplemented.
+Windows E2E. It also has immutable admitted Work Items, deterministic
+deduplication, persistent accountable Cases, exact KRN attempt/evidence
+retention, and verified terminal disposition. The active next task is
+`D2I-WORK-300 - Work Radar and Work Intake`. Queue, Scheduler, ownership
+transfer, and production AI Safety execution remain unimplemented.
 
 ## Active Product Goal
 
@@ -34,6 +37,12 @@ Role Contract -> Work Radar -> Work Intake -> Case/Work Queue
 -> Verified Closure -> Episodic Memory -> SLA/Outcome Tracking
 -> Exception Escalation -> Role-level Report
 ```
+
+## Historical Baseline (Superseded)
+
+The encoding-preserved paragraph below records an earlier baseline only. Its
+`active next task` references are superseded by the Workforce Status Addendum
+above and do not define the current implementation scope.
 
 이번 작업 시작 기준선
 `866a53926016824f2664dfab4e9bc600fade1cc6`까지의 완료 범위는 Cognitive

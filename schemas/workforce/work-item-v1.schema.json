@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/work-item-v1.schema.json",
+  "title": "D2I WorkItemV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "work_item_id", "work_item_generation",
+    "source_envelope_sha256", "organization_id", "work_class_id",
+    "work_class_contract_version", "subject_refs", "requested_outcome_class_ids",
+    "requested_evidence_class_ids", "priority_class", "risk_class",
+    "application_pack_refs", "integration_ids", "capability_requirement_ids",
+    "semantic_target_ids", "received_at_unix_seconds", "deduplication_scope_id",
+    "deduplication_key_sha256", "content_trust_labels", "structured_input_refs",
+    "evidence_ids", "work_item_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "work_item_id": { "$ref": "#/$defs/id" },
+    "work_item_generation": { "const": 1 },
+    "source_envelope_sha256": { "$ref": "#/$defs/sha256" },
+    "organization_id": { "$ref": "#/$defs/id" },
+    "work_class_id": { "$ref": "#/$defs/id" },
+    "work_class_contract_version": { "$ref": "#/$defs/id" },
+    "subject_refs": { "$ref": "#/$defs/nonEmptyIds" },
+    "requested_outcome_class_ids": { "$ref": "#/$defs/nonEmptyIds" },
+    "requested_evidence_class_ids": { "$ref": "#/$defs/nonEmptyIds" },
+    "priority_class": { "enum": ["routine", "normal", "elevated", "urgent"] },
+    "risk_class": { "enum": ["read_only", "reversible", "business_state_change", "high_criticality"] },
+    "application_pack_refs": {
+      "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["application_pack_id", "application_pack_sha256"],
+        "properties": {
+          "application_pack_id": { "$ref": "#/$defs/id" },
+          "application_pack_sha256": { "$ref": "#/$defs/sha256" }
+        }
+      }
+    },
+    "integration_ids": { "$ref": "#/$defs/nonEmptyIds" },
+    "capability_requirement_ids": { "$ref": "#/$defs/nonEmptyIds" },
+    "semantic_target_ids": { "$ref": "#/$defs/ids" },
+    "requested_due_at_unix_seconds": { "type": ["integer", "null"], "minimum": 1 },
+    "received_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "deduplication_scope_id": { "$ref": "#/$defs/id" },
+    "deduplication_key_sha256": { "$ref": "#/$defs/sha256" },
+    "content_trust_labels": { "$ref": "#/$defs/nonEmptyIds" },
+    "structured_input_refs": { "$ref": "#/$defs/ids" },
+    "evidence_ids": { "$ref": "#/$defs/nonEmptyIds" },
+    "work_item_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._:/-]+$" },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "ids": { "type": "array", "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "nonEmptyIds": { "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }
+  }
+}

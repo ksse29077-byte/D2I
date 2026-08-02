@@ -93,4 +93,5 @@ and Human-by-Exception rules, but does not create or execute a Case.
 Work Item and Case instances, Work Radar, Work Intake, Queue, Scheduler, Case
 ownership, adaptive planning, episodic memory storage, KPI measurement, SLA
 timer execution, report delivery, and the AI Safety production adapter remain
-unimplemented. Their first contract task is `D2I-WORK-200`.
+unimplemented by WORK-100. WORK-200 subsequently added the Work Item and Case
+contracts; the active next task is `D2I-WORK-300`.

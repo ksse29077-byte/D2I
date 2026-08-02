@@ -69,9 +69,12 @@ products/d2i-desktop/src/windows_*.rs
 crates/d2i-windows-host/**
 schemas/desktop/**
 crates/d2i-role-contract/**
+crates/d2i-work-case/**
 schemas/workforce/**
 docs/workforce/**
 scripts/workforce/**
 examples/workforce/**
 products/d2i-desktop/src/role_instance.rs
 products/d2i-desktop/tests/role_contract.rs
+products/d2i-desktop/src/case_instance.rs
+products/d2i-desktop/tests/work_item_case.rs

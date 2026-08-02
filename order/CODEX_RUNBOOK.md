@@ -24,8 +24,8 @@ Track K is complete. Do not create KRN-600.
 ## Track W - Autonomous Workforce Layer
 
 - `D2I-WORK-100` Role Contract v1 - **complete**
-- `D2I-WORK-200` Work Item / Case Contract v1 - **active**
-- `D2I-WORK-300` Work Radar and Work Intake
+- `D2I-WORK-200` Work Item / Case Contract v1 - **complete**
+- `D2I-WORK-300` Work Radar and Work Intake - **active**
 - `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
 - `D2I-WORK-500` Situation Model and Adaptive Planner
 - `D2I-WORK-600` Episodic Memory and Case Learning Records
@@ -52,9 +52,31 @@ KRN-300 evidence. It persists budget and replay state before mutation and
 requires a wholly fresh trust chain for retry. The next prompt is
 `D2I-KRN-500` now assembles the first complete verified single-task E2E.
 WORK-100 defines immutable approved Role Contracts, persistent bounded Role
-Instances, and one-time role-bound Kernel admission. The next prompt is
-`D2I-WORK-200`; it defines Work Item / Case Contract v1 without starting Work
-Radar, Queue, or Scheduler.
+Instances, and one-time role-bound Kernel admission. WORK-200 defines
+immutable admitted Work Items, deterministic deduplication, persistent
+accountable Cases, exact role-bound KRN attempts, typed evidence evaluation,
+and verified terminal disposition. The next prompt is `D2I-WORK-300`; it adds
+Work Radar and Work Intake without starting Queue, Scheduler, Case claim,
+reassignment, or ownership transfer.
+
+Official WORK-200 checks:
+
+```powershell
+cargo test -p d2i-work-case --all-features
+cargo test -p d2i-desktop --test work_item_case
+
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-work-item-case-v1.ps1 `
+  -Mode All
+```
+
+Inspection-only CLI examples:
+
+```powershell
+cargo run -p d2i-work-case --bin d2i-case -- work-item validate --input work-item.json
+cargo run -p d2i-work-case --bin d2i-case -- case inspect --case case-instance.json
+cargo run -p d2i-work-case --bin d2i-case -- terminal verify --input terminal-record.json
+```
 
 ---
 

@@ -3,10 +3,11 @@
 ## Active Workforce Overlay
 
 The compiler and package architecture remains unchanged by Workforce
-governance. `D2I-WORK-100 - Role Contract v1` is complete as an additive
-platform-neutral compiler and Desktop-owned persistent runtime boundary. The
-active next task is `D2I-WORK-200 - Work Item / Case Contract v1`. It must not
-start Work Radar, Queue, or Scheduler.
+governance. `D2I-WORK-100 - Role Contract v1` and `D2I-WORK-200 - Work Item /
+Case Contract v1` are complete as additive platform-neutral contracts with
+Desktop-owned protected persistent runtime boundaries. The active next task is
+`D2I-WORK-300 - Work Radar and Work Intake`. It must not start Queue,
+Scheduler, Case claim, reassignment, or ownership transfer.
 
 ## Product Context
 

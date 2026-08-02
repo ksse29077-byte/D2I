@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "fixture_id": "ai-safety-corrective-action-tracking-v1",
+  "execution_mode": "none",
+  "accepted_role_contract_id": "ai-safety-operations-employee",
+  "work_item": {
+    "work_class_id": "safety.corrective_action.tracking",
+    "subject_refs": ["safety-finding:opaque-reference"],
+    "priority_class": "elevated",
+    "risk_class": "read_only",
+    "requested_outcome_class_ids": ["corrective-action-evidence-present", "due-state-verified", "residual-risk-criterion-satisfied"],
+    "requested_evidence_class_ids": ["corrective-action-completion-artifact", "finding-reference", "verification-observation"],
+    "capability_requirement_ids": ["enterprise_api.read"]
+  },
+  "case_contract": {
+    "responsibility_id": "corrective-action-closure",
+    "outcome_requirements": [
+      { "requirement_id": "corrective-action-evidence", "verification_kind": "trusted_evidence_present", "required": true },
+      { "requirement_id": "due-state", "verification_kind": "trusted_state_criterion", "required": true },
+      { "requirement_id": "residual-risk", "verification_kind": "trusted_state_criterion", "required": true },
+      { "requirement_id": "overdue-unresolved-escalated", "verification_kind": "trusted_evidence_present", "required": true }
+    ],
+    "evidence_requirements": [
+      { "evidence_class_id": "finding-reference", "minimum_count": 1 },
+      { "evidence_class_id": "corrective-action-completion-artifact", "minimum_count": 1 },
+      { "evidence_class_id": "verification-observation", "minimum_count": 1 },
+      { "evidence_class_id": "escalation-record", "minimum_count": 1, "conditional": "overdue-unresolved-item-present" }
+    ],
+    "terminal_outcomes": ["verified_complete", "explicit_refusal", "escalated"]
+  }
+}

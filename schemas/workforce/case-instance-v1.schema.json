@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/case-instance-v1.schema.json",
+  "title": "D2I CaseInstanceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "case_id", "case_generation", "case_contract_sha256",
+    "work_item_sha256", "role_instance_id", "ownership_sha256", "organization_id",
+    "current_status", "terminal_outcome", "lifecycle_generation",
+    "opened_at_unix_seconds", "activated_at_unix_seconds", "last_transition_at_unix_seconds",
+    "terminal_at_unix_seconds", "latest_task_sequence", "task_attempt_count",
+    "successful_task_count", "clarification_count", "escalation_count",
+    "recovery_cycle_count", "unresolved_requirement_ids", "satisfied_requirement_ids",
+    "evidence_index_sha256", "active_block_sha256", "latest_task_attempt_sha256",
+    "latest_kernel_run_record_sha256", "latest_work_report_sha256",
+    "latest_verified_result_sha256", "latest_escalation_sha256", "ledger_id",
+    "ledger_chain_head", "evidence_ids", "instance_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "case_id": { "$ref": "#/$defs/id" },
+    "case_generation": { "const": 1 },
+    "case_contract_sha256": { "$ref": "#/$defs/sha256" },
+    "work_item_sha256": { "$ref": "#/$defs/sha256" },
+    "role_instance_id": { "$ref": "#/$defs/id" },
+    "ownership_sha256": { "$ref": "#/$defs/sha256" },
+    "organization_id": { "$ref": "#/$defs/id" },
+    "current_status": { "enum": ["opened", "active", "awaiting_clarification", "blocked", "awaiting_verification", "escalation_pending", "terminal"] },
+    "terminal_outcome": { "type": ["string", "null"], "enum": ["verified_complete", "explicit_refusal", "escalated", null] },
+    "lifecycle_generation": { "type": "integer", "minimum": 1 },
+    "opened_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "activated_at_unix_seconds": { "type": ["integer", "null"], "minimum": 1 },
+    "last_transition_at_unix_seconds": { "type": "integer", "minimum": 1 },
+    "terminal_at_unix_seconds": { "type": ["integer", "null"], "minimum": 1 },
+    "latest_task_sequence": { "type": "integer", "minimum": 0 },
+    "task_attempt_count": { "type": "integer", "minimum": 0 },
+    "successful_task_count": { "type": "integer", "minimum": 0 },
+    "clarification_count": { "type": "integer", "minimum": 0 },
+    "escalation_count": { "type": "integer", "minimum": 0 },
+    "recovery_cycle_count": { "type": "integer", "minimum": 0 },
+    "unresolved_requirement_ids": { "$ref": "#/$defs/ids" },
+    "satisfied_requirement_ids": { "$ref": "#/$defs/ids" },
+    "evidence_index_sha256": { "$ref": "#/$defs/sha256" },
+    "active_block_sha256": { "$ref": "#/$defs/nullableSha256" },
+    "latest_task_attempt_sha256": { "$ref": "#/$defs/nullableSha256" },
+    "latest_kernel_run_record_sha256": { "$ref": "#/$defs/nullableSha256" },
+    "latest_work_report_sha256": { "$ref": "#/$defs/nullableSha256" },
+    "latest_verified_result_sha256": { "$ref": "#/$defs/nullableSha256" },
+    "latest_escalation_sha256": { "$ref": "#/$defs/nullableSha256" },
+    "ledger_id": { "$ref": "#/$defs/id" },
+    "ledger_chain_head": { "$ref": "#/$defs/sha256" },
+    "evidence_ids": { "$ref": "#/$defs/nonEmptyIds" },
+    "instance_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "current_status": { "const": "terminal" } } },
+      "then": { "properties": { "terminal_outcome": { "type": "string" }, "terminal_at_unix_seconds": { "type": "integer" } } },
+      "else": { "properties": { "terminal_outcome": { "type": "null" }, "terminal_at_unix_seconds": { "type": "null" } } }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._:/-]+$" },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "nullableSha256": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$" },
+    "ids": { "type": "array", "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "nonEmptyIds": { "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }
+  }
+}

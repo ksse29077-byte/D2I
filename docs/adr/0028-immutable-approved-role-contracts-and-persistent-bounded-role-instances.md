@@ -90,5 +90,6 @@ Repository Decoupling v1.
 
 An approved persistent Role Instance can now consistently admit or reject
 role-scoped tasks and project the exact authority and recovery contexts needed
-by the verified Safe Execution Kernel. The next task is
-`D2I-WORK-200 - Work Item / Case Contract v1`; this ADR does not start it.
+by the verified Safe Execution Kernel. WORK-200 subsequently added the Work
+Item and Case boundary without changing this contract. The active next task is
+`D2I-WORK-300 - Work Radar and Work Intake`; this ADR does not start it.

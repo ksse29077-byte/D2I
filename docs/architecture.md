@@ -212,6 +212,27 @@ KPI/SLA declarations, reporting duties, and memory boundaries are not
 authority. WORK-100 creates no Work Item, Case, Radar, Queue, Scheduler, Case
 ownership, KPI result, SLA claim, or report delivery.
 
+WORK-200 adds the durable work boundary above Role admission:
+
+```text
+strict hash-only source envelope -> immutable normalized WorkItemV1
+-> deterministic deduplication -> Work Item admission
+-> immutable CaseContractV1 + generation-1 accountable Role ownership
+-> protected persistent CaseInstanceV1
+-> zero or more exact role-bound KRN-500 Task attempts
+-> typed evidence and requirement evaluation
+-> verified complete, explicit refusal, or escalated terminal record
+```
+
+`d2i-work-case` owns platform-neutral normalization, admission, ownership,
+requirements, evidence, lifecycle, closure, terminal, strict JSON, and
+canonical hash contracts. `d2i-desktop` owns the protected Case ledger and
+coordinator. A task failure, timeout, clarification, block, or `WorkReport`
+alone never closes a Case. Work Item and Case artifacts grant no execution
+authority; every mutation still crosses Role, policy, activation, adapter,
+re-observation, and verification boundaries. WORK-200 implements no Radar,
+connector, Queue, Scheduler, lease, reassignment, or ownership transfer.
+
 Phase 6 adds:
 
 ```text

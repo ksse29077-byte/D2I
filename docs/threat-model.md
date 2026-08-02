@@ -398,3 +398,34 @@ data, and absolute paths. Remaining risks include organization production key
 custody, external chain-head anchoring, Work Item/Case ownership, scheduler
 time authority, KPI measurement, SLA timers, and report routing; none grants a
 fallback execution path.
+
+## Immutable Work Items and Persistent Cases
+
+WORK-200 addresses raw-source elevation, source event replay, semantic
+collision, duplicate Case creation, Work Item/Role/scope substitution, stale
+Case requests, KRN run reuse, evidence substitution, WorkReport-only false
+completion, failed-task false terminal state, terminal reopen, ledger rollback,
+and silent abandonment.
+
+Source envelopes and Work Items contain only bounded IDs, trust labels, and
+hash references. They cannot grant capability, policy, activation, adapter, or
+mutation authority. Admission requires exact active Role, delegation,
+organization, work class, source allowlist, pack, integration, capability,
+risk, policy, calendar, freshness, and deduplication state before Goal or Task
+work begins.
+
+The Desktop Case ledger verifies protected DACL fingerprints, atomic
+append-only SHA-256 state, monotonic sequence/time, immutable Work Item and
+Case identities, one-time Task/attempt/KRN-run use, Role and audit chain heads,
+and terminal immutability. The coordinator revalidates the full owner Role
+Instance and ownership expiry before every Task. Durable-write failure poisons
+the coordinator before later mutation.
+
+Closure evaluates typed outcome and evidence requirements against exact
+current hashes and trust/freshness floors. Failure, timeout, infrastructure
+error, budget exhaustion, clarification, block, suspension, and generated
+reports remain non-terminal. Unsafe evidence cannot become completion;
+revocation or expiry requires escalation. Remaining risks include external
+ledger-head anchoring, production SLA time authority, legal retention, Radar
+source authentication, Queue/Scheduler concurrency, and future ownership
+transfer. None creates a fallback execution path in WORK-200.

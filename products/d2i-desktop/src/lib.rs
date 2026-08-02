@@ -3,6 +3,7 @@
 mod adapter;
 mod approval;
 mod audit;
+mod case_instance;
 mod cognitive;
 mod cognitive_kernel_task;
 mod cognitive_recovery;
@@ -38,6 +39,11 @@ pub use approval::{sign_approval, ExecutionPermit, HumanApproval};
 pub use audit::{
     initialize_audit_ledger, replay_audit, verify_audit_ledger, AuditEvent, AuditEventKind,
     AuditLedger, AuditReplayExpectation, AuditReplayReport, AuditVerification,
+};
+pub use case_instance::{
+    initialize_case_ledger, persist_new_case, verify_case_ledger, CaseKernelArtifactsV1,
+    CaseLedgerEventKindV1, CaseLedgerRecordV1, CaseLedgerV1, CaseLedgerVerificationV1,
+    WorkCaseCoordinatorV1,
 };
 pub use cognitive::{
     ActionCandidateProvider, ActionExecution, ActionExecutor, ActionPolicyEvaluator,

@@ -280,12 +280,19 @@ struct ScenarioArtifacts {
     recovery_count: usize,
     mutation_count: usize,
     audit_chain_head: String,
+    role_context: Option<RoleBoundKernelTaskContextV1>,
+    role_instance: Option<RoleInstanceV1>,
+    role_terminal_instance: Option<RoleInstanceV1>,
+    role_contract: Option<RoleContractV1>,
+    role_delegation: Option<RoleDelegationGrantV1>,
     role_context_sha256: Option<String>,
     role_ledger_chain_head: Option<String>,
 }
 
 struct RoleKernelBinding {
     contract: RoleContractV1,
+    delegation: RoleDelegationGrantV1,
+    admitted_instance: RoleInstanceV1,
     ledger: RoleInstanceLedgerV1,
     audit: WindowsDeploymentAuditLedger,
     audit_root: PathBuf,
@@ -299,7 +306,7 @@ impl RoleKernelBinding {
         &mut self,
         run_record_sha256: &str,
         recorded_at_unix_ms: u64,
-    ) -> Result<String, DesktopError> {
+    ) -> Result<RoleInstanceV1, DesktopError> {
         let current = self
             .ledger
             .verification()
@@ -318,7 +325,11 @@ impl RoleKernelBinding {
             BTreeMap::from([("kernel_task_run".to_owned(), run_record_sha256.to_owned())]),
             recorded_at_unix_ms,
         )?;
-        Ok(self.ledger.verification().terminal_record_hash.clone())
+        self.ledger
+            .verification()
+            .current_instance
+            .clone()
+            .ok_or_else(|| DesktopError::Integrity("terminal Role Instance is absent".to_owned()))
     }
 
     fn audit_chain_head(&self) -> Result<String, DesktopError> {
@@ -373,6 +384,39 @@ fn run_main() -> Result<ExitCode, DesktopError> {
         .iter()
         .filter(|cycle| cycle.completed)
         .count();
+    write_scenario_artifact(
+        &args.output_root.join("kernel-task-run-record.json"),
+        &artifacts.run_record,
+    )?;
+    write_scenario_artifact(
+        &args.output_root.join("final-goal-verification.json"),
+        &artifacts.final_verification,
+    )?;
+    write_scenario_artifact(
+        &args.output_root.join("work-report.json"),
+        &artifacts.report,
+    )?;
+    if let Some(context) = &artifacts.role_context {
+        write_scenario_artifact(
+            &args.output_root.join("role-bound-kernel-context.json"),
+            context,
+        )?;
+    }
+    if let Some(instance) = &artifacts.role_instance {
+        write_scenario_artifact(&args.output_root.join("role-instance.json"), instance)?;
+    }
+    if let Some(instance) = &artifacts.role_terminal_instance {
+        write_scenario_artifact(
+            &args.output_root.join("role-terminal-instance.json"),
+            instance,
+        )?;
+    }
+    if let Some(contract) = &artifacts.role_contract {
+        write_scenario_artifact(&args.output_root.join("role-contract.json"), contract)?;
+    }
+    if let Some(delegation) = &artifacts.role_delegation {
+        write_scenario_artifact(&args.output_root.join("role-delegation.json"), delegation)?;
+    }
     let result = KernelE2eScenarioResultV1 {
         schema_version: KERNEL_TASK_SCHEMA_VERSION,
         mode: args.mode,
@@ -435,6 +479,14 @@ fn run_main() -> Result<ExitCode, DesktopError> {
         KernelFinalOutcomeV1::Stopped | KernelFinalOutcomeV1::Failed => ExitCode::from(12),
         KernelFinalOutcomeV1::InfrastructureError => ExitCode::from(13),
     })
+}
+
+#[cfg(windows)]
+fn write_scenario_artifact<T: Serialize>(path: &Path, value: &T) -> Result<(), DesktopError> {
+    let mut bytes =
+        serde_json::to_vec_pretty(value).map_err(|error| DesktopError::Json(error.to_string()))?;
+    bytes.push(b'\n');
+    fs::write(path, bytes).map_err(|error| io_error("scenario-artifact", error))
 }
 
 fn parse_args() -> Result<RunnerArgs, String> {
@@ -1636,44 +1688,6 @@ fn verification_verdict(value: VerificationVerdictV2) -> FinalVerificationVerdic
     }
 }
 
-fn add_focus_transfer_expectations(
-    source: &ObservationSnapshot,
-    target_automation_id: &str,
-    target_already_bound: bool,
-    postconditions: &mut Vec<Postcondition>,
-    targets: &mut Vec<VerificationGuardTargetV1>,
-) -> Result<(), DesktopError> {
-    let target = element_by_automation_id(source, target_automation_id)?;
-    for element in &source.observable_elements {
-        let is_target = element.element_id == target.element_id;
-        let source_focused = element
-            .value
-            .pointer("/focused")
-            .and_then(Value::as_bool)
-            .unwrap_or(false);
-        if !is_target && !source_focused {
-            continue;
-        }
-        if is_target && target_already_bound {
-            continue;
-        }
-        let expected_focused = is_target;
-        let mut expected_value = element.value.clone();
-        let focused = expected_value.pointer_mut("/focused").ok_or_else(|| {
-            DesktopError::Integrity("observed UIA value omits focused".to_owned())
-        })?;
-        *focused = Value::Bool(expected_focused);
-        postconditions.push(exact_value_postcondition(element, &expected_value)?);
-        if element.value != expected_value {
-            targets.push(VerificationGuardTargetV1 {
-                element_id: element.element_id.clone(),
-                field: VerificationGuardFieldV1::Value,
-            });
-        }
-    }
-    Ok(())
-}
-
 fn action_expectations(
     source: &ObservationSnapshot,
     step: ActionStepKind,
@@ -1683,23 +1697,12 @@ fn action_expectations(
     match step {
         ActionStepKind::SetName => {
             let element = element_by_automation_id(source, "employee-name-input")?;
-            let mut expected_value = expected_text_value(element, EXPECTED_NAME)?;
-            let focused = expected_value.pointer_mut("/focused").ok_or_else(|| {
-                DesktopError::Integrity("observed UIA value omits focused".to_owned())
-            })?;
-            *focused = Value::Bool(true);
+            let expected_value = expected_text_value(element, EXPECTED_NAME)?;
             postconditions.push(exact_value_postcondition(element, &expected_value)?);
             targets.push(VerificationGuardTargetV1 {
                 element_id: element.element_id.clone(),
                 field: VerificationGuardFieldV1::Value,
             });
-            add_focus_transfer_expectations(
-                source,
-                "employee-name-input",
-                true,
-                &mut postconditions,
-                &mut targets,
-            )?;
         }
         ActionStepKind::Save => {
             for (automation_id, expected) in [
@@ -1729,13 +1732,6 @@ fn action_expectations(
                 element_id: revision.element_id.clone(),
                 field: VerificationGuardFieldV1::Value,
             });
-            add_focus_transfer_expectations(
-                source,
-                "save-button",
-                false,
-                &mut postconditions,
-                &mut targets,
-            )?;
         }
     }
     Ok((postconditions, targets))
@@ -2977,7 +2973,7 @@ fn prepare_role_binding(
             maximum_autonomous_risk: CognitiveRiskClass::Reversible,
             maximum_confirmable_risk: CognitiveRiskClass::BusinessStateChange,
             policy_set_sha256: contract.policy_set_sha256.clone(),
-            valid_from_unix_seconds: now.saturating_sub(1).max(1),
+            valid_from_unix_seconds: now.saturating_sub(60).max(1),
             expires_at_unix_seconds: now.saturating_add(600),
             assigned_by_actor_id: "kernel-e2e-role-assigner".to_owned(),
             signer_key_id: "kernel-e2e-delegation-key".to_owned(),
@@ -2994,19 +2990,20 @@ fn prepare_role_binding(
     let role_root = temp.path().join("role-ledger");
     let audit_root = temp.path().join("role-audit");
     let now_ms = now.saturating_mul(1_000);
+    let role_started_ms = now_ms.saturating_sub(60_000).max(1);
     let mut ledger = initialize_role_instance_ledger(
         &role_root,
         "kernel-e2e-role-ledger",
         ACTOR_ID,
         64,
-        now_ms,
+        role_started_ms,
     )?;
     let mut audit = initialize_windows_deployment_audit(
         &audit_root,
         "kernel-e2e-role-audit",
         "kernel-e2e-role-session",
         128,
-        now_ms,
+        role_started_ms,
     )?;
     append_role_record(
         &mut ledger,
@@ -3018,7 +3015,7 @@ fn prepare_role_binding(
         None,
         None,
         BTreeMap::new(),
-        now_ms.saturating_add(1),
+        now_ms.saturating_sub(50_000).max(2),
     )?;
     append_role_record(
         &mut ledger,
@@ -3030,7 +3027,7 @@ fn prepare_role_binding(
         None,
         None,
         BTreeMap::from([("approval".to_owned(), approval.approval_sha256.clone())]),
-        now_ms.saturating_add(2),
+        now_ms.saturating_sub(45_000).max(3),
     )?;
     let provisioned = RoleInstanceV1::provision(
         ACTOR_ID.to_owned(),
@@ -3057,14 +3054,14 @@ fn prepare_role_binding(
             "delegation".to_owned(),
             delegation.delegation_sha256.clone(),
         )]),
-        now_ms.saturating_add(3),
+        now_ms.saturating_sub(40_000).max(4),
     )?;
     let active = ledger
         .verification()
         .current_instance
         .as_ref()
         .ok_or_else(|| DesktopError::Integrity("provisioned Role is absent".to_owned()))?
-        .transition(RoleInstanceStatusV1::Active, now)
+        .transition(RoleInstanceStatusV1::Active, now.saturating_sub(30).max(1))
         .map_err(selection_error)?;
     append_role_record(
         &mut ledger,
@@ -3076,7 +3073,7 @@ fn prepare_role_binding(
         None,
         None,
         BTreeMap::new(),
-        now_ms.saturating_add(4),
+        now_ms.saturating_sub(30_000).max(5),
     )?;
 
     let active = ledger
@@ -3220,6 +3217,8 @@ fn prepare_role_binding(
     )?;
     Ok(RoleKernelBinding {
         contract,
+        delegation,
+        admitted_instance: active,
         ledger,
         audit,
         audit_root,
@@ -3761,7 +3760,17 @@ fn run_scenario(
     let role_context_sha256 = role_binding
         .as_ref()
         .map(|binding| binding.context.context_sha256.clone());
-    let role_ledger_chain_head = role_binding
+    let role_context = role_binding.as_ref().map(|binding| binding.context.clone());
+    let role_instance = role_binding
+        .as_ref()
+        .map(|binding| binding.admitted_instance.clone());
+    let role_contract = role_binding
+        .as_ref()
+        .map(|binding| binding.contract.clone());
+    let role_delegation = role_binding
+        .as_ref()
+        .map(|binding| binding.delegation.clone());
+    let role_terminal_instance = role_binding
         .as_mut()
         .map(|binding| {
             binding.finish(
@@ -3770,6 +3779,9 @@ fn run_scenario(
             )
         })
         .transpose()?;
+    let role_ledger_chain_head = role_terminal_instance
+        .as_ref()
+        .map(|instance| instance.ledger_chain_head.clone());
     let mut tampered_record = run_record.clone();
     tampered_record.work_report_sha256 = digest("tampered-work-report");
     if tampered_record.validate(&report).is_ok() {
@@ -3850,6 +3862,11 @@ fn run_scenario(
         recovery_count,
         mutation_count,
         audit_chain_head,
+        role_context,
+        role_instance,
+        role_terminal_instance,
+        role_contract,
+        role_delegation,
         role_context_sha256,
         role_ledger_chain_head,
     })

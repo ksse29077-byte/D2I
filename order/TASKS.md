@@ -42,8 +42,8 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 ## Track W - Autonomous Workforce Layer
 
 - [x] `D2I-WORK-100` Role Contract v1
-- [ ] `D2I-WORK-200` Work Item / Case Contract v1 - **first active task**
-- [ ] `D2I-WORK-300` Work Radar and Work Intake
+- [x] `D2I-WORK-200` Work Item / Case Contract v1
+- [ ] `D2I-WORK-300` Work Radar and Work Intake - **first active task**
 - [ ] `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
 - [ ] `D2I-WORK-500` Situation Model and Adaptive Planner
 - [ ] `D2I-WORK-600` Episodic Memory and Case Learning Records

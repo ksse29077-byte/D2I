@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "fixture_id": "ai-safety-training-compliance-follow-up-v1",
+  "execution_mode": "none",
+  "accepted_role_contract_id": "ai-safety-operations-employee",
+  "work_item": {
+    "work_class_id": "safety.training.compliance_followup",
+    "subject_refs": ["training-program:opaque-reference", "worker-group:opaque-reference"],
+    "priority_class": "normal",
+    "risk_class": "read_only",
+    "requested_outcome_class_ids": ["expired-exceptions-explicit", "remaining-non-compliant-zero", "subject-completion-evidence-present"],
+    "requested_evidence_class_ids": ["final-compliance-summary", "follow-up-evidence", "training-completion-record"],
+    "capability_requirement_ids": ["enterprise_api.read"]
+  },
+  "case_contract": {
+    "responsibility_id": "training-compliance",
+    "outcome_requirements": [
+      { "requirement_id": "completion-evidence", "verification_kind": "trusted_evidence_present", "required": true },
+      { "requirement_id": "remaining-count-zero", "verification_kind": "trusted_state_criterion", "required": true },
+      { "requirement_id": "expired-exceptions-explicit", "verification_kind": "trusted_evidence_present", "required": true },
+      { "requirement_id": "overdue-exceptions-escalated", "verification_kind": "trusted_evidence_present", "required": true }
+    ],
+    "evidence_requirements": [
+      { "evidence_class_id": "training-completion-record", "minimum_count": 1 },
+      { "evidence_class_id": "follow-up-evidence", "minimum_count": 1 },
+      { "evidence_class_id": "final-compliance-summary", "minimum_count": 1 },
+      { "evidence_class_id": "escalation-record", "minimum_count": 1, "conditional": "overdue-exception-present" }
+    ],
+    "terminal_outcomes": ["verified_complete", "explicit_refusal", "escalated"]
+  }
+}

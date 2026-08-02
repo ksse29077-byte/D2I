@@ -187,8 +187,8 @@ state.
 ### Track W - Autonomous Workforce Layer
 
 - `D2I-WORK-100`: Role Contract v1. **Complete**
-- `D2I-WORK-200`: Work Item / Case Contract v1. **First active task**
-- `D2I-WORK-300`: Work Radar and Work Intake.
+- `D2I-WORK-200`: Work Item / Case Contract v1. **Complete**
+- `D2I-WORK-300`: Work Radar and Work Intake. **First active task**
 - `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership.
 - `D2I-WORK-500`: Situation Model and Adaptive Planner.
 - `D2I-WORK-600`: Episodic Memory and Case Learning Records.
@@ -250,4 +250,19 @@ recovery, final goal verification, WorkReport, deterministic replay, and zero
 residual authority or process state. WORK-100 adds immutable approved Role
 Contracts, bounded signed delegation, persistent protected Role Instances,
 one-time Role task admission, exact authority/recovery projection, and an
-actual role-bound KRN-500 run. The active next task is `D2I-WORK-200`.
+actual role-bound KRN-500 run.
+
+WORK-200 now admits immutable hash-only Work Items before Goal/module/policy or
+activation work, creates at most one persistent accountable Case, retains
+exact role-bound KRN Task attempts and evidence, and permits only verified
+completion, explicit refusal, or escalation as terminal outcomes. It removes
+the following human dependency:
+
+업무가 접수된 뒤 사람이 중복 여부, 책임 Role, 성공 조건, 증거, 시도 이력, blocked 상태와 최종 완료 여부를 별도 표·메모로 관리하던 의존성
+
+The opened product gate is:
+
+An admitted Work Item can become a persistent, role-owned Case that retains every verified Task attempt and remains open until verified completion, explicit refusal, or escalation.
+
+The active next task is `D2I-WORK-300`. Radar, connectors, Queue, Scheduler,
+leases, reassignment, and ownership transfer are not part of WORK-200.

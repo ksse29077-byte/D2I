@@ -268,6 +268,33 @@ Implemented in `products/d2i-desktop/src/cognitive_kernel_task.rs`, the
 The module hosts are test/evaluation transport only. Core links no standalone
 module implementation.
 
+## Work Item / Case Contract v1 Status
+
+Implemented in `crates/d2i-work-case` and
+`products/d2i-desktop/src/case_instance.rs`:
+
+- strict hash-only `WorkItemSourceEnvelopeV1` and immutable `WorkItemV1`
+- deterministic normalization, semantic hashing, deduplication, and conflict
+  detection
+- Work Item admission against exact Role, delegation, source, policy,
+  calendar, pack, integration, capability, risk, and organization scope
+- one-Work-Item/one-Case cardinality and generation-1 accountable ownership
+- typed success, evidence, SLA, block, Task request, attempt, closure, refusal,
+  escalation, and terminal contracts
+- closed non-terminal lifecycle and only verified-complete, explicit-refusal,
+  or escalated terminal outcomes
+- ACL-protected append-only Case ledger, atomic replacement, restart replay,
+  corruption detection, and one-time Task/attempt/KRN-run consumption
+- full current Role Instance and ledger-head revalidation before Case Task
+  admission
+- actual role-bound Windows KRN-500 artifact binding and verified Case closure
+- strict Draft 2020-12 schemas, deterministic replay report, CLI inspection,
+  AI Safety reference Case fixtures, and official WORK-200 runner
+
+Task failure, clarification, blocked state, suspended Role, and WorkReport-only
+evidence remain non-terminal. Radar, source connectors, Queue, Scheduler,
+lease, reassignment, and ownership transfer remain unimplemented.
+
 ## Verification
 
 Passed:
@@ -293,15 +320,17 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-200 - Work Item / Case Contract v1`
+`D2I-WORK-300 - Work Radar and Work Intake`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
 recovery, unsafe escalation, clarification without mutation, final verified
 closure, deterministic normalized replay, and zero residual execution state.
 
-Track K and WORK-100 are complete. Do not add a KRN-600 task. WORK-100 now
+Track K, WORK-100, and WORK-200 are complete. Do not add a KRN-600 task. WORK-100 now
 proves deterministic Role compilation, exact signatures, persistent protected
 lifecycle, one-time task admission, existing authority/recovery projections,
-and the actual role-bound KRN-500 two-action Windows path. WORK-200 is next;
-Work Radar, Queue, and Scheduler remain unimplemented.
+and the actual role-bound KRN-500 two-action Windows path. WORK-200 now proves
+immutable admitted Work Items, persistent accountable Cases, verified attempt
+retention, exact evidence evaluation, and fail-closed terminal disposition.
+WORK-300 is next; Work Radar, Queue, and Scheduler remain unimplemented.

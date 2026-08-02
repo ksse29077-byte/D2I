@@ -332,6 +332,7 @@ dependencies = [
  "d2i-runtime-api",
  "d2i-trusted-action-execution",
  "d2i-windows-host",
+ "d2i-work-case",
  "ed25519-dalek",
  "jsonschema",
  "serde",
@@ -500,6 +501,21 @@ name = "d2i-windows-host"
 version = "0.9.0"
 dependencies = [
  "windows",
+]
+
+[[package]]
+name = "d2i-work-case"
+version = "0.9.0"
+dependencies = [
+ "d2i-cognitive-ir",
+ "d2i-cognitive-recovery",
+ "d2i-role-contract",
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2",
 ]
 
 [[package]]

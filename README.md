@@ -65,6 +65,11 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   lifecycle contracts, one-time task admission, and exact existing
   authority/recovery projections. `products/d2i-desktop` owns the protected
   Role ledger and role-bound KRN-500 gate.
+- `crates/d2i-work-case`: strict hash-only Work Item normalization and
+  admission, deterministic deduplication, immutable Case ownership,
+  requirements, evidence, lifecycle, closure, terminal records, replay
+  reports, and an execution-free inspection CLI. `products/d2i-desktop` owns
+  the protected persistent Case ledger and actual role-bound KRN coordinator.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -158,6 +163,15 @@ Run the complete Windows Safe Execution Kernel product gate with:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/e2e/run-first-kernel-e2e.ps1 `
+  -Mode All
+```
+
+Run the Work Item / Case v1 product gate, including the WORK-100 regression
+and actual role-bound KRN evidence closure, with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-work-item-case-v1.ps1 `
   -Mode All
 ```
 
