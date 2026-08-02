@@ -293,12 +293,15 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-100 - Role Contract v1`
+`D2I-WORK-200 - Work Item / Case Contract v1`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
 recovery, unsafe escalation, clarification without mutation, final verified
 closure, deterministic normalized replay, and zero residual execution state.
 
-Track K is complete. Do not add a KRN-600 task. The next active work begins the
-Workforce Layer without implementing Work Radar or Case Queue in WORK-100.
+Track K and WORK-100 are complete. Do not add a KRN-600 task. WORK-100 now
+proves deterministic Role compilation, exact signatures, persistent protected
+lifecycle, one-time task admission, existing authority/recovery projections,
+and the actual role-bound KRN-500 two-action Windows path. WORK-200 is next;
+Work Radar, Queue, and Scheduler remain unimplemented.

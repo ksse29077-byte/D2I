@@ -3,7 +3,9 @@ param(
     [ValidateSet('Happy', 'Recovery', 'Unsafe', 'Clarification', 'All')]
     [string]$Mode = 'All',
 
-    [string]$OutputRoot
+    [string]$OutputRoot,
+
+    [string]$RoleSource
 )
 
 $ErrorActionPreference = 'Stop'
@@ -98,6 +100,9 @@ function Invoke-Scenario(
         '--ranker-host', $ModuleHosts['plan-ranker'],
         '--ranker-host-sha256', $ModuleHashes['plan-ranker']
     )
+    if ($RoleSource) {
+        $arguments += @('--role-source', $RoleSource)
+    }
     & $Runner @arguments 1> $stdoutPath 2> $stderrPath
     $actualExitCode = $LASTEXITCODE
     if ($actualExitCode -ne $ExpectedExitCode) {
@@ -107,6 +112,9 @@ function Invoke-Scenario(
         -ResultPath (Join-Path $scenarioRoot 'result.json') `
         -ExpectedMode $ScenarioMode `
         -ExpectedOutcome $ExpectedOutcome
+    if ($RoleSource -and (-not $result.role_context_sha256 -or -not $result.role_ledger_chain_head)) {
+        throw "role-bound scenario omitted Role context or ledger head: $ScenarioLabel"
+    }
     return [pscustomobject][ordered]@{
         label = $ScenarioLabel
         mode = $ScenarioMode
@@ -135,6 +143,12 @@ try {
         )) {
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
             throw "required KRN-500 input is absent: $path"
+        }
+    }
+    if ($RoleSource) {
+        $RoleSource = [IO.Path]::GetFullPath($RoleSource)
+        if (-not (Test-Path -LiteralPath $RoleSource -PathType Leaf)) {
+            throw "RoleSource is absent: $RoleSource"
         }
     }
     $cargo = Get-Command cargo -ErrorAction Stop
@@ -219,6 +233,7 @@ try {
         schema_version = 1
         git_head = $gitHead
         mode = $Mode.ToLowerInvariant()
+        role_bound = [bool]$RoleSource
         scenario_count = $summaries.Count
         normalized_replay_equal = if ($Mode -eq 'All') { $true } else { $null }
         scenarios = @($summaries)

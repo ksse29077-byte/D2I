@@ -60,6 +60,11 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   KRN-500 adds the first complete authenticated single-task runtime through
   actual standalone modules, UIA execution, independent verification, bounded
   recovery, final goal verification, and a machine-verifiable WorkReport.
+- `crates/d2i-role-contract`: strict deterministic Role source compilation,
+  immutable contracts, Ed25519 approval/delegation, persistent Role Instance
+  lifecycle contracts, one-time task admission, and exact existing
+  authority/recovery projections. `products/d2i-desktop` owns the protected
+  Role ledger and role-bound KRN-500 gate.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.

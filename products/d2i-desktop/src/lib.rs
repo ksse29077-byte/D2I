@@ -11,6 +11,7 @@ mod cognitive_verification_v2;
 mod contract;
 mod executor;
 mod policy;
+mod role_instance;
 mod trusted_execution;
 mod windows_activation;
 mod windows_adapters;
@@ -130,6 +131,10 @@ pub use executor::{DesktopActionPreparation, DesktopExecutor};
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,
     PolicyDecisionStatus,
+};
+pub use role_instance::{
+    initialize_role_instance_ledger, verify_role_instance_ledger, RoleInstanceLedgerEventKindV1,
+    RoleInstanceLedgerRecordV1, RoleInstanceLedgerV1, RoleInstanceLedgerVerificationV1,
 };
 pub use trusted_execution::{
     build_cognitive_desktop_action_intent, project_windows_activation,

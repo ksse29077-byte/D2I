@@ -1,9 +1,12 @@
-use crate::{DesktopError, GoalProgress, Provenance, WorkReport};
+use crate::{DesktopError, GoalProgress, Provenance, RoleInstanceLedgerVerificationV1, WorkReport};
+use d2i_cognitive_recovery::RecoveryPolicyProfileV1;
 use d2i_module_sdk::{
     canonical_json_bytes, canonical_sha256, load_module_manifest, parse_json_strict,
     validate_result_binding, LoadedModuleManifest, ModuleInvocationEnvelope, ModuleResultEnvelope,
     NetworkRequirement,
 };
+use d2i_policy_admission::DelegatedAuthorityContextV1;
+use d2i_role_contract::{RoleBoundKernelTaskContextV1, RoleInstanceStatusV1};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
@@ -593,6 +596,7 @@ impl KernelTaskStageRecordV1 {
 pub struct CognitiveKernelTaskRuntimeV1 {
     task_run_id: String,
     instruction_sha256: String,
+    role_context_sha256: Option<String>,
     state: KernelTaskRuntimeStateV1,
     stages: Vec<KernelTaskStageRecordV1>,
     used_stage_ids: BTreeSet<String>,
@@ -606,11 +610,95 @@ impl CognitiveKernelTaskRuntimeV1 {
         instruction_sha256: String,
         logical_tick: u64,
     ) -> Result<Self, DesktopError> {
+        Self::begin_internal(task_run_id, instruction_sha256, None, logical_tick)
+    }
+
+    /// Begins one task only after exact Role admission and projection verification.
+    #[allow(clippy::too_many_arguments)]
+    pub fn begin_role_bound(
+        task_run_id: String,
+        instruction_sha256: String,
+        goal_spec_sha256: &str,
+        application_pack_sha256: &str,
+        integration_id: &str,
+        context: &RoleBoundKernelTaskContextV1,
+        authority: &DelegatedAuthorityContextV1,
+        recovery: &RecoveryPolicyProfileV1,
+        role_ledger: &RoleInstanceLedgerVerificationV1,
+        now_unix_seconds: u64,
+        logical_tick: u64,
+    ) -> Result<Self, DesktopError> {
+        context.validate(now_unix_seconds).map_err(role_error)?;
+        authority.validate().map_err(policy_error)?;
+        recovery.validate().map_err(recovery_error)?;
+        let instance = role_ledger.current_instance.as_ref().ok_or_else(|| {
+            DesktopError::AccessDenied("Role ledger has no provisioned instance".to_owned())
+        })?;
+        if instance.current_status != RoleInstanceStatusV1::Active
+            || now_unix_seconds >= instance.expires_at_unix_seconds
+            || instance.role_instance_id != context.role_instance_id
+            || instance.role_contract_id != context.role_contract_id
+            || instance.role_version != context.role_version
+            || instance.contract_sha256 != context.contract_sha256
+            || instance.delegation_sha256 != context.delegation_sha256
+            || context.authenticated_instruction_sha256 != instruction_sha256
+            || context.goal_spec_sha256 != goal_spec_sha256
+            || context.application_pack_sha256 != application_pack_sha256
+            || context.integration_id != integration_id
+            || context.authority_projection_sha256 != authority.authority_sha256
+            || context.recovery_profile_projection_sha256 != recovery.profile_sha256
+            || context.required_capability_ids != authority.allowed_capability_ids
+            || authority.actor_id != context.role_instance_id
+            || authority.role_id != context.role_contract_id
+            || authority.allowed_application_pack_sha256 != context.application_pack_sha256
+            || authority.allowed_integration_ids != vec![context.integration_id.clone()]
+            || recovery.authority_sha256 != context.authority_projection_sha256
+            || role_ledger
+                .consumed_task_admission_hashes
+                .binary_search(&context.role_task_admission_sha256)
+                .is_err()
+            || role_ledger
+                .started_role_context_hashes
+                .binary_search(&context.context_sha256)
+                .is_err()
+            || role_ledger
+                .terminal_role_context_hashes
+                .binary_search(&context.context_sha256)
+                .is_ok()
+        {
+            return Err(DesktopError::AccessDenied(
+                "Role-bound Kernel context differs from active ledger or projections".to_owned(),
+            ));
+        }
+        Self::begin_internal(
+            task_run_id,
+            instruction_sha256,
+            Some(context.context_sha256.clone()),
+            logical_tick,
+        )
+    }
+
+    fn begin_internal(
+        task_run_id: String,
+        instruction_sha256: String,
+        role_context_sha256: Option<String>,
+        logical_tick: u64,
+    ) -> Result<Self, DesktopError> {
         validate_id(&task_run_id, "task_run_id")?;
         validate_hash(&instruction_sha256, "instruction_sha256")?;
+        if let Some(hash) = &role_context_sha256 {
+            validate_hash(hash, "role_context_sha256")?;
+        }
+        let mut input_hashes = vec![instruction_sha256.clone()];
+        let mut evidence_ids = vec!["authenticated-instruction".to_owned()];
+        if let Some(hash) = &role_context_sha256 {
+            input_hashes.push(hash.clone());
+            evidence_ids.push("role-task-admission".to_owned());
+        }
         let mut runtime = Self {
             task_run_id,
             instruction_sha256: instruction_sha256.clone(),
+            role_context_sha256,
             state: KernelTaskRuntimeStateV1::Created,
             stages: Vec::new(),
             used_stage_ids: BTreeSet::new(),
@@ -619,12 +707,12 @@ impl CognitiveKernelTaskRuntimeV1 {
         runtime.record(
             "created",
             KernelTaskRuntimeStateV1::Created,
-            vec![instruction_sha256],
+            input_hashes,
             Vec::new(),
             vec![KERNEL_TASK_RUNTIME_BUILD_ID.to_owned()],
             logical_tick,
             KernelTaskStageStatusV1::Succeeded,
-            vec!["authenticated-instruction".to_owned()],
+            evidence_ids,
         )?;
         Ok(runtime)
     }
@@ -913,6 +1001,12 @@ impl CognitiveKernelTaskRuntimeV1 {
         &self.task_run_id
     }
 
+    /// Role task context bound to this run, when Role governance was required.
+    #[must_use]
+    pub fn role_context_sha256(&self) -> Option<&str> {
+        self.role_context_sha256.as_deref()
+    }
+
     /// Current immutable stage records.
     #[must_use]
     pub fn stages(&self) -> &[KernelTaskStageRecordV1] {
@@ -1192,6 +1286,8 @@ pub struct KernelTaskRunRecordV1 {
     pub schema_version: u32,
     pub task_run_id: String,
     pub authenticated_instruction_sha256: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role_context_sha256: Option<String>,
     pub goal_compiler_invocation_sha256: String,
     pub goal_spec_sha256: String,
     pub application_pack_sha256: String,
@@ -1265,6 +1361,16 @@ impl KernelTaskRunRecordV1 {
             &self.run_record_sha256,
         ] {
             validate_hash(hash, "kernel run hash")?;
+        }
+        if let Some(hash) = &self.role_context_sha256 {
+            validate_hash(hash, "kernel run role_context_sha256")?;
+            if self
+                .stage_records
+                .first()
+                .is_none_or(|stage| !stage.input_hashes.contains(hash))
+            {
+                return integrity("role-bound Kernel run root omits its Role context");
+            }
         }
         let mut previous = empty_hash();
         let mut tick = 0;
@@ -1363,6 +1469,18 @@ fn expected_module_contract(
         )),
         _ => None,
     }
+}
+
+fn role_error(error: d2i_role_contract::RoleContractError) -> DesktopError {
+    DesktopError::Integrity(error.to_string())
+}
+
+fn policy_error(error: d2i_policy_admission::PolicyAdmissionError) -> DesktopError {
+    DesktopError::Integrity(error.to_string())
+}
+
+fn recovery_error(error: d2i_cognitive_recovery::RecoveryError) -> DesktopError {
+    DesktopError::Integrity(error.to_string())
 }
 
 fn schema_hash(loaded: &LoadedModuleManifest, schema_id: &str) -> Result<String, DesktopError> {

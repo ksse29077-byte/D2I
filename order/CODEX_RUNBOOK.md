@@ -23,8 +23,8 @@ Track K is complete. Do not create KRN-600.
 
 ## Track W - Autonomous Workforce Layer
 
-- `D2I-WORK-100` Role Contract v1 - **active**
-- `D2I-WORK-200` Work Item / Case Contract v1
+- `D2I-WORK-100` Role Contract v1 - **complete**
+- `D2I-WORK-200` Work Item / Case Contract v1 - **active**
 - `D2I-WORK-300` Work Radar and Work Intake
 - `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
 - `D2I-WORK-500` Situation Model and Adaptive Planner
@@ -51,8 +51,10 @@ force 없이 `git push origin HEAD:main`한다. PR, 승인 대기, 웹 병합은
 KRN-300 evidence. It persists budget and replay state before mutation and
 requires a wholly fresh trust chain for retry. The next prompt is
 `D2I-KRN-500` now assembles the first complete verified single-task E2E.
-The next prompt is `D2I-WORK-100`; it defines Role Contract v1 without starting
-Work Radar or Case Queue.
+WORK-100 defines immutable approved Role Contracts, persistent bounded Role
+Instances, and one-time role-bound Kernel admission. The next prompt is
+`D2I-WORK-200`; it defines Work Item / Case Contract v1 without starting Work
+Radar, Queue, or Scheduler.
 
 ---
 

@@ -1,5 +1,13 @@
 # D2I Industrial Autonomous Workforce OS - Compiler Subsystem
 
+## Active Workforce Overlay
+
+The compiler and package architecture remains unchanged by Workforce
+governance. `D2I-WORK-100 - Role Contract v1` is complete as an additive
+platform-neutral compiler and Desktop-owned persistent runtime boundary. The
+active next task is `D2I-WORK-200 - Work Item / Case Contract v1`. It must not
+start Work Radar, Queue, or Scheduler.
+
 ## Product Context
 
 D2I는 고객 조직의 Domain, Role, Authority, Application Semantics,

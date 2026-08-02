@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/role-contract-v1.schema.json",
+  "title": "D2I Role Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "role_contract_id", "role_version", "role_contract_generation",
+    "display_name", "purpose", "authority_ceiling", "organization_scope",
+    "responsibilities", "accepted_work_classes", "prohibited_work_class_ids",
+    "capability_policy", "risk_policy", "application_bindings", "observation_sources",
+    "working_calendar", "kpi_definitions", "sla_profiles", "reporting_obligations",
+    "memory_boundary", "escalation_policy", "human_exception_policy", "policy_set_id",
+    "policy_set_version", "policy_set_sha256", "source_inventory_sha256",
+    "compiler_build_id", "evidence_ids", "contract_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "role_contract_id": { "$ref": "#/$defs/id" },
+    "role_version": { "$ref": "#/$defs/id" },
+    "role_contract_generation": { "type": "integer", "minimum": 1 },
+    "display_name": { "$ref": "#/$defs/text" },
+    "purpose": { "$ref": "#/$defs/text" },
+    "authority_ceiling": { "$ref": "#/$defs/id" },
+    "organization_scope": { "$ref": "#/$defs/organization_scope" },
+    "responsibilities": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/responsibility" } },
+    "accepted_work_classes": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/work_class" } },
+    "prohibited_work_class_ids": { "$ref": "#/$defs/id_set" },
+    "capability_policy": { "$ref": "#/$defs/capability_policy" },
+    "risk_policy": { "$ref": "#/$defs/risk_policy" },
+    "application_bindings": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/application_binding" } },
+    "observation_sources": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/observation_source" } },
+    "working_calendar": { "$ref": "#/$defs/calendar" },
+    "kpi_definitions": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/kpi" } },
+    "sla_profiles": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/sla" } },
+    "reporting_obligations": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/reporting" } },
+    "memory_boundary": { "$ref": "#/$defs/memory" },
+    "escalation_policy": { "$ref": "#/$defs/escalation" },
+    "human_exception_policy": { "$ref": "#/$defs/human_exception" },
+    "policy_set_id": { "$ref": "#/$defs/id" },
+    "policy_set_version": { "$ref": "#/$defs/id" },
+    "policy_set_sha256": { "$ref": "#/$defs/hash" },
+    "source_inventory_sha256": { "$ref": "#/$defs/hash" },
+    "compiler_build_id": { "$ref": "#/$defs/id" },
+    "evidence_ids": { "$ref": "#/$defs/id_set" },
+    "contract_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._:/-]+$", "not": { "enum": ["*", "all", "any"] } },
+    "text": { "type": "string", "minLength": 1, "maxLength": 2048 },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "risk": { "enum": ["read_only", "reversible", "business_state_change", "high_criticality"] },
+    "id_set": { "type": "array", "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "nonempty_id_set": { "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "organization_scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["organization_id", "business_unit_ids", "site_ids", "domain_ids", "environment_ids", "jurisdiction_ids"],
+      "properties": {
+        "organization_id": { "$ref": "#/$defs/id" }, "business_unit_ids": { "$ref": "#/$defs/id_set" },
+        "site_ids": { "$ref": "#/$defs/id_set" }, "domain_ids": { "$ref": "#/$defs/id_set" },
+        "environment_ids": { "$ref": "#/$defs/id_set" }, "jurisdiction_ids": { "$ref": "#/$defs/id_set" }
+      }
+    },
+    "responsibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["responsibility_id", "outcome_class_ids", "accepted_work_class_ids", "evidence_class_ids", "reporting_obligation_ids", "description"],
+      "properties": {
+        "responsibility_id": { "$ref": "#/$defs/id" }, "outcome_class_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "accepted_work_class_ids": { "$ref": "#/$defs/nonempty_id_set" }, "evidence_class_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "reporting_obligation_ids": { "$ref": "#/$defs/nonempty_id_set" }, "description": { "$ref": "#/$defs/text" }
+      }
+    },
+    "work_class": {
+      "type": "object", "additionalProperties": false,
+      "required": ["work_class_id", "contract_version", "responsibility_id", "allowed_priority_classes", "sla_profile_id", "maximum_risk", "required_application_pack_ids", "required_integration_ids", "required_capability_ids", "permitted_observation_source_ids", "clarification_allowed", "automatic_recovery_allowed", "mandatory_escalation_reason_codes"],
+      "properties": {
+        "work_class_id": { "$ref": "#/$defs/id" }, "contract_version": { "$ref": "#/$defs/id" }, "responsibility_id": { "$ref": "#/$defs/id" },
+        "allowed_priority_classes": { "$ref": "#/$defs/nonempty_id_set" }, "sla_profile_id": { "$ref": "#/$defs/id" }, "maximum_risk": { "$ref": "#/$defs/risk" },
+        "required_application_pack_ids": { "$ref": "#/$defs/nonempty_id_set" }, "required_integration_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "required_capability_ids": { "$ref": "#/$defs/nonempty_id_set" }, "permitted_observation_source_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "clarification_allowed": { "type": "boolean" }, "automatic_recovery_allowed": { "type": "boolean" }, "mandatory_escalation_reason_codes": { "$ref": "#/$defs/id_set" }
+      }
+    },
+    "capability_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["allowed_capability_ids", "prohibited_capability_ids", "autonomous_capability_ids", "confirmation_capability_ids", "escalation_only_capability_ids", "capability_group_ids", "semantic_target_ids", "maximum_attempts_per_capability"],
+      "properties": {
+        "allowed_capability_ids": { "$ref": "#/$defs/nonempty_id_set" }, "prohibited_capability_ids": { "$ref": "#/$defs/id_set" },
+        "autonomous_capability_ids": { "$ref": "#/$defs/id_set" }, "confirmation_capability_ids": { "$ref": "#/$defs/id_set" },
+        "escalation_only_capability_ids": { "$ref": "#/$defs/id_set" }, "capability_group_ids": { "$ref": "#/$defs/id_set" },
+        "semantic_target_ids": { "$ref": "#/$defs/nonempty_id_set" }, "maximum_attempts_per_capability": { "type": "integer", "minimum": 1, "maximum": 16 }
+      }
+    },
+    "risk_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["maximum_autonomous_risk", "maximum_confirmable_risk", "mandatory_escalation_risk", "irreversible_actions_allowed", "high_criticality_automatic_allowed", "unknown_policy_behavior", "unsafe_verification_behavior"],
+      "properties": {
+        "maximum_autonomous_risk": { "$ref": "#/$defs/risk" }, "maximum_confirmable_risk": { "$ref": "#/$defs/risk" }, "mandatory_escalation_risk": { "$ref": "#/$defs/risk" },
+        "irreversible_actions_allowed": { "const": false }, "high_criticality_automatic_allowed": { "const": false },
+        "unknown_policy_behavior": { "enum": ["deny", "escalate"] }, "unsafe_verification_behavior": { "enum": ["escalate", "stop"] }
+      }
+    },
+    "application_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["application_pack_id", "application_pack_sha256", "integration_ids", "allowed_semantic_target_ids", "allowed_capability_ids", "observation_source_ids", "environment_ids"],
+      "properties": {
+        "application_pack_id": { "$ref": "#/$defs/id" }, "application_pack_sha256": { "$ref": "#/$defs/hash" },
+        "integration_ids": { "$ref": "#/$defs/nonempty_id_set" }, "allowed_semantic_target_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "allowed_capability_ids": { "$ref": "#/$defs/nonempty_id_set" }, "observation_source_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "environment_ids": { "$ref": "#/$defs/nonempty_id_set" }
+      }
+    },
+    "observation_source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observation_source_id", "source_kind", "integration_id", "trust_floor", "read_only", "event_class_ids", "application_pack_id", "maximum_staleness_seconds", "enabled"],
+      "properties": {
+        "observation_source_id": { "$ref": "#/$defs/id" }, "source_kind": { "enum": ["desktop_uia", "web_driver", "enterprise_api", "schedule", "event_stream", "sensor_summary", "manual_authenticated_instruction"] },
+        "integration_id": { "$ref": "#/$defs/id" }, "trust_floor": { "$ref": "#/$defs/id" }, "read_only": { "type": "boolean" },
+        "event_class_ids": { "$ref": "#/$defs/id_set" }, "application_pack_id": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "maximum_staleness_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 }, "enabled": { "type": "boolean" }
+      }
+    },
+    "weekly_window": {
+      "type": "object", "additionalProperties": false, "required": ["weekday", "start_minute_local", "end_minute_local"],
+      "properties": { "weekday": { "type": "integer", "minimum": 0, "maximum": 6 }, "start_minute_local": { "type": "integer", "minimum": 0, "maximum": 1439 }, "end_minute_local": { "type": "integer", "minimum": 1, "maximum": 1440 } }
+    },
+    "calendar": {
+      "type": "object", "additionalProperties": false,
+      "required": ["calendar_id", "timezone_id", "weekly_windows", "blackout_date_ids", "emergency_override_policy", "outside_window_behavior", "calendar_sha256"],
+      "properties": {
+        "calendar_id": { "$ref": "#/$defs/id" }, "timezone_id": { "$ref": "#/$defs/id" },
+        "weekly_windows": { "type": "array", "minItems": 1, "maxItems": 128, "items": { "$ref": "#/$defs/weekly_window" } },
+        "blackout_date_ids": { "$ref": "#/$defs/id_set" }, "emergency_override_policy": { "enum": ["forbidden", "signed_reference_only"] },
+        "outside_window_behavior": { "enum": ["deny_new_work", "escalation_only"] }, "calendar_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "kpi": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kpi_id", "metric_id", "direction", "target_millionths", "target_integer", "measurement_window_id", "evidence_class_ids", "warning_threshold", "breach_behavior", "enabled"],
+      "properties": {
+        "kpi_id": { "$ref": "#/$defs/id" }, "metric_id": { "$ref": "#/$defs/id" }, "direction": { "enum": ["maximize", "minimize", "at_least", "at_most"] },
+        "target_millionths": { "type": ["integer", "null"] }, "target_integer": { "type": ["integer", "null"] },
+        "measurement_window_id": { "$ref": "#/$defs/id" }, "evidence_class_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "warning_threshold": { "type": ["integer", "null"] }, "breach_behavior": { "enum": ["report", "escalate"] }, "enabled": { "type": "boolean" }
+      }
+    },
+    "sla": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sla_profile_id", "priority_class", "acknowledge_within_seconds", "begin_within_seconds", "resolve_within_seconds", "escalation_after_seconds", "pause_conditions", "evidence_class_ids"],
+      "properties": {
+        "sla_profile_id": { "$ref": "#/$defs/id" }, "priority_class": { "$ref": "#/$defs/id" },
+        "acknowledge_within_seconds": { "type": "integer", "minimum": 1 }, "begin_within_seconds": { "type": "integer", "minimum": 1 },
+        "resolve_within_seconds": { "type": "integer", "minimum": 1, "maximum": 31536000 }, "escalation_after_seconds": { "type": "integer", "minimum": 1 },
+        "pause_conditions": { "$ref": "#/$defs/id_set" }, "evidence_class_ids": { "$ref": "#/$defs/nonempty_id_set" }
+      }
+    },
+    "reporting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["obligation_id", "trigger", "report_class_id", "routing_class_id", "required_evidence_class_ids", "frequency_profile_id", "retention_class_id", "enabled"],
+      "properties": {
+        "obligation_id": { "$ref": "#/$defs/id" }, "trigger": { "enum": ["on_task_complete", "on_task_failed", "on_escalation", "on_role_suspend", "periodic", "sla_breach"] },
+        "report_class_id": { "$ref": "#/$defs/id" }, "routing_class_id": { "$ref": "#/$defs/id" }, "required_evidence_class_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "frequency_profile_id": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] }, "retention_class_id": { "$ref": "#/$defs/id" }, "enabled": { "type": "boolean" }
+      }
+    },
+    "memory": {
+      "type": "object", "additionalProperties": false,
+      "required": ["allowed_memory_namespace_ids", "prohibited_data_class_ids", "retention_class_id", "maximum_retention_days", "raw_credentials_allowed", "raw_ui_payload_allowed", "cross_case_reuse_policy", "learning_candidate_allowed", "memory_boundary_sha256"],
+      "properties": {
+        "allowed_memory_namespace_ids": { "$ref": "#/$defs/id_set" }, "prohibited_data_class_ids": { "$ref": "#/$defs/nonempty_id_set" },
+        "retention_class_id": { "$ref": "#/$defs/id" }, "maximum_retention_days": { "type": "integer", "minimum": 0, "maximum": 3650 },
+        "raw_credentials_allowed": { "const": false }, "raw_ui_payload_allowed": { "const": false },
+        "cross_case_reuse_policy": { "enum": ["forbidden", "hash_reference_only", "approved_summary_only"] }, "learning_candidate_allowed": { "type": "boolean" },
+        "memory_boundary_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "escalation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["escalation_policy_id", "routing_class_by_severity", "mandatory_reason_codes", "authority_exceeded_route_class", "unsafe_route_class", "legal_review_route_class", "policy_conflict_route_class", "maximum_pending_seconds", "evidence_class_ids"],
+      "properties": {
+        "escalation_policy_id": { "$ref": "#/$defs/id" },
+        "routing_class_by_severity": { "type": "object", "minProperties": 1, "maxProperties": 16, "additionalProperties": { "$ref": "#/$defs/id" }, "propertyNames": { "$ref": "#/$defs/id" } },
+        "mandatory_reason_codes": { "$ref": "#/$defs/nonempty_id_set" }, "authority_exceeded_route_class": { "$ref": "#/$defs/id" },
+        "unsafe_route_class": { "$ref": "#/$defs/id" }, "legal_review_route_class": { "$ref": "#/$defs/id" }, "policy_conflict_route_class": { "$ref": "#/$defs/id" },
+        "maximum_pending_seconds": { "type": "integer", "minimum": 1, "maximum": 31536000 }, "evidence_class_ids": { "$ref": "#/$defs/nonempty_id_set" }
+      }
+    },
+    "human_exception": {
+      "type": "object", "additionalProperties": false,
+      "required": ["autonomous_reason_codes", "confirmation_reason_codes", "mandatory_escalation_reason_codes", "prohibited_automatic_reason_codes", "human_touch_budget", "policy_sha256"],
+      "properties": {
+        "autonomous_reason_codes": { "$ref": "#/$defs/id_set" }, "confirmation_reason_codes": { "$ref": "#/$defs/id_set" },
+        "mandatory_escalation_reason_codes": { "$ref": "#/$defs/nonempty_id_set" }, "prohibited_automatic_reason_codes": { "$ref": "#/$defs/nonempty_id_set" },
+        "human_touch_budget": { "type": ["integer", "null"], "minimum": 1, "maximum": 100 }, "policy_sha256": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

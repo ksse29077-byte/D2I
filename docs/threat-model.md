@@ -378,3 +378,23 @@ activation, payload, and temporary-state residuals.
 Remaining risk is intentionally outside Track K: KRN-500 is one fixed local
 fixture task and does not establish persistent Role/Case ownership, general
 module loading, arbitrary application control, or production model planning.
+
+## Role Contract and Persistent Role Instance
+
+WORK-100 addresses prose-derived authority, unsigned activation, approval and
+delegation substitution, delegated scope expansion, stale or replayed Role
+task admission, contract in-place mutation, suspended/revoked reactivation,
+ledger rollback, and false KPI/SLA/Case claims. Contracts and signed grants use
+exact canonical hashes and bounded explicit sets. The Desktop ledger verifies
+protected DACL fingerprints, an atomic append-only hash chain, legal lifecycle
+transitions, contract ID/version collisions, consumed request/admission hashes,
+and protected audit cross-references before returning current state.
+
+The KRN root is created only after exact Role context, active instance,
+instruction, GoalSpec, pack, integration, capabilities, authority projection,
+recovery projection, and consumed task-start evidence agree. Role artifacts
+exclude raw locators, payloads, credentials, private keys, recipient personal
+data, and absolute paths. Remaining risks include organization production key
+custody, external chain-head anchoring, Work Item/Case ownership, scheduler
+time authority, KPI measurement, SLA timers, and report routing; none grants a
+fallback execution path.

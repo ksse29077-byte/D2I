@@ -3,12 +3,15 @@ param(
     [string]$WindowTitle,
     [Parameter(Mandatory = $true)]
     [ValidateSet("happy", "recovery", "unsafe", "clarification")]
-    [string]$Mode
+    [string]$Mode,
+    [Parameter(Mandatory = $true)]
+    [string]$StatePath
 )
 
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+$script:Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = $WindowTitle
@@ -28,6 +31,7 @@ $nameInput.AccessibleName = "Employee name input"
 $nameInput.Text = "INITIAL-NAME"
 $nameInput.Location = New-Object System.Drawing.Point(24, 58)
 $nameInput.Size = New-Object System.Drawing.Size(300, 24)
+$nameInput.TabStop = $false
 $form.Controls.Add($nameInput)
 
 if ($Mode -eq "clarification") {
@@ -37,6 +41,7 @@ if ($Mode -eq "clarification") {
     $duplicateInput.Text = "DUPLICATE-NAME"
     $duplicateInput.Location = New-Object System.Drawing.Point(340, 58)
     $duplicateInput.Size = New-Object System.Drawing.Size(280, 24)
+    $duplicateInput.TabStop = $false
     $form.Controls.Add($duplicateInput)
 }
 
@@ -46,6 +51,7 @@ $saveButton.AccessibleName = "Save employee"
 $saveButton.Text = "Save employee"
 $saveButton.Location = New-Object System.Drawing.Point(24, 98)
 $saveButton.Size = New-Object System.Drawing.Size(150, 30)
+$saveButton.TabStop = $false
 $form.Controls.Add($saveButton)
 
 $savedName = New-Object System.Windows.Forms.TextBox
@@ -55,6 +61,7 @@ $savedName.Text = "INITIAL-NAME"
 $savedName.ReadOnly = $true
 $savedName.Location = New-Object System.Drawing.Point(24, 154)
 $savedName.Size = New-Object System.Drawing.Size(300, 24)
+$savedName.TabStop = $false
 $form.Controls.Add($savedName)
 
 $revision = New-Object System.Windows.Forms.TextBox
@@ -64,6 +71,7 @@ $revision.Text = "0"
 $revision.ReadOnly = $true
 $revision.Location = New-Object System.Drawing.Point(340, 154)
 $revision.Size = New-Object System.Drawing.Size(90, 24)
+$revision.TabStop = $false
 $form.Controls.Add($revision)
 
 $saveStatus = New-Object System.Windows.Forms.TextBox
@@ -73,6 +81,7 @@ $saveStatus.Text = "idle"
 $saveStatus.ReadOnly = $true
 $saveStatus.Location = New-Object System.Drawing.Point(450, 154)
 $saveStatus.Size = New-Object System.Drawing.Size(170, 24)
+$saveStatus.TabStop = $false
 $form.Controls.Add($saveStatus)
 
 $protected = New-Object System.Windows.Forms.CheckBox
@@ -82,6 +91,7 @@ $protected.Text = "Protected"
 $protected.Checked = $false
 $protected.Location = New-Object System.Drawing.Point(24, 210)
 $protected.Size = New-Object System.Drawing.Size(160, 24)
+$protected.TabStop = $false
 $form.Controls.Add($protected)
 
 $observationStatus = New-Object System.Windows.Forms.TextBox
@@ -91,6 +101,7 @@ $observationStatus.Text = "ready"
 $observationStatus.ReadOnly = $true
 $observationStatus.Location = New-Object System.Drawing.Point(210, 210)
 $observationStatus.Size = New-Object System.Drawing.Size(180, 24)
+$observationStatus.TabStop = $false
 $form.Controls.Add($observationStatus)
 
 $untrusted = New-Object System.Windows.Forms.Label
@@ -101,10 +112,51 @@ $untrusted.Size = New-Object System.Drawing.Size(500, 30)
 $form.Controls.Add($untrusted)
 
 $script:saveAttempts = 0
+$script:inputRevision = 0
+
+function Get-Sha256Text {
+    param([string]$Text)
+
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $bytes = $script:Utf8NoBom.GetBytes($Text)
+        $hash = $sha256.ComputeHash($bytes)
+        return "sha256:" + ([System.BitConverter]::ToString($hash) -replace '-', '').ToLowerInvariant()
+    }
+    finally {
+        $sha256.Dispose()
+    }
+}
+
+function Write-FixtureState {
+    $state = [ordered]@{
+        schema_version = 1
+        ready = $true
+        input_revision = $script:inputRevision
+        input_sha256 = Get-Sha256Text -Text $nameInput.Text
+        input_focused = $nameInput.Focused
+        save_attempts = $script:saveAttempts
+        save_status = $saveStatus.Text
+        saved_name_sha256 = Get-Sha256Text -Text $savedName.Text
+    }
+    $temporaryPath = "$StatePath.tmp"
+    $json = $state | ConvertTo-Json -Compress
+    [System.IO.File]::WriteAllText($temporaryPath, $json, $script:Utf8NoBom)
+    Move-Item -LiteralPath $temporaryPath -Destination $StatePath -Force
+}
+
+$nameInput.Add_TextChanged({
+    $script:inputRevision += 1
+    [void]$form.BeginInvoke([System.Action]{
+        Write-FixtureState
+    })
+})
+
 $saveButton.Add_Click({
     $script:saveAttempts += 1
     if (($Mode -eq "recovery") -and ($script:saveAttempts -eq 1)) {
         $saveStatus.Text = "rejected"
+        Write-FixtureState
         return
     }
     $savedName.Text = $nameInput.Text
@@ -113,10 +165,13 @@ $saveButton.Add_Click({
     if ($Mode -eq "unsafe") {
         $protected.Checked = -not $protected.Checked
     }
+    Write-FixtureState
 })
 
 $form.Add_Shown({
+    $form.ActiveControl = $null
     $form.Activate()
+    Write-FixtureState
 })
 
 [System.Windows.Forms.Application]::Run($form)

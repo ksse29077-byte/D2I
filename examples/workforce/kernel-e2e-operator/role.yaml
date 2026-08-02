@@ -1,0 +1,161 @@
+schema_version: 1
+role_contract_id: kernel-e2e-task-operator
+role_version: 1.0.0
+display_name: Kernel E2E Operator
+purpose: Operate the bounded local verified name-save fixture.
+organization_scope:
+  organization_id: organization-1
+  business_unit_ids: [engineering]
+  site_ids: [local-test-site]
+  domain_ids: [kernel-e2e]
+  environment_ids: [local-windows-test]
+  jurisdiction_ids: [test-only]
+responsibilities:
+  - responsibility_id: verified-name-save
+    outcome_class_ids: [verified-form-save]
+    accepted_work_class_ids: [workforce.kernel_e2e.name_save]
+    evidence_class_ids: [verified-action-result, final-goal-verification]
+    reporting_obligation_ids: [report-task-complete]
+    description: Change and save the fixture employee name while preserving protected state.
+accepted_work_classes:
+  - work_class_id: workforce.kernel_e2e.name_save
+    contract_version: 1.0.0
+    responsibility_id: verified-name-save
+    allowed_priority_classes: [normal]
+    sla_profile_id: kernel-e2e-sla
+    maximum_risk: business_state_change
+    required_application_pack_ids: [kernel-e2e-name-save]
+    required_integration_ids: [windows-kernel-e2e]
+    required_capability_ids: [uia.invoke, uia.set_value]
+    permitted_observation_source_ids: [kernel-uia]
+    clarification_allowed: true
+    automatic_recovery_allowed: true
+    mandatory_escalation_reason_codes: [protected_invariant_violation, unsafe_verification]
+prohibited_work_class_ids: [workforce.kernel_e2e.protected_mutation]
+authority_ceiling: local-reversible-and-confirmed-business-state
+application_bindings:
+  - application_pack_id: kernel-e2e-name-save
+    application_pack_sha256: sha256:63af89c06cb5a7b6623e1619718a9a4f3d8346d1387acb52ea339b8ad710411e
+    integration_ids: [windows-kernel-e2e]
+    allowed_semantic_target_ids: [employee_name_input, save_button]
+    allowed_capability_ids: [uia.invoke, uia.set_value]
+    observation_source_ids: [kernel-uia]
+    environment_ids: [local-windows-test]
+observation_sources:
+  - observation_source_id: kernel-uia
+    source_kind: desktop_uia
+    integration_id: windows-kernel-e2e
+    trust_floor: signed-runtime-binding
+    read_only: true
+    event_class_ids: [manual-task]
+    application_pack_id: kernel-e2e-name-save
+    maximum_staleness_seconds: 30
+    enabled: true
+capability_policy:
+  allowed_capability_ids: [uia.invoke, uia.set_value]
+  prohibited_capability_ids: [uia.set_protected]
+  autonomous_capability_ids: [uia.set_value]
+  confirmation_capability_ids: [uia.invoke]
+  escalation_only_capability_ids: []
+  capability_group_ids: [kernel-form-edit]
+  semantic_target_ids: [employee_name_input, save_button]
+  maximum_attempts_per_capability: 2
+risk_policy:
+  maximum_autonomous_risk: reversible
+  maximum_confirmable_risk: business_state_change
+  mandatory_escalation_risk: high_criticality
+  irreversible_actions_allowed: false
+  high_criticality_automatic_allowed: false
+  unknown_policy_behavior: escalate
+  unsafe_verification_behavior: escalate
+working_calendar:
+  calendar_id: kernel-e2e-calendar
+  timezone_id: Asia/Seoul
+  weekly_windows:
+    - weekday: 0
+      start_minute_local: 0
+      end_minute_local: 1440
+    - weekday: 1
+      start_minute_local: 0
+      end_minute_local: 1440
+    - weekday: 2
+      start_minute_local: 0
+      end_minute_local: 1440
+    - weekday: 3
+      start_minute_local: 0
+      end_minute_local: 1440
+    - weekday: 4
+      start_minute_local: 0
+      end_minute_local: 1440
+    - weekday: 5
+      start_minute_local: 0
+      end_minute_local: 1440
+    - weekday: 6
+      start_minute_local: 0
+      end_minute_local: 1440
+  blackout_date_ids: []
+  emergency_override_policy: forbidden
+  outside_window_behavior: deny_new_work
+  calendar_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+kpi_definitions:
+  - kpi_id: verified-closure-rate
+    metric_id: verified_closure_rate
+    direction: at_least
+    target_millionths: 1000000
+    target_integer: null
+    measurement_window_id: test-run
+    evidence_class_ids: [final-goal-verification]
+    warning_threshold: 1000000
+    breach_behavior: report
+    enabled: true
+sla_profiles:
+  - sla_profile_id: kernel-e2e-sla
+    priority_class: normal
+    acknowledge_within_seconds: 5
+    begin_within_seconds: 10
+    resolve_within_seconds: 300
+    escalation_after_seconds: 120
+    pause_conditions: []
+    evidence_class_ids: [role-task-admission]
+reporting_obligations:
+  - obligation_id: report-task-complete
+    trigger: on_task_complete
+    report_class_id: kernel-task-work-report
+    routing_class_id: test-supervisor
+    required_evidence_class_ids: [final-goal-verification, kernel-task-run-record]
+    frequency_profile_id: null
+    retention_class_id: test-evidence
+    enabled: true
+memory_boundary:
+  allowed_memory_namespace_ids: []
+  prohibited_data_class_ids: [credential, raw-locator, raw-ui-payload]
+  retention_class_id: test-evidence
+  maximum_retention_days: 1
+  raw_credentials_allowed: false
+  raw_ui_payload_allowed: false
+  cross_case_reuse_policy: hash_reference_only
+  learning_candidate_allowed: false
+  memory_boundary_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+escalation_policy:
+  escalation_policy_id: kernel-e2e-escalation
+  routing_class_by_severity:
+    elevated: test-supervisor
+    unsafe: safety-review
+  mandatory_reason_codes: [authority_exceeded, policy_unknown, unsafe_verification]
+  authority_exceeded_route_class: safety-review
+  unsafe_route_class: safety-review
+  legal_review_route_class: legal-review
+  policy_conflict_route_class: safety-review
+  maximum_pending_seconds: 300
+  evidence_class_ids: [role-task-admission, verified-action-result]
+human_exception_policy:
+  autonomous_reason_codes: [routine_delegated_work, safe_bounded_recovery]
+  confirmation_reason_codes: [business_state_change]
+  mandatory_escalation_reason_codes: [authority_exceeded, high_criticality, irreversible_change, legal_approval, material_ambiguity, policy_unknown, sensitive_input, unsafe_verification]
+  prohibited_automatic_reason_codes: [authority_exceeded, high_criticality, irreversible_change, legal_approval, material_ambiguity, policy_unknown, sensitive_input, unsafe_verification]
+  human_touch_budget: 1
+  policy_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+policy_set_id: kernel-e2e-policy-set
+policy_set_version: 1.0.0
+policy_set_sha256: sha256:49fc72fcca86bc5f9ea6ae601a568db8d89452d79344b0147c393c0b7aa6894c
+evidence_ids: [application-pack-kernel-e2e, policy-kernel-e2e]

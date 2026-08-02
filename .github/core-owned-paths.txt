@@ -68,3 +68,10 @@ products/d2i-desktop/src/audit.rs
 products/d2i-desktop/src/windows_*.rs
 crates/d2i-windows-host/**
 schemas/desktop/**
+crates/d2i-role-contract/**
+schemas/workforce/**
+docs/workforce/**
+scripts/workforce/**
+examples/workforce/**
+products/d2i-desktop/src/role_instance.rs
+products/d2i-desktop/tests/role_contract.rs

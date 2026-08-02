@@ -15,14 +15,14 @@ use d2i_application_semantics::{
     build_element_grounder_payload, ApplicationPack, ElementGrounderBridgeRequest,
 };
 use d2i_cognitive_ir::{
-    CapabilityDescriptor, CognitiveRiskClass, CognitiveTiming, ComparisonOp,
+    CapabilityDescriptor, CognitiveRiskClass, CognitiveTiming, ComparisonOp, ConfirmationPolicy,
     ConfirmationRequirement, GoalProgress, GoalSpec, ObservationSnapshot, ObservationSourceKind,
     PlanEdge, PlanEdgeKind, PlanGraph, PlanNode, PlanNodeKind, Postcondition, Provenance,
     WorkReport, WorldState,
 };
 use d2i_desktop::{
     activate_certified_windows_binding, bind_actual_source_observation, certify_windows_binding,
-    grounded_target_binding_sha256, initialize_recovery_ledger,
+    grounded_target_binding_sha256, initialize_recovery_ledger, initialize_role_instance_ledger,
     initialize_windows_activation_ledger, initialize_windows_deployment_audit,
     project_windows_activation, to_verification_bound_execution_v2, trusted_execution_sha256,
     verify_recovery_ledger, verify_signed_windows_certification, verify_windows_activation_ledger,
@@ -38,14 +38,17 @@ use d2i_desktop::{
     RecoveryDecisionKindV1, RecoveryFailureClassV1, RecoveryHistoryEntryV1,
     RecoveryHistoryOutcomeV1, RecoveryHistoryV1, RecoveryPolicyProfileV1, RecoveryReasonCodeV1,
     RecoveryStageV1, RecoveryTriggerV1, RecoveryVerificationVerdictV1, ReobservationRequestV1,
-    RequiredAuthorityClassV1, SafeStateSummaryCodeV1, TrustedExecutionBindingRequestV1,
+    RequiredAuthorityClassV1, RoleInstanceLedgerEventKindV1, RoleInstanceLedgerRecordV1,
+    RoleInstanceLedgerV1, SafeStateSummaryCodeV1, TrustedExecutionBindingRequestV1,
     TrustedExecutionSessionV1, TrustedExecutionStatusV1, TrustedReadOnlyObservationConfiguration,
     TrustedTargetResolverInput, VerificationConsumptionLedgerV1, VerificationGuardFieldV1,
     VerificationGuardProfileV1, VerificationGuardTargetV1, VerificationVerdictV2,
     WindowsActivationAdmission, WindowsAdapterConfiguration, WindowsAdapterKind,
-    WindowsRuntimeBindingProbe, WindowsRuntimeManifest, WindowsUiAutomationAdapter,
-    WindowsUiaObservationProvider, WindowsUiaObservationTarget, KERNEL_TASK_RUNTIME_BUILD_ID,
-    KERNEL_TASK_SCHEMA_VERSION, RECOVERY_SCHEMA_VERSION, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+    WindowsDeploymentAuditEvent, WindowsDeploymentAuditEventKind, WindowsDeploymentAuditLedger,
+    WindowsDeploymentAuditStatus, WindowsRuntimeBindingProbe, WindowsRuntimeManifest,
+    WindowsUiAutomationAdapter, WindowsUiaObservationProvider, WindowsUiaObservationTarget,
+    KERNEL_TASK_RUNTIME_BUILD_ID, KERNEL_TASK_SCHEMA_VERSION, RECOVERY_SCHEMA_VERSION,
+    TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
 use d2i_module_sdk::{
     canonical_sha256 as module_sha256, load_module_manifest, parse_json_strict,
@@ -58,6 +61,12 @@ use d2i_policy_admission::{
     DelegatedAuthorityContextV1, GrantConsumptionLedgerV1, PolicyEvaluationRequestV1,
     PolicyOutcomeV1, RequestedAutonomyModeV1, TrustedPolicySnapshotV1, TrustedPolicyStateV1,
     POLICY_ADMISSION_SCHEMA_VERSION,
+};
+use d2i_role_contract::{
+    admit_role_task, compile_role_source, create_role_contract_approval, create_role_delegation,
+    RoleBoundKernelTaskContextV1, RoleCompileFormatV1, RoleContractApprovalV1, RoleContractV1,
+    RoleDelegationGrantV1, RoleInstanceStatusV1, RoleInstanceV1, RoleOperationalTimeContextV1,
+    RoleTaskAdmissionOutcomeV1, RoleTaskAdmissionRequestV1, ROLE_CONTRACT_SCHEMA_VERSION,
 };
 use ed25519_dalek::SigningKey;
 use serde::{Deserialize, Serialize};
@@ -74,6 +83,7 @@ const INTEGRATION_ID: &str = "windows-kernel-e2e";
 const ORGANIZATION_ID: &str = "organization-1";
 const ACTOR_ID: &str = "kernel-e2e-actor";
 const ROLE_ID: &str = "kernel-e2e-task-operator";
+const FIXTURE_STATE_FILE: &str = "fixture-state.json";
 const FIXTURE_SCRIPT_BYTES: &[u8] =
     include_bytes!("../../tests/support/kernel_e2e_name_save_fixture.ps1");
 
@@ -122,6 +132,7 @@ struct RunnerArgs {
     worker_executable: PathBuf,
     fixture_script: PathBuf,
     application_pack: PathBuf,
+    role_source: Option<PathBuf>,
     module_roots: BTreeMap<String, PathBuf>,
     module_hosts: BTreeMap<String, PathBuf>,
     module_host_hashes: BTreeMap<String, String>,
@@ -146,6 +157,10 @@ struct KernelE2eScenarioResultV1 {
     expected_outcome: KernelFinalOutcomeV1,
     actual_outcome: KernelFinalOutcomeV1,
     authenticated_instruction_sha256: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    role_context_sha256: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    role_ledger_chain_head: Option<String>,
     goal_spec_sha256: String,
     application_pack_sha256: String,
     plan_sha256: String,
@@ -240,6 +255,7 @@ struct CycleExecution {
     receipt_sha256: String,
     verified_result_sha256: String,
     verdict: VerificationVerdictV2,
+    verification_diagnostic: String,
     record: ActionCycleRecordV1,
     audit_chain_heads: Vec<String>,
 }
@@ -264,6 +280,50 @@ struct ScenarioArtifacts {
     recovery_count: usize,
     mutation_count: usize,
     audit_chain_head: String,
+    role_context_sha256: Option<String>,
+    role_ledger_chain_head: Option<String>,
+}
+
+struct RoleKernelBinding {
+    contract: RoleContractV1,
+    ledger: RoleInstanceLedgerV1,
+    audit: WindowsDeploymentAuditLedger,
+    audit_root: PathBuf,
+    context: RoleBoundKernelTaskContextV1,
+    authority: DelegatedAuthorityContextV1,
+    recovery: RecoveryPolicyProfileV1,
+}
+
+impl RoleKernelBinding {
+    fn finish(
+        &mut self,
+        run_record_sha256: &str,
+        recorded_at_unix_ms: u64,
+    ) -> Result<String, DesktopError> {
+        let current = self
+            .ledger
+            .verification()
+            .current_instance
+            .clone()
+            .ok_or_else(|| DesktopError::Integrity("active Role disappeared".to_owned()))?;
+        append_role_record(
+            &mut self.ledger,
+            &mut self.audit,
+            &self.contract,
+            RoleInstanceLedgerEventKindV1::RoleBoundTaskTerminal,
+            Some(current),
+            None,
+            None,
+            Some(self.context.context_sha256.clone()),
+            BTreeMap::from([("kernel_task_run".to_owned(), run_record_sha256.to_owned())]),
+            recorded_at_unix_ms,
+        )?;
+        Ok(self.ledger.verification().terminal_record_hash.clone())
+    }
+
+    fn audit_chain_head(&self) -> Result<String, DesktopError> {
+        Ok(verify_windows_deployment_audit(&self.audit_root)?.terminal_record_hash)
+    }
 }
 
 fn main() -> ExitCode {
@@ -319,6 +379,8 @@ fn run_main() -> Result<ExitCode, DesktopError> {
         expected_outcome: args.mode.expected_outcome(),
         actual_outcome: artifacts.actual_outcome,
         authenticated_instruction_sha256: artifacts.instruction.instruction_sha256.clone(),
+        role_context_sha256: artifacts.role_context_sha256,
+        role_ledger_chain_head: artifacts.role_ledger_chain_head,
         goal_spec_sha256: canonical_sha256(&artifacts.goal).map_err(selection_error)?,
         application_pack_sha256: artifacts.pack.pack_sha256.clone(),
         plan_sha256: canonical_sha256(&artifacts.plan).map_err(selection_error)?,
@@ -396,6 +458,7 @@ fn parse_args() -> Result<RunnerArgs, String> {
     let worker_executable = PathBuf::from(take(&mut map, "--worker-executable")?);
     let fixture_script = PathBuf::from(take(&mut map, "--fixture-script")?);
     let application_pack = PathBuf::from(take(&mut map, "--application-pack")?);
+    let role_source = map.remove("--role-source").map(PathBuf::from);
     let mut module_roots = BTreeMap::new();
     let mut module_hosts = BTreeMap::new();
     let mut module_host_hashes = BTreeMap::new();
@@ -426,6 +489,7 @@ fn parse_args() -> Result<RunnerArgs, String> {
         worker_executable,
         fixture_script,
         application_pack,
+        role_source,
         module_roots,
         module_hosts,
         module_host_hashes,
@@ -443,6 +507,7 @@ fn start_fixture(args: &RunnerArgs, temp: &TempRoot) -> Result<ChildGuard, Deskt
     }
     let powershell = powershell_path()?;
     let title = fixture_title(args.mode);
+    let state_path = temp.path().join(FIXTURE_STATE_FILE);
     let child = Command::new(powershell)
         .args(["-NoProfile", "-STA", "-ExecutionPolicy", "Bypass", "-File"])
         .arg(script)
@@ -450,6 +515,8 @@ fn start_fixture(args: &RunnerArgs, temp: &TempRoot) -> Result<ChildGuard, Deskt
         .arg(title)
         .arg("-Mode")
         .arg(args.mode.fixture_mode())
+        .arg("-StatePath")
+        .arg(&state_path)
         .current_dir(temp.path())
         .spawn()
         .map_err(|error| io_error("winforms-fixture", error))?;
@@ -467,13 +534,94 @@ fn start_fixture(args: &RunnerArgs, temp: &TempRoot) -> Result<ChildGuard, Deskt
         }
         if process_exists(guard.0.id()) {
             std::thread::sleep(Duration::from_millis(100));
-            if wait_for_window(guard.0.id()) {
+            if wait_for_window(guard.0.id())
+                && fixture_state(&state_path).is_ok_and(|state| state.ready)
+            {
                 return Ok(guard);
             }
         }
     }
     Err(DesktopError::AdapterUnavailable(
         "WinForms fixture window did not become observable".to_owned(),
+    ))
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct FixtureState {
+    schema_version: u32,
+    ready: bool,
+    input_revision: u64,
+    input_sha256: String,
+    input_focused: bool,
+    save_attempts: u64,
+    save_status: String,
+    saved_name_sha256: String,
+}
+
+#[cfg(windows)]
+fn fixture_state(path: &Path) -> Result<FixtureState, DesktopError> {
+    let bytes = fs::read(path).map_err(|error| io_error("fixture-state", error))?;
+    let state: FixtureState = parse_json_strict(&bytes).map_err(selection_error)?;
+    if state.schema_version != 1
+        || state.save_status.len() > 16
+        || !state
+            .save_status
+            .bytes()
+            .all(|byte| byte.is_ascii_lowercase())
+        || !state
+            .input_sha256
+            .strip_prefix("sha256:")
+            .is_some_and(|value| {
+                value.len() == 64 && value.bytes().all(|byte| byte.is_ascii_hexdigit())
+            })
+        || !state
+            .saved_name_sha256
+            .strip_prefix("sha256:")
+            .is_some_and(|value| {
+                value.len() == 64 && value.bytes().all(|byte| byte.is_ascii_hexdigit())
+            })
+    {
+        return Err(DesktopError::Integrity(
+            "fixture state contract is invalid".to_owned(),
+        ));
+    }
+    Ok(state)
+}
+
+#[cfg(windows)]
+fn wait_for_fixture_transition(
+    temp: &TempRoot,
+    mode: ScenarioMode,
+    step: ActionStepKind,
+    action_sequence: u64,
+) -> Result<(), DesktopError> {
+    let state_path = temp.path().join(FIXTURE_STATE_FILE);
+    let expected_name_sha256 = sha(EXPECTED_NAME.as_bytes());
+    for _ in 0..50 {
+        if fixture_state(&state_path).is_ok_and(|state| match step {
+            ActionStepKind::SetName => {
+                state.input_revision >= 1
+                    && state.input_sha256 == expected_name_sha256
+                    && state.input_focused
+            }
+            ActionStepKind::Save => {
+                let required_attempts = action_sequence.saturating_sub(1);
+                state.save_attempts >= required_attempts
+                    && if mode == ScenarioMode::Recovery && required_attempts == 1 {
+                        state.save_status == "rejected"
+                    } else {
+                        state.save_status == "saved"
+                            && state.saved_name_sha256 == expected_name_sha256
+                    }
+            }
+        }) {
+            return Ok(());
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    Err(DesktopError::AdapterUnavailable(
+        "WinForms fixture did not publish the expected bounded UI transition".to_owned(),
     ))
 }
 
@@ -1405,6 +1553,13 @@ enum ActionStepKind {
 }
 
 impl ActionStepKind {
+    const fn automation_id(self) -> &'static str {
+        match self {
+            Self::SetName => "employee-name-input",
+            Self::Save => "save-button",
+        }
+    }
+
     const fn semantic_target(self) -> &'static str {
         match self {
             Self::SetName => "employee_name_input",
@@ -1441,6 +1596,36 @@ impl ActionStepKind {
     }
 }
 
+fn changed_element_value_fields(
+    source: &ObservationSnapshot,
+    fresh: &ObservationSnapshot,
+    automation_id: &str,
+) -> Result<String, DesktopError> {
+    let source_value = &element_by_automation_id(source, automation_id)?.value;
+    let fresh_value = &element_by_automation_id(fresh, automation_id)?.value;
+    let (Some(source_fields), Some(fresh_fields)) =
+        (source_value.as_object(), fresh_value.as_object())
+    else {
+        return Ok("non-object".to_owned());
+    };
+    let keys = source_fields
+        .keys()
+        .chain(fresh_fields.keys())
+        .collect::<BTreeSet<_>>();
+    let changed = keys
+        .into_iter()
+        .filter(|key| source_fields.get(*key) != fresh_fields.get(*key))
+        .cloned()
+        .collect::<Vec<_>>()
+        .join(",");
+    Ok(format!(
+        "{};focused={:?}->{:?}",
+        changed,
+        source_value.pointer("/focused").and_then(Value::as_bool),
+        fresh_value.pointer("/focused").and_then(Value::as_bool)
+    ))
+}
+
 fn verification_verdict(value: VerificationVerdictV2) -> FinalVerificationVerdictV1 {
     match value {
         VerificationVerdictV2::Passed => FinalVerificationVerdictV1::Passed,
@@ -1449,6 +1634,44 @@ fn verification_verdict(value: VerificationVerdictV2) -> FinalVerificationVerdic
         | VerificationVerdictV2::Inconclusive
         | VerificationVerdictV2::Unsupported => FinalVerificationVerdictV1::Failed,
     }
+}
+
+fn add_focus_transfer_expectations(
+    source: &ObservationSnapshot,
+    target_automation_id: &str,
+    target_already_bound: bool,
+    postconditions: &mut Vec<Postcondition>,
+    targets: &mut Vec<VerificationGuardTargetV1>,
+) -> Result<(), DesktopError> {
+    let target = element_by_automation_id(source, target_automation_id)?;
+    for element in &source.observable_elements {
+        let is_target = element.element_id == target.element_id;
+        let source_focused = element
+            .value
+            .pointer("/focused")
+            .and_then(Value::as_bool)
+            .unwrap_or(false);
+        if !is_target && !source_focused {
+            continue;
+        }
+        if is_target && target_already_bound {
+            continue;
+        }
+        let expected_focused = is_target;
+        let mut expected_value = element.value.clone();
+        let focused = expected_value.pointer_mut("/focused").ok_or_else(|| {
+            DesktopError::Integrity("observed UIA value omits focused".to_owned())
+        })?;
+        *focused = Value::Bool(expected_focused);
+        postconditions.push(exact_value_postcondition(element, &expected_value)?);
+        if element.value != expected_value {
+            targets.push(VerificationGuardTargetV1 {
+                element_id: element.element_id.clone(),
+                field: VerificationGuardFieldV1::Value,
+            });
+        }
+    }
+    Ok(())
 }
 
 fn action_expectations(
@@ -1460,14 +1683,23 @@ fn action_expectations(
     match step {
         ActionStepKind::SetName => {
             let element = element_by_automation_id(source, "employee-name-input")?;
-            postconditions.push(exact_value_postcondition(
-                element,
-                &expected_text_value(element, EXPECTED_NAME)?,
-            )?);
+            let mut expected_value = expected_text_value(element, EXPECTED_NAME)?;
+            let focused = expected_value.pointer_mut("/focused").ok_or_else(|| {
+                DesktopError::Integrity("observed UIA value omits focused".to_owned())
+            })?;
+            *focused = Value::Bool(true);
+            postconditions.push(exact_value_postcondition(element, &expected_value)?);
             targets.push(VerificationGuardTargetV1 {
                 element_id: element.element_id.clone(),
                 field: VerificationGuardFieldV1::Value,
             });
+            add_focus_transfer_expectations(
+                source,
+                "employee-name-input",
+                true,
+                &mut postconditions,
+                &mut targets,
+            )?;
         }
         ActionStepKind::Save => {
             for (automation_id, expected) in [
@@ -1497,6 +1729,13 @@ fn action_expectations(
                 element_id: revision.element_id.clone(),
                 field: VerificationGuardFieldV1::Value,
             });
+            add_focus_transfer_expectations(
+                source,
+                "save-button",
+                false,
+                &mut postconditions,
+                &mut targets,
+            )?;
         }
     }
     Ok((postconditions, targets))
@@ -1669,9 +1908,15 @@ fn run_action_cycle(
             "mutation worker remained after one-shot execution".to_owned(),
         ));
     }
+    wait_for_fixture_transition(temp, args.mode, step, action_sequence)?;
     let mutation_audit_head =
         verify_windows_deployment_audit(&mutation_audit_root)?.terminal_record_hash;
 
+    let expected_postcondition_hashes = expected_postconditions
+        .iter()
+        .filter_map(|value| value.expected_value.as_str())
+        .collect::<Vec<_>>()
+        .join(",");
     let verification_goal = GoalSpec {
         success_criteria: expected_postconditions,
         ..goal.clone()
@@ -1767,12 +2012,55 @@ fn run_action_cycle(
     let fresh = verifier.fresh_observation().cloned().ok_or_else(|| {
         DesktopError::Integrity("fresh verification observation is absent".to_owned())
     })?;
+    let changed_value_fields = changed_element_value_fields(&source, &fresh, step.automation_id())?;
     let fresh_worker_id = verifier.observation_worker_process_id().ok_or_else(|| {
         DesktopError::Integrity("verification worker process identity is absent".to_owned())
     })?;
-    verifier.analyze_delta(now_ms.saturating_add(7_000))?;
+    let delta = verifier
+        .analyze_delta(now_ms.saturating_add(7_000))?
+        .clone();
+    let unexpected_delta_targets = delta
+        .unexpected_changes
+        .iter()
+        .chain(delta.security_relevant_changes.iter())
+        .chain(delta.protected_invariant_violations.iter())
+        .map(|change| {
+            change.target.as_ref().map_or_else(
+                || format!("observation:{:?}", change.kind),
+                |target| format!("{}:{:?}", target.element_id, target.field),
+            )
+        })
+        .collect::<Vec<_>>()
+        .join(",");
     verifier.build_verification_request()?;
     let verified = verifier.verify(now_ms.saturating_add(8_000))?.clone();
+    let verification_diagnostic = format!(
+        "reason={}; expected=[{}]; postconditions=[{}]; changed_fields=[{}]; unexpected_changes={}:{}",
+        verified.reason,
+        expected_postcondition_hashes,
+        verified
+            .action_postcondition_results
+            .iter()
+            .map(|result| {
+                let observed_sha256 = result
+                    .observed_value
+                    .as_ref()
+                    .and_then(|value| trusted_execution_sha256(value).ok())
+                    .unwrap_or_else(|| "absent".to_owned());
+                format!(
+                    "{}:{}:{}:{}",
+                    result.criterion_id,
+                    result.verdict == VerificationVerdictV2::Passed,
+                    result.reason,
+                    observed_sha256
+                )
+            })
+            .collect::<Vec<_>>()
+            .join(","),
+        changed_value_fields,
+        verified.unexpected_changes.len(),
+        unexpected_delta_targets,
+    );
     let terminal = verifier.finalize(now_ms.saturating_add(9_000))?;
     drop(verifier);
     if process_exists(fresh_worker_id) || verified.action_verdict != terminal.action_verdict {
@@ -1823,6 +2111,7 @@ fn run_action_cycle(
         receipt_sha256: receipt.receipt_sha256,
         verified_result_sha256: terminal.result_sha256,
         verdict: terminal.action_verdict,
+        verification_diagnostic,
         record,
         audit_chain_heads: vec![
             activation_audit_head,
@@ -2548,6 +2837,505 @@ fn assert_required_elements(
     Ok(())
 }
 
+fn expected_kernel_goal(
+    instruction: &AuthenticatedTaskInstructionV1,
+    payload: &Value,
+) -> Result<GoalSpec, DesktopError> {
+    let values = instruction
+        .instruction_text
+        .lines()
+        .map(|line| {
+            line.split_once(':')
+                .map(|(_, value)| value.split_whitespace().collect::<Vec<_>>().join(" "))
+                .filter(|value| !value.is_empty())
+                .ok_or_else(|| {
+                    DesktopError::Integrity(
+                        "KRN-500 role pre-admission grammar line is malformed".to_owned(),
+                    )
+                })
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    if values.len() != 4 {
+        return Err(DesktopError::Integrity(
+            "KRN-500 role pre-admission grammar changed".to_owned(),
+        ));
+    }
+    let input_sha256 = module_sha256(payload).map_err(selection_error)?;
+    let suffix = input_sha256
+        .strip_prefix("sha256:")
+        .ok_or_else(|| DesktopError::Integrity("Goal input hash prefix differs".to_owned()))?;
+    let mut constraints = BTreeSet::from([
+        "protected fields remain unchanged".to_owned(),
+        values[3].clone(),
+    ]);
+    let goal = GoalSpec {
+        schema_version: 1,
+        goal_id: format!("goal-{}", &suffix[..32]),
+        objective: values[0].clone(),
+        scope: BTreeMap::from([("fixture".to_owned(), json!("windows-uia"))]),
+        required_outcomes: vec![values[2].clone()],
+        constraints: constraints.iter().cloned().collect(),
+        success_criteria: instruction.structured_success_criteria.clone(),
+        risk_class: CognitiveRiskClass::BusinessStateChange,
+        confirmation_policy: ConfirmationPolicy::BeforeRiskyAction,
+        provenance: Provenance {
+            source: instruction.source_id.clone(),
+            source_hash: payload
+                .get("source_hash")
+                .and_then(Value::as_str)
+                .ok_or_else(|| DesktopError::Integrity("Goal source hash is absent".to_owned()))?
+                .to_owned(),
+            module_id: "goal-compiler".to_owned(),
+        },
+    };
+    constraints.clear();
+    goal.validate()?;
+    Ok(goal)
+}
+
+fn prepare_role_binding(
+    role_source: &Path,
+    temp: &TempRoot,
+    instruction: &AuthenticatedTaskInstructionV1,
+    expected_goal: &GoalSpec,
+    pack: &ApplicationPack,
+    now: u64,
+) -> Result<RoleKernelBinding, DesktopError> {
+    let source = fs::read(canonical_file(role_source, "role-source")?)
+        .map_err(|error| io_error("role-source", error))?;
+    let format = if role_source
+        .extension()
+        .and_then(|value| value.to_str())
+        .is_some_and(|value| value.eq_ignore_ascii_case("json"))
+    {
+        RoleCompileFormatV1::Json
+    } else {
+        RoleCompileFormatV1::Yaml
+    };
+    let contract = compile_role_source(&source, format)
+        .map_err(selection_error)?
+        .contract;
+    let application = contract
+        .application_bindings
+        .iter()
+        .find(|binding| binding.application_pack_id == pack.pack_id)
+        .ok_or_else(|| DesktopError::AccessDenied("Role does not bind the KRN pack".to_owned()))?;
+    if application.application_pack_sha256 != pack.pack_sha256
+        || !application
+            .integration_ids
+            .iter()
+            .any(|value| value == INTEGRATION_ID)
+        || contract.role_contract_id != ROLE_ID
+        || contract.organization_scope.organization_id != ORGANIZATION_ID
+    {
+        return Err(DesktopError::AccessDenied(
+            "Role source does not exactly bind the KRN fixture".to_owned(),
+        ));
+    }
+
+    let approval_key = SigningKey::from_bytes(&[81_u8; 32]);
+    let delegation_key = SigningKey::from_bytes(&[82_u8; 32]);
+    let approval = create_role_contract_approval(
+        RoleContractApprovalV1 {
+            schema_version: ROLE_CONTRACT_SCHEMA_VERSION,
+            approval_id: "kernel-e2e-role-approval".to_owned(),
+            organization_id: ORGANIZATION_ID.to_owned(),
+            role_contract_id: contract.role_contract_id.clone(),
+            role_version: contract.role_version.clone(),
+            contract_sha256: contract.contract_sha256.clone(),
+            approved_by_actor_id: "kernel-e2e-role-approver".to_owned(),
+            approver_authority_class: "role-governance".to_owned(),
+            signer_key_id: "kernel-e2e-approval-key".to_owned(),
+            issued_at_unix_seconds: now.saturating_sub(60).max(1),
+            expires_at_unix_seconds: now.saturating_add(600),
+            approval_signature: String::new(),
+            evidence_ids: vec!["kernel-e2e-role-approval".to_owned()],
+            approval_sha256: empty_hash(),
+        },
+        &contract,
+        &approval_key,
+    )
+    .map_err(selection_error)?;
+    let delegation = create_role_delegation(
+        RoleDelegationGrantV1 {
+            schema_version: ROLE_CONTRACT_SCHEMA_VERSION,
+            delegation_id: "kernel-e2e-role-delegation".to_owned(),
+            organization_id: ORGANIZATION_ID.to_owned(),
+            role_instance_id: ACTOR_ID.to_owned(),
+            role_contract_id: contract.role_contract_id.clone(),
+            role_version: contract.role_version.clone(),
+            contract_sha256: contract.contract_sha256.clone(),
+            approval_sha256: approval.approval_sha256.clone(),
+            delegated_scope: contract.organization_scope.clone(),
+            delegated_work_class_ids: vec!["workforce.kernel_e2e.name_save".to_owned()],
+            delegated_application_pack_ids: vec![pack.pack_id.clone()],
+            delegated_integration_ids: vec![INTEGRATION_ID.to_owned()],
+            delegated_capability_ids: vec!["uia.invoke".to_owned(), "uia.set_value".to_owned()],
+            autonomous_capability_ids: vec!["uia.set_value".to_owned()],
+            confirmation_capability_ids: vec!["uia.invoke".to_owned()],
+            prohibited_capability_ids: vec!["uia.set_protected".to_owned()],
+            maximum_autonomous_risk: CognitiveRiskClass::Reversible,
+            maximum_confirmable_risk: CognitiveRiskClass::BusinessStateChange,
+            policy_set_sha256: contract.policy_set_sha256.clone(),
+            valid_from_unix_seconds: now.saturating_sub(1).max(1),
+            expires_at_unix_seconds: now.saturating_add(600),
+            assigned_by_actor_id: "kernel-e2e-role-assigner".to_owned(),
+            signer_key_id: "kernel-e2e-delegation-key".to_owned(),
+            delegation_signature: String::new(),
+            evidence_ids: vec!["kernel-e2e-role-delegation".to_owned()],
+            delegation_sha256: empty_hash(),
+        },
+        &contract,
+        &approval,
+        &delegation_key,
+    )
+    .map_err(selection_error)?;
+
+    let role_root = temp.path().join("role-ledger");
+    let audit_root = temp.path().join("role-audit");
+    let now_ms = now.saturating_mul(1_000);
+    let mut ledger = initialize_role_instance_ledger(
+        &role_root,
+        "kernel-e2e-role-ledger",
+        ACTOR_ID,
+        64,
+        now_ms,
+    )?;
+    let mut audit = initialize_windows_deployment_audit(
+        &audit_root,
+        "kernel-e2e-role-audit",
+        "kernel-e2e-role-session",
+        128,
+        now_ms,
+    )?;
+    append_role_record(
+        &mut ledger,
+        &mut audit,
+        &contract,
+        RoleInstanceLedgerEventKindV1::RoleContractRegistered,
+        None,
+        None,
+        None,
+        None,
+        BTreeMap::new(),
+        now_ms.saturating_add(1),
+    )?;
+    append_role_record(
+        &mut ledger,
+        &mut audit,
+        &contract,
+        RoleInstanceLedgerEventKindV1::RoleContractApproved,
+        None,
+        None,
+        None,
+        None,
+        BTreeMap::from([("approval".to_owned(), approval.approval_sha256.clone())]),
+        now_ms.saturating_add(2),
+    )?;
+    let provisioned = RoleInstanceV1::provision(
+        ACTOR_ID.to_owned(),
+        &contract,
+        &approval,
+        &delegation,
+        "kernel-e2e-role-ledger".to_owned(),
+        digest("kernel-role-authority-template"),
+        digest("kernel-role-recovery-template"),
+        vec!["kernel-e2e-role-instance".to_owned()],
+    )
+    .and_then(|value| value.bind_ledger_head(ledger.verification().terminal_record_hash.clone()))
+    .map_err(selection_error)?;
+    append_role_record(
+        &mut ledger,
+        &mut audit,
+        &contract,
+        RoleInstanceLedgerEventKindV1::RoleInstanceProvisioned,
+        Some(provisioned),
+        None,
+        None,
+        None,
+        BTreeMap::from([(
+            "delegation".to_owned(),
+            delegation.delegation_sha256.clone(),
+        )]),
+        now_ms.saturating_add(3),
+    )?;
+    let active = ledger
+        .verification()
+        .current_instance
+        .as_ref()
+        .ok_or_else(|| DesktopError::Integrity("provisioned Role is absent".to_owned()))?
+        .transition(RoleInstanceStatusV1::Active, now)
+        .map_err(selection_error)?;
+    append_role_record(
+        &mut ledger,
+        &mut audit,
+        &contract,
+        RoleInstanceLedgerEventKindV1::RoleInstanceActivated,
+        Some(active),
+        None,
+        None,
+        None,
+        BTreeMap::new(),
+        now_ms.saturating_add(4),
+    )?;
+
+    let active = ledger
+        .verification()
+        .current_instance
+        .clone()
+        .ok_or_else(|| DesktopError::Integrity("active Role is absent".to_owned()))?;
+    let policy = TrustedPolicySnapshotV1 {
+        schema_version: POLICY_ADMISSION_SCHEMA_VERSION,
+        policy_set_id: contract.policy_set_id.clone(),
+        policy_set_version: contract.policy_set_version.clone(),
+        policy_set_sha256: contract.policy_set_sha256.clone(),
+        organization_id: ORGANIZATION_ID.to_owned(),
+        policy_state: TrustedPolicyStateV1::Effective,
+        allowed_risk_classes: vec![
+            CognitiveRiskClass::ReadOnly,
+            CognitiveRiskClass::Reversible,
+            CognitiveRiskClass::BusinessStateChange,
+        ],
+        denied_capability_ids: Vec::new(),
+        mandatory_confirmation_capability_ids: Vec::new(),
+        mandatory_escalation_capability_ids: Vec::new(),
+        forbidden_semantic_targets: Vec::new(),
+        effective_from_unix_seconds: now.saturating_sub(60).max(1),
+        expires_at_unix_seconds: now.saturating_add(600),
+        evidence_ids: vec!["kernel-e2e-policy-snapshot".to_owned()],
+        snapshot_sha256: empty_hash(),
+    }
+    .seal()
+    .map_err(selection_error)?;
+    let (local_date, weekday, local_minute_of_day) = seoul_local_time(now)?;
+    let time = RoleOperationalTimeContextV1 {
+        schema_version: ROLE_CONTRACT_SCHEMA_VERSION,
+        calendar_sha256: contract.working_calendar.calendar_sha256.clone(),
+        timezone_id: contract.working_calendar.timezone_id.clone(),
+        local_date,
+        weekday,
+        local_minute_of_day,
+        utc_offset_minutes: 540,
+        blackout_date_ids: Vec::new(),
+        emergency_override_sha256: None,
+        observed_at_unix_seconds: now,
+        evidence_ids: vec!["kernel-e2e-trusted-clock".to_owned()],
+        context_sha256: empty_hash(),
+    }
+    .seal()
+    .map_err(selection_error)?;
+    let request = RoleTaskAdmissionRequestV1 {
+        schema_version: ROLE_CONTRACT_SCHEMA_VERSION,
+        request_id: "kernel-e2e-role-task-request".to_owned(),
+        role_instance_sha256: active.instance_sha256.clone(),
+        contract_sha256: contract.contract_sha256.clone(),
+        delegation_sha256: delegation.delegation_sha256.clone(),
+        organization_id: ORGANIZATION_ID.to_owned(),
+        authenticated_actor_id: instruction.authenticated_actor_id.clone(),
+        authenticated_role_id: instruction.authenticated_role_id.clone(),
+        authenticated_instruction_sha256: instruction.instruction_sha256.clone(),
+        goal_spec_sha256: canonical_sha256(expected_goal).map_err(selection_error)?,
+        work_class_id: "workforce.kernel_e2e.name_save".to_owned(),
+        requested_application_pack_id: pack.pack_id.clone(),
+        requested_application_pack_sha256: pack.pack_sha256.clone(),
+        requested_integration_id: INTEGRATION_ID.to_owned(),
+        required_capability_ids: vec!["uia.invoke".to_owned(), "uia.set_value".to_owned()],
+        semantic_target_ids: vec!["employee_name_input".to_owned(), "save_button".to_owned()],
+        task_risk: CognitiveRiskClass::BusinessStateChange,
+        trusted_policy_snapshot_sha256: policy.snapshot_sha256.clone(),
+        policy_set_sha256: contract.policy_set_sha256.clone(),
+        operational_time_context: time,
+        requested_at_unix_seconds: now,
+        expires_at_unix_seconds: now.saturating_add(300),
+        evidence_ids: vec!["kernel-e2e-authenticated-task".to_owned()],
+        request_sha256: empty_hash(),
+    }
+    .seal()
+    .map_err(selection_error)?;
+    let admitted = admit_role_task(
+        &request,
+        &contract,
+        &approval,
+        &delegation,
+        &active,
+        &policy,
+        "kernel-e2e-approval-key",
+        &approval_key.verifying_key(),
+        "kernel-e2e-delegation-key",
+        &delegation_key.verifying_key(),
+        now,
+    )
+    .map_err(selection_error)?;
+    if admitted.decision.outcome != RoleTaskAdmissionOutcomeV1::Admitted {
+        return Err(DesktopError::AccessDenied(format!(
+            "KRN-500 Role task was not admitted: {:?}",
+            admitted.decision.reason_codes
+        )));
+    }
+    let context = admitted
+        .role_task_context
+        .ok_or_else(|| DesktopError::Integrity("admitted Role context is absent".to_owned()))?;
+    let authority = admitted
+        .authority_projection
+        .ok_or_else(|| DesktopError::Integrity("Role authority projection is absent".to_owned()))?;
+    let recovery = admitted
+        .recovery_profile_projection
+        .ok_or_else(|| DesktopError::Integrity("Role recovery projection is absent".to_owned()))?;
+    let current = ledger
+        .verification()
+        .current_instance
+        .clone()
+        .ok_or_else(|| DesktopError::Integrity("active Role is absent".to_owned()))?;
+    append_role_record(
+        &mut ledger,
+        &mut audit,
+        &contract,
+        RoleInstanceLedgerEventKindV1::RoleTaskAdmitted,
+        Some(current),
+        Some(admitted.decision.request_sha256.clone()),
+        Some(admitted.decision.admission_sha256.clone()),
+        Some(context.context_sha256.clone()),
+        BTreeMap::from([
+            ("authority".to_owned(), authority.authority_sha256.clone()),
+            ("recovery".to_owned(), recovery.profile_sha256.clone()),
+        ]),
+        now_ms.saturating_add(5),
+    )?;
+    let current = ledger
+        .verification()
+        .current_instance
+        .clone()
+        .ok_or_else(|| DesktopError::Integrity("admitted Role is absent".to_owned()))?;
+    append_role_record(
+        &mut ledger,
+        &mut audit,
+        &contract,
+        RoleInstanceLedgerEventKindV1::RoleBoundTaskStarted,
+        Some(current),
+        None,
+        Some(admitted.decision.admission_sha256),
+        Some(context.context_sha256.clone()),
+        BTreeMap::new(),
+        now_ms.saturating_add(6),
+    )?;
+    Ok(RoleKernelBinding {
+        contract,
+        ledger,
+        audit,
+        audit_root,
+        context,
+        authority,
+        recovery,
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+fn append_role_record(
+    ledger: &mut RoleInstanceLedgerV1,
+    audit: &mut WindowsDeploymentAuditLedger,
+    contract: &RoleContractV1,
+    event_kind: RoleInstanceLedgerEventKindV1,
+    instance_after: Option<RoleInstanceV1>,
+    task_request_sha256: Option<String>,
+    task_admission_sha256: Option<String>,
+    role_context_sha256: Option<String>,
+    artifact_hashes: BTreeMap<String, String>,
+    recorded_at_unix_ms: u64,
+) -> Result<String, DesktopError> {
+    let (audit_kind, event_token) = match event_kind {
+        RoleInstanceLedgerEventKindV1::RoleContractRegistered => (
+            WindowsDeploymentAuditEventKind::RoleContractRegistered,
+            "contract-registered",
+        ),
+        RoleInstanceLedgerEventKindV1::RoleContractApproved => (
+            WindowsDeploymentAuditEventKind::RoleContractApproved,
+            "contract-approved",
+        ),
+        RoleInstanceLedgerEventKindV1::RoleInstanceProvisioned => (
+            WindowsDeploymentAuditEventKind::RoleInstanceProvisioned,
+            "instance-provisioned",
+        ),
+        RoleInstanceLedgerEventKindV1::RoleInstanceActivated => (
+            WindowsDeploymentAuditEventKind::RoleInstanceActivated,
+            "instance-activated",
+        ),
+        RoleInstanceLedgerEventKindV1::RoleTaskAdmitted => (
+            WindowsDeploymentAuditEventKind::RoleTaskAdmitted,
+            "task-admitted",
+        ),
+        RoleInstanceLedgerEventKindV1::RoleBoundTaskStarted => (
+            WindowsDeploymentAuditEventKind::RoleBoundTaskStarted,
+            "task-started",
+        ),
+        RoleInstanceLedgerEventKindV1::RoleBoundTaskTerminal => (
+            WindowsDeploymentAuditEventKind::RoleBoundTaskTerminal,
+            "task-terminal",
+        ),
+        _ => {
+            return Err(DesktopError::Invalid(
+                "KRN-500 runner received an unsupported Role event".to_owned(),
+            ));
+        }
+    };
+    let mut audit_artifacts = artifact_hashes.clone();
+    audit_artifacts.insert("contract".to_owned(), contract.contract_sha256.clone());
+    let audit_record_hash = audit.append(WindowsDeploymentAuditEvent {
+        schema_version: 1,
+        event_id: format!("role-{event_token}-{recorded_at_unix_ms}"),
+        kind: audit_kind,
+        status: WindowsDeploymentAuditStatus::Succeeded,
+        artifact_hashes: audit_artifacts,
+        detail_hash: digest(event_token),
+        recorded_at_unix_ms,
+    })?;
+    ledger.append(RoleInstanceLedgerRecordV1 {
+        schema_version: 1,
+        sequence: 1,
+        ledger_id: "kernel-e2e-role-ledger".to_owned(),
+        role_instance_id: ACTOR_ID.to_owned(),
+        event_kind,
+        role_contract_id: contract.role_contract_id.clone(),
+        role_version: contract.role_version.clone(),
+        contract_sha256: contract.contract_sha256.clone(),
+        instance_after,
+        task_request_sha256,
+        task_admission_sha256,
+        role_context_sha256,
+        artifact_hashes,
+        audit_record_hash,
+        recorded_at_unix_ms,
+        previous_record_hash: empty_hash(),
+        record_hash: empty_hash(),
+    })
+}
+
+fn seoul_local_time(now: u64) -> Result<(String, u8, u16), DesktopError> {
+    let local = now.saturating_add(9 * 60 * 60);
+    let days = i64::try_from(local / 86_400)
+        .map_err(|_| DesktopError::Invalid("local day is not representable".to_owned()))?;
+    let seconds = local % 86_400;
+    let minute = u16::try_from(seconds / 60)
+        .map_err(|_| DesktopError::Invalid("local minute is not representable".to_owned()))?;
+    let weekday = u8::try_from((days + 3).rem_euclid(7))
+        .map_err(|_| DesktopError::Invalid("local weekday is not representable".to_owned()))?;
+    let adjusted = days + 719_468;
+    let era = if adjusted >= 0 {
+        adjusted
+    } else {
+        adjusted - 146_096
+    } / 146_097;
+    let day_of_era = adjusted - era * 146_097;
+    let year_of_era =
+        (day_of_era - day_of_era / 1_460 + day_of_era / 36_524 - day_of_era / 146_096) / 365;
+    let mut year = year_of_era + era * 400;
+    let day_of_year = day_of_era - (365 * year_of_era + year_of_era / 4 - year_of_era / 100);
+    let month_prime = (5 * day_of_year + 2) / 153;
+    let day = day_of_year - (153 * month_prime + 2) / 5 + 1;
+    let month = month_prime + if month_prime < 10 { 3 } else { -9 };
+    year += i64::from(month <= 2);
+    Ok((format!("{year:04}-{month:02}-{day:02}"), weekday, minute))
+}
+
 #[cfg(windows)]
 fn run_scenario(
     args: &RunnerArgs,
@@ -2558,12 +3346,19 @@ fn run_scenario(
     let now_ms = now.saturating_mul(1_000);
     let instruction = authenticated_instruction(now_ms)?;
     instruction.validate(now_ms.saturating_add(1))?;
+    let goal_payload = goal_compiler_payload(&instruction)?;
+    let expected_goal = expected_kernel_goal(&instruction, &goal_payload)?;
+    let pack = load_application_pack(&args.application_pack)?;
+    let mut role_binding = args
+        .role_source
+        .as_deref()
+        .map(|source| prepare_role_binding(source, temp, &instruction, &expected_goal, &pack, now))
+        .transpose()?;
     let bindings = ["goal-compiler", "element-grounder", "plan-ranker"]
         .iter()
         .map(|module_id| module_binding(args, module_id))
         .collect::<Result<Vec<_>, _>>()?;
     let mut modules = ModuleInvocationCoordinatorV1::new(bindings, Duration::from_secs(15))?;
-    let goal_payload = goal_compiler_payload(&instruction)?;
     let goal_fixture_hash = module_sha256(&goal_payload).map_err(selection_error)?;
     let goal_invocation = module_invocation(
         args,
@@ -2603,8 +3398,13 @@ fn run_scenario(
     )
     .map_err(|error| DesktopError::Json(error.to_string()))?;
     goal.validate()?;
+    if role_binding.is_some() && goal != expected_goal {
+        return Err(DesktopError::Integrity(
+            "actual Goal Compiler output differs from pre-admitted deterministic GoalSpec"
+                .to_owned(),
+        ));
+    }
     let goal_sha256 = canonical_sha256(&goal).map_err(selection_error)?;
-    let pack = load_application_pack(&args.application_pack)?;
     let plan = task_plan()?;
     let plan_sha256 = canonical_sha256(&plan).map_err(selection_error)?;
     let powershell = powershell_path()?;
@@ -2628,11 +3428,27 @@ fn run_scenario(
     let initial_target = initial_observation.target;
     let initial_world = world_state(&goal, &initial, &plan, "select-name-capability")?;
     let world_sha256 = canonical_sha256(&initial_world).map_err(selection_error)?;
-    let mut runtime = CognitiveKernelTaskRuntimeV1::begin(
-        "kernel-e2e-task-run".to_owned(),
-        instruction.instruction_sha256.clone(),
-        1,
-    )?;
+    let mut runtime = if let Some(binding) = &role_binding {
+        CognitiveKernelTaskRuntimeV1::begin_role_bound(
+            "kernel-e2e-task-run".to_owned(),
+            instruction.instruction_sha256.clone(),
+            &goal_sha256,
+            &pack.pack_sha256,
+            INTEGRATION_ID,
+            &binding.context,
+            &binding.authority,
+            &binding.recovery,
+            binding.ledger.verification(),
+            now,
+            1,
+        )?
+    } else {
+        CognitiveKernelTaskRuntimeV1::begin(
+            "kernel-e2e-task-run".to_owned(),
+            instruction.instruction_sha256.clone(),
+            1,
+        )?
+    };
     runtime.compile_goal(goal_invocation_sha256.clone(), goal_sha256.clone(), 2)?;
     runtime.observe_initial(goal_sha256.clone(), initial.state_hash.clone(), 3)?;
     runtime.prepare_plan(
@@ -2647,6 +3463,9 @@ fn run_scenario(
     let mut recovery_decision_hashes = Vec::new();
     let mut recovery_result_hashes = Vec::new();
     let mut audit_heads = vec![initial_observation.audit_chain_head];
+    if let Some(binding) = &role_binding {
+        audit_heads.push(binding.audit_chain_head()?);
+    }
     let mut tick = 5_u64;
 
     if args.mode == ScenarioMode::Clarification {
@@ -2692,9 +3511,10 @@ fn run_scenario(
             now,
         )?;
         if name.verdict != VerificationVerdictV2::Passed {
-            return Err(DesktopError::Integrity(
-                "actual name SetValue did not independently verify".to_owned(),
-            ));
+            return Err(DesktopError::Integrity(format!(
+                "actual name SetValue did not independently verify: {}",
+                name.verification_diagnostic
+            )));
         }
         runtime.record_action_verified(
             "name-action-verified".to_owned(),
@@ -2747,9 +3567,10 @@ fn run_scenario(
         match args.mode {
             ScenarioMode::Happy => {
                 if save.verdict != VerificationVerdictV2::Passed {
-                    return Err(DesktopError::Integrity(
-                        "happy save action did not pass verification".to_owned(),
-                    ));
+                    return Err(DesktopError::Integrity(format!(
+                        "happy save action did not pass verification: {}",
+                        save.verification_diagnostic
+                    )));
                 }
                 runtime.advance(
                     "save-action-advanced".to_owned(),
@@ -2761,9 +3582,10 @@ fn run_scenario(
             }
             ScenarioMode::Recovery => {
                 if save.verdict != VerificationVerdictV2::Failed {
-                    return Err(DesktopError::Integrity(
-                        "recovery fixture first save did not fail verification".to_owned(),
-                    ));
+                    return Err(DesktopError::Integrity(format!(
+                        "recovery fixture first save did not fail verification: {}",
+                        save.verification_diagnostic
+                    )));
                 }
                 let recovery = run_fresh_save_recovery(
                     args,
@@ -2889,6 +3711,7 @@ fn run_scenario(
         schema_version: KERNEL_TASK_SCHEMA_VERSION,
         task_run_id: runtime.task_run_id().to_owned(),
         authenticated_instruction_sha256: instruction.instruction_sha256.clone(),
+        role_context_sha256: runtime.role_context_sha256().map(str::to_owned),
         goal_compiler_invocation_sha256: goal_invocation_sha256,
         goal_spec_sha256: goal_sha256,
         application_pack_sha256: pack.pack_sha256.clone(),
@@ -2935,6 +3758,18 @@ fn run_scenario(
         run_record_sha256: empty_hash(),
     }
     .seal(&report)?;
+    let role_context_sha256 = role_binding
+        .as_ref()
+        .map(|binding| binding.context.context_sha256.clone());
+    let role_ledger_chain_head = role_binding
+        .as_mut()
+        .map(|binding| {
+            binding.finish(
+                &run_record.run_record_sha256,
+                now_ms.saturating_add(tick).saturating_add(1),
+            )
+        })
+        .transpose()?;
     let mut tampered_record = run_record.clone();
     tampered_record.work_report_sha256 = digest("tampered-work-report");
     if tampered_record.validate(&report).is_ok() {
@@ -3015,6 +3850,8 @@ fn run_scenario(
         recovery_count,
         mutation_count,
         audit_chain_head,
+        role_context_sha256,
+        role_ledger_chain_head,
     })
 }
 

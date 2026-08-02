@@ -1,5 +1,15 @@
 # D2I Safe Execution Kernel and Autonomous Role Runtime
 
+## Workforce Status Addendum
+
+`D2I-WORK-100 - Role Contract v1` is complete. The platform now has
+deterministic immutable Role contracts, exact organization approval, bounded
+signed delegation, persistent protected Role Instances, one-time task
+admission, existing authority/recovery projections, and a role-bound KRN-500
+Windows E2E. The active next task is `D2I-WORK-200 - Work Item / Case Contract
+v1`. Work Radar, Queue, Scheduler, and production AI Safety execution remain
+unimplemented.
+
 ## Active Product Goal
 
 단일 작업 수행은 하위 목표다. 최종 목표는 지속 실행되는 Role Instance가

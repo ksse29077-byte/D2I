@@ -186,8 +186,8 @@ state.
 
 ### Track W - Autonomous Workforce Layer
 
-- `D2I-WORK-100`: Role Contract v1. **First active task**
-- `D2I-WORK-200`: Work Item / Case Contract v1.
+- `D2I-WORK-100`: Role Contract v1. **Complete**
+- `D2I-WORK-200`: Work Item / Case Contract v1. **First active task**
 - `D2I-WORK-300`: Work Radar and Work Intake.
 - `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership.
 - `D2I-WORK-500`: Situation Model and Adaptive Planner.
@@ -247,4 +247,7 @@ restores exact budget/history state after restart.
 KRN-500 now proves the complete authenticated task path through actual
 standalone modules, two real UIA actions, independent verification, bounded
 recovery, final goal verification, WorkReport, deterministic replay, and zero
-residual authority or process state. The active next task is `D2I-WORK-100`.
+residual authority or process state. WORK-100 adds immutable approved Role
+Contracts, bounded signed delegation, persistent protected Role Instances,
+one-time Role task admission, exact authority/recovery projection, and an
+actual role-bound KRN-500 run. The active next task is `D2I-WORK-200`.

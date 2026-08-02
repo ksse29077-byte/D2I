@@ -102,6 +102,21 @@ pub enum WindowsDeploymentAuditEventKind {
     RecoveryStopped,
     RecoveryAborted,
     RecoveryLedgerRejected,
+    RoleContractRegistered,
+    RoleContractApproved,
+    RoleInstanceProvisioned,
+    RoleInstanceActivated,
+    RoleInstanceSuspended,
+    RoleInstanceResumed,
+    RoleInstanceRevoked,
+    RoleInstanceExpired,
+    RoleInstanceUpgraded,
+    RoleTaskAdmitted,
+    RoleTaskDenied,
+    RoleTaskEscalationRequired,
+    RoleBoundTaskStarted,
+    RoleBoundTaskTerminal,
+    RoleLedgerRejected,
 }
 
 /// Outcome classification with no unrestricted payload.

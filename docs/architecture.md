@@ -195,7 +195,22 @@ independent verification, bounded recovery, final stability verification,
 outside the root dependency graph and communicate through one bounded Module
 Contract v1 JSON exchange using test/evaluation-only hosts. Task completion is
 permitted only after final criteria and protected invariants pass. This closes
-Track K but does not implement Role or Case autonomy.
+Track K but does not itself implement Role or Case autonomy.
+
+WORK-100 adds the first Workforce boundary above KRN-500:
+
+```text
+strict Role source -> immutable RoleContractV1 -> signed approval
+-> signed subset delegation -> persistent protected RoleInstanceV1
+-> one-time RoleTaskAdmissionV1 -> existing authority/recovery projections
+-> RoleBoundKernelTaskContextV1 -> KRN-500
+```
+
+`d2i-role-contract` remains platform-neutral. `d2i-desktop` owns protected Role
+state, audit, restart recovery, and the role-bound Kernel gate. Role prose,
+KPI/SLA declarations, reporting duties, and memory boundaries are not
+authority. WORK-100 creates no Work Item, Case, Radar, Queue, Scheduler, Case
+ownership, KPI result, SLA claim, or report delivery.
 
 Phase 6 adds:
 
