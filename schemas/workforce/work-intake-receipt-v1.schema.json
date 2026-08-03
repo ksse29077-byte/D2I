@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/work-intake-receipt-v1.schema.json",
+  "title": "WorkIntakeReceiptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "cycle_id", "cycle_sequence", "signal_id", "signal_sha256", "source_approval_sha256", "source_envelope_sha256", "work_item_sha256", "admission_sha256", "case_id", "case_contract_sha256", "case_instance_sha256", "duplicate_result", "disposition", "reason_codes", "checkpoint_before_sha256", "checkpoint_after_sha256", "case_ledger_chain_head", "role_ledger_chain_head", "intake_ledger_chain_head", "evidence_ids", "decided_at_unix_seconds", "receipt_sha256"],
+  "properties": {
+    "schema_version": { "const": 1 }, "receipt_id": { "$ref": "#/$defs/id" }, "cycle_id": { "$ref": "#/$defs/id" },
+    "cycle_sequence": { "type": "integer", "minimum": 1 }, "signal_id": { "$ref": "#/$defs/id" }, "signal_sha256": { "$ref": "#/$defs/hash" }, "source_approval_sha256": { "$ref": "#/$defs/hash" },
+    "source_envelope_sha256": { "$ref": "#/$defs/nullableHash" }, "work_item_sha256": { "$ref": "#/$defs/nullableHash" }, "admission_sha256": { "$ref": "#/$defs/nullableHash" },
+    "case_id": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/id" }] }, "case_contract_sha256": { "$ref": "#/$defs/nullableHash" }, "case_instance_sha256": { "$ref": "#/$defs/nullableHash" },
+    "duplicate_result": { "oneOf": [{ "type": "null" }, { "enum": ["new", "duplicate_open", "duplicate_terminal", "conflict"] }] },
+    "disposition": { "enum": ["admitted_case_created", "duplicate_open", "duplicate_terminal", "admission_denied", "clarification_required", "escalation_required", "inactive_role", "outside_operating_window", "stale_source", "unsupported_event_class", "malformed_signal", "integrity_conflict", "quarantined", "no_work"] },
+    "reason_codes": { "$ref": "#/$defs/idsRequired" }, "checkpoint_before_sha256": { "$ref": "#/$defs/hash" }, "checkpoint_after_sha256": { "$ref": "#/$defs/hash" },
+    "case_ledger_chain_head": { "$ref": "#/$defs/hash" }, "role_ledger_chain_head": { "$ref": "#/$defs/hash" }, "intake_ledger_chain_head": { "$ref": "#/$defs/hash" },
+    "evidence_ids": { "$ref": "#/$defs/idsRequired" }, "decided_at_unix_seconds": { "type": "integer", "minimum": 1 }, "receipt_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$" },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "nullableHash": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/hash" }] },
+    "idsRequired": { "type": "array", "minItems": 1, "maxItems": 256, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }
+  }
+}

@@ -2,10 +2,11 @@
 
 ## Mission
 
-D2I is an Industrial Autonomous Workforce OS. It compiles and runs a customer
-organization's Domain, Role, Authority, Application Semantics, Organizational
-Memory, and execution means as continuously operating autonomous digital
-employees.
+D2I is an Open Autonomous Digital Workforce OS. It compiles an organization's
+Domain, Role, Authority, Application Semantics, Organizational Memory, Work
+Sources, and execution means into bounded autonomous digital employees capable
+of general office and computer work. Industry-specific Roles are optional
+packs, not Core product taxonomy.
 
 The Domain-to-Intelligence Compiler (D2IC) is a compile-time subsystem of that
 product. It produces versioned Domain, Role, Application, Policy and Authority,
@@ -69,7 +70,7 @@ The active order is:
    `D2I-KRN-500`.
 2. Track W, Autonomous Workforce Layer: `D2I-WORK-100` through
    `D2I-WORK-900`.
-3. Track X, Industrial Execution Expansion: `D2I-EDGE-100` through
+3. Track X, Execution Plane Expansion: `D2I-EDGE-100` through
    `D2I-EDGE-400`.
 
 Work only on the explicitly requested task. Detect the completed baseline and

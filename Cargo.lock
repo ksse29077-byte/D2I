@@ -333,6 +333,7 @@ dependencies = [
  "d2i-trusted-action-execution",
  "d2i-windows-host",
  "d2i-work-case",
+ "d2i-work-intake",
  "ed25519-dalek",
  "jsonschema",
  "serde",
@@ -510,6 +511,21 @@ dependencies = [
  "d2i-cognitive-ir",
  "d2i-cognitive-recovery",
  "d2i-role-contract",
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-work-intake"
+version = "0.9.0"
+dependencies = [
+ "d2i-cognitive-ir",
+ "d2i-role-contract",
+ "d2i-work-case",
  "ed25519-dalek",
  "jsonschema",
  "serde",

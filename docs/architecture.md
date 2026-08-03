@@ -2,6 +2,11 @@
 
 ## Current Scope
 
+The product enclosing this compiler is an Open Autonomous Digital Workforce OS
+for bounded general office and computer work. Domain vocabularies remain in
+Domain Packs, Role Packs, examples, and tests; Core architecture uses opaque
+versioned identifiers.
+
 The current baseline implements typed IR, the deterministic package boundary, compile-time
 executor selection, the Rust reference runtime, an implementation-neutral
 existing-runtime adapter, a versioned native executor ABI, and one removable
@@ -232,6 +237,33 @@ alone never closes a Case. Work Item and Case artifacts grant no execution
 authority; every mutation still crosses Role, policy, activation, adapter,
 re-observation, and verification boundaries. WORK-200 implements no Radar,
 connector, Queue, Scheduler, lease, reassignment, or ownership transfer.
+
+WORK-300 adds authority-free work discovery above the existing admission
+boundary:
+
+```text
+exact Role source registration -> signed WorkSourceApprovalV1 verification
+-> bounded one-shot typed Work Signal
+-> freshness and checkpoint verification -> exactly one deterministic mapping
+-> existing source envelope / normalization / duplicate / admission
+-> existing persistent Case creation -> protected Intake receipt -> checkpoint
+```
+
+`d2i-work-intake` owns platform-neutral registrations, source approvals,
+signals, mappings, checkpoints, receipts, cycle reports, and the narrow
+one-shot source trait. Source approval binds the exact organization, Role
+Contract, Role Instance, delegation, registration hash, signer, and lifetime
+before scanning. `d2i-desktop` owns the protected approval-bound single-writer
+Intake ledger and restart recovery. Signals contain only immutable hashes and opaque references; they
+cannot confer command, credential, policy, activation, adapter, filesystem, or
+network authority. At-least-once source delivery relies on WORK-200
+deduplication for exactly-one Case creation. WORK-300 implements no production
+connector, background service, Queue, Scheduler, lease, claim, reassignment,
+ownership transfer, or Case Task execution.
+
+The canonical WORK-300 product E2E uses the General Office Operations Employee
+and `office.record.update`. HR, IT, and Safety examples prove cross-domain
+compatibility without adding those work classes to Core.
 
 Phase 6 adds:
 

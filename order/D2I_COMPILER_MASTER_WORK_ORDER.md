@@ -1,19 +1,26 @@
-# D2I Industrial Autonomous Workforce OS - Compiler Subsystem
+# D2I Open Autonomous Digital Workforce OS - Compiler Subsystem
+
+D2I compiles an organization's Domain, Role, Authority, Application Semantics,
+Organizational Memory, Work Sources, and execution means into bounded
+autonomous digital employees capable of general office and computer work.
+General Office Operations Employee is the canonical reference Role;
+domain-specific vocabularies remain outside Core.
 
 ## Active Workforce Overlay
 
 The compiler and package architecture remains unchanged by Workforce
-governance. `D2I-WORK-100 - Role Contract v1` and `D2I-WORK-200 - Work Item /
-Case Contract v1` are complete as additive platform-neutral contracts with
-Desktop-owned protected persistent runtime boundaries. The active next task is
-`D2I-WORK-300 - Work Radar and Work Intake`. It must not start Queue,
-Scheduler, Case claim, reassignment, or ownership transfer.
+governance. `D2I-WORK-100 - Role Contract v1`, `D2I-WORK-200 - Work Item /
+Case Contract v1`, and `D2I-WORK-300 - Work Radar and Work Intake` are complete
+as additive platform-neutral contracts with Desktop-owned protected persistent
+runtime boundaries. The active next task is `D2I-WORK-400 - Work Queue,
+Scheduler and Case Ownership`.
 
 ## Product Context
 
-D2I는 고객 조직의 Domain, Role, Authority, Application Semantics,
-Organizational Memory와 실행 수단을 지속적으로 운영되는 자율 디지털
-직원으로 컴파일하고 실행하는 Industrial Autonomous Workforce OS다.
+D2I는 조직의 Domain, Role, Authority, Application Semantics,
+Organizational Memory, Work Sources와 실행 수단을 일반 사무 및 컴퓨터
+업무를 수행하는 bounded 자율 디지털 직원으로 컴파일하는 Open
+Autonomous Digital Workforce OS다.
 
 D2IC는 전체 제품이 아니라 compile-time subsystem이다. 기존 Domain
 Source Pack과 Intelligence Package 계약을 보존하면서 다음 compile-time

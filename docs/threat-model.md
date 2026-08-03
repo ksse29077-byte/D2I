@@ -429,3 +429,40 @@ revocation or expiry requires escalation. Remaining risks include external
 ledger-head anchoring, production SLA time authority, legal retention, Radar
 source authentication, Queue/Scheduler concurrency, and future ownership
 transfer. None creates a fallback execution path in WORK-200.
+
+## Bounded Work Radar and Intake
+
+WORK-300 addresses unsigned, expired, altered, or cross-organization source
+approval, unauthorized source registration, wildcard source/event
+scope, untrusted-content authority elevation, stale/future events, cursor and
+sequence rollback, bounded-gap violations, event ID/content substitution,
+ambiguous mappings, Role/delegation expansion, receipt/checkpoint replay,
+crash-window duplicate Case creation, ledger tampering, concurrent writers,
+and sensitive source leakage.
+
+Registrations exactly equal an enabled read-only Role observation source. A
+signed `WorkSourceApprovalV1` binds the exact registration, Role, delegation,
+organization, signer, and lifetime before the adapter can scan; registration
+shape alone never authorizes observation.
+Signals contain only bounded IDs, hashes, opaque references, trust labels, and
+provenance. Exact mappings may narrow but cannot expand Role or signed
+delegation scope. Every accepted signal crosses existing WORK-200
+normalization, duplicate classification, and admission; Radar cannot create a
+Case or commit its checkpoint.
+
+The Desktop Intake ledger pins DACL fingerprints, regular files, strict JSON,
+monotonic record/checkpoint chains, consumed event/signal/receipt hashes, Role
+and Case ledger heads, and receipt-before-checkpoint order. A crash after Case
+creation is recovered through WORK-200 deduplication without a second Case.
+Write failure poisons the writer. Rejections perform no Goal, module, policy,
+activation, adapter, credential, process, or network operation.
+
+General Office, HR, IT, and Safety identifiers are fixture-owned opaque values.
+Core contains no domain classifier or taxonomy that untrusted content can
+select or extend.
+
+Remaining risks include production source transport authentication, external
+chain-head anchoring, deployment identity/key custody, multi-source atomicity,
+enterprise connector hardening, schedule time authority, Queue/Scheduler
+concurrency, and Case ownership transfer. These belong to EDGE-100 or
+WORK-400 and create no WORK-300 fallback authority.

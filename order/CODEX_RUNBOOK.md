@@ -2,7 +2,13 @@
 
 ## Current Product Direction
 
-D2I는 Industrial Autonomous Workforce OS다. Safe Execution Kernel은
+D2I is an Open Autonomous Digital Workforce OS that compiles Domain, Role,
+Authority, Application Semantics, Organizational Memory, Work Sources, and
+execution means into bounded digital employees for general office and computer
+work. `General Office Operations Employee` is the canonical reference Role;
+domain-specific Roles remain optional packs.
+
+Safe Execution Kernel은
 단일 작업을 안전하게 완료하는 하위 계층이고, Workforce Layer는 Role
 Instance가 Work Radar와 Case Queue를 통해 업무를 찾아 verified closure까지
 소유하게 한다. 운영 원칙은 Human-by-exception이다.
@@ -25,15 +31,15 @@ Track K is complete. Do not create KRN-600.
 
 - `D2I-WORK-100` Role Contract v1 - **complete**
 - `D2I-WORK-200` Work Item / Case Contract v1 - **complete**
-- `D2I-WORK-300` Work Radar and Work Intake - **active**
-- `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
+- `D2I-WORK-300` Work Radar and Work Intake - **complete**
+- `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **active**
 - `D2I-WORK-500` Situation Model and Adaptive Planner
 - `D2I-WORK-600` Episodic Memory and Case Learning Records
 - `D2I-WORK-700` Role-level Reporting, SLA and Escalation
-- `D2I-WORK-800` AI Safety Operations Employee Shadow Mode
+- `D2I-WORK-800` Open Digital Employee Shadow Mode
 - `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
 
-## Track X - Industrial Execution Expansion
+## Track X - Execution Plane Expansion
 
 - `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
 - `D2I-EDGE-200` Sensor / Camera / IoT observation planes
@@ -55,9 +61,13 @@ WORK-100 defines immutable approved Role Contracts, persistent bounded Role
 Instances, and one-time role-bound Kernel admission. WORK-200 defines
 immutable admitted Work Items, deterministic deduplication, persistent
 accountable Cases, exact role-bound KRN attempts, typed evidence evaluation,
-and verified terminal disposition. The next prompt is `D2I-WORK-300`; it adds
-Work Radar and Work Intake without starting Queue, Scheduler, Case claim,
-reassignment, or ownership transfer.
+and verified terminal disposition. WORK-300 adds exact source registration,
+signed `WorkSourceApprovalV1`, typed hash-only signals, deterministic Intake,
+General Office Case creation, cross-domain replay, protected
+receipts/checkpoints, and exactly-one Case crash recovery. The next prompt is
+`D2I-WORK-400`; it adds
+Queue, Scheduler, Case claim, lease, reassignment, and ownership without
+changing WORK-300 source authority.
 
 Official WORK-200 checks:
 
@@ -67,6 +77,17 @@ cargo test -p d2i-desktop --test work_item_case
 
 powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/workforce/run-work-item-case-v1.ps1 `
+  -Mode All
+```
+
+Official WORK-300 checks:
+
+```powershell
+cargo test -p d2i-work-intake --all-features
+cargo test -p d2i-desktop --test work_radar_intake
+
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-work-radar-intake-v1.ps1 `
   -Mode All
 ```
 

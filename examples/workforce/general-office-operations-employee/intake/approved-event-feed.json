@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "feed_id": "fixture-internal-records-feed",
+  "observation_source_id": "internal-records",
+  "source_kind": "enterprise_api",
+  "integration_id": "internal-records-read",
+  "event_class_id": "internal-record-updated",
+  "records": [
+    {
+      "event_id": "internal-record-event-1",
+      "source_sequence": 1,
+      "source_record_sha256": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "payload_reference_sha256": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "semantic_payload_sha256": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "subject_refs": ["employee-record:opaque-1"],
+      "structured_input_kind_ids": ["internal-record-ref"],
+      "structured_input_refs": ["record-change:opaque-approved"],
+      "trust_labels": ["authenticated-internal-record"],
+      "evidence_ids": ["fixture-office-record-evidence"]
+    }
+  ]
+}

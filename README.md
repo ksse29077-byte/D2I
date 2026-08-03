@@ -1,5 +1,10 @@
 # D2I Compiler
 
+D2I is an Open Autonomous Digital Workforce OS that compiles an organization's
+Domain, Role, Authority, Application Semantics, Organizational Memory, Work
+Sources, and execution means into bounded autonomous digital employees capable
+of general office and computer work. D2IC is its compile-time subsystem.
+
 D2I Compiler (D2IC) is a Rust-first compiler project for turning a versioned
 Domain Source Pack into a deterministic, verifiable, offline D2I Intelligence
 Package.
@@ -70,6 +75,12 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   requirements, evidence, lifecycle, closure, terminal records, replay
   reports, and an execution-free inspection CLI. `products/d2i-desktop` owns
   the protected persistent Case ledger and actual role-bound KRN coordinator.
+- `crates/d2i-work-intake`: exact Radar source registrations, signed
+  `WorkSourceApprovalV1`, bounded typed Work Signals, deterministic
+  event-to-Work mapping, replay-safe checkpoints, Intake receipts/cycle
+  reports, and a one-shot authority-free source trait. `products/d2i-desktop`
+  owns its protected approval-bound Intake ledger and exactly-one-Case crash
+  recovery.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -172,6 +183,16 @@ and actual role-bound KRN evidence closure, with:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/workforce/run-work-item-case-v1.ps1 `
+  -Mode All
+```
+
+Run the Work Radar and Work Intake v1 gate, including WORK-100/200 regression,
+the General Office source-to-Case E2E, Office/HR/IT/Safety compatibility,
+signed source approval, replay, tamper, and crash recovery, with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-work-radar-intake-v1.ps1 `
   -Mode All
 ```
 

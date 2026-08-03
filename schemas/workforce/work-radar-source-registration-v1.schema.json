@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/work-radar-source-registration-v1.schema.json",
+  "title": "ApprovedRadarSourceRegistrationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registration_id", "organization_id", "role_contract_id", "role_contract_sha256", "role_instance_id", "role_instance_sha256", "approval_sha256", "delegation_sha256", "observation_source_id", "source_kind", "integration_id", "application_pack_ref", "allowed_event_class_ids", "minimum_trust_label", "maximum_staleness_seconds", "cursor_policy", "maximum_sequence_advance", "resource_limits", "enabled", "evidence_ids", "registration_sha256"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "registration_id": { "$ref": "#/$defs/id" },
+    "organization_id": { "$ref": "#/$defs/id" },
+    "role_contract_id": { "$ref": "#/$defs/id" },
+    "role_contract_sha256": { "$ref": "#/$defs/hash" },
+    "role_instance_id": { "$ref": "#/$defs/id" },
+    "role_instance_sha256": { "$ref": "#/$defs/hash" },
+    "approval_sha256": { "$ref": "#/$defs/hash" },
+    "delegation_sha256": { "$ref": "#/$defs/hash" },
+    "observation_source_id": { "$ref": "#/$defs/id" },
+    "source_kind": { "enum": ["desktop_uia", "web_driver", "enterprise_api", "schedule", "event_stream", "sensor_summary", "manual_authenticated_instruction"] },
+    "integration_id": { "$ref": "#/$defs/id" },
+    "application_pack_ref": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/applicationPack" }] },
+    "allowed_event_class_ids": { "$ref": "#/$defs/ids" },
+    "minimum_trust_label": { "$ref": "#/$defs/id" },
+    "maximum_staleness_seconds": { "type": "integer", "minimum": 1 },
+    "cursor_policy": { "enum": ["sequence_only", "opaque_cursor_with_sequence"] },
+    "maximum_sequence_advance": { "type": "integer", "minimum": 1, "maximum": 1024 },
+    "resource_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maximum_events_per_cycle", "maximum_subject_refs_per_event", "maximum_structured_input_refs_per_event", "maximum_attachment_refs_per_event", "maximum_evidence_ids_per_event", "maximum_trust_labels_per_event", "maximum_event_id_bytes", "maximum_record_bytes", "maximum_output_bytes", "maximum_receipts_per_cycle", "maximum_ledger_records", "maximum_logical_operations", "maximum_ticks", "maximum_retries", "maximum_concurrent_requests"],
+      "properties": {
+        "maximum_events_per_cycle": { "type": "integer", "minimum": 1, "maximum": 128 },
+        "maximum_subject_refs_per_event": { "type": "integer", "minimum": 0, "maximum": 128 },
+        "maximum_structured_input_refs_per_event": { "type": "integer", "minimum": 0, "maximum": 128 },
+        "maximum_attachment_refs_per_event": { "type": "integer", "minimum": 0, "maximum": 128 },
+        "maximum_evidence_ids_per_event": { "type": "integer", "minimum": 1, "maximum": 256 },
+        "maximum_trust_labels_per_event": { "type": "integer", "minimum": 0, "maximum": 128 },
+        "maximum_event_id_bytes": { "type": "integer", "minimum": 1, "maximum": 128 },
+        "maximum_record_bytes": { "type": "integer", "minimum": 1, "maximum": 4194304 },
+        "maximum_output_bytes": { "type": "integer", "minimum": 1, "maximum": 4194304 },
+        "maximum_receipts_per_cycle": { "type": "integer", "minimum": 1, "maximum": 128 },
+        "maximum_ledger_records": { "type": "integer", "minimum": 1, "maximum": 65536 },
+        "maximum_logical_operations": { "type": "integer", "minimum": 1, "maximum": 16384 },
+        "maximum_ticks": { "type": "integer", "minimum": 1, "maximum": 16384 },
+        "maximum_retries": { "const": 0 },
+        "maximum_concurrent_requests": { "const": 1 }
+      }
+    },
+    "enabled": { "const": true },
+    "evidence_ids": { "$ref": "#/$defs/ids" },
+    "registration_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$" },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "ids": { "type": "array", "minItems": 1, "maxItems": 256, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "applicationPack": { "type": "object", "additionalProperties": false, "required": ["application_pack_id", "application_pack_sha256"], "properties": { "application_pack_id": { "$ref": "#/$defs/id" }, "application_pack_sha256": { "$ref": "#/$defs/hash" } } }
+  }
+}

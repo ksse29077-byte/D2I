@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/work-radar-cycle-report-v1.schema.json",
+  "title": "RadarCycleReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "cycle_id", "cycle_sequence", "role_instance_id", "role_instance_sha256", "registration_id", "registration_sha256", "source_approval_sha256", "checkpoint_before_sha256", "checkpoint_after_sha256", "observed_signals", "accepted_signals", "cases_created", "duplicate_open", "duplicate_terminal", "denied", "clarification_required", "escalation_required", "quarantined", "logical_operations", "ticks_consumed", "retries", "receipt_hashes", "cycle_sha256"],
+  "properties": {
+    "schema_version": { "const": 1 }, "cycle_id": { "$ref": "#/$defs/id" }, "cycle_sequence": { "type": "integer", "minimum": 1 },
+    "role_instance_id": { "$ref": "#/$defs/id" }, "role_instance_sha256": { "$ref": "#/$defs/hash" }, "registration_id": { "$ref": "#/$defs/id" }, "registration_sha256": { "$ref": "#/$defs/hash" }, "source_approval_sha256": { "$ref": "#/$defs/hash" },
+    "checkpoint_before_sha256": { "$ref": "#/$defs/hash" }, "checkpoint_after_sha256": { "$ref": "#/$defs/hash" },
+    "observed_signals": { "$ref": "#/$defs/count" }, "accepted_signals": { "$ref": "#/$defs/count" }, "cases_created": { "$ref": "#/$defs/count" },
+    "duplicate_open": { "$ref": "#/$defs/count" }, "duplicate_terminal": { "$ref": "#/$defs/count" }, "denied": { "$ref": "#/$defs/count" },
+    "clarification_required": { "$ref": "#/$defs/count" }, "escalation_required": { "$ref": "#/$defs/count" }, "quarantined": { "$ref": "#/$defs/count" },
+    "logical_operations": { "type": "integer", "minimum": 0, "maximum": 16384 }, "ticks_consumed": { "type": "integer", "minimum": 0, "maximum": 16384 }, "retries": { "const": 0 },
+    "receipt_hashes": { "type": "array", "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/hash" } }, "cycle_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$" },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "count": { "type": "integer", "minimum": 0, "maximum": 128 }
+  }
+}

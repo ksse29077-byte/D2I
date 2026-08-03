@@ -1,4 +1,4 @@
-# D2I Industrial Autonomous Workforce OS
+# D2I Open Autonomous Digital Workforce OS
 
 This document is the canonical product direction below `AGENTS.md` and approved
 ADRs. Compiler and runtime documents retain their technical authority within
@@ -6,10 +6,10 @@ their narrower scopes.
 
 ## 1. Product Thesis
 
-D2I compiles and runs a customer organization's Domain, Role, Authority,
-Application Semantics, Organizational Memory, and execution means as
-continuously operating autonomous digital employees. It is an Industrial
-Autonomous Workforce OS.
+D2I is an Open Autonomous Digital Workforce OS that compiles an organization's
+Domain, Role, Authority, Application Semantics, Organizational Memory, Work
+Sources, and execution means into bounded autonomous digital employees capable
+of general office and computer work.
 
 D2IC is the compile-time subsystem that produces Domain, Role, Application,
 Policy and Authority, Evaluation, runtime/capability binding, and Autonomous
@@ -134,18 +134,17 @@ or escalation is reserved for legal, irreversible, high-criticality,
 out-of-authority, uncertain, or conflicting situations. The key direction
 metric is how many Cases one human intervention can bring to verified closure.
 
-## 14. AI Safety Operations Employee
+## 14. Open Digital Employee Reference Roles
 
-The first vertical product detects expired or incomplete training, coordinates
-enrollment and evidence, follows risk-assessment corrective actions, receives
-inspection and near-miss Cases, manages owners and due dates, requests
-evidence, retrieves rules and precedents, escalates overdue actions, maintains
-audit readiness, and builds outcome evidence.
+`General Office Operations Employee` is the canonical reference Role. It shows
+how approved internal work sources become persistent Cases for ordinary office
+and computer work without embedding office vocabulary in Core.
 
-Its output is not a safety-report draft. Actions must actually be complete,
-success conditions verified, open items explicit, evidence retained, and only
-exceptions handed to people. This is a market entry point, not a hard-coded
-limit on D2I.
+Finance or HR Operations, IT Service Operations, and AI Safety Operations are
+optional domain-specific reference Roles and cross-domain compatibility
+fixtures. Their work classes, source IDs, and semantic targets belong to Role
+Packs, Domain Packs, examples, or tests. Generic Core contracts treat those IDs
+as opaque bounded values and never infer an industry taxonomy.
 
 ## 15. Business KPI
 
@@ -188,22 +187,22 @@ state.
 
 - `D2I-WORK-100`: Role Contract v1. **Complete**
 - `D2I-WORK-200`: Work Item / Case Contract v1. **Complete**
-- `D2I-WORK-300`: Work Radar and Work Intake. **First active task**
-- `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership.
+- `D2I-WORK-300`: Work Radar and Work Intake. **Complete**
+- `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership. **First active task**
 - `D2I-WORK-500`: Situation Model and Adaptive Planner.
 - `D2I-WORK-600`: Episodic Memory and Case Learning Records.
 - `D2I-WORK-700`: Role-level Reporting, SLA and Escalation.
-- `D2I-WORK-800`: AI Safety Operations Employee Shadow Mode.
+- `D2I-WORK-800`: Open Digital Employee Shadow Mode.
 - `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation.
 
-### Track X - Industrial Execution Expansion
+### Track X - Execution Plane Expansion
 
 - `D2I-EDGE-100`: Enterprise API / ERP / MES / CMMS planes.
 - `D2I-EDGE-200`: Sensor / Camera / IoT observation planes.
 - `D2I-EDGE-300`: PLC / SCADA / OT supervised execution.
 - `D2I-EDGE-400`: Robot / AMR / Drone adapters.
 
-## 18. Industrial Execution Planes
+## 18. Execution Planes
 
 Desktop is the first execution plane. New planes reuse the Cognitive Control
 Plane while retaining plane-specific trust, safety, activation, and
@@ -264,5 +263,12 @@ The opened product gate is:
 
 An admitted Work Item can become a persistent, role-owned Case that retains every verified Task attempt and remains open until verified completion, explicit refusal, or escalation.
 
-The active next task is `D2I-WORK-300`. Radar, connectors, Queue, Scheduler,
-leases, reassignment, and ownership transfer are not part of WORK-200.
+WORK-300 now discovers bounded typed signals from exact approved Role sources,
+maps them without model inference into existing WORK-200 admission, and
+persists a protected receipt/checkpoint only after at most one Case exists.
+It removes the need to repeatedly inspect an approved source and manually
+register routine work. Replay and crash recovery cannot create a second Case.
+
+The active next task is `D2I-WORK-400 - Work Queue, Scheduler and Case
+Ownership`. Production connectors, background polling, schedules, Queue,
+leases, reassignment, and ownership transfer are not part of WORK-300.

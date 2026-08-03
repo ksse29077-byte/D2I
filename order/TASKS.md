@@ -1,5 +1,9 @@
 # D2I Active Product Roadmap
 
+D2I is an Open Autonomous Digital Workforce OS for bounded general office and
+computer work. `General Office Operations Employee` is the canonical reference
+Role; Finance/HR, IT, and Safety Roles are optional domain-owned packs.
+
 ## Current Completed Baseline
 
 작업 시작 기준 commit `866a53926016824f2664dfab4e9bc600fade1cc6`까지 Cognitive IR
@@ -43,15 +47,15 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 
 - [x] `D2I-WORK-100` Role Contract v1
 - [x] `D2I-WORK-200` Work Item / Case Contract v1
-- [ ] `D2I-WORK-300` Work Radar and Work Intake - **first active task**
-- [ ] `D2I-WORK-400` Work Queue, Scheduler and Case Ownership
+- [x] `D2I-WORK-300` Work Radar and Work Intake
+- [ ] `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **first active task**
 - [ ] `D2I-WORK-500` Situation Model and Adaptive Planner
 - [ ] `D2I-WORK-600` Episodic Memory and Case Learning Records
 - [ ] `D2I-WORK-700` Role-level Reporting, SLA and Escalation
-- [ ] `D2I-WORK-800` AI Safety Operations Employee Shadow Mode
+- [ ] `D2I-WORK-800` Open Digital Employee Shadow Mode
 - [ ] `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
 
-## Track X - Industrial Execution Expansion
+## Track X - Execution Plane Expansion
 
 - [ ] `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
 - [ ] `D2I-EDGE-200` Sensor / Camera / IoT observation planes
