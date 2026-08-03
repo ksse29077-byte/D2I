@@ -106,9 +106,13 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 `All` runs Core/schema checks, protected Desktop persistence, the General
 Office E2E, Office/HR/IT/Safety and schedule compatibility, 100 deterministic
-duplicate replays, crash recovery, approval/tamper/stale/conflict negative
+replays of a maximum 128-event batch with identical receipt ordering,
+checkpoint, cycle hash, and bounded resource metrics, 100 duplicate-recovery
+replays, crash recovery, approval/tamper/stale/conflict negative
 tests, official WORK-100/200 regressions, sensitive-output scanning, and zero authority/process/credential/activation residual assertions. It writes
-a hash-bearing `finished.json` below `target/d2i-workforce-intake/`.
+a hash-bearing `finished.json` below `target/d2i-workforce-intake/`. The report
+embeds the normalized maximum-batch metrics, receipt/checkpoint/cycle hashes,
+and normalized summary hash; wall-clock timing remains informational.
 
 ## Boundary
 

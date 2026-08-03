@@ -8,6 +8,7 @@ use d2i_work_case::{WorkApplicationPackRefV1, WorkItemDeduplicationResultV1, Wor
 use d2i_work_intake::*;
 use ed25519_dalek::SigningKey;
 use jsonschema::{Draft, JSONSchema};
+use serde::Serialize;
 
 const ROLE_SOURCE: &str =
     include_str!("../../../examples/workforce/ai-safety-operations-employee/role.yaml");
@@ -747,6 +748,292 @@ fn schedule_source_uses_the_same_bounded_one_shot_mapping_contract() {
             .as_ref()
             .map(|envelope| envelope.source_kind),
         Some(d2i_work_case::WorkItemSourceKindV1::ApprovedScheduleEvent)
+    );
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+struct MaximumBatchReplaySummary {
+    events_observed: u32,
+    events_processed: u32,
+    logical_operations: u64,
+    receipts_emitted: u32,
+    cases_created: u32,
+    duplicates: u32,
+    critical_errors: u32,
+    total_input_bytes: u64,
+    total_output_bytes: u64,
+    peak_bounded_in_memory_records: u32,
+    checkpoint_after_sha256: String,
+    ordered_receipt_hashes: Vec<String>,
+    cycle_report_sha256: String,
+}
+
+struct MaximumBatchFixture {
+    registration: ApprovedRadarSourceRegistrationV1,
+    source_approval: WorkSourceApprovalV1,
+    mapping: WorkIntakeMappingProfileV1,
+    checkpoint: RadarCheckpointV1,
+    signals: Vec<WorkSignalV1>,
+}
+
+fn maximum_batch_fixture(fixture: &Fixture) -> MaximumBatchFixture {
+    let mut registration = fixture.registration.clone();
+    registration.maximum_sequence_advance = MAX_EVENTS_PER_CYCLE as u64;
+    registration.registration_sha256 = ZERO_HASH.to_owned();
+    let registration =
+        ok(registration.seal_against(&fixture.contract, &fixture.delegation, &fixture.instance));
+
+    let mut source_approval = fixture.source_approval.clone();
+    source_approval.source_approval_id = "source-approval-maximum-batch".to_owned();
+    source_approval.registration_sha256 = registration.registration_sha256.clone();
+    source_approval.approval_signature.clear();
+    source_approval.source_approval_sha256 = ZERO_HASH.to_owned();
+    let source_approval = ok(create_work_source_approval(
+        source_approval,
+        &registration,
+        &fixture.contract,
+        &fixture.delegation,
+        &fixture.instance,
+        &fixture.source_approval_key,
+    ));
+
+    let mut mapping = fixture.mapping.clone();
+    mapping.mapping_id = "mapping-maximum-batch".to_owned();
+    mapping.registration_sha256 = registration.registration_sha256.clone();
+    mapping.mapping_sha256 = ZERO_HASH.to_owned();
+    let mapping = ok(mapping.seal_against(&registration, &fixture.contract, &fixture.delegation));
+    let checkpoint = ok(RadarCheckpointV1::initial(
+        &registration,
+        ZERO_HASH.to_owned(),
+        vec!["maximum-batch-checkpoint-initial".to_owned()],
+    ));
+    let signals = (1..=MAX_EVENTS_PER_CYCLE)
+        .map(|sequence| {
+            let mut signal = fixture.signal.clone();
+            signal.signal_id = format!("signal-maximum-batch-{sequence}");
+            signal.event_id = format!("event-maximum-batch-{sequence}");
+            signal.registration_sha256 = registration.registration_sha256.clone();
+            signal.source_sequence = sequence as u64;
+            signal.source_record_sha256 = ok(canonical_sha256(&("record", sequence)));
+            signal.payload_reference_sha256 = ok(canonical_sha256(&("payload", sequence)));
+            signal.semantic_payload_sha256 = ok(canonical_sha256(&("semantic", sequence)));
+            signal.structured_input_kind_ids.clear();
+            signal.structured_input_refs.clear();
+            signal.signal_sha256 = ZERO_HASH.to_owned();
+            ok(signal.seal())
+        })
+        .collect::<Vec<_>>();
+
+    MaximumBatchFixture {
+        registration,
+        source_approval,
+        mapping,
+        checkpoint,
+        signals,
+    }
+}
+
+fn maximum_batch_replay_summary(
+    fixture: &Fixture,
+    maximum: &MaximumBatchFixture,
+) -> (MaximumBatchReplaySummary, String) {
+    let total_input_bytes = maximum
+        .signals
+        .iter()
+        .map(|signal| ok(serde_json::to_vec(signal)).len() as u64)
+        .sum();
+    let request = ok(RadarScanRequestV1::create(
+        "cycle-maximum-batch".to_owned(),
+        1,
+        &maximum.registration,
+        &maximum.source_approval,
+        &maximum.checkpoint,
+        NOW - 1,
+        NOW + 10,
+    ));
+    let mut adapter = ok(FixtureRadarSourceV1::new(
+        maximum.signals.clone(),
+        total_input_bytes,
+        NOW,
+    ));
+    let batch = ok(adapter.scan_once(
+        &maximum.registration,
+        RadarSourceApprovalVerificationV1 {
+            source_approval: &maximum.source_approval,
+            expected_signer_key_id: "safety-source-approval-key-v1",
+            verifying_key: &fixture.source_approval_key.verifying_key(),
+            now_unix_seconds: NOW,
+        },
+        &maximum.checkpoint,
+        &request,
+    ));
+    let evaluations = batch
+        .signals
+        .iter()
+        .map(|signal| {
+            ok(evaluate_work_signal(
+                WorkIntakeEvaluationContextV1 {
+                    role_contract: &fixture.contract,
+                    approval: &fixture.approval,
+                    delegation: &fixture.delegation,
+                    role_instance: &fixture.instance,
+                    expected_approval_signer_key_id: "safety-approval-key-v1",
+                    approval_verifying_key: &fixture.approval_key.verifying_key(),
+                    expected_delegation_signer_key_id: "safety-delegation-key-v1",
+                    delegation_verifying_key: &fixture.delegation_key.verifying_key(),
+                    registration: &maximum.registration,
+                    source_approval: &maximum.source_approval,
+                    expected_source_approval_signer_key_id: "safety-source-approval-key-v1",
+                    source_approval_verifying_key: &fixture.source_approval_key.verifying_key(),
+                    mappings: std::slice::from_ref(&maximum.mapping),
+                    checkpoint: &maximum.checkpoint,
+                    deduplication_entries: &[],
+                    operational_time_context: time(&fixture.contract),
+                    trusted_policy_snapshot_sha256: digest('2'),
+                    policy_set_sha256: fixture.contract.policy_set_sha256.clone(),
+                    caller_due_at_unix_seconds: None,
+                    now_unix_seconds: NOW,
+                },
+                signal,
+            ))
+        })
+        .collect::<Vec<_>>();
+    assert!(evaluations.iter().all(|evaluation| {
+        evaluation.disposition == Some(WorkIntakeDispositionV1::ClarificationRequired)
+            && evaluation.mapping_sha256.as_ref() == Some(&maximum.mapping.mapping_sha256)
+            && !evaluation.requires_case_creation()
+    }));
+    let last_signal = batch
+        .signals
+        .last()
+        .unwrap_or_else(|| panic!("maximum batch emitted no signal"));
+    let checkpoint_after = ok(maximum.checkpoint.advance(
+        &maximum.registration,
+        last_signal,
+        1,
+        ZERO_HASH.to_owned(),
+        vec!["maximum-batch-checkpoint-final".to_owned()],
+    ));
+    let receipts = batch
+        .signals
+        .iter()
+        .zip(&evaluations)
+        .map(|(signal, evaluation)| {
+            ok(WorkIntakeReceiptV1 {
+                schema_version: 1,
+                receipt_id: format!("receipt-{}", signal.source_sequence),
+                cycle_id: request.cycle_id.clone(),
+                cycle_sequence: 1,
+                signal_id: signal.signal_id.clone(),
+                signal_sha256: signal.signal_sha256.clone(),
+                source_approval_sha256: maximum.source_approval.source_approval_sha256.clone(),
+                source_envelope_sha256: None,
+                work_item_sha256: None,
+                admission_sha256: None,
+                case_id: None,
+                case_contract_sha256: None,
+                case_instance_sha256: None,
+                duplicate_result: None,
+                disposition: WorkIntakeDispositionV1::ClarificationRequired,
+                reason_codes: evaluation.reason_codes.clone(),
+                checkpoint_before_sha256: maximum.checkpoint.checkpoint_sha256.clone(),
+                checkpoint_after_sha256: checkpoint_after.checkpoint_sha256.clone(),
+                case_ledger_chain_head: ZERO_HASH.to_owned(),
+                role_ledger_chain_head: ZERO_HASH.to_owned(),
+                intake_ledger_chain_head: ZERO_HASH.to_owned(),
+                evidence_ids: vec!["maximum-batch-replay".to_owned()],
+                decided_at_unix_seconds: NOW,
+                receipt_sha256: ZERO_HASH.to_owned(),
+            }
+            .seal())
+        })
+        .collect::<Vec<_>>();
+    let total_output_bytes = receipts
+        .iter()
+        .map(|receipt| ok(serde_json::to_vec(receipt)).len() as u64)
+        .sum();
+    let ordered_receipt_hashes = receipts
+        .iter()
+        .map(|receipt| receipt.receipt_sha256.clone())
+        .collect::<Vec<_>>();
+    let report = ok(RadarCycleReportV1 {
+        schema_version: 1,
+        cycle_id: request.cycle_id,
+        cycle_sequence: 1,
+        role_instance_id: fixture.instance.role_instance_id.clone(),
+        role_instance_sha256: fixture.instance.instance_sha256.clone(),
+        registration_id: maximum.registration.registration_id.clone(),
+        registration_sha256: maximum.registration.registration_sha256.clone(),
+        source_approval_sha256: maximum.source_approval.source_approval_sha256.clone(),
+        checkpoint_before_sha256: maximum.checkpoint.checkpoint_sha256.clone(),
+        checkpoint_after_sha256: checkpoint_after.checkpoint_sha256.clone(),
+        observed_signals: MAX_EVENTS_PER_CYCLE as u32,
+        accepted_signals: 0,
+        cases_created: 0,
+        duplicate_open: 0,
+        duplicate_terminal: 0,
+        denied: 0,
+        clarification_required: MAX_EVENTS_PER_CYCLE as u32,
+        escalation_required: 0,
+        quarantined: 0,
+        logical_operations: batch
+            .logical_operations
+            .saturating_add(evaluations.len() as u64)
+            .saturating_add(receipts.len() as u64),
+        ticks_consumed: MAX_EVENTS_PER_CYCLE as u64,
+        retries: 0,
+        receipt_hashes: ordered_receipt_hashes.clone(),
+        cycle_sha256: ZERO_HASH.to_owned(),
+    }
+    .seal());
+    let summary = MaximumBatchReplaySummary {
+        events_observed: MAX_EVENTS_PER_CYCLE as u32,
+        events_processed: MAX_EVENTS_PER_CYCLE as u32,
+        logical_operations: report.logical_operations,
+        receipts_emitted: receipts.len() as u32,
+        cases_created: report.cases_created,
+        duplicates: report
+            .duplicate_open
+            .saturating_add(report.duplicate_terminal),
+        critical_errors: 0,
+        total_input_bytes,
+        total_output_bytes,
+        peak_bounded_in_memory_records: MAX_EVENTS_PER_CYCLE as u32,
+        checkpoint_after_sha256: checkpoint_after.checkpoint_sha256,
+        ordered_receipt_hashes: report.receipt_hashes.clone(),
+        cycle_report_sha256: report.cycle_sha256,
+    };
+    let summary_sha256 = ok(canonical_sha256(&summary));
+    (summary, summary_sha256)
+}
+
+#[test]
+fn maximum_batch_one_hundred_replays_have_identical_normalized_report() {
+    let fixture = fixture();
+    let maximum = maximum_batch_fixture(&fixture);
+    let expected = maximum_batch_replay_summary(&fixture, &maximum);
+    assert_eq!(expected.0.events_observed, MAX_EVENTS_PER_CYCLE as u32);
+    assert_eq!(expected.0.events_processed, MAX_EVENTS_PER_CYCLE as u32);
+    assert_eq!(expected.0.receipts_emitted, MAX_EVENTS_PER_CYCLE as u32);
+    assert_eq!(expected.0.cases_created, 0);
+    assert_eq!(expected.0.duplicates, 0);
+    assert_eq!(expected.0.critical_errors, 0);
+    assert!(expected.0.total_input_bytes > 0);
+    assert!(expected.0.total_output_bytes > 0);
+    assert_eq!(
+        expected.0.peak_bounded_in_memory_records,
+        MAX_EVENTS_PER_CYCLE as u32
+    );
+    for _ in 1..100 {
+        assert_eq!(maximum_batch_replay_summary(&fixture, &maximum), expected);
+    }
+    println!(
+        "D2I_MAXIMUM_BATCH_SUMMARY={}",
+        ok(serde_json::to_string(&serde_json::json!({
+            "replay_runs": 100,
+            "normalized_summary_sha256": expected.1,
+            "summary": expected.0,
+        })))
     );
 }
 

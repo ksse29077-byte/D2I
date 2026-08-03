@@ -45,7 +45,9 @@ function Invoke-Checked([string]$Label, [scriptblock]$Command) {
 
 function Invoke-Contract {
     Invoke-Checked 'contract-canonical-hash-exact-mapping' {
-        cargo test --locked -p d2i-work-intake --all-features -- --nocapture
+        cargo test --locked -p d2i-work-intake --all-features -- `
+            --skip maximum_batch_one_hundred_replays_have_identical_normalized_report `
+            --nocapture
     }
 }
 
@@ -124,6 +126,18 @@ function Invoke-Negative {
 }
 
 function Invoke-Replay {
+    Invoke-Checked 'maximum-batch-one-hundred-normalized-replays' {
+        cargo test --locked -p d2i-work-intake --test contract `
+            maximum_batch_one_hundred_replays_have_identical_normalized_report `
+            -- --exact --nocapture
+    }
+    $summaryLine = Get-Content -LiteralPath (Join-Path $script:OutputRoot 'maximum-batch-one-hundred-normalized-replays.stdout.log') |
+        Where-Object { $_.StartsWith('D2I_MAXIMUM_BATCH_SUMMARY=', [StringComparison]::Ordinal) } |
+        Select-Object -Last 1
+    if (-not $summaryLine) {
+        throw 'maximum batch replay did not emit its normalized summary'
+    }
+    $script:maximumBatchReplay = $summaryLine.Substring('D2I_MAXIMUM_BATCH_SUMMARY='.Length) | ConvertFrom-Json
     Invoke-Checked 'one-hundred-replays-zero-duplicate-cases' {
         cargo test --locked -p d2i-desktop --test work_radar_intake `
             crash_after_case_before_receipt_recovers_as_duplicate_without_second_case `
@@ -239,6 +253,9 @@ try {
         cross_domain_fixtures = @('general-office-operations', 'human-resources', 'it-service', 'safety-operations')
         queue_scheduler_implemented = $false
         fixture_replay_runs = if ($Mode -in @('Replay', 'All')) { 100 } else { 0 }
+        maximum_batch_events = if ($Mode -in @('Replay', 'All')) { 128 } else { 0 }
+        normalized_cycle_replay_verified = ($Mode -in @('Replay', 'All'))
+        maximum_batch_replay = if ($Mode -in @('Replay', 'All')) { $script:maximumBatchReplay } else { $null }
         duplicate_cases = 0
         critical_errors = 0
         residual_owned_processes = 0

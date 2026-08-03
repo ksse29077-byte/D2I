@@ -365,6 +365,7 @@ immutable admitted Work Items, persistent accountable Cases, verified attempt
 retention, exact evidence evaluation, and fail-closed terminal disposition.
 WORK-300 now proves signed approved-source discovery, exact Intake mapping,
 General Office Case creation, cross-domain replay, receipt/checkpoint
-durability, crash repair, and zero duplicate Cases. WORK-400
+durability, 100 identical normalized replays at the 128-event cycle limit,
+crash repair, and zero duplicate Cases. WORK-400
 is next; Queue, Scheduler, lease, claim, reassignment, and ownership transfer
 remain unimplemented.
