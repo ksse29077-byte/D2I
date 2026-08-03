@@ -40,7 +40,7 @@
       "enum": ["not_started", "in_progress", "complete", "blocked"]
     },
     "guardField": {
-      "enum": ["exists", "value", "kind"]
+      "enum": ["exists", "value", "focus", "kind"]
     },
     "guardTarget": {
       "type": "object",
@@ -234,7 +234,7 @@
         },
         "kind": {
           "enum": [
-            "element_added", "element_removed", "value_changed", "kind_changed",
+            "element_added", "element_removed", "value_changed", "focus_changed", "kind_changed",
             "trust_labels_changed", "redaction_changed", "target_binding_changed",
             "expected_change_missing", "unexpected_limit_exceeded"
           ]

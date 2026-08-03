@@ -672,10 +672,13 @@ fn run_actual_text_cycle(
             "truncated": false
         }
     });
+    let expected_current_value = expected_value
+        .pointer("/current_value")
+        .unwrap_or_else(|| panic!("recovery expected current_value is absent"));
     let expected_postcondition = Postcondition {
-        target_state: format!("element:{}:value", text_element.element_id),
+        target_state: format!("element:{}:current_value", text_element.element_id),
         op: ComparisonOp::Equals,
-        expected_value: ok(trusted_execution_sha256(&expected_value)).into(),
+        expected_value: ok(trusted_execution_sha256(expected_current_value)).into(),
         required: true,
         timeout_ms: 5_000,
     };
@@ -811,14 +814,24 @@ fn run_actual_text_cycle(
             severity: ProtectedInvariantSeverityV1::Unsafe,
             reason_code: "protected-checkbox-stable".to_owned(),
         }],
-        vec![IgnoredVolatileTargetV1 {
-            target: VerificationGuardTargetV1 {
-                element_id: "observation.status".to_owned(),
-                field: VerificationGuardFieldV1::Value,
+        vec![
+            IgnoredVolatileTargetV1 {
+                target: VerificationGuardTargetV1 {
+                    element_id: text_element.element_id.clone(),
+                    field: VerificationGuardFieldV1::Focus,
+                },
+                approved_reason_code: "windows-uia-focus-volatile".to_owned(),
+                evidence_id: "windows-uia-observation-contract".to_owned(),
             },
-            approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
-            evidence_id: "windows-observation-contract".to_owned(),
-        }],
+            IgnoredVolatileTargetV1 {
+                target: VerificationGuardTargetV1 {
+                    element_id: "observation.status".to_owned(),
+                    field: VerificationGuardFieldV1::Value,
+                },
+                approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
+                evidence_id: "windows-observation-contract".to_owned(),
+            },
+        ],
         0,
         vec![format!("actual-recovery-{label}")],
     ));
@@ -1991,10 +2004,13 @@ fn live_execution_is_freshly_reobserved_and_verified() {
             "truncated": false
         }
     });
+    let expected_current_value = expected_text_value
+        .pointer("/current_value")
+        .unwrap_or_else(|| panic!("expected text current_value is absent"));
     let expected_postcondition = Postcondition {
-        target_state: format!("element:{}:value", text_element.element_id),
+        target_state: format!("element:{}:current_value", text_element.element_id),
         op: ComparisonOp::Equals,
-        expected_value: ok(trusted_execution_sha256(&expected_text_value)).into(),
+        expected_value: ok(trusted_execution_sha256(expected_current_value)).into(),
         required: true,
         timeout_ms: 5_000,
     };
@@ -2185,14 +2201,24 @@ fn live_execution_is_freshly_reobserved_and_verified() {
             severity: ProtectedInvariantSeverityV1::Unsafe,
             reason_code: "protected-checkbox-stable".to_owned(),
         }],
-        vec![IgnoredVolatileTargetV1 {
-            target: VerificationGuardTargetV1 {
-                element_id: "observation.status".to_owned(),
-                field: VerificationGuardFieldV1::Value,
+        vec![
+            IgnoredVolatileTargetV1 {
+                target: VerificationGuardTargetV1 {
+                    element_id: text_element.element_id.clone(),
+                    field: VerificationGuardFieldV1::Focus,
+                },
+                approved_reason_code: "windows-uia-focus-volatile".to_owned(),
+                evidence_id: "windows-uia-observation-contract".to_owned(),
             },
-            approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
-            evidence_id: "windows-observation-contract".to_owned(),
-        }],
+            IgnoredVolatileTargetV1 {
+                target: VerificationGuardTargetV1 {
+                    element_id: "observation.status".to_owned(),
+                    field: VerificationGuardFieldV1::Value,
+                },
+                approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
+                evidence_id: "windows-observation-contract".to_owned(),
+            },
+        ],
         0,
         vec!["actual-windows-uia".to_owned()],
     ));

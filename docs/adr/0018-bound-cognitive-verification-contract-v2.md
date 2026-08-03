@@ -68,6 +68,7 @@ postcondition identifies one element and one frozen observable field:
 
 - `element_exists`;
 - `element_value`;
+- `element_current_value`;
 - `element_kind`.
 
 The expected value remains typed JSON data. Supported comparison semantics are:
@@ -76,6 +77,8 @@ The expected value remains typed JSON data. Supported comparison semantics are:
 - `element_kind`: `equals` or `not_equals` with a string;
 - `element_value`: `equals`, `not_equals`, string `contains`, Boolean `exists`,
   and integer `greater_or_equal` or `less_or_equal`.
+- `element_current_value`: the same comparisons over the exact typed
+  `value.current_value` member, without widening to sibling UI metadata.
 
 Ordered floating-point comparison is unsupported to avoid cross-platform
 rounding policy. Missing values are inconclusive, not failed, except an

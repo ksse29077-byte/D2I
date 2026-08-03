@@ -21,6 +21,8 @@ pub enum VerifiableObservationFieldV2 {
     ElementExists,
     /// The typed `ObservableElement.value` field.
     ElementValue,
+    /// The typed `ObservableElement.value.current_value` field.
+    ElementCurrentValue,
     /// The normalized `ObservableElement.kind` field.
     ElementKind,
 }
@@ -80,7 +82,8 @@ impl VerifiablePostconditionV2 {
                     ));
                 }
             }
-            VerifiableObservationFieldV2::ElementValue => match self.op {
+            VerifiableObservationFieldV2::ElementValue
+            | VerifiableObservationFieldV2::ElementCurrentValue => match self.op {
                 ComparisonOp::Contains if !self.expected_value.is_string() => {
                     return Err(DesktopError::Invalid(
                         "contains requires a string expected_value".to_owned(),
@@ -761,6 +764,9 @@ fn evaluate_criterion(
         VerifiableObservationFieldV2::ElementValue => {
             matching.first().map(|element| element.value.clone())
         }
+        VerifiableObservationFieldV2::ElementCurrentValue => matching
+            .first()
+            .and_then(|element| element.value.pointer("/current_value").cloned()),
         VerifiableObservationFieldV2::ElementKind => matching
             .first()
             .map(|element| Value::String(element.kind.clone())),

@@ -49,7 +49,7 @@
       "enum": ["equals", "not_equals", "contains", "exists", "greater_or_equal", "less_or_equal"]
     },
     "verification_field": {
-      "enum": ["element_exists", "element_value", "element_kind"]
+      "enum": ["element_exists", "element_value", "element_current_value", "element_kind"]
     },
     "verification_target": {
       "type": "object",

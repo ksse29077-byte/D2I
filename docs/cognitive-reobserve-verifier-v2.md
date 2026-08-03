@@ -33,6 +33,7 @@ The only accepted target grammar is:
 ```text
 element:<element_id>:exists
 element:<element_id>:value
+element:<element_id>:current_value
 element:<element_id>:kind
 ```
 
@@ -41,6 +42,15 @@ duplicate criteria, lifecycle substitutions, and secret-like expected values
 fail closed. Object/array values can be compared to their canonical digest so
 raw desired text and locator-bearing observation objects need not enter the
 postcondition contract.
+
+Windows UIA text postconditions use `current_value` when focus is not part of
+the intended outcome. Delta analysis still records focus separately as
+`FocusChanged`; it is ignored only when the exact element `focus` target is
+listed in the guard's bounded `ignored_volatile_targets`. A UIA workflow may
+enumerate every source-observed element with a typed `focused` Boolean, but it
+cannot use a wildcard or cover elements absent from that source snapshot. All
+non-focus value changes remain subject to the normal expected, protected, or
+unexpected classification.
 
 ## Freshness and Identity
 

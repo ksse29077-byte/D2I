@@ -27,8 +27,9 @@ Verification Contract v2:
    same logical process/session/window or browser-session/origin, while also
    retaining the fresh activation and transport hashes.
 3. `VerificationSpecAdapterV1` accepts only the closed grammar
-   `element:<element_id>:{exists|value|kind}`. It performs no fuzzy, label, or
-   model-based targeting.
+   `element:<element_id>:{exists|value|current_value|kind}`. It performs no
+   fuzzy, label, or model-based targeting. `current_value` narrows UIA text
+   postconditions to the typed value payload without including focus state.
 4. `VerificationGuardProfileV1` requires at least one exact expected, allowed,
    protected, or explicitly reviewed volatile target. Empty and ignore-all
    profiles are rejected. The Windows fixture protects a second UI field.
@@ -40,8 +41,12 @@ Verification Contract v2:
    or another postcondition passed.
 7. UIA observation-status metrics may vary between independent collections.
    They may be ignored only as the exact `observation.status:value` target with
-   a reason code and evidence ID. Process/session/window identity is never
-   ignored.
+   a reason code and evidence ID. UIA focus is classified separately as
+   `FocusChanged` and may be ignored only for an exact element `focus` target
+   with its own reason and evidence. A bounded guard may enumerate every
+   source-observed UIA element that has typed focus state; wildcard and
+   non-source targets remain invalid. Non-UIA `focused` JSON keys remain
+   normal value data. Process/session/window identity is never ignored.
 8. Verification v2 scalar equality is preserved. For an observed JSON object
    or array and a valid lowercase `sha256:` expected string, equality means
    equality with the canonical observed-value digest. This avoids raw input or

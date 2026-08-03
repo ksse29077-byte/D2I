@@ -592,6 +592,7 @@ impl FreshObservationProofV1 {
 pub enum VerificationGuardFieldV1 {
     Exists,
     Value,
+    Focus,
     Kind,
 }
 
@@ -822,6 +823,7 @@ pub enum ObservationDeltaKindV1 {
     ElementAdded,
     ElementRemoved,
     ValueChanged,
+    FocusChanged,
     KindChanged,
     TrustLabelsChanged,
     RedactionChanged,
@@ -965,16 +967,37 @@ pub fn analyze_observation_delta(
                 "element-removed",
             )?),
             (Some(before), Some(after)) => {
-                if before.value != after.value {
+                let split_uia_focus = source.source_kind == ObservationSourceKind::Uia;
+                let before_value = value_without_uia_focus(&before.value, split_uia_focus);
+                let after_value = value_without_uia_focus(&after.value, split_uia_focus);
+                if before_value != after_value {
                     changes.push(delta_change(
                         Some(VerificationGuardTargetV1 {
                             element_id: element_id.clone(),
                             field: VerificationGuardFieldV1::Value,
                         }),
                         ObservationDeltaKindV1::ValueChanged,
-                        Some(&before.value),
-                        Some(&after.value),
+                        Some(&before_value),
+                        Some(&after_value),
                         "value-changed",
+                    )?);
+                }
+                let before_focus = split_uia_focus
+                    .then(|| before.value.pointer("/focused"))
+                    .flatten();
+                let after_focus = split_uia_focus
+                    .then(|| after.value.pointer("/focused"))
+                    .flatten();
+                if split_uia_focus && before_focus != after_focus {
+                    changes.push(delta_change(
+                        Some(VerificationGuardTargetV1 {
+                            element_id: element_id.clone(),
+                            field: VerificationGuardFieldV1::Focus,
+                        }),
+                        ObservationDeltaKindV1::FocusChanged,
+                        before_focus,
+                        after_focus,
+                        "focus-changed",
                     )?);
                 }
                 if before.kind != after.kind {
@@ -2149,6 +2172,7 @@ fn parse_target_state(value: &str) -> Result<VerificationTargetV2, DesktopError>
     let field = match field {
         "exists" => VerifiableObservationFieldV2::ElementExists,
         "value" => VerifiableObservationFieldV2::ElementValue,
+        "current_value" => VerifiableObservationFieldV2::ElementCurrentValue,
         "kind" => VerifiableObservationFieldV2::ElementKind,
         _ => {
             return Err(DesktopError::AdapterUnavailable(
@@ -2185,6 +2209,9 @@ fn evaluate_postcondition(
         VerifiableObservationFieldV2::ElementValue => {
             matches.first().map(|element| element.value.clone())
         }
+        VerifiableObservationFieldV2::ElementCurrentValue => matches
+            .first()
+            .and_then(|element| element.value.pointer("/current_value").cloned()),
         VerifiableObservationFieldV2::ElementKind => matches
             .first()
             .map(|element| Value::String(element.kind.clone())),
@@ -2350,6 +2377,15 @@ fn observed_target_value(
     Ok(match target.field {
         VerificationGuardFieldV1::Exists => Value::Bool(true),
         VerificationGuardFieldV1::Value => matches[0].value.clone(),
+        VerificationGuardFieldV1::Focus => matches[0]
+            .value
+            .pointer("/focused")
+            .cloned()
+            .ok_or_else(|| {
+                DesktopError::Precondition(
+                    "guard focus target omits a typed focused value".to_owned(),
+                )
+            })?,
         VerificationGuardFieldV1::Kind => Value::String(matches[0].kind.clone()),
     })
 }
@@ -2417,6 +2453,16 @@ fn value_type(value: &Value) -> &'static str {
     }
 }
 
+fn value_without_uia_focus(value: &Value, split_uia_focus: bool) -> Value {
+    let mut projected = value.clone();
+    if split_uia_focus {
+        if let Some(fields) = projected.as_object_mut() {
+            fields.remove("focused");
+        }
+    }
+    projected
+}
+
 fn change_matches_guard_field(
     change: &ObservationElementDeltaV1,
     target: &VerificationGuardTargetV1,
@@ -2429,6 +2475,9 @@ fn change_matches_guard_field(
         ) | (
             VerificationGuardFieldV1::Value,
             ObservationDeltaKindV1::ValueChanged
+        ) | (
+            VerificationGuardFieldV1::Focus,
+            ObservationDeltaKindV1::FocusChanged
         ) | (
             VerificationGuardFieldV1::Kind,
             ObservationDeltaKindV1::KindChanged
@@ -2922,6 +2971,174 @@ mod tests {
         ] {
             assert!(convert_postconditions("action", &[invalid], &source).is_err());
         }
+    }
+
+    #[test]
+    fn current_value_postcondition_ignores_focus_but_not_typed_value_changes() {
+        let mut source = observation(false, false, 7);
+        source.observable_elements[0].value = json!({
+            "current_value": {"status": "present", "value": {"text": "before"}},
+            "focused": false
+        });
+        let expected_current = json!({
+            "status": "present",
+            "value": {"text": "after"}
+        });
+        let condition = postcondition(
+            "element:action-state:current_value",
+            Value::String(
+                canonical_hash(&expected_current)
+                    .unwrap_or_else(|error| panic!("current value hash failed: {error}")),
+            ),
+            true,
+        );
+        let criterion = convert_postconditions("action", &[condition], &source)
+            .unwrap_or_else(|error| panic!("conversion failed: {error}"))
+            .remove(0);
+
+        let mut focus_changed = source.clone();
+        focus_changed.observable_elements[0].value = json!({
+            "current_value": expected_current,
+            "focused": true
+        });
+        assert_eq!(
+            evaluate_postcondition(&criterion, &focus_changed)
+                .unwrap_or_else(|error| panic!("evaluation failed: {error}"))
+                .verdict,
+            VerificationVerdictV2::Passed
+        );
+
+        focus_changed.observable_elements[0].value["current_value"] = json!({
+            "status": "present",
+            "value": {"text": "different"}
+        });
+        assert_eq!(
+            evaluate_postcondition(&criterion, &focus_changed)
+                .unwrap_or_else(|error| panic!("evaluation failed: {error}"))
+                .verdict,
+            VerificationVerdictV2::Failed
+        );
+    }
+
+    #[test]
+    fn delta_ignores_focus_only_when_the_exact_focus_target_is_approved() {
+        let mut source = observation(false, false, 7);
+        source.source_kind = ObservationSourceKind::Uia;
+        source.observable_elements[0].value = json!({
+            "current_value": {"status": "present", "value": {"text": "before"}},
+            "focused": false
+        });
+        source.state_hash = source
+            .compute_state_hash()
+            .unwrap_or_else(|error| panic!("source hash failed: {error}"));
+        let action = proposal(&source);
+        let expected_target = VerificationGuardTargetV1 {
+            element_id: "action-state".to_owned(),
+            field: VerificationGuardFieldV1::Value,
+        };
+        let focus_target = VerificationGuardTargetV1 {
+            element_id: "action-state".to_owned(),
+            field: VerificationGuardFieldV1::Focus,
+        };
+        let profile = VerificationGuardProfileV1::new(
+            "focus-aware-guard".to_owned(),
+            &action,
+            &source,
+            vec![expected_target.clone()],
+            Vec::new(),
+            Vec::new(),
+            vec![IgnoredVolatileTargetV1 {
+                target: focus_target,
+                approved_reason_code: "windows-uia-focus-volatile".to_owned(),
+                evidence_id: "windows-uia-observation-contract".to_owned(),
+            }],
+            0,
+            vec!["fixture:guard".to_owned()],
+        )
+        .unwrap_or_else(|error| panic!("focus-aware guard failed: {error}"));
+
+        let mut fresh = source.clone();
+        fresh.observation_id = "observation-8".to_owned();
+        fresh.sequence = 8;
+        fresh.observable_elements[0].value = json!({
+            "current_value": {"status": "present", "value": {"text": "after"}},
+            "focused": true
+        });
+        fresh.state_hash = fresh
+            .compute_state_hash()
+            .unwrap_or_else(|error| panic!("fresh hash failed: {error}"));
+
+        let delta = analyze_observation_delta(&source, &fresh, &profile)
+            .unwrap_or_else(|error| panic!("focus-aware delta failed: {error}"));
+        assert_eq!(delta.expected_changes.len(), 1);
+        assert_eq!(
+            delta.expected_changes[0].kind,
+            ObservationDeltaKindV1::ValueChanged
+        );
+        assert_eq!(delta.ignored_volatile_changes.len(), 1);
+        assert_eq!(
+            delta.ignored_volatile_changes[0].kind,
+            ObservationDeltaKindV1::FocusChanged
+        );
+        assert!(delta.unexpected_changes.is_empty());
+
+        let strict_profile = VerificationGuardProfileV1::new(
+            "strict-focus-guard".to_owned(),
+            &action,
+            &source,
+            vec![expected_target],
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+            0,
+            vec!["fixture:guard".to_owned()],
+        )
+        .unwrap_or_else(|error| panic!("strict focus guard failed: {error}"));
+        let strict_delta = analyze_observation_delta(&source, &fresh, &strict_profile)
+            .unwrap_or_else(|error| panic!("strict focus delta failed: {error}"));
+        assert_eq!(strict_delta.unexpected_changes.len(), 1);
+        assert_eq!(
+            strict_delta.unexpected_changes[0].kind,
+            ObservationDeltaKindV1::FocusChanged
+        );
+        assert!(strict_delta.unexpected_limit_exceeded);
+
+        let mut fixture_source = source.clone();
+        fixture_source.source_kind = ObservationSourceKind::Fixture;
+        fixture_source.state_hash = fixture_source
+            .compute_state_hash()
+            .unwrap_or_else(|error| panic!("fixture source hash failed: {error}"));
+        let fixture_action = proposal(&fixture_source);
+        let fixture_profile = VerificationGuardProfileV1::new(
+            "fixture-value-guard".to_owned(),
+            &fixture_action,
+            &fixture_source,
+            vec![VerificationGuardTargetV1 {
+                element_id: "action-state".to_owned(),
+                field: VerificationGuardFieldV1::Value,
+            }],
+            Vec::new(),
+            Vec::new(),
+            Vec::new(),
+            0,
+            vec!["fixture:guard".to_owned()],
+        )
+        .unwrap_or_else(|error| panic!("fixture guard failed: {error}"));
+        let mut fixture_fresh = fresh;
+        fixture_fresh.source_kind = ObservationSourceKind::Fixture;
+        fixture_fresh.state_hash = fixture_fresh
+            .compute_state_hash()
+            .unwrap_or_else(|error| panic!("fixture fresh hash failed: {error}"));
+        let fixture_delta =
+            analyze_observation_delta(&fixture_source, &fixture_fresh, &fixture_profile)
+                .unwrap_or_else(|error| panic!("fixture delta failed: {error}"));
+        assert_eq!(fixture_delta.expected_changes.len(), 1);
+        assert_eq!(
+            fixture_delta.expected_changes[0].kind,
+            ObservationDeltaKindV1::ValueChanged
+        );
+        assert!(fixture_delta.ignored_volatile_changes.is_empty());
+        assert!(fixture_delta.unexpected_changes.is_empty());
     }
 
     #[test]

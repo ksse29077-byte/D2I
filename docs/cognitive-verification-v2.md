@@ -51,6 +51,11 @@ distinct observation ID, and stable target binding.
 | `element_value` | `contains` | string |
 | `element_value` | `exists` | Boolean |
 | `element_value` | `greater_or_equal`, `less_or_equal` | integer |
+| `element_current_value` | same as `element_value` | any JSON value |
+
+`element_current_value` addresses only the typed `current_value` member of an
+element value. It supports exact text-state verification without accidentally
+making volatile UIA focus metadata part of the postcondition.
 
 Missing evidence is `inconclusive`. Duplicate matching element IDs are
 conflicting evidence and are also `inconclusive`. Decimal ordered comparisons

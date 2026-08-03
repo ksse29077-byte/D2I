@@ -605,7 +605,8 @@ struct FixtureState {
     ready: bool,
     input_revision: u64,
     input_sha256: String,
-    input_focused: bool,
+    #[serde(rename = "input_focused")]
+    _input_focused: bool,
     save_attempts: u64,
     save_status: String,
     saved_name_sha256: String,
@@ -653,9 +654,7 @@ fn wait_for_fixture_transition(
     for _ in 0..50 {
         if fixture_state(&state_path).is_ok_and(|state| match step {
             ActionStepKind::SetName => {
-                state.input_revision >= 1
-                    && state.input_sha256 == expected_name_sha256
-                    && state.input_focused
+                state.input_revision >= 1 && state.input_sha256 == expected_name_sha256
             }
             ActionStepKind::Save => {
                 let required_attempts = action_sequence.saturating_sub(1);
@@ -1275,15 +1274,18 @@ fn expected_text_value(
     Ok(value)
 }
 
-fn exact_value_postcondition(
+fn exact_current_value_postcondition(
     element: &d2i_cognitive_ir::ObservableElement,
     expected_value: &Value,
 ) -> Result<Postcondition, DesktopError> {
+    let current_value = expected_value.pointer("/current_value").ok_or_else(|| {
+        DesktopError::Integrity("expected UIA value omits current_value".to_owned())
+    })?;
     Ok(Postcondition {
-        target_state: format!("element:{}:value", element.element_id),
+        target_state: format!("element:{}:current_value", element.element_id),
         op: ComparisonOp::Equals,
         expected_value: Value::String(
-            trusted_execution_sha256(expected_value).map_err(selection_error)?,
+            trusted_execution_sha256(current_value).map_err(selection_error)?,
         ),
         required: true,
         timeout_ms: 5_000,
@@ -1671,11 +1673,35 @@ fn changed_element_value_fields(
         .collect::<Vec<_>>()
         .join(",");
     Ok(format!(
-        "{};focused={:?}->{:?}",
+        "{};focused={:?}->{:?};current={}->{}",
         changed,
         source_value.pointer("/focused").and_then(Value::as_bool),
-        fresh_value.pointer("/focused").and_then(Value::as_bool)
+        fresh_value.pointer("/focused").and_then(Value::as_bool),
+        safe_current_value_summary(source_value),
+        safe_current_value_summary(fresh_value)
     ))
+}
+
+fn safe_current_value_summary(value: &Value) -> String {
+    let current = value.pointer("/current_value");
+    let status = current
+        .and_then(|value| value.pointer("/status"))
+        .and_then(Value::as_str)
+        .unwrap_or("absent");
+    let text_hash = current
+        .and_then(|value| value.pointer("/value/text_hash"))
+        .and_then(Value::as_str)
+        .unwrap_or("absent");
+    let text_len = current
+        .and_then(|value| value.pointer("/value/text"))
+        .and_then(Value::as_str)
+        .map(str::len)
+        .map_or_else(|| "absent".to_owned(), |value| value.to_string());
+    let truncated = current
+        .and_then(|value| value.pointer("/value/truncated"))
+        .and_then(Value::as_bool)
+        .map_or_else(|| "absent".to_owned(), |value| value.to_string());
+    format!("{status}:{text_hash}:{text_len}:{truncated}")
 }
 
 fn verification_verdict(value: VerificationVerdictV2) -> FinalVerificationVerdictV1 {
@@ -1698,7 +1724,7 @@ fn action_expectations(
         ActionStepKind::SetName => {
             let element = element_by_automation_id(source, "employee-name-input")?;
             let expected_value = expected_text_value(element, EXPECTED_NAME)?;
-            postconditions.push(exact_value_postcondition(element, &expected_value)?);
+            postconditions.push(exact_current_value_postcondition(element, &expected_value)?);
             targets.push(VerificationGuardTargetV1 {
                 element_id: element.element_id.clone(),
                 field: VerificationGuardFieldV1::Value,
@@ -1710,7 +1736,7 @@ fn action_expectations(
                 ("save-status", "saved".to_owned()),
             ] {
                 let element = element_by_automation_id(source, automation_id)?;
-                postconditions.push(exact_value_postcondition(
+                postconditions.push(exact_current_value_postcondition(
                     element,
                     &expected_text_value(element, &expected)?,
                 )?);
@@ -1724,7 +1750,7 @@ fn action_expectations(
                 .ok_or_else(|| DesktopError::Integrity("save revision is not readable".to_owned()))?
                 .parse::<u64>()
                 .map_err(|error| DesktopError::Integrity(error.to_string()))?;
-            postconditions.push(exact_value_postcondition(
+            postconditions.push(exact_current_value_postcondition(
                 revision,
                 &expected_text_value(revision, &current.saturating_add(1).to_string())?,
             )?);
@@ -1927,6 +1953,33 @@ fn run_action_cycle(
         now_ms.saturating_add(90_000),
     )?;
     let protected = element_by_automation_id(&source, "protected-checkbox")?;
+    let mut ignored_volatile_targets = source
+        .observable_elements
+        .iter()
+        .filter(|element| {
+            element
+                .value
+                .pointer("/focused")
+                .and_then(Value::as_bool)
+                .is_some()
+        })
+        .map(|element| IgnoredVolatileTargetV1 {
+            target: VerificationGuardTargetV1 {
+                element_id: element.element_id.clone(),
+                field: VerificationGuardFieldV1::Focus,
+            },
+            approved_reason_code: "windows-uia-focus-volatile".to_owned(),
+            evidence_id: "windows-uia-observation-contract".to_owned(),
+        })
+        .collect::<Vec<_>>();
+    ignored_volatile_targets.push(IgnoredVolatileTargetV1 {
+        target: VerificationGuardTargetV1 {
+            element_id: "observation.status".to_owned(),
+            field: VerificationGuardFieldV1::Value,
+        },
+        approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
+        evidence_id: "windows-observation-contract".to_owned(),
+    });
     let guard = VerificationGuardProfileV1::new(
         format!("guard-{label}"),
         &selected.ready.proposal,
@@ -1943,14 +1996,7 @@ fn run_action_cycle(
             severity: ProtectedInvariantSeverityV1::Unsafe,
             reason_code: "protected-checkbox-stable".to_owned(),
         }],
-        vec![IgnoredVolatileTargetV1 {
-            target: VerificationGuardTargetV1 {
-                element_id: "observation.status".to_owned(),
-                field: VerificationGuardFieldV1::Value,
-            },
-            approved_reason_code: "bounded-observation-metrics-volatile".to_owned(),
-            evidence_id: "windows-observation-contract".to_owned(),
-        }],
+        ignored_volatile_targets,
         0,
         vec![format!("actual-kernel-cycle-{label}")],
     )?;
