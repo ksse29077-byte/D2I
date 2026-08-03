@@ -76,7 +76,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, ExitCode};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 const EXPECTED_NAME: &str = "D2I-E2E-VERIFIED-NAME";
 const INTEGRATION_ID: &str = "windows-kernel-e2e";
@@ -651,28 +651,49 @@ fn wait_for_fixture_transition(
 ) -> Result<(), DesktopError> {
     let state_path = temp.path().join(FIXTURE_STATE_FILE);
     let expected_name_sha256 = sha(EXPECTED_NAME.as_bytes());
-    for _ in 0..50 {
-        if fixture_state(&state_path).is_ok_and(|state| match step {
-            ActionStepKind::SetName => {
-                state.input_revision >= 1 && state.input_sha256 == expected_name_sha256
+    let timeout = Duration::from_secs(10);
+    let deadline = Instant::now() + timeout;
+    let mut last_state = "state-unavailable".to_owned();
+    loop {
+        if let Ok(state) = fixture_state(&state_path) {
+            let matches = match step {
+                ActionStepKind::SetName => {
+                    state.input_revision >= 1 && state.input_sha256 == expected_name_sha256
+                }
+                ActionStepKind::Save => {
+                    let required_attempts = action_sequence.saturating_sub(1);
+                    state.save_attempts >= required_attempts
+                        && if mode == ScenarioMode::Recovery && required_attempts == 1 {
+                            state.save_status == "rejected"
+                        } else {
+                            state.save_status == "saved"
+                                && state.saved_name_sha256 == expected_name_sha256
+                        }
+                }
+            };
+            last_state = format!(
+                "input_revision={};input_hash_match={};save_attempts={};save_status={};saved_hash_match={}",
+                state.input_revision,
+                state.input_sha256 == expected_name_sha256,
+                state.save_attempts,
+                state.save_status,
+                state.saved_name_sha256 == expected_name_sha256
+            );
+            if matches {
+                return Ok(());
             }
-            ActionStepKind::Save => {
-                let required_attempts = action_sequence.saturating_sub(1);
-                state.save_attempts >= required_attempts
-                    && if mode == ScenarioMode::Recovery && required_attempts == 1 {
-                        state.save_status == "rejected"
-                    } else {
-                        state.save_status == "saved"
-                            && state.saved_name_sha256 == expected_name_sha256
-                    }
-            }
-        }) {
-            return Ok(());
+        }
+        if Instant::now() >= deadline {
+            break;
         }
         std::thread::sleep(Duration::from_millis(100));
     }
     Err(DesktopError::AdapterUnavailable(
-        "WinForms fixture did not publish the expected bounded UI transition".to_owned(),
+        format!(
+            "WinForms fixture did not publish the expected bounded UI transition within {}ms: step={}, action_sequence={action_sequence}, {last_state}",
+            timeout.as_millis(),
+            step.label()
+        ),
     ))
 }
 
@@ -1607,6 +1628,13 @@ enum ActionStepKind {
 }
 
 impl ActionStepKind {
+    const fn label(self) -> &'static str {
+        match self {
+            Self::SetName => "set-name",
+            Self::Save => "save",
+        }
+    }
+
     const fn automation_id(self) -> &'static str {
         match self {
             Self::SetName => "employee-name-input",
