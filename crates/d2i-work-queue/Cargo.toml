@@ -1,0 +1,24 @@
+[package]
+name = "d2i-work-queue"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-cognitive-ir = { path = "../d2i-cognitive-ir" }
+d2i-role-contract = { path = "../d2i-role-contract" }
+d2i-work-case = { path = "../d2i-work-case" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-queue"
+path = "src/bin/d2i-queue.rs"

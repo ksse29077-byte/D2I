@@ -196,6 +196,16 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -Mode All
 ```
 
+Run the Work Queue, deterministic Scheduler, and Case Ownership v1 gate,
+including the WORK-300 multiple-Case E2E, crash recovery, signed reassignment,
+exclusive leases, 128-Case replay, and WORK-100/200/300 regression, with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-work-queue-scheduler-v1.ps1 `
+  -Mode All
+```
+
 ## Checks
 
 ```text

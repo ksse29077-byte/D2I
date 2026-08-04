@@ -53,12 +53,57 @@ pub fn fixture_with_governance(
     role_instance: RoleInstanceV1,
     admitted_at_unix_seconds: u64,
 ) -> Fixture {
+    fixture_with_governance_suffix(
+        role_contract,
+        delegation,
+        role_instance,
+        admitted_at_unix_seconds,
+        "",
+    )
+}
+
+// This shared fixture module is compiled into older desktop test binaries too.
+#[allow(dead_code)]
+pub fn distinct_fixtures(count: usize) -> Vec<Fixture> {
+    let role_contract = ok(compile_role_source(
+        ROLE_SOURCE.as_bytes(),
+        RoleCompileFormatV1::Yaml,
+    ))
+    .contract;
+    let (delegation, role_instance) = governance(&role_contract);
+    (0..count)
+        .map(|index| {
+            fixture_with_governance_suffix(
+                role_contract.clone(),
+                delegation.clone(),
+                role_instance.clone(),
+                1_785_000_010,
+                &format!("replay-{index:03}"),
+            )
+        })
+        .collect()
+}
+
+fn fixture_with_governance_suffix(
+    role_contract: RoleContractV1,
+    delegation: RoleDelegationGrantV1,
+    role_instance: RoleInstanceV1,
+    admitted_at_unix_seconds: u64,
+    suffix: &str,
+) -> Fixture {
+    let tagged = |base: &str| {
+        if suffix.is_empty() {
+            base.to_owned()
+        } else {
+            format!("{base}-{suffix}")
+        }
+    };
     let envelope = ok(WorkItemSourceEnvelopeV1 {
         schema_version: 1,
-        source_envelope_id: "source-envelope-kernel-case".to_owned(),
+        source_envelope_id: tagged("source-envelope-kernel-case"),
         source_kind: WorkItemSourceKindV1::AuthenticatedInstruction,
         source_system_id: "kernel-uia".to_owned(),
-        source_event_id: "instruction-kernel-name-save-1".to_owned(),
+        source_event_id: tagged("instruction-kernel-name-save-1"),
         organization_id: "organization-1".to_owned(),
         observed_at_unix_seconds: admitted_at_unix_seconds.saturating_sub(10),
         received_at_unix_seconds: admitted_at_unix_seconds.saturating_sub(9),
@@ -78,10 +123,10 @@ pub fn fixture_with_governance(
     let (work_item, dedup_key) = ok(normalize_work_item(
         &envelope,
         WorkItemNormalizationInputV1 {
-            work_item_id: "work-item-kernel-name-save".to_owned(),
+            work_item_id: tagged("work-item-kernel-name-save"),
             work_class_id: "workforce.kernel_e2e.name_save".to_owned(),
             work_class_contract_version: "1.0.0".to_owned(),
-            subject_refs: vec!["employee-record:opaque-1".to_owned()],
+            subject_refs: vec![tagged("employee-record:opaque-1")],
             requested_outcome_class_ids: vec!["employee-name-saved".to_owned()],
             requested_evidence_class_ids: vec![
                 "final-goal-verification".to_owned(),
@@ -124,7 +169,7 @@ pub fn fixture_with_governance(
     .seal());
     let request = ok(WorkItemAdmissionRequestV1 {
         schema_version: 1,
-        request_id: "request-kernel-case".to_owned(),
+        request_id: tagged("request-kernel-case"),
         work_item: work_item.clone(),
         source_envelope: envelope,
         role_instance_sha256: role_instance.instance_sha256.clone(),
@@ -146,7 +191,7 @@ pub fn fixture_with_governance(
         &role_instance,
     ));
     let ownership = ok(CaseOwnershipBindingV1::create(
-        "case-kernel-name-save".to_owned(),
+        tagged("case-kernel-name-save"),
         &work_item,
         &admission,
         &role_contract,

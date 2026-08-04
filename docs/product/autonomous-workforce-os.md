@@ -188,8 +188,8 @@ state.
 - `D2I-WORK-100`: Role Contract v1. **Complete**
 - `D2I-WORK-200`: Work Item / Case Contract v1. **Complete**
 - `D2I-WORK-300`: Work Radar and Work Intake. **Complete**
-- `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership. **First active task**
-- `D2I-WORK-500`: Situation Model and Adaptive Planner.
+- `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership. **Complete**
+- `D2I-WORK-500`: Situation Model and Adaptive Planner. **First active task**
 - `D2I-WORK-600`: Episodic Memory and Case Learning Records.
 - `D2I-WORK-700`: Role-level Reporting, SLA and Escalation.
 - `D2I-WORK-800`: Open Digital Employee Shadow Mode.
@@ -269,6 +269,8 @@ persists a protected receipt/checkpoint only after at most one Case exists.
 It removes the need to repeatedly inspect an approved source and manually
 register routine work. Replay and crash recovery cannot create a second Case.
 
-The active next task is `D2I-WORK-400 - Work Queue, Scheduler and Case
-Ownership`. Production connectors, background polling, schedules, Queue,
-leases, reassignment, and ownership transfer are not part of WORK-300.
+WORK-400 now reconciles persistent Cases into a protected Queue, selects one
+eligible Case with trusted-time deterministic ordering, creates an exclusive
+lease and non-executable Work Grant, and recovers audited ownership transfer
+from a signed exact Role pool. These artifacts grant no execution authority.
+The active next task is `D2I-WORK-500 - Situation Model and Adaptive Planner`.

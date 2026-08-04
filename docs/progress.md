@@ -292,9 +292,10 @@ Implemented in `crates/d2i-work-case` and
   domain-neutral Case fixtures, optional Safety compatibility fixtures, and
   the official WORK-200 runner
 
-Task failure, clarification, blocked state, suspended Role, and WorkReport-only
-evidence remain non-terminal. Radar, source connectors, Queue, Scheduler,
-lease, reassignment, and ownership transfer remain unimplemented.
+At the WORK-200 boundary, task failure, clarification, blocked state,
+suspended Role, and WorkReport-only evidence remain non-terminal. That phase
+implemented no Radar, source connector, Queue, Scheduler, lease,
+reassignment, or ownership transfer.
 
 ## Work Radar and Work Intake v1 Status
 
@@ -321,9 +322,34 @@ Implemented in `crates/d2i-work-intake` and
   WORK-300 runner
 
 The source is at least once; Case creation is exactly once through WORK-200
-deduplication. Production connectors, background polling, Queue, Scheduler,
-lease, reassignment, ownership transfer, and Case Task execution remain
-unimplemented.
+deduplication. At the WORK-300 boundary, production connectors, background
+polling, Queue, Scheduler, lease, reassignment, ownership transfer, and Case
+Task execution were intentionally absent.
+
+## Work Queue, Scheduler, and Case Ownership v1 Status
+
+Implemented in `crates/d2i-work-queue` and
+`products/d2i-desktop/src/work_queue.rs`:
+
+- strict Queue policy and signed exact ownership pool
+- immutable origin ownership with an additive current-owner overlay
+- deterministic Case-to-Queue projection and one-shot trusted-time Scheduler
+- fixed lexicographic deadline, escalation, integer-aging, sequence, and hash
+  ordering
+- exclusive hash-chained claim leases with bounded renewal and expiry
+- audited signed-pool ownership transfer without Case Contract mutation
+- non-executable one-time `CaseWorkGrantV1` for the future planner boundary
+- current-user DACL-protected single-writer Queue/ownership ledger with strict
+  JSON, atomic replacement, tamper detection, restart replay, and receipts
+- actual WORK-300 four-Case General Office E2E through enqueue, selection,
+  lease recovery, owner suspension, standby reassignment, and grant
+- Office, HR, IT, and Safety opaque-ID compatibility with no Core taxonomy
+- strict Draft 2020-12 schemas, inspection CLI, crash windows A-E, and 128
+  distinct Cases replayed identically 100 times
+
+WORK-400 starts no background service and creates no Goal, Plan, Task, policy
+decision, activation, adapter call, credential, process, network request, Case
+closure, SLA delivery, or recipient routing.
 
 ## Verification
 
@@ -350,7 +376,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-400 - Work Queue, Scheduler and Case Ownership`
+`D2I-WORK-500 - Situation Model and Adaptive Planner`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -366,6 +392,8 @@ retention, exact evidence evaluation, and fail-closed terminal disposition.
 WORK-300 now proves signed approved-source discovery, exact Intake mapping,
 General Office Case creation, cross-domain replay, receipt/checkpoint
 durability, 100 identical normalized replays at the 128-event cycle limit,
-crash repair, and zero duplicate Cases. WORK-400
-is next; Queue, Scheduler, lease, claim, reassignment, and ownership transfer
+crash repair, and zero duplicate Cases. WORK-400 now proves protected Queue
+reconciliation, deterministic selection, exclusive lease recovery, signed-pool
+ownership reassignment, non-executable grants, crash repair, and 128-Case
+deterministic replay. WORK-500 is next; Situation Model and Adaptive Planner
 remain unimplemented.

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.invalid/schemas/workforce/work-queue-policy-v1.schema.json",
+  "title": "WorkQueuePolicyV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "policy_version", "queue_id", "organization_id", "role_contract_id", "role_version", "role_contract_sha256", "allowed_work_class_ids", "allowed_role_instance_ids", "maximum_queue_entries", "maximum_entries_examined_per_tick", "claim_lease_duration_seconds", "minimum_lease_duration_seconds", "maximum_lease_duration_seconds", "maximum_lease_renewals", "maximum_concurrent_leases_per_role", "maximum_open_cases_per_role", "aging_interval_seconds", "maximum_aging_buckets", "require_inside_operating_calendar", "blocked_treatment", "awaiting_clarification_treatment", "awaiting_verification_treatment", "escalation_pending_treatment", "owner_unavailable_treatment", "lease_expiry_behavior", "reassignment_allowed", "automatic_reassignment_reasons", "maximum_ownership_generations", "maximum_queue_operations", "maximum_snapshot_bytes", "maximum_decision_bytes", "maximum_ledger_bytes", "logical_operation_budget", "maximum_scheduler_ticks_per_invocation", "maximum_concurrent_coordinators", "maximum_replay_records", "evidence_ids", "policy_sha256"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "policy_id": { "$ref": "#/$defs/id" }, "policy_version": { "$ref": "#/$defs/id" }, "queue_id": { "$ref": "#/$defs/id" }, "organization_id": { "$ref": "#/$defs/id" }, "role_contract_id": { "$ref": "#/$defs/id" }, "role_version": { "$ref": "#/$defs/id" },
+    "role_contract_sha256": { "$ref": "#/$defs/hash" }, "allowed_work_class_ids": { "$ref": "#/$defs/ids" }, "allowed_role_instance_ids": { "$ref": "#/$defs/ids" },
+    "maximum_queue_entries": { "type": "integer", "minimum": 1, "maximum": 128 }, "maximum_entries_examined_per_tick": { "type": "integer", "minimum": 1, "maximum": 128 },
+    "claim_lease_duration_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 }, "minimum_lease_duration_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 }, "maximum_lease_duration_seconds": { "type": "integer", "minimum": 1, "maximum": 86400 },
+    "maximum_lease_renewals": { "type": "integer", "minimum": 0, "maximum": 64 }, "maximum_concurrent_leases_per_role": { "type": "integer", "minimum": 1, "maximum": 128 }, "maximum_open_cases_per_role": { "type": "integer", "minimum": 1, "maximum": 128 },
+    "aging_interval_seconds": { "type": "integer", "minimum": 1 }, "maximum_aging_buckets": { "type": "integer", "minimum": 0, "maximum": 1024 }, "require_inside_operating_calendar": { "type": "boolean" },
+    "blocked_treatment": { "$ref": "#/$defs/treatment" }, "awaiting_clarification_treatment": { "$ref": "#/$defs/treatment" }, "awaiting_verification_treatment": { "$ref": "#/$defs/treatment" }, "escalation_pending_treatment": { "$ref": "#/$defs/treatment" }, "owner_unavailable_treatment": { "$ref": "#/$defs/treatment" },
+    "lease_expiry_behavior": { "enum": ["return_to_ready", "attention"] }, "reassignment_allowed": { "type": "boolean" }, "automatic_reassignment_reasons": { "$ref": "#/$defs/reasons" },
+    "maximum_ownership_generations": { "type": "integer", "minimum": 1, "maximum": 1024 }, "maximum_queue_operations": { "type": "integer", "minimum": 1 }, "maximum_snapshot_bytes": { "type": "integer", "minimum": 1, "maximum": 8388608 }, "maximum_decision_bytes": { "type": "integer", "minimum": 1, "maximum": 8388608 }, "maximum_ledger_bytes": { "type": "integer", "minimum": 1 }, "logical_operation_budget": { "type": "integer", "minimum": 1 }, "maximum_scheduler_ticks_per_invocation": { "const": 1 }, "maximum_concurrent_coordinators": { "const": 1 }, "maximum_replay_records": { "type": "integer", "minimum": 1, "maximum": 65536 },
+    "evidence_ids": { "$ref": "#/$defs/evidence" }, "policy_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^(?!\\*$)(?!all$)(?!any$)[A-Za-z0-9._:/-]+$" },
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "ids": { "type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "evidence": { "type": "array", "minItems": 1, "maxItems": 256, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "treatment": { "enum": ["exclude", "eligible", "attention"] },
+    "reasons": { "type": "array", "maxItems": 6, "uniqueItems": true, "items": { "enum": ["coordinator_recovery", "lease_recovery", "owner_capacity_exhausted", "owner_expired", "owner_revoked", "owner_suspended"] } }
+  }
+}

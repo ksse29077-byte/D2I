@@ -442,6 +442,20 @@ pub fn new_case(
     evaluation: &WorkIntakeEvaluationV1,
     case_ledger_id: &str,
 ) -> NewCaseArtifacts {
+    new_case_with_id(
+        governance,
+        evaluation,
+        case_ledger_id,
+        "case-office-record-update-1",
+    )
+}
+
+pub fn new_case_with_id(
+    governance: &GovernanceFixture,
+    evaluation: &WorkIntakeEvaluationV1,
+    case_ledger_id: &str,
+    case_id: &str,
+) -> NewCaseArtifacts {
     let work_item = evaluation
         .work_item
         .as_ref()
@@ -450,7 +464,7 @@ pub fn new_case(
         .admission
         .as_ref()
         .unwrap_or_else(|| panic!("admission is absent"));
-    let case_id = "case-office-record-update-1".to_owned();
+    let case_id = case_id.to_owned();
     let ownership = ok(CaseOwnershipBindingV1::create(
         case_id.clone(),
         work_item,

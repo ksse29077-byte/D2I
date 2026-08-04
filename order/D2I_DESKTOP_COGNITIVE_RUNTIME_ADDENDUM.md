@@ -3,7 +3,8 @@
 ## Workforce Status Addendum
 
 `D2I-WORK-100 - Role Contract v1`, `D2I-WORK-200 - Work Item / Case
-Contract v1`, and `D2I-WORK-300 - Work Radar and Work Intake` are complete. The platform now has
+Contract v1`, `D2I-WORK-300 - Work Radar and Work Intake`, and
+`D2I-WORK-400 - Work Queue, Scheduler and Case Ownership` are complete. The platform now has
 deterministic immutable Role contracts, exact organization approval, bounded
 signed delegation, persistent protected Role Instances, one-time task
 admission, existing authority/recovery projections, and a role-bound KRN-500
@@ -12,9 +13,10 @@ deduplication, persistent accountable Cases, exact KRN attempt/evidence
 retention, and verified terminal disposition. WORK-300 adds signed source
 approvals, exact opaque mappings, protected Intake receipts/checkpoints,
 General Office Case creation, and deterministic cross-domain fixtures. The
-active next task is `D2I-WORK-400 - Work Queue, Scheduler and Case Ownership`.
-Queue, Scheduler, ownership transfer, and production connectors remain
-unimplemented.
+WORK-400 adds protected deterministic Queue reconciliation, exclusive lease
+chains, signed-pool ownership reassignment, restart recovery, and a
+non-executable Work Grant. The active next task is `D2I-WORK-500 - Situation
+Model and Adaptive Planner`. Production connectors remain unimplemented.
 
 ## Active Product Goal
 

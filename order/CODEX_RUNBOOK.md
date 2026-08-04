@@ -32,8 +32,8 @@ Track K is complete. Do not create KRN-600.
 - `D2I-WORK-100` Role Contract v1 - **complete**
 - `D2I-WORK-200` Work Item / Case Contract v1 - **complete**
 - `D2I-WORK-300` Work Radar and Work Intake - **complete**
-- `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **active**
-- `D2I-WORK-500` Situation Model and Adaptive Planner
+- `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **complete**
+- `D2I-WORK-500` Situation Model and Adaptive Planner - **active**
 - `D2I-WORK-600` Episodic Memory and Case Learning Records
 - `D2I-WORK-700` Role-level Reporting, SLA and Escalation
 - `D2I-WORK-800` Open Digital Employee Shadow Mode
@@ -65,9 +65,9 @@ and verified terminal disposition. WORK-300 adds exact source registration,
 signed `WorkSourceApprovalV1`, typed hash-only signals, deterministic Intake,
 General Office Case creation, cross-domain replay, protected
 receipts/checkpoints, and exactly-one Case crash recovery. The next prompt is
-`D2I-WORK-400`; it adds
-Queue, Scheduler, Case claim, lease, reassignment, and ownership without
-changing WORK-300 source authority.
+WORK-400 adds deterministic Queue projection, one-shot scheduling, exclusive
+lease chains, signed-pool reassignment, protected recovery, and a
+non-executable planner handoff without changing WORK-300 source authority.
 
 Official WORK-200 checks:
 
@@ -91,12 +91,25 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -Mode All
 ```
 
+Official WORK-400 checks:
+
+```powershell
+cargo test -p d2i-work-queue --all-features
+cargo test -p d2i-desktop --test work_queue_scheduler
+
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-work-queue-scheduler-v1.ps1 `
+  -Mode All
+```
+
 Inspection-only CLI examples:
 
 ```powershell
 cargo run -p d2i-work-case --bin d2i-case -- work-item validate --input work-item.json
 cargo run -p d2i-work-case --bin d2i-case -- case inspect --case case-instance.json
 cargo run -p d2i-work-case --bin d2i-case -- terminal verify --input terminal-record.json
+cargo run -p d2i-work-queue --bin d2i-queue -- snapshot verify --input snapshot.json
+cargo run -p d2i-work-queue --bin d2i-queue -- decision verify --input decision.json
 ```
 
 ---

@@ -21,6 +21,7 @@ members = [
     "crates/d2i-role-contract",
     "crates/d2i-work-case",
     "crates/d2i-work-intake",
+    "crates/d2i-work-queue",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

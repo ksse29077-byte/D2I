@@ -30,6 +30,7 @@ mod windows_wfp_broker_runtime;
 mod windows_wfp_self_test;
 mod windows_worker;
 mod work_intake;
+mod work_queue;
 
 pub use adapter::{
     ActionOutcome, ActionOutcomeStatus, AdapterExecution, DesktopAdapter, DesktopAdapterDescriptor,
@@ -223,6 +224,11 @@ pub use windows_wfp_self_test::{
 pub use work_intake::{
     initialize_work_intake_ledger, verify_work_intake_ledger, WorkIntakeLedgerEventKindV1,
     WorkIntakeLedgerRecordV1, WorkIntakeLedgerV1, WorkIntakeLedgerVerificationV1,
+};
+pub use work_queue::{
+    initialize_work_queue_ledger, verify_work_queue_ledger, WorkQueueCoordinatorV1,
+    WorkQueueLedgerEventKindV1, WorkQueueLedgerRecordV1, WorkQueueLedgerV1,
+    WorkQueueLedgerVerificationV1,
 };
 
 use sha2::{Digest, Sha256};

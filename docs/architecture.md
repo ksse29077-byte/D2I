@@ -265,6 +265,23 @@ The canonical WORK-300 product E2E uses the General Office Operations Employee
 and `office.record.update`. HR, IT, and Safety examples prove cross-domain
 compatibility without adding those work classes to Core.
 
+WORK-400 adds a platform-neutral coordination layer after persistent Case
+creation:
+
+```text
+verified non-terminal Case ledger state -> deterministic Queue projection
+-> trusted caller one-shot Scheduler tick -> exclusive hash-chained lease
+-> non-executable CaseWorkGrantV1
+-> release/expiry or signed-pool ownership reassignment
+```
+
+The Case ledger remains authoritative. `CaseOwnershipBindingV1` remains the
+immutable generation-1 origin record; `CurrentCaseOwnershipStateV1` is an
+additive protected overlay. The Desktop Queue ledger owns DACL-protected
+single-writer persistence and replay. Scheduler code reads no clock, random
+source, environment, process, or network, and no WORK-400 artifact can invoke
+Goal, policy, activation, KRN, or an adapter.
+
 Phase 6 adds:
 
 ```text

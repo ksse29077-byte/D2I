@@ -461,8 +461,30 @@ General Office, HR, IT, and Safety identifiers are fixture-owned opaque values.
 Core contains no domain classifier or taxonomy that untrusted content can
 select or extend.
 
-Remaining risks include production source transport authentication, external
-chain-head anchoring, deployment identity/key custody, multi-source atomicity,
-enterprise connector hardening, schedule time authority, Queue/Scheduler
-concurrency, and Case ownership transfer. These belong to EDGE-100 or
-WORK-400 and create no WORK-300 fallback authority.
+At the WORK-300 boundary, production source transport authentication,
+external chain-head anchoring, deployment identity/key custody, multi-source
+atomicity, enterprise connector hardening, trusted Scheduler time, concurrent
+claims, and ownership transfer were intentionally deferred. WORK-400 closes
+the local Queue/claim/transfer portion below without creating WORK-300
+fallback authority; production transport remains an EDGE concern.
+
+## Deterministic Queue And Ownership Coordination
+
+WORK-400 addresses duplicate enqueue, stale Case/Role/Queue projections,
+ambiguous entries, input-order manipulation, untrusted urgency claims,
+concurrent claim, lease epoch replay, expired-owner renewal, transfer outside
+an approved Role pool, ownership history deletion, and protected-ledger
+rollback or tampering.
+
+Queue entries bind exact Case, ownership, Intake receipt, and ledger hashes.
+The Scheduler accepts only trusted caller time and closed lane/reason enums;
+integer aging cannot expand authority. Claims advance a per-Case lease chain.
+Transfers require no active lease and an exact signed pool containing the
+target Role's organization, contract, delegation, work class, responsibility,
+applications, integrations, capabilities, risk, lifetime, and capacity.
+
+Leases and Work Grants are explicitly non-executable. Rejections occur before
+Goal, planner, module, policy, activation, adapter, credential, process, or
+network work. Remaining risks are external time attestation, external
+chain-head anchoring, multi-node consensus, and production connector identity;
+these do not create fallback authority in WORK-400.

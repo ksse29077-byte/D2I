@@ -21,7 +21,7 @@ accepted_work_classes:
   - work_class_id: office.record.update
     contract_version: 1.0.0
     responsibility_id: internal-record-maintenance
-    allowed_priority_classes: [normal]
+    allowed_priority_classes: [routine, normal, elevated, urgent]
     sla_profile_id: office-standard
     maximum_risk: read_only
     required_application_pack_ids: [kernel-e2e-name-save]

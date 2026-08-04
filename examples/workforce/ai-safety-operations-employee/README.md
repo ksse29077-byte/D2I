@@ -15,3 +15,7 @@ The `intake/` directory adds the WORK-300 local approved event feed. Its typed
 fixture discovers one training-compliance signal, reuses WORK-200 admission,
 creates at most one persistent Case, and repairs receipt/checkpoint state after
 restart. It performs no enterprise API call, Task, activation, or adapter use.
+
+For WORK-400, Safety remains a domain-owned compatibility fixture. Its opaque
+work class follows the same Queue policy, ordering, lease, and ownership
+contract as General Office, HR, and IT; Core contains no Safety branch.
