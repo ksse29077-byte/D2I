@@ -89,10 +89,10 @@ impl WindowsJobLimits {
             ));
         }
         if self.per_process_memory_bytes < 16 * 1024 * 1024
-            || self.per_process_memory_bytes > 4 * 1024 * 1024 * 1024
+            || self.per_process_memory_bytes > 8 * 1024 * 1024 * 1024
         {
             return Err(WindowsHostError::new(
-                "per-process memory limit must be within 16 MiB..=4 GiB",
+                "per-process memory limit must be within 16 MiB..=8 GiB",
             ));
         }
         Ok(self)
@@ -205,6 +205,51 @@ pub fn spawn_zero_capability_appcontainer(
         executable,
         arguments,
         working_directory,
+        None,
+        None,
+    )
+}
+
+/// Starts one zero-capability AppContainer child suspended, assigns it to the
+/// supplied Job Object, verifies its identity, and only then resumes it.
+pub fn spawn_zero_capability_appcontainer_in_job(
+    profile_name: &str,
+    expected_profile_sid: &str,
+    executable: &Path,
+    arguments: &[String],
+    working_directory: &Path,
+    job: &WindowsJob,
+) -> Result<WindowsAppContainerChild, WindowsHostError> {
+    platform::spawn_zero_capability_appcontainer(
+        profile_name,
+        expected_profile_sid,
+        executable,
+        arguments,
+        working_directory,
+        None,
+        Some(job),
+    )
+}
+
+/// Starts one zero-capability AppContainer child in a Job Object with only the
+/// explicitly supplied environment variables.
+pub fn spawn_zero_capability_appcontainer_in_job_with_environment(
+    profile_name: &str,
+    expected_profile_sid: &str,
+    executable: &Path,
+    arguments: &[String],
+    working_directory: &Path,
+    environment: &[(String, String)],
+    job: &WindowsJob,
+) -> Result<WindowsAppContainerChild, WindowsHostError> {
+    platform::spawn_zero_capability_appcontainer(
+        profile_name,
+        expected_profile_sid,
+        executable,
+        arguments,
+        working_directory,
+        Some(environment),
+        Some(job),
     )
 }
 
@@ -332,10 +377,10 @@ mod platform {
         CreateProcessW, DeleteProcThreadAttributeList, GetCurrentProcess, GetCurrentProcessId,
         GetExitCodeProcess, InitializeProcThreadAttributeList, OpenProcess, OpenProcessToken,
         QueryFullProcessImageNameW, ResumeThread, TerminateProcess, UpdateProcThreadAttribute,
-        WaitForSingleObject, CREATE_NO_WINDOW, CREATE_SUSPENDED, EXTENDED_STARTUPINFO_PRESENT,
-        LPPROC_THREAD_ATTRIBUTE_LIST, PROCESS_INFORMATION, PROCESS_NAME_WIN32,
-        PROCESS_QUERY_LIMITED_INFORMATION, PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES,
-        STARTUPINFOEXW,
+        WaitForSingleObject, CREATE_NO_WINDOW, CREATE_SUSPENDED, CREATE_UNICODE_ENVIRONMENT,
+        EXTENDED_STARTUPINFO_PRESENT, LPPROC_THREAD_ATTRIBUTE_LIST, PROCESS_INFORMATION,
+        PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION,
+        PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES, STARTUPINFOEXW,
     };
 
     pub(super) fn create_job(limits: WindowsJobLimits) -> Result<WindowsJob, WindowsHostError> {
@@ -598,6 +643,8 @@ mod platform {
         executable: &Path,
         arguments: &[String],
         working_directory: &Path,
+        environment: Option<&[(String, String)]>,
+        job: Option<&WindowsJob>,
     ) -> Result<WindowsAppContainerChild, WindowsHostError> {
         validate_deployment_path(executable)?;
         validate_deployment_path(working_directory)?;
@@ -680,6 +727,14 @@ mod platform {
         let executable_wide = wide_path(executable)?;
         let working_directory_wide = wide_path(working_directory)?;
         let mut command_line = windows_command_line(executable.as_os_str(), arguments)?;
+        let environment_block = environment.map(windows_environment_block).transpose()?;
+        let environment_pointer = environment_block
+            .as_ref()
+            .map(|value| value.as_ptr().cast());
+        let mut creation_flags = EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED | CREATE_NO_WINDOW;
+        if environment_block.is_some() {
+            creation_flags |= CREATE_UNICODE_ENVIRONMENT;
+        }
         let mut startup = STARTUPINFOEXW::default();
         startup.StartupInfo.cb = u32::try_from(size_of::<STARTUPINFOEXW>())
             .map_err(|_| WindowsHostError::new("STARTUPINFOEXW size overflow"))?;
@@ -694,8 +749,8 @@ mod platform {
                 None,
                 None,
                 false,
-                EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED | CREATE_NO_WINDOW,
-                None,
+                creation_flags,
+                environment_pointer,
                 PCWSTR(working_directory_wide.as_ptr()),
                 &raw const startup.StartupInfo,
                 &raw mut process_information,
@@ -721,6 +776,23 @@ mod platform {
             // SAFETY: hProcess is live and owned by this function.
             let _ = unsafe { CloseHandle(process_information.hProcess) };
             return Err(error);
+        }
+        if let Some(job) = job {
+            // SAFETY: both handles are live and owned by the caller/function. The
+            // process is still suspended, so no descendant can escape assignment.
+            let assignment =
+                unsafe { AssignProcessToJobObject(job.handle, process_information.hProcess) };
+            if let Err(error) = assignment {
+                // SAFETY: both handles were returned by CreateProcessW and are live.
+                let _ = unsafe { TerminateProcess(process_information.hProcess, 1) };
+                // SAFETY: hThread is live and owned by this function.
+                let _ = unsafe { CloseHandle(process_information.hThread) };
+                // SAFETY: hProcess is live and owned by this function.
+                let _ = unsafe { CloseHandle(process_information.hProcess) };
+                return Err(WindowsHostError::new(format!(
+                    "AssignProcessToJobObject for AppContainer failed: {error}"
+                )));
+            }
         }
         // SAFETY: hThread is the suspended primary thread returned by CreateProcessW.
         let resume_result = unsafe { ResumeThread(process_information.hThread) };
@@ -1263,6 +1335,55 @@ mod platform {
         Ok(output)
     }
 
+    fn windows_environment_block(
+        environment: &[(String, String)],
+    ) -> Result<Vec<u16>, WindowsHostError> {
+        if environment.is_empty() || environment.len() > 32 {
+            return Err(WindowsHostError::new(
+                "AppContainer environment count is outside 1..=32",
+            ));
+        }
+        let mut entries = environment.to_vec();
+        entries.sort_by_key(|(name, _)| name.to_ascii_uppercase());
+        for pair in entries.windows(2) {
+            if pair[0].0.eq_ignore_ascii_case(&pair[1].0) {
+                return Err(WindowsHostError::new(
+                    "AppContainer environment contains a duplicate name",
+                ));
+            }
+        }
+        let mut output = Vec::new();
+        for (name, value) in entries {
+            if name.is_empty()
+                || name.len() > 128
+                || !name.bytes().enumerate().all(|(index, byte)| {
+                    if index == 0 {
+                        byte.is_ascii_alphabetic() || byte == b'_'
+                    } else {
+                        byte.is_ascii_alphanumeric() || byte == b'_'
+                    }
+                })
+                || value.len() > 32_768
+                || value.contains('\0')
+            {
+                return Err(WindowsHostError::new(
+                    "AppContainer environment entry is outside supported bounds",
+                ));
+            }
+            output.extend(OsStr::new(&name).encode_wide());
+            output.push(b'=' as u16);
+            output.extend(OsStr::new(&value).encode_wide());
+            output.push(0);
+        }
+        output.push(0);
+        if output.len() >= 32_767 {
+            return Err(WindowsHostError::new(
+                "AppContainer environment block exceeds Windows bounds",
+            ));
+        }
+        Ok(output)
+    }
+
     fn append_windows_argument(
         output: &mut Vec<u16>,
         argument: &OsStr,
@@ -1443,6 +1564,8 @@ mod platform {
         _executable: &Path,
         _arguments: &[String],
         _working_directory: &Path,
+        _environment: Option<&[(String, String)]>,
+        _job: Option<&WindowsJob>,
     ) -> Result<WindowsAppContainerChild, WindowsHostError> {
         Err(unavailable())
     }

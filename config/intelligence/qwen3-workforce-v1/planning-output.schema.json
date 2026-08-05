@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "candidates", "reason_codes", "confidence_millionths"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"enum": ["succeeded", "clarification_required", "escalation_required", "unsupported"]},
+    "candidates": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/candidate"}},
+    "reason_codes": {"$ref": "#/$defs/reasons"},
+    "confidence_millionths": {"type": "integer", "minimum": 0, "maximum": 1000000}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"},
+    "hash": {"type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$"},
+    "ids": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "reasons": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"enum": ["ambiguous_objective", "authority_expansion", "conflicting_evidence", "conflicting_objective", "credential_requested", "insufficient_evidence", "invalid_output", "irreversible_requested", "missing_scope", "missing_success_criteria", "missing_value", "no_eligible_action", "policy_unknown", "prompt_injection", "provider_unavailable", "resource_limit", "stale_input", "unsupported_locale", "unsupported_operation"]}},
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "subgoal_id", "semantic_intent", "semantic_target_id", "capability_id", "approved_value_sha256", "required_precondition_ids", "expected_postcondition_ids", "risk_estimate", "reversible", "disposition", "confidence_millionths", "uncertainty", "evidence_refs"],
+      "properties": {
+        "candidate_id": {"$ref": "#/$defs/id"},
+        "subgoal_id": {"$ref": "#/$defs/id"},
+        "semantic_intent": {"$ref": "#/$defs/id"},
+        "semantic_target_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "capability_id": {"oneOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "approved_value_sha256": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+        "required_precondition_ids": {"$ref": "#/$defs/ids"},
+        "expected_postcondition_ids": {"$ref": "#/$defs/ids"},
+        "risk_estimate": {"enum": ["read_only", "reversible", "business_state_change", "high_criticality"]},
+        "reversible": {"type": "boolean"},
+        "disposition": {"enum": ["action", "information_gathering", "clarification", "escalation", "verify_only"]},
+        "confidence_millionths": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "uncertainty": {"$ref": "#/$defs/reasons"},
+        "evidence_refs": {"$ref": "#/$defs/ids"}
+      }
+    }
+  }
+}

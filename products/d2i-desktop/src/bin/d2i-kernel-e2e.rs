@@ -91,6 +91,7 @@ const FIXTURE_SCRIPT_BYTES: &[u8] =
 #[serde(rename_all = "snake_case")]
 enum ScenarioMode {
     Happy,
+    AlreadyCorrect,
     Recovery,
     Unsafe,
     Clarification,
@@ -100,16 +101,21 @@ impl ScenarioMode {
     fn parse(value: &str) -> Result<Self, String> {
         match value.to_ascii_lowercase().as_str() {
             "happy" => Ok(Self::Happy),
+            "already_correct" => Ok(Self::AlreadyCorrect),
             "recovery" => Ok(Self::Recovery),
             "unsafe" => Ok(Self::Unsafe),
             "clarification" => Ok(Self::Clarification),
-            _ => Err("mode must be happy, recovery, unsafe, or clarification".to_owned()),
+            _ => Err(
+                "mode must be happy, already_correct, recovery, unsafe, or clarification"
+                    .to_owned(),
+            ),
         }
     }
 
     const fn fixture_mode(self) -> &'static str {
         match self {
             Self::Happy => "happy",
+            Self::AlreadyCorrect => "already_correct",
             Self::Recovery => "recovery",
             Self::Unsafe => "unsafe",
             Self::Clarification => "clarification",
@@ -118,7 +124,7 @@ impl ScenarioMode {
 
     const fn expected_outcome(self) -> KernelFinalOutcomeV1 {
         match self {
-            Self::Happy | Self::Recovery => KernelFinalOutcomeV1::Completed,
+            Self::Happy | Self::AlreadyCorrect | Self::Recovery => KernelFinalOutcomeV1::Completed,
             Self::Unsafe => KernelFinalOutcomeV1::Escalated,
             Self::Clarification => KernelFinalOutcomeV1::ClarificationRequired,
         }
@@ -996,15 +1002,19 @@ fn load_application_pack(path: &Path) -> Result<ApplicationPack, DesktopError> {
     Ok(pack)
 }
 
-fn task_plan() -> Result<PlanGraph, DesktopError> {
-    let definitions = [
-        ("observe", PlanNodeKind::Observe),
-        ("select-name-capability", PlanNodeKind::SelectCapability),
-        ("propose-name-action", PlanNodeKind::ProposeAction),
-        ("policy-name", PlanNodeKind::PolicyGate),
-        ("activate-name", PlanNodeKind::ActivationGate),
-        ("execute-name", PlanNodeKind::Execute),
-        ("verify-name", PlanNodeKind::Verify),
+fn task_plan(include_name_update: bool) -> Result<PlanGraph, DesktopError> {
+    let mut definitions = vec![("observe", PlanNodeKind::Observe)];
+    if include_name_update {
+        definitions.extend([
+            ("select-name-capability", PlanNodeKind::SelectCapability),
+            ("propose-name-action", PlanNodeKind::ProposeAction),
+            ("policy-name", PlanNodeKind::PolicyGate),
+            ("activate-name", PlanNodeKind::ActivationGate),
+            ("execute-name", PlanNodeKind::Execute),
+            ("verify-name", PlanNodeKind::Verify),
+        ]);
+    }
+    definitions.extend([
         ("select-save-capability", PlanNodeKind::SelectCapability),
         ("propose-save-action", PlanNodeKind::ProposeAction),
         ("policy-save", PlanNodeKind::PolicyGate),
@@ -1012,7 +1022,7 @@ fn task_plan() -> Result<PlanGraph, DesktopError> {
         ("execute-save", PlanNodeKind::Execute),
         ("verify-save", PlanNodeKind::Verify),
         ("return", PlanNodeKind::Return),
-    ];
+    ]);
     let nodes = definitions
         .iter()
         .map(|(node_id, kind)| PlanNode {
@@ -1033,7 +1043,12 @@ fn task_plan() -> Result<PlanGraph, DesktopError> {
         .collect::<Vec<_>>();
     let plan = PlanGraph {
         schema_version: 1,
-        plan_generation_id: "kernel-e2e-plan-v1".to_owned(),
+        plan_generation_id: if include_name_update {
+            "kernel-e2e-plan-v1"
+        } else {
+            "kernel-e2e-save-only-plan-v1"
+        }
+        .to_owned(),
         entry_node: "observe".to_owned(),
         nodes,
         edges,
@@ -2709,12 +2724,16 @@ fn build_final_verification(
     let all_passed = required.iter().all(|criterion| criterion.passed)
         && protected.iter().all(|criterion| criterion.passed);
     let verdict = match mode {
-        ScenarioMode::Happy | ScenarioMode::Recovery if all_passed => {
+        ScenarioMode::Happy | ScenarioMode::AlreadyCorrect | ScenarioMode::Recovery
+            if all_passed =>
+        {
             FinalVerificationVerdictV1::Passed
         }
         ScenarioMode::Unsafe => FinalVerificationVerdictV1::Unsafe,
         ScenarioMode::Clarification => FinalVerificationVerdictV1::ClarificationRequired,
-        ScenarioMode::Happy | ScenarioMode::Recovery => FinalVerificationVerdictV1::Failed,
+        ScenarioMode::Happy | ScenarioMode::AlreadyCorrect | ScenarioMode::Recovery => {
+            FinalVerificationVerdictV1::Failed
+        }
     };
     let goal_progress = if verdict == FinalVerificationVerdictV1::Passed {
         GoalProgress::Complete
@@ -2759,10 +2778,14 @@ fn build_work_report(
         .collect::<Vec<_>>();
     let completed = final_verification.verdict == FinalVerificationVerdictV1::Passed;
     let incomplete_items = match mode {
-        ScenarioMode::Happy | ScenarioMode::Recovery if completed => Vec::new(),
+        ScenarioMode::Happy | ScenarioMode::AlreadyCorrect | ScenarioMode::Recovery
+            if completed =>
+        {
+            Vec::new()
+        }
         ScenarioMode::Unsafe => vec!["protected-invariant-violation".to_owned()],
         ScenarioMode::Clarification => vec!["ambiguous-employee-name-target".to_owned()],
-        ScenarioMode::Happy | ScenarioMode::Recovery => {
+        ScenarioMode::Happy | ScenarioMode::AlreadyCorrect | ScenarioMode::Recovery => {
             vec!["final-goal-verification-failed".to_owned()]
         }
     };
@@ -3478,8 +3501,6 @@ fn run_scenario(
         ));
     }
     let goal_sha256 = canonical_sha256(&goal).map_err(selection_error)?;
-    let plan = task_plan()?;
-    let plan_sha256 = canonical_sha256(&plan).map_err(selection_error)?;
     let powershell = powershell_path()?;
     let powershell_hash =
         sha(&fs::read(&powershell).map_err(|error| io_error("powershell", error))?);
@@ -3499,7 +3520,25 @@ fn run_scenario(
     assert_required_elements(&initial_observation.snapshot, args.mode)?;
     let initial = initial_observation.snapshot;
     let initial_target = initial_observation.target;
-    let initial_world = world_state(&goal, &initial, &plan, "select-name-capability")?;
+    let input_already_correct = if args.mode == ScenarioMode::Clarification {
+        false
+    } else {
+        observed_text(element_by_automation_id(&initial, "employee-name-input")?)
+            == Some(EXPECTED_NAME)
+    };
+    if input_already_correct != (args.mode == ScenarioMode::AlreadyCorrect) {
+        return Err(DesktopError::Integrity(
+            "fixture input state differs from the requested adaptive path".to_owned(),
+        ));
+    }
+    let plan = task_plan(!input_already_correct)?;
+    let plan_sha256 = canonical_sha256(&plan).map_err(selection_error)?;
+    let current_step = if input_already_correct {
+        "select-save-capability"
+    } else {
+        "select-name-capability"
+    };
+    let initial_world = world_state(&goal, &initial, &plan, current_step)?;
     let world_sha256 = canonical_sha256(&initial_world).map_err(selection_error)?;
     let mut runtime = if let Some(binding) = &role_binding {
         CognitiveKernelTaskRuntimeV1::begin_role_bound(
@@ -3561,50 +3600,55 @@ fn run_scenario(
             ));
         }
     } else {
-        runtime.execute_next_step(
-            "name-action-cycle".to_owned(),
-            vec![initial.state_hash.clone(), plan_sha256.clone()],
-            tick,
-        )?;
-        tick = tick.saturating_add(1);
-        let name = run_action_cycle(
-            args,
-            temp,
-            &mut modules,
-            &configuration,
-            &initial_target,
-            &initial,
-            &instruction,
-            &goal,
-            &pack,
-            &plan,
-            ActionStepKind::SetName,
-            "name",
-            1,
-            now,
-        )?;
-        if name.verdict != VerificationVerdictV2::Passed {
-            return Err(DesktopError::Integrity(format!(
-                "actual name SetValue did not independently verify: {}",
-                name.verification_diagnostic
-            )));
-        }
-        runtime.record_action_verified(
-            "name-action-verified".to_owned(),
-            vec![name.receipt_sha256.clone()],
-            name.verified_result_sha256.clone(),
-            tick,
-        )?;
-        tick = tick.saturating_add(1);
-        runtime.advance(
-            "name-action-advanced".to_owned(),
-            vec![name.verified_result_sha256.clone()],
-            tick,
-        )?;
-        tick = tick.saturating_add(1);
-        audit_heads.extend(name.audit_chain_heads.iter().cloned());
-        let save_source = name.fresh.clone();
-        executions.push(name);
+        let save_source = if input_already_correct {
+            initial.clone()
+        } else {
+            runtime.execute_next_step(
+                "name-action-cycle".to_owned(),
+                vec![initial.state_hash.clone(), plan_sha256.clone()],
+                tick,
+            )?;
+            tick = tick.saturating_add(1);
+            let name = run_action_cycle(
+                args,
+                temp,
+                &mut modules,
+                &configuration,
+                &initial_target,
+                &initial,
+                &instruction,
+                &goal,
+                &pack,
+                &plan,
+                ActionStepKind::SetName,
+                "name",
+                1,
+                now,
+            )?;
+            if name.verdict != VerificationVerdictV2::Passed {
+                return Err(DesktopError::Integrity(format!(
+                    "actual name SetValue did not independently verify: {}",
+                    name.verification_diagnostic
+                )));
+            }
+            runtime.record_action_verified(
+                "name-action-verified".to_owned(),
+                vec![name.receipt_sha256.clone()],
+                name.verified_result_sha256.clone(),
+                tick,
+            )?;
+            tick = tick.saturating_add(1);
+            runtime.advance(
+                "name-action-advanced".to_owned(),
+                vec![name.verified_result_sha256.clone()],
+                tick,
+            )?;
+            tick = tick.saturating_add(1);
+            audit_heads.extend(name.audit_chain_heads.iter().cloned());
+            let fresh = name.fresh.clone();
+            executions.push(name);
+            fresh
+        };
 
         runtime.execute_next_step(
             "save-action-cycle".to_owned(),
@@ -3625,7 +3669,7 @@ fn run_scenario(
             &plan,
             ActionStepKind::Save,
             "save-1",
-            2,
+            if input_already_correct { 1 } else { 2 },
             now,
         )?;
         runtime.record_action_verified(
@@ -3638,7 +3682,7 @@ fn run_scenario(
         audit_heads.extend(save.audit_chain_heads.iter().cloned());
 
         match args.mode {
-            ScenarioMode::Happy => {
+            ScenarioMode::Happy | ScenarioMode::AlreadyCorrect => {
                 if save.verdict != VerificationVerdictV2::Passed {
                     return Err(DesktopError::Integrity(format!(
                         "happy save action did not pass verification: {}",

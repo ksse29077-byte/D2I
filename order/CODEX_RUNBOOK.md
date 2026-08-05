@@ -33,8 +33,8 @@ Track K is complete. Do not create KRN-600.
 - `D2I-WORK-200` Work Item / Case Contract v1 - **complete**
 - `D2I-WORK-300` Work Radar and Work Intake - **complete**
 - `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **complete**
-- `D2I-WORK-500` Situation Model and Adaptive Planner - **active**
-- `D2I-WORK-600` Episodic Memory and Case Learning Records
+- `D2I-WORK-500` Situation Model and Adaptive Planner - **complete**
+- `D2I-WORK-600` Episodic Memory and Case Learning Records - **active**
 - `D2I-WORK-700` Role-level Reporting, SLA and Escalation
 - `D2I-WORK-800` Open Digital Employee Shadow Mode
 - `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
@@ -101,6 +101,25 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/workforce/run-work-queue-scheduler-v1.ps1 `
   -Mode All
 ```
+
+Official WORK-500 checks require approved local artifacts:
+
+```powershell
+cargo test -p d2i-situation-model --all-features
+cargo test -p d2i-intelligence-provider --all-features
+cargo test -p d2i-adaptive-planner --all-features
+cargo test -p d2i-desktop --test adaptive_case
+
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-situation-adaptive-planner-v1.ps1 `
+  -Mode Completion `
+  -Runtime C:\path\to\llama-cli.exe `
+  -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
+  -OutputRoot target\d2i-workforce-planner\completion
+```
+
+`All` is deterministic contract evidence only. WORK-500 completion requires
+`Completion` with `product_intelligence_evidence=true`.
 
 Inspection-only CLI examples:
 

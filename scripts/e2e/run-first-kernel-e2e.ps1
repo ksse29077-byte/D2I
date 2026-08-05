@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Happy', 'Recovery', 'Unsafe', 'Clarification', 'All')]
+    [ValidateSet('Happy', 'AlreadyCorrect', 'Adaptive', 'Recovery', 'Unsafe', 'Clarification', 'All')]
     [string]$Mode = 'All',
 
     [string]$OutputRoot,
@@ -12,6 +12,17 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $previousTargetDir = $env:CARGO_TARGET_DIR
 $terminalExitCode = 13
+
+function ConvertTo-ComparableFullPath([string]$Path) {
+    $fullPath = [IO.Path]::GetFullPath($Path)
+    if ($fullPath.StartsWith('\\?\UNC\', [StringComparison]::OrdinalIgnoreCase)) {
+        return '\\' + $fullPath.Substring(8)
+    }
+    if ($fullPath.StartsWith('\\?\', [StringComparison]::OrdinalIgnoreCase)) {
+        return $fullPath.Substring(4)
+    }
+    return $fullPath
+}
 
 function Get-Sha256([string]$Path) {
     return 'sha256:' + (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -164,8 +175,8 @@ try {
         $runId = '{0}-{1}-{2}' -f [DateTimeOffset]::UtcNow.ToString('yyyyMMddTHHmmssZ'), $shortHead, $PID
         $OutputRoot = Join-Path $repoRoot "target/d2i-e2e/$runId"
     }
-    $runRoot = [IO.Path]::GetFullPath($OutputRoot)
-    $targetRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot 'target'))
+    $runRoot = ConvertTo-ComparableFullPath $OutputRoot
+    $targetRoot = ConvertTo-ComparableFullPath (Join-Path $repoRoot 'target')
     if (-not $runRoot.StartsWith("$targetRoot$([IO.Path]::DirectorySeparatorChar)", [StringComparison]::OrdinalIgnoreCase)) {
         throw 'OutputRoot must remain under repository target/'
     }
@@ -174,7 +185,16 @@ try {
     }
     New-Item -ItemType Directory -Path $runRoot -Force | Out-Null
     $logRoot = Join-Path $runRoot 'build-logs'
-    $buildRoot = Join-Path $runRoot 'build'
+    $buildRoot = if ($env:D2I_KERNEL_E2E_BUILD_ROOT) {
+        $candidate = ConvertTo-ComparableFullPath $env:D2I_KERNEL_E2E_BUILD_ROOT
+        if (-not $candidate.StartsWith("$targetRoot$([IO.Path]::DirectorySeparatorChar)", [StringComparison]::OrdinalIgnoreCase)) {
+            throw 'D2I_KERNEL_E2E_BUILD_ROOT must remain under repository target/'
+        }
+        $candidate
+    }
+    else {
+        Join-Path $runRoot 'build'
+    }
     New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
 
     $rootTarget = Join-Path $buildRoot 'root'
@@ -213,14 +233,21 @@ try {
         if ($summaries[0].normalized_replay_sha256 -ne $summaries[1].normalized_replay_sha256) {
             throw 'normalized happy replay hashes differ'
         }
+        $summaries.Add((Invoke-Scenario 'already-correct' 'already_correct' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
         $summaries.Add((Invoke-Scenario 'recovery' 'recovery' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
         $summaries.Add((Invoke-Scenario 'unsafe' 'unsafe' 11 'escalated' $runner $worker $moduleHosts $moduleHashes $runRoot))
         $summaries.Add((Invoke-Scenario 'clarification' 'clarification' 10 'clarification_required' $runner $worker $moduleHosts $moduleHashes $runRoot))
         $terminalExitCode = 0
     }
+    elseif ($Mode -eq 'Adaptive') {
+        $summaries.Add((Invoke-Scenario 'happy' 'happy' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'already_correct' 'already_correct' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $terminalExitCode = 0
+    }
     else {
         $contract = switch ($Mode) {
             'Happy' { @('happy', 0, 'completed') }
+            'AlreadyCorrect' { @('already_correct', 0, 'completed') }
             'Recovery' { @('recovery', 0, 'completed') }
             'Unsafe' { @('unsafe', 11, 'escalated') }
             'Clarification' { @('clarification', 10, 'clarification_required') }

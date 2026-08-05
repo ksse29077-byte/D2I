@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/goal-understanding-result-v1.schema.json",
+  "title": "GoalUnderstandingResultV1",
+  "oneOf": [
+    {"$ref": "#/$defs/draft_result"},
+    {"$ref": "#/$defs/clarification_result"},
+    {"$ref": "#/$defs/unsupported_result"}
+  ],
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"}, "hash": {"type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$"}, "text": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "texts": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}, "small_texts": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "reason": {"enum": ["ambiguous_objective", "authority_expansion", "conflicting_evidence", "conflicting_objective", "credential_requested", "insufficient_evidence", "invalid_output", "irreversible_requested", "missing_scope", "missing_success_criteria", "missing_value", "no_eligible_action", "policy_unknown", "prompt_injection", "provider_unavailable", "resource_limit", "stale_input", "unsupported_locale", "unsupported_operation"]},
+    "reasons": {"type": "array", "minItems": 1, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/reason"}},
+    "criterion": {"type": "object", "additionalProperties": false, "required": ["target_state_id", "expected_value_class", "required"], "properties": {"target_state_id": {"$ref": "#/$defs/id"}, "expected_value_class": {"$ref": "#/$defs/id"}, "required": {"type": "boolean"}}},
+    "draft": {"type": "object", "additionalProperties": false, "required": ["objective", "scope", "required_outcomes", "constraints", "success_criteria", "forbidden_outcomes", "risk_estimate", "confirmation_suggestion", "ambiguities", "missing_fields", "confidence_millionths", "evidence_refs"], "properties": {"objective": {"$ref": "#/$defs/text"}, "scope": {"type": "array", "minItems": 1, "maxItems": 128, "items": {"$ref": "#/$defs/text"}}, "required_outcomes": {"type": "array", "minItems": 1, "maxItems": 128, "items": {"$ref": "#/$defs/text"}}, "constraints": {"$ref": "#/$defs/texts"}, "success_criteria": {"type": "array", "minItems": 1, "maxItems": 128, "items": {"$ref": "#/$defs/criterion"}}, "forbidden_outcomes": {"$ref": "#/$defs/texts"}, "risk_estimate": {"enum": ["read_only", "reversible", "business_state_change", "high_criticality"]}, "confirmation_suggestion": {"enum": ["never", "before_risky_action", "before_irreversible_action", "always"]}, "ambiguities": {"maxItems": 0}, "missing_fields": {"maxItems": 0}, "confidence_millionths": {"type": "integer", "minimum": 0, "maximum": 1000000}, "evidence_refs": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+    "draft_result": {"type": "object", "additionalProperties": false, "required": ["status", "request_id", "invocation_sha256", "draft", "result_sha256"], "properties": {"status": {"const": "draft"}, "request_id": {"$ref": "#/$defs/id"}, "invocation_sha256": {"$ref": "#/$defs/hash"}, "draft": {"$ref": "#/$defs/draft"}, "result_sha256": {"$ref": "#/$defs/hash"}}},
+    "clarification_result": {"type": "object", "additionalProperties": false, "required": ["status", "request_id", "invocation_sha256", "missing_fields", "ambiguities", "questions", "reason_codes", "result_sha256"], "properties": {"status": {"const": "clarification_required"}, "request_id": {"$ref": "#/$defs/id"}, "invocation_sha256": {"$ref": "#/$defs/hash"}, "missing_fields": {"$ref": "#/$defs/small_texts"}, "ambiguities": {"$ref": "#/$defs/small_texts"}, "questions": {"type": "array", "minItems": 1, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}}, "reason_codes": {"$ref": "#/$defs/reasons"}, "result_sha256": {"$ref": "#/$defs/hash"}}},
+    "unsupported_result": {"type": "object", "additionalProperties": false, "required": ["status", "request_id", "invocation_sha256", "reason_codes", "result_sha256"], "properties": {"status": {"const": "unsupported"}, "request_id": {"$ref": "#/$defs/id"}, "invocation_sha256": {"$ref": "#/$defs/hash"}, "reason_codes": {"$ref": "#/$defs/reasons"}, "result_sha256": {"$ref": "#/$defs/hash"}}}
+  }
+}

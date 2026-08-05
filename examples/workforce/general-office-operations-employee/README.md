@@ -11,5 +11,11 @@ normal, and routine persistent Cases. The protected Queue selects exactly one,
 recovers its exclusive lease after restart, and reassigns a suspended owner to
 an exact approved standby Role. It produces only a non-executable Work Grant.
 
+WORK-500 consumes an exact Work Grant and approved hash-only Case context. Its
+actual local provider interprets the fresh name-save state and chooses one
+semantic action at a time. An incorrect value follows SetValue then Save; an
+already-correct value skips SetValue and follows Save. Both paths cross the
+existing Safe Execution Kernel and require independent verified closure.
+
 All identifiers in this directory are example-owned domain vocabulary. The
 generic Radar, Intake, Work Item, and Case crates do not interpret these names.

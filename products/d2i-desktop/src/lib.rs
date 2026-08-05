@@ -1,6 +1,7 @@
 //! Policy-gated contracts and adapters for auditable desktop autonomy.
 
 mod adapter;
+mod adaptive_case;
 mod approval;
 mod audit;
 mod case_instance;
@@ -11,6 +12,7 @@ mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
 mod executor;
+mod local_model_provider;
 mod policy;
 mod role_instance;
 mod trusted_execution;
@@ -29,6 +31,7 @@ mod windows_wfp_broker;
 mod windows_wfp_broker_runtime;
 mod windows_wfp_self_test;
 mod windows_worker;
+mod work500_model;
 mod work_intake;
 mod work_queue;
 
@@ -36,6 +39,10 @@ pub use adapter::{
     ActionOutcome, ActionOutcomeStatus, AdapterExecution, DesktopAdapter, DesktopAdapterDescriptor,
     LocalReadOnlyDesktopAdapter, OfflineConformanceDesktopAdapter, PreparedAction,
     UnavailableDesktopAdapter,
+};
+pub use adaptive_case::{
+    initialize_planner_ledger, verify_planner_ledger, AdaptiveCaseCoordinatorV1,
+    PlannerLedgerEventKindV1, PlannerLedgerRecordV1, PlannerLedgerV1, PlannerLedgerVerificationV1,
 };
 pub use approval::{sign_approval, ExecutionPermit, HumanApproval};
 pub use audit::{
@@ -136,6 +143,10 @@ pub use d2i_trusted_action_execution::{
     TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
+pub use local_model_provider::{
+    local_model_worker_main, LocalModelProcessConfigurationV1, LocalModelProcessProvider,
+    VerifiedLocalModelArtifactsV1,
+};
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,
     PolicyDecisionStatus,
@@ -220,6 +231,11 @@ pub use windows_wfp_self_test::{
     run_windows_wfp_browser_egress_self_test, WindowsWfpBrowserEgressSelfTestReport,
     WindowsWfpConnectionEvent, WindowsWfpConnectionOutcome, WindowsWfpNetworkProbe,
     WindowsWfpProbeDisposition, WindowsWfpProbeServerTelemetry, WindowsWfpSelfTestCleanup,
+};
+pub use work500_model::{
+    PinnedWork500ModelSuiteV1, Work500ModelPathsV1, Work500ProviderCallV1, WORK500_MODEL_ID,
+    WORK500_MODEL_REVISION, WORK500_MODEL_SHA256, WORK500_RUNTIME_DISTRIBUTION_SHA256,
+    WORK500_RUNTIME_EXECUTABLE_SHA256, WORK500_RUNTIME_ID, WORK500_RUNTIME_REVISION,
 };
 pub use work_intake::{
     initialize_work_intake_ledger, verify_work_intake_ledger, WorkIntakeLedgerEventKindV1,

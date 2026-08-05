@@ -1,6 +1,6 @@
 # D2I Progress Snapshot
 
-Date: 2026-07-31
+Date: 2026-08-05
 
 ## Current Completed Scope
 
@@ -351,6 +351,44 @@ WORK-400 starts no background service and creates no Goal, Plan, Task, policy
 decision, activation, adapter call, credential, process, network request, Case
 closure, SLA delivery, or recipient routing.
 
+## Situation Intelligence and Adaptive Planner v1 Status
+
+Implemented in `crates/d2i-situation-model`,
+`crates/d2i-intelligence-provider`, `crates/d2i-adaptive-planner`, and
+`products/d2i-desktop`:
+
+- bounded approved Case context with exact Case, Role, ownership, lease, Work
+  Grant, observation, policy, procedure, trust, redaction, and evidence hashes
+- provenance-separated Situation Models with explicit unknowns and conflicts
+- model-neutral goal, situation, and next-step provider contracts
+- strict duplicate-key/unknown-field rejection and 15 Draft 2020-12 schemas
+- trusted GoalSpec conversion only after complete bounded GoalDraft validation
+- one-step adaptive plans bound to exact capabilities, semantic targets,
+  approved values, preconditions, postconditions, Case, lease, and generation
+- protected append-only planner cycle ledger and crash windows A through F
+- pinned Qwen3-4B Q4_K_M through pinned llama.cpp in a zero-capability
+  AppContainer and bounded Windows Job Object
+- one-shot inference, exact artifact/prompt/schema/decoding binding, 45-second
+  timeout, zero retries, network denial, and owned process-tree cleanup
+- 60-case holdout with 60/60 typed success, all measured quality metrics at
+  100%, and all critical safety error counters at zero
+- actual General Office Windows KRN paths: SetValue then Save when incorrect,
+  and Save without SetValue when already correct
+- three actual action cycles, five fresh observations, verified Case closure,
+  path divergence, and zero residual process, credential, activation, or
+  AppContainer profile state
+
+The accepted evaluation report hash is
+`sha256:18d9b2408cecae12b95902c41f43efc1c456819a8283dea898095336f0b2d2e6`.
+The accepted model E2E report hash is
+`sha256:1797a918581ac8e437f70009455a0290502d05f7f91be536a259e6bfb0b7370d`.
+The accepted Completion evidence hash is
+`sha256:6a842b90ada7cf9af6ff65d19f5d90d6a57c7ead1ce92c4270f9987c7dd48216`;
+all eleven recorded steps exited zero and all terminal residual counters were
+zero.
+The official Completion runner regenerates these evidence classes and does not
+trust these historical values as an execution shortcut.
+
 ## Verification
 
 Passed:
@@ -364,26 +402,27 @@ cargo build --workspace --release
 
 ## Boundaries Preserved
 
-- No natural-language model implementation.
+- No remote, online-learning, or unrestricted general-purpose model provider.
 - No GUI implementation.
 - No production CognitiveExecutor-to-KRN-200 connection.
 - No external network feature.
 - No production package format or Runtime ABI change.
-- No concrete WFP, Windows adapter, activation ledger, or protected audit
-  storage changes in the Cognitive Core work.
+- No WFP policy, activation authority, or production adapter capability
+  expansion; the Windows host change is limited to bounded local-model process
+  isolation and the KRN test fixture change rejects stray shared-desktop input.
 - No production module loader, package embedding, native ABI, Mojo loader, or
   CognitiveExecutor production-flow connection.
 
 ## Next Task
 
-`D2I-WORK-500 - Situation Model and Adaptive Planner`
+`D2I-WORK-600 - Episodic Memory and Case Learning Records`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
 recovery, unsafe escalation, clarification without mutation, final verified
 closure, deterministic normalized replay, and zero residual execution state.
 
-Track K and WORK-100 through WORK-300 are complete. Do not add a KRN-600 task. WORK-100 now
+Track K and WORK-100 through WORK-500 are complete. Do not add a KRN-600 task. WORK-100 now
 proves deterministic Role compilation, exact signatures, persistent protected
 lifecycle, one-time task admission, existing authority/recovery projections,
 and the actual role-bound KRN-500 two-action Windows path. WORK-200 now proves
@@ -395,5 +434,7 @@ durability, 100 identical normalized replays at the 128-event cycle limit,
 crash repair, and zero duplicate Cases. WORK-400 now proves protected Queue
 reconciliation, deterministic selection, exclusive lease recovery, signed-pool
 ownership reassignment, non-executable grants, crash repair, and 128-Case
-deterministic replay. WORK-500 is next; Situation Model and Adaptive Planner
-remain unimplemented.
+deterministic replay. WORK-500 now proves actual bounded local-model goal and
+situation interpretation, validated one-step adaptive planning, fresh
+replanning, existing KRN execution, adaptive path divergence, and verified
+closure. WORK-600 is next; episodic memory is not implemented.

@@ -488,3 +488,29 @@ Goal, planner, module, policy, activation, adapter, credential, process, or
 network work. Remaining risks are external time attestation, external
 chain-head anchoring, multi-node consensus, and production connector identity;
 these do not create fallback authority in WORK-400.
+
+## WORK-500 Model And Planner Threats
+
+WORK-500 addresses model/runtime substitution, prompt/schema/seed/config
+substitution, malformed or duplicate-key JSON, unknown fields, oversized
+output, timeout, crash, unexpected framing, hidden retry, network attempt,
+residual process, prompt injection, instruction-like UI/document content,
+secret requests, authority expansion, model inference relabeling, unknown-to-
+false conversion, conflict suppression, wrong Case/lease/grant, stale
+observation or plan generation, raw locator/command output, capability or
+target escape, empty postconditions, risk expansion, confirmation bypass,
+direct completion, action-after-escalation, and blind replay after crash.
+
+Mitigations include exact artifact hashes, direct argv launch, a
+zero-capability AppContainer, bounded Job Object, environment allowlist,
+network denial, 45-second deadline, zero retries, bounded input/output,
+strict typed parsing, trust-class preservation, exact request subset checks,
+one-step planning, protected planner ledgers, fresh re-observation, existing
+policy/activation/KRN gates, independent verification, and terminal cleanup.
+
+Residual risks include model semantic errors within accepted bounds,
+non-bitwise live inference reproducibility, local deployment key and artifact
+custody, external time and ledger-head anchoring, and the narrow General Office
+fixture surface. These risks do not create direct execution authority. A
+failed, stale, ambiguous, conflicting, unavailable, or unverified result fails
+closed or produces bounded clarification/escalation.

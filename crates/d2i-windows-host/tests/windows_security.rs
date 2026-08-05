@@ -5,6 +5,7 @@ use d2i_windows_host::{
     grant_current_process_query_to_verifier, harden_path_for_current_user,
     inspect_verifier_process, path_security_descriptor, process_parent_id, protect_current_user,
     provision_appcontainer_profile, spawn_zero_capability_appcontainer, unprotect_current_user,
+    WindowsJobLimits,
 };
 use std::fmt::Debug;
 use std::path::{Path, PathBuf};
@@ -15,6 +16,23 @@ fn ok<T, E: Debug>(result: Result<T, E>) -> T {
         Ok(value) => value,
         Err(error) => panic!("test operation failed: {error:?}"),
     }
+}
+
+#[test]
+fn model_job_memory_bound_accepts_eight_gib_and_rejects_more() {
+    let eight_gib = 8 * 1024 * 1024 * 1024;
+    assert!(WindowsJobLimits {
+        active_process_limit: 2,
+        per_process_memory_bytes: eight_gib,
+    }
+    .validate()
+    .is_ok());
+    assert!(WindowsJobLimits {
+        active_process_limit: 2,
+        per_process_memory_bytes: eight_gib + 1,
+    }
+    .validate()
+    .is_err());
 }
 
 struct Profile(String);

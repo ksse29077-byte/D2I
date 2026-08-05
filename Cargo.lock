@@ -246,6 +246,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "d2i-adaptive-planner"
+version = "0.9.0"
+dependencies = [
+ "d2i-cognitive-ir",
+ "d2i-intelligence-provider",
+ "d2i-situation-model",
+ "d2i-work-queue",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "d2i-application-semantics"
 version = "0.9.0"
 dependencies = [
@@ -323,13 +337,16 @@ version = "0.9.0"
 dependencies = [
  "d2i-action-candidates",
  "d2i-action-selection",
+ "d2i-adaptive-planner",
  "d2i-application-semantics",
  "d2i-cognitive-ir",
  "d2i-cognitive-recovery",
+ "d2i-intelligence-provider",
  "d2i-module-sdk",
  "d2i-policy-admission",
  "d2i-role-contract",
  "d2i-runtime-api",
+ "d2i-situation-model",
  "d2i-trusted-action-execution",
  "d2i-windows-host",
  "d2i-work-case",
@@ -372,6 +389,18 @@ version = "0.9.0"
 dependencies = [
  "libloading",
  "serde",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-intelligence-provider"
+version = "0.9.0"
+dependencies = [
+ "d2i-cognitive-ir",
+ "d2i-situation-model",
+ "jsonschema",
+ "serde",
+ "serde_json",
  "sha2",
 ]
 
@@ -482,6 +511,16 @@ version = "0.9.0"
 dependencies = [
  "planus",
  "serde",
+]
+
+[[package]]
+name = "d2i-situation-model"
+version = "0.9.0"
+dependencies = [
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

@@ -81,6 +81,19 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   reports, and a one-shot authority-free source trait. `products/d2i-desktop`
   owns its protected approval-bound Intake ledger and exactly-one-Case crash
   recovery.
+- `crates/d2i-work-queue`: deterministic Queue projection and scheduling,
+  exclusive Case leases, audited ownership reassignment, and non-executable
+  planner grants.
+- `crates/d2i-situation-model`: approved Case context, provenance-separated
+  Situation Models, explicit unknown/conflict state, strict JSON, and stable
+  canonical hashes.
+- `crates/d2i-intelligence-provider`: model-neutral goal, situation, and
+  planning provider contracts, recorded replay, evaluation reports, and
+  strict model-result admission.
+- `crates/d2i-adaptive-planner`: one-step semantic planning with exact
+  capability, target, value, precondition, postcondition, Case, lease, and
+  generation binding. `products/d2i-desktop` owns the protected planner ledger
+  and pinned local-model Windows process boundary.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -205,6 +218,22 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -File scripts/workforce/run-work-queue-scheduler-v1.ps1 `
   -Mode All
 ```
+
+Run the Situation Intelligence and Adaptive Planner v1 product gate with the
+approved local artifacts:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-situation-adaptive-planner-v1.ps1 `
+  -Mode Completion `
+  -Runtime C:\path\to\llama-cli.exe `
+  -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
+  -OutputRoot target\d2i-workforce-planner\completion
+```
+
+`All` covers deterministic WORK-500 contracts. Only `Completion` can set
+`product_intelligence_evidence=true`; it additionally requires actual model
+evaluation, adaptive Windows KRN execution, regressions, and terminal cleanup.
 
 ## Checks
 

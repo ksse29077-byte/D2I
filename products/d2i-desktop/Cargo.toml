@@ -16,6 +16,9 @@ d2i-role-contract = { path = "../../crates/d2i-role-contract" }
 d2i-work-case = { path = "../../crates/d2i-work-case" }
 d2i-work-intake = { path = "../../crates/d2i-work-intake" }
 d2i-work-queue = { path = "../../crates/d2i-work-queue" }
+d2i-situation-model = { path = "../../crates/d2i-situation-model" }
+d2i-intelligence-provider = { path = "../../crates/d2i-intelligence-provider" }
+d2i-adaptive-planner = { path = "../../crates/d2i-adaptive-planner" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }
 d2i-windows-host = { path = "../../crates/d2i-windows-host" }
@@ -44,3 +47,19 @@ path = "src/bin/d2i-wfp-verifier-broker.rs"
 [[bin]]
 name = "d2i-kernel-e2e"
 path = "src/bin/d2i-kernel-e2e.rs"
+
+[[bin]]
+name = "d2i-local-model-worker"
+path = "src/bin/d2i-local-model-worker.rs"
+
+[[bin]]
+name = "d2i-adaptive-case-e2e"
+path = "src/bin/d2i-adaptive-case-e2e.rs"
+
+[[bin]]
+name = "d2i-work500-evaluator"
+path = "src/bin/d2i-work500-evaluator.rs"
+
+[[bin]]
+name = "d2i-work500-model-e2e"
+path = "src/bin/d2i-work500-model-e2e.rs"

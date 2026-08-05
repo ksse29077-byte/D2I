@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/intelligence-provider-result-v1.schema.json",
+  "title": "IntelligenceProviderResultV1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "result_id", "operation", "status", "invocation_sha256", "provider_descriptor_sha256", "output_schema_id", "output", "output_sha256", "started_at_unix_milliseconds", "completed_at_unix_milliseconds", "exit_code", "stderr_sha256", "reason_codes", "evidence_ids", "result_sha256"],
+  "properties": {
+    "schema_version": {"const": 1}, "result_id": {"$ref": "#/$defs/id"}, "operation": {"enum": ["understand_goal", "interpret_situation", "propose_next_steps"]}, "status": {"enum": ["succeeded", "clarification_required", "escalation_required", "unsupported", "failed"]}, "invocation_sha256": {"$ref": "#/$defs/hash"}, "provider_descriptor_sha256": {"$ref": "#/$defs/hash"}, "output_schema_id": {"$ref": "#/$defs/id"}, "output": {}, "output_sha256": {"$ref": "#/$defs/hash"}, "started_at_unix_milliseconds": {"type": "integer", "minimum": 1}, "completed_at_unix_milliseconds": {"type": "integer", "minimum": 1}, "exit_code": {"type": ["integer", "null"]}, "stderr_sha256": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]}, "reason_codes": {"$ref": "#/$defs/reasons"}, "evidence_ids": {"$ref": "#/$defs/ids"}, "result_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"}, "hash": {"type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$"}, "ids": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "reasons": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"enum": ["ambiguous_objective", "authority_expansion", "conflicting_evidence", "conflicting_objective", "credential_requested", "insufficient_evidence", "invalid_output", "irreversible_requested", "missing_scope", "missing_success_criteria", "missing_value", "no_eligible_action", "policy_unknown", "prompt_injection", "provider_unavailable", "resource_limit", "stale_input", "unsupported_locale", "unsupported_operation"]}}}
+}

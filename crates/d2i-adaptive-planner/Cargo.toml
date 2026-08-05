@@ -1,0 +1,24 @@
+[package]
+name = "d2i-adaptive-planner"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-cognitive-ir = { path = "../d2i-cognitive-ir" }
+d2i-intelligence-provider = { path = "../d2i-intelligence-provider" }
+d2i-situation-model = { path = "../d2i-situation-model" }
+d2i-work-queue = { path = "../d2i-work-queue" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-planner"
+path = "src/bin/d2i-planner.rs"

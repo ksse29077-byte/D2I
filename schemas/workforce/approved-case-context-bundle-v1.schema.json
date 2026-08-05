@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/approved-case-context-bundle-v1.schema.json",
+  "title": "ApprovedCaseContextBundleV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "context_bundle_id", "case_id", "case_contract_sha256", "case_instance_sha256", "work_item_sha256", "case_work_grant_sha256", "lease_sha256", "ownership_state_sha256", "role_instance_id", "role_instance_sha256", "role_contract_sha256", "delegation_sha256", "organization_id", "work_class_id", "responsibility_id", "approved_objective_artifact_refs", "approved_structured_input_refs", "application_pack_refs", "approved_procedure_refs", "approved_policy_refs", "current_observation_refs", "previous_verified_attempt_refs", "unresolved_requirement_ids", "satisfied_requirement_ids", "content_trust_labels", "redaction_proofs", "freshness", "evidence_ids", "total_byte_count", "context_sha256"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "context_bundle_id": {"$ref": "#/$defs/id"},
+    "case_id": {"$ref": "#/$defs/id"},
+    "case_contract_sha256": {"$ref": "#/$defs/hash"},
+    "case_instance_sha256": {"$ref": "#/$defs/hash"},
+    "work_item_sha256": {"$ref": "#/$defs/hash"},
+    "case_work_grant_sha256": {"$ref": "#/$defs/hash"},
+    "lease_sha256": {"$ref": "#/$defs/hash"},
+    "ownership_state_sha256": {"$ref": "#/$defs/hash"},
+    "role_instance_id": {"$ref": "#/$defs/id"},
+    "role_instance_sha256": {"$ref": "#/$defs/hash"},
+    "role_contract_sha256": {"$ref": "#/$defs/hash"},
+    "delegation_sha256": {"$ref": "#/$defs/hash"},
+    "organization_id": {"$ref": "#/$defs/id"},
+    "work_class_id": {"$ref": "#/$defs/id"},
+    "responsibility_id": {"$ref": "#/$defs/id"},
+    "approved_objective_artifact_refs": {"$ref": "#/$defs/non_empty_refs"},
+    "approved_structured_input_refs": {"$ref": "#/$defs/refs"},
+    "application_pack_refs": {"$ref": "#/$defs/non_empty_refs"},
+    "approved_procedure_refs": {"$ref": "#/$defs/refs"},
+    "approved_policy_refs": {"$ref": "#/$defs/refs"},
+    "current_observation_refs": {"$ref": "#/$defs/non_empty_refs"},
+    "previous_verified_attempt_refs": {"$ref": "#/$defs/refs"},
+    "unresolved_requirement_ids": {"$ref": "#/$defs/ids"},
+    "satisfied_requirement_ids": {"$ref": "#/$defs/ids"},
+    "content_trust_labels": {"type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": {"$ref": "#/$defs/trust"}},
+    "redaction_proofs": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/redaction"}},
+    "freshness": {"$ref": "#/$defs/freshness"},
+    "evidence_ids": {"$ref": "#/$defs/non_empty_ids"},
+    "total_byte_count": {"type": "integer", "minimum": 1, "maximum": 131072},
+    "context_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"},
+    "hash": {"type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "ids": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "non_empty_ids": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "trust": {"enum": ["authenticated_instruction", "approved_policy", "approved_procedure", "trusted_system", "verified_observation", "model_inference"]},
+    "ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["artifact_id", "artifact_sha256", "trust_class", "safe_summary"],
+      "properties": {"artifact_id": {"$ref": "#/$defs/id"}, "artifact_sha256": {"$ref": "#/$defs/hash"}, "trust_class": {"$ref": "#/$defs/trust"}, "safe_summary": {"$ref": "#/$defs/text"}}
+    },
+    "refs": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/ref"}},
+    "non_empty_refs": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/ref"}},
+    "redaction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["field_id", "redaction_reason", "replacement_sha256"],
+      "properties": {"field_id": {"$ref": "#/$defs/id"}, "redaction_reason": {"$ref": "#/$defs/text"}, "replacement_sha256": {"$ref": "#/$defs/hash"}}
+    },
+    "freshness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed_at_unix_seconds", "valid_until_unix_seconds", "maximum_age_seconds"],
+      "properties": {"observed_at_unix_seconds": {"type": "integer", "minimum": 1}, "valid_until_unix_seconds": {"type": "integer", "minimum": 2}, "maximum_age_seconds": {"type": "integer", "minimum": 1, "maximum": 86400}}
+    }
+  }
+}

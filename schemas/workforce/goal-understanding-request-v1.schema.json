@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/workforce/goal-understanding-request-v1.schema.json",
+  "title": "GoalUnderstandingRequestV1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "request_id", "case_id", "context_sha256", "authenticated_instruction_artifact", "locale", "role_responsibility_id", "work_class_id", "scope_bounds", "case_outcome_requirement_ids", "case_evidence_requirement_ids", "allowed_risk_ceiling", "confirmation_requirements", "forbidden_outcomes", "approved_policy_summaries", "approved_procedure_summaries", "trust_labels", "provider_invocation_sha256", "evidence_ids", "request_sha256"],
+  "properties": {
+    "schema_version": {"const": 1}, "request_id": {"$ref": "#/$defs/id"}, "case_id": {"$ref": "#/$defs/id"}, "context_sha256": {"$ref": "#/$defs/hash"},
+    "authenticated_instruction_artifact": {"$ref": "#/$defs/artifact"}, "locale": {"type": "string", "pattern": "^[A-Za-z0-9-]{2,35}$"}, "role_responsibility_id": {"$ref": "#/$defs/id"}, "work_class_id": {"$ref": "#/$defs/id"},
+    "scope_bounds": {"$ref": "#/$defs/non_empty_ids"}, "case_outcome_requirement_ids": {"$ref": "#/$defs/non_empty_ids"}, "case_evidence_requirement_ids": {"$ref": "#/$defs/non_empty_ids"},
+    "allowed_risk_ceiling": {"enum": ["read_only", "reversible", "business_state_change", "high_criticality"]}, "confirmation_requirements": {"$ref": "#/$defs/non_empty_ids"}, "forbidden_outcomes": {"$ref": "#/$defs/non_empty_ids"},
+    "approved_policy_summaries": {"$ref": "#/$defs/texts"}, "approved_procedure_summaries": {"$ref": "#/$defs/texts"},
+    "trust_labels": {"type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": {"enum": ["authenticated_instruction", "approved_policy", "approved_procedure", "trusted_system", "verified_observation", "model_inference"]}},
+    "provider_invocation_sha256": {"$ref": "#/$defs/hash"}, "evidence_ids": {"$ref": "#/$defs/non_empty_ids"}, "request_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"}, "hash": {"type": "string", "pattern": "^(sha256:)?[0-9a-f]{64}$"}, "text": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "non_empty_ids": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "texts": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "artifact": {"type": "object", "additionalProperties": false, "required": ["artifact_id", "artifact_sha256", "trust_class", "safe_summary"], "properties": {"artifact_id": {"$ref": "#/$defs/id"}, "artifact_sha256": {"$ref": "#/$defs/hash"}, "trust_class": {"const": "authenticated_instruction"}, "safe_summary": {"$ref": "#/$defs/text"}}}
+  }
+}

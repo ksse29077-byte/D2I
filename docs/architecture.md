@@ -457,3 +457,26 @@ key.
 - No real-time safety-loop or emergency-controller implementation.
 - No motor/actuator API, physical dispatch, fleet deployment, or automatic
   rollback execution.
+
+## Situation Intelligence And Adaptive Planning
+
+WORK-500 consumes the WORK-400 non-executable grant through a bounded approved
+context bundle. Core Situation contracts preserve observed, trusted-system,
+approved-policy, approved-procedure, authenticated-assertion, model-inference,
+unknown, conflict, and untrusted-content classes separately. Provider output
+cannot create authority or rewrite these classes.
+
+The model-neutral provider boundary returns only typed goal interpretation,
+situation interpretation, or semantic next-step candidates. The Desktop local
+provider verifies exact llama.cpp and GGUF identities, launches one invocation
+inside a zero-capability AppContainer already assigned to a bounded Job Object,
+and admits only strict schema output. It has no direct adapter, credential,
+filesystem mutation, arbitrary process, or network surface.
+
+The Adaptive Planner intersects each candidate with exact Case, lease,
+ownership, generation, capability, semantic target, value, precondition,
+postcondition, risk, and evidence bounds. One admitted step then enters the
+existing Action Selection, Policy, Activation, Trusted Execution,
+re-observation, and Verification chain. Remaining plan text is never executed
+after a state change. Fresh Situation Model generation drives replan,
+clarification, escalation, or verified Case closure.

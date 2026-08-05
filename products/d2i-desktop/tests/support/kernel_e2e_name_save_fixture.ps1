@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$WindowTitle,
     [Parameter(Mandatory = $true)]
-    [ValidateSet("happy", "recovery", "unsafe", "clarification")]
+    [ValidateSet("happy", "already_correct", "recovery", "unsafe", "clarification")]
     [string]$Mode,
     [Parameter(Mandatory = $true)]
     [string]$StatePath
@@ -28,10 +28,11 @@ $form.Controls.Add($heading)
 $nameInput = New-Object System.Windows.Forms.TextBox
 $nameInput.Name = "employee-name-input"
 $nameInput.AccessibleName = "Employee name input"
-$nameInput.Text = "INITIAL-NAME"
+$nameInput.Text = if ($Mode -eq "already_correct") { "D2I-E2E-VERIFIED-NAME" } else { "INITIAL-NAME" }
 $nameInput.Location = New-Object System.Drawing.Point(24, 58)
 $nameInput.Size = New-Object System.Drawing.Size(300, 24)
 $nameInput.TabStop = $false
+$nameInput.ShortcutsEnabled = $false
 $form.Controls.Add($nameInput)
 
 if ($Mode -eq "clarification") {
@@ -113,6 +114,8 @@ $form.Controls.Add($untrusted)
 
 $script:saveAttempts = 0
 $script:inputRevision = 0
+$script:lastAcceptedInput = $nameInput.Text
+$script:restoringInput = $false
 
 function Get-Sha256Text {
     param([string]$Text)
@@ -145,8 +148,31 @@ function Write-FixtureState {
     Move-Item -LiteralPath $temporaryPath -Destination $StatePath -Force
 }
 
+$nameInput.Add_KeyDown({
+    param($sender, $eventArgs)
+    $eventArgs.SuppressKeyPress = $true
+    $eventArgs.Handled = $true
+})
+
+$nameInput.Add_KeyPress({
+    param($sender, $eventArgs)
+    $eventArgs.Handled = $true
+})
+
 $nameInput.Add_TextChanged({
+    if ($script:restoringInput) {
+        return
+    }
+    if ($nameInput.Text -ne "D2I-E2E-VERIFIED-NAME") {
+        $script:restoringInput = $true
+        $nameInput.Text = $script:lastAcceptedInput
+        $script:restoringInput = $false
+        $form.ActiveControl = $null
+        return
+    }
+    $script:lastAcceptedInput = $nameInput.Text
     $script:inputRevision += 1
+    $form.ActiveControl = $null
     [void]$form.BeginInvoke([System.Action]{
         Write-FixtureState
     })
