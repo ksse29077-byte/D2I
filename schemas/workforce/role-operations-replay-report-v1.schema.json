@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoleOperationsReplayReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "total_cases",
+    "active_cases",
+    "terminal_cases",
+    "compliant_cases",
+    "at_risk_cases",
+    "paused_cases",
+    "breached_cases",
+    "verified_complete_cases",
+    "explicit_refusal_cases",
+    "escalated_cases",
+    "reports_generated",
+    "reports_published",
+    "escalations_generated",
+    "acknowledged_escalations",
+    "resolved_escalations",
+    "evidence_incomplete_metrics",
+    "input_bytes",
+    "output_bytes",
+    "peak_records",
+    "logical_operations",
+    "critical_error_count",
+    "sla_state_set_sha256",
+    "role_snapshot_sha256",
+    "metric_set_sha256",
+    "report_set_sha256",
+    "escalation_set_sha256",
+    "normalized_replay_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "total_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "active_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "terminal_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "compliant_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "at_risk_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "paused_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "breached_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "verified_complete_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "explicit_refusal_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "escalated_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reports_generated": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reports_published": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "escalations_generated": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "acknowledged_escalations": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "resolved_escalations": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_incomplete_metrics": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "input_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "output_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "peak_records": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "logical_operations": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "critical_error_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sla_state_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "role_snapshot_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "metric_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "report_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "escalation_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "normalized_replay_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

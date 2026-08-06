@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrustedRoleOperationsTimeContextV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "context_id",
+    "trusted_now_unix_seconds",
+    "timezone_id",
+    "timezone_projection_sha256",
+    "operational_date_id",
+    "window_start_unix_seconds",
+    "window_end_unix_seconds",
+    "tick_sequence",
+    "prior_tick_sha256",
+    "caller_trust_class",
+    "evidence_ids",
+    "context_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "context_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "trusted_now_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "timezone_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "timezone_projection_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "operational_date_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "window_start_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "window_end_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tick_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "prior_tick_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "caller_trust_class": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

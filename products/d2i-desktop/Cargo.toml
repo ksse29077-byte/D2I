@@ -13,6 +13,7 @@ d2i-cognitive-recovery = { path = "../../crates/d2i-cognitive-recovery" }
 d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
 d2i-policy-admission = { path = "../../crates/d2i-policy-admission" }
 d2i-role-contract = { path = "../../crates/d2i-role-contract" }
+d2i-role-operations = { path = "../../crates/d2i-role-operations" }
 d2i-work-case = { path = "../../crates/d2i-work-case" }
 d2i-work-intake = { path = "../../crates/d2i-work-intake" }
 d2i-work-queue = { path = "../../crates/d2i-work-queue" }
@@ -69,3 +70,7 @@ path = "src/bin/d2i-work500-model-e2e.rs"
 [[bin]]
 name = "d2i-work600-memory-e2e"
 path = "src/bin/d2i-work600-memory-e2e.rs"
+
+[[bin]]
+name = "d2i-work700-operations-e2e"
+path = "src/bin/d2i-work700-operations-e2e.rs"

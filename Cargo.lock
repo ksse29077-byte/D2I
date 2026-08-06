@@ -358,6 +358,7 @@ dependencies = [
  "d2i-module-sdk",
  "d2i-policy-admission",
  "d2i-role-contract",
+ "d2i-role-operations",
  "d2i-runtime-api",
  "d2i-situation-model",
  "d2i-trusted-action-execution",
@@ -483,6 +484,21 @@ dependencies = [
  "d2i-cognitive-ir",
  "d2i-cognitive-recovery",
  "d2i-policy-admission",
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-role-operations"
+version = "0.9.0"
+dependencies = [
+ "d2i-cognitive-recovery",
+ "d2i-role-contract",
+ "d2i-work-case",
  "ed25519-dalek",
  "jsonschema",
  "serde",

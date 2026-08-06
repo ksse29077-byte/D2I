@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EscalationAcknowledgementV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "acknowledgement_id",
+    "escalation_item_sha256",
+    "authenticated_actor_class_id",
+    "acknowledged_at_unix_seconds",
+    "acknowledgement_kind",
+    "evidence_ids",
+    "signer_key_id",
+    "acknowledgement_sha256",
+    "signature_hex"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "acknowledgement_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "escalation_item_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "authenticated_actor_class_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "acknowledged_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "acknowledgement_kind": {
+      "type": "string",
+      "enum": [
+        "accepted_for_review",
+        "clarification_requested",
+        "transferred_to_authorized_human_process",
+        "duplicate_confirmed"
+      ]
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "signer_key_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "acknowledgement_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "signature_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{128}$"
+    }
+  }
+}

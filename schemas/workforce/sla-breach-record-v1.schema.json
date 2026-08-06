@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SlaBreachRecordV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "breach_id",
+    "case_id",
+    "sla_state_sha256",
+    "sla_binding_sha256",
+    "milestone",
+    "baseline_deadline_unix_seconds",
+    "effective_deadline_unix_seconds",
+    "detected_at_unix_seconds",
+    "actual_milestone_at_unix_seconds",
+    "breach_duration_seconds",
+    "severity",
+    "reason_codes",
+    "mandatory_escalation",
+    "source_ledger_heads",
+    "evidence_ids",
+    "breach_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "breach_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "sla_state_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "sla_binding_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "milestone": {
+      "type": "string",
+      "enum": [
+        "received",
+        "acknowledged",
+        "begun",
+        "resolved",
+        "escalated"
+      ]
+    },
+    "baseline_deadline_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "effective_deadline_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "detected_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "actual_milestone_at_unix_seconds": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breach_duration_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "routine",
+        "elevated",
+        "high",
+        "unsafe"
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "mandatory_escalation": {
+      "type": "boolean"
+    },
+    "source_ledger_heads": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "breach_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

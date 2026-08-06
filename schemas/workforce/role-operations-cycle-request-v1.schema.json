@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoleOperationsCycleRequestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cycle_id",
+    "organization_id",
+    "role_contract_sha256",
+    "role_instance_ids",
+    "operations_profile_sha256",
+    "time_context",
+    "measurement_window_sha256",
+    "role_ledger_head_sha256",
+    "intake_ledger_head_sha256",
+    "case_ledger_head_sha256",
+    "queue_ledger_head_sha256",
+    "planner_ledger_head_hashes",
+    "memory_store_head_sha256",
+    "audit_ledger_head_sha256",
+    "maximum_cases",
+    "maximum_reports",
+    "maximum_escalations",
+    "logical_operation_budget",
+    "evidence_ids",
+    "request_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "cycle_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "organization_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "role_instance_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "operations_profile_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "time_context": {
+      "$ref": "#/$defs/TrustedRoleOperationsTimeContextV1"
+    },
+    "measurement_window_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "role_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "intake_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "case_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "queue_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "planner_ledger_head_hashes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "memory_store_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "audit_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "maximum_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_reports": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_escalations": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "logical_operation_budget": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "request_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "TrustedRoleOperationsTimeContextV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "context_id",
+        "trusted_now_unix_seconds",
+        "timezone_id",
+        "timezone_projection_sha256",
+        "operational_date_id",
+        "window_start_unix_seconds",
+        "window_end_unix_seconds",
+        "tick_sequence",
+        "prior_tick_sha256",
+        "caller_trust_class",
+        "evidence_ids",
+        "context_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "context_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "trusted_now_unix_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timezone_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "timezone_projection_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "operational_date_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "window_start_unix_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "window_end_unix_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tick_sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "prior_tick_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "caller_trust_class": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+          }
+        },
+        "context_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ mod executor;
 mod local_model_provider;
 mod policy;
 mod role_instance;
+mod role_operations;
 mod trusted_execution;
 mod windows_activation;
 mod windows_adapters;
@@ -160,6 +161,11 @@ pub use policy::{
 pub use role_instance::{
     initialize_role_instance_ledger, verify_role_instance_ledger, RoleInstanceLedgerEventKindV1,
     RoleInstanceLedgerRecordV1, RoleInstanceLedgerV1, RoleInstanceLedgerVerificationV1,
+};
+pub use role_operations::{
+    initialize_role_operations_store, verify_role_operations_store, RoleOperationsArtifactV1,
+    RoleOperationsStoreRecordKindV1, RoleOperationsStoreRecordV1, RoleOperationsStoreV1,
+    RoleOperationsStoreVerificationV1,
 };
 pub use trusted_execution::{
     build_cognitive_desktop_action_intent, project_windows_activation,

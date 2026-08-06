@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KpiMetricBindingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kpi_id",
+    "metric_id",
+    "formula_kind",
+    "unit",
+    "direction",
+    "target_millionths",
+    "target_integer",
+    "warning_threshold",
+    "breach_behavior",
+    "required_evidence_class_ids",
+    "binding_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kpi_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "metric_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "formula_kind": {
+      "type": "string",
+      "enum": [
+        "admitted_case_count",
+        "terminal_case_count",
+        "verified_complete_count",
+        "explicit_refusal_count",
+        "escalated_case_count",
+        "autonomous_case_completion_rate",
+        "verified_closure_rate",
+        "sla_compliance_rate",
+        "escalation_rate",
+        "clarification_rate",
+        "recovery_success_rate",
+        "human_touches_per_case",
+        "human_minutes_per_case",
+        "average_time_to_acknowledge",
+        "average_time_to_begin",
+        "average_time_to_resolve",
+        "false_completion_rate",
+        "unsupported_case_rate"
+      ]
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "maximize",
+        "minimize",
+        "at_least",
+        "at_most"
+      ]
+    },
+    "target_millionths": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "target_integer": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "warning_threshold": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "breach_behavior": {
+      "type": "string",
+      "enum": [
+        "report",
+        "escalate"
+      ]
+    },
+    "required_evidence_class_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "binding_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

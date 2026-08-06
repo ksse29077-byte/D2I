@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SlaMilestoneMappingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "received_source",
+    "acknowledged_source",
+    "begun_source",
+    "resolved_source",
+    "escalated_source",
+    "mapping_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "received_source": {
+      "type": "string",
+      "enum": [
+        "work_item_received",
+        "first_exclusive_lease_claim",
+        "explicit_case_acknowledgement",
+        "first_accepted_case_task",
+        "first_planner_step_admitted",
+        "first_kernel_binding",
+        "terminal_case_timestamp",
+        "durable_escalation_item"
+      ]
+    },
+    "acknowledged_source": {
+      "type": "string",
+      "enum": [
+        "work_item_received",
+        "first_exclusive_lease_claim",
+        "explicit_case_acknowledgement",
+        "first_accepted_case_task",
+        "first_planner_step_admitted",
+        "first_kernel_binding",
+        "terminal_case_timestamp",
+        "durable_escalation_item"
+      ]
+    },
+    "begun_source": {
+      "type": "string",
+      "enum": [
+        "work_item_received",
+        "first_exclusive_lease_claim",
+        "explicit_case_acknowledgement",
+        "first_accepted_case_task",
+        "first_planner_step_admitted",
+        "first_kernel_binding",
+        "terminal_case_timestamp",
+        "durable_escalation_item"
+      ]
+    },
+    "resolved_source": {
+      "type": "string",
+      "enum": [
+        "work_item_received",
+        "first_exclusive_lease_claim",
+        "explicit_case_acknowledgement",
+        "first_accepted_case_task",
+        "first_planner_step_admitted",
+        "first_kernel_binding",
+        "terminal_case_timestamp",
+        "durable_escalation_item"
+      ]
+    },
+    "escalated_source": {
+      "type": "string",
+      "enum": [
+        "work_item_received",
+        "first_exclusive_lease_claim",
+        "explicit_case_acknowledgement",
+        "first_accepted_case_task",
+        "first_planner_step_admitted",
+        "first_kernel_binding",
+        "terminal_case_timestamp",
+        "durable_escalation_item"
+      ]
+    },
+    "mapping_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

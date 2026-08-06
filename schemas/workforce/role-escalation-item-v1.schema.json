@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoleEscalationItemV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "escalation_item_id",
+    "organization_id",
+    "role_contract_sha256",
+    "case_id",
+    "escalation_kind",
+    "source_trigger_sha256",
+    "reason_codes",
+    "severity",
+    "routing_class_id",
+    "internal_inbox_id",
+    "created_at_unix_seconds",
+    "acknowledge_due_at_unix_seconds",
+    "resolution_due_at_unix_seconds",
+    "status",
+    "source_case_ledger_head_sha256",
+    "source_role_ledger_head_sha256",
+    "source_queue_ledger_head_sha256",
+    "evidence_ids",
+    "previous_escalation_sha256",
+    "item_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "escalation_item_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "organization_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "escalation_kind": {
+      "type": "string",
+      "enum": [
+        "operational_attention",
+        "human_exception_handoff"
+      ]
+    },
+    "source_trigger_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "reason_codes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "routine",
+        "elevated",
+        "high",
+        "unsafe"
+      ]
+    },
+    "routing_class_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "internal_inbox_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "created_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "acknowledge_due_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "resolution_due_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "routed",
+        "acknowledged",
+        "resolved",
+        "overdue",
+        "rejected",
+        "route_unavailable",
+        "superseded"
+      ]
+    },
+    "source_case_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "source_role_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "source_queue_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "previous_escalation_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "item_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

@@ -1,0 +1,555 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoleOperationsProfileV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "profile_version",
+    "organization_id",
+    "role_contract_id",
+    "role_contract_version",
+    "role_contract_sha256",
+    "role_instance_scope",
+    "delegation_sha256",
+    "policy_set_sha256",
+    "working_calendar_sha256",
+    "kpi_metric_bindings",
+    "measurement_window_profiles",
+    "sla_milestone_mapping",
+    "sla_pause_condition_bindings",
+    "report_frequency_profile_ids",
+    "routing_class_allowlist",
+    "internal_route_bindings",
+    "warning_remaining_millionths",
+    "critical_remaining_seconds",
+    "maximum_cases_per_cycle",
+    "maximum_reports_per_cycle",
+    "maximum_escalations_per_cycle",
+    "maximum_report_bytes",
+    "maximum_store_bytes",
+    "maximum_pending_escalation_seconds",
+    "maximum_resolution_seconds",
+    "logical_operation_budget",
+    "evidence_ids",
+    "profile_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "profile_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "profile_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "organization_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "role_instance_scope": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "delegation_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "policy_set_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "working_calendar_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "kpi_metric_bindings": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/KpiMetricBindingV1"
+      }
+    },
+    "measurement_window_profiles": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/MeasurementWindowProfileV1"
+      }
+    },
+    "sla_milestone_mapping": {
+      "$ref": "#/$defs/SlaMilestoneMappingV1"
+    },
+    "sla_pause_condition_bindings": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/SlaPauseConditionBindingV1"
+      }
+    },
+    "report_frequency_profile_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "routing_class_allowlist": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "internal_route_bindings": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/InternalRouteBindingV1"
+      }
+    },
+    "warning_remaining_millionths": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "critical_remaining_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_cases_per_cycle": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_reports_per_cycle": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_escalations_per_cycle": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_report_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_store_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_pending_escalation_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_resolution_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "logical_operation_budget": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "profile_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "KpiMetricBindingV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "kpi_id",
+        "metric_id",
+        "formula_kind",
+        "unit",
+        "direction",
+        "target_millionths",
+        "target_integer",
+        "warning_threshold",
+        "breach_behavior",
+        "required_evidence_class_ids",
+        "binding_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kpi_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "metric_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "formula_kind": {
+          "type": "string",
+          "enum": [
+            "admitted_case_count",
+            "terminal_case_count",
+            "verified_complete_count",
+            "explicit_refusal_count",
+            "escalated_case_count",
+            "autonomous_case_completion_rate",
+            "verified_closure_rate",
+            "sla_compliance_rate",
+            "escalation_rate",
+            "clarification_rate",
+            "recovery_success_rate",
+            "human_touches_per_case",
+            "human_minutes_per_case",
+            "average_time_to_acknowledge",
+            "average_time_to_begin",
+            "average_time_to_resolve",
+            "false_completion_rate",
+            "unsupported_case_rate"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "maximize",
+            "minimize",
+            "at_least",
+            "at_most"
+          ]
+        },
+        "target_millionths": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_integer": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "warning_threshold": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "breach_behavior": {
+          "type": "string",
+          "enum": [
+            "report",
+            "escalate"
+          ]
+        },
+        "required_evidence_class_ids": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+          }
+        },
+        "binding_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "MeasurementWindowProfileV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measurement_window_profile_id",
+        "role_measurement_window_id",
+        "maximum_window_seconds"
+      ],
+      "properties": {
+        "measurement_window_profile_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "role_measurement_window_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "maximum_window_seconds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "SlaMilestoneMappingV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "received_source",
+        "acknowledged_source",
+        "begun_source",
+        "resolved_source",
+        "escalated_source",
+        "mapping_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "received_source": {
+          "type": "string",
+          "enum": [
+            "work_item_received",
+            "first_exclusive_lease_claim",
+            "explicit_case_acknowledgement",
+            "first_accepted_case_task",
+            "first_planner_step_admitted",
+            "first_kernel_binding",
+            "terminal_case_timestamp",
+            "durable_escalation_item"
+          ]
+        },
+        "acknowledged_source": {
+          "type": "string",
+          "enum": [
+            "work_item_received",
+            "first_exclusive_lease_claim",
+            "explicit_case_acknowledgement",
+            "first_accepted_case_task",
+            "first_planner_step_admitted",
+            "first_kernel_binding",
+            "terminal_case_timestamp",
+            "durable_escalation_item"
+          ]
+        },
+        "begun_source": {
+          "type": "string",
+          "enum": [
+            "work_item_received",
+            "first_exclusive_lease_claim",
+            "explicit_case_acknowledgement",
+            "first_accepted_case_task",
+            "first_planner_step_admitted",
+            "first_kernel_binding",
+            "terminal_case_timestamp",
+            "durable_escalation_item"
+          ]
+        },
+        "resolved_source": {
+          "type": "string",
+          "enum": [
+            "work_item_received",
+            "first_exclusive_lease_claim",
+            "explicit_case_acknowledgement",
+            "first_accepted_case_task",
+            "first_planner_step_admitted",
+            "first_kernel_binding",
+            "terminal_case_timestamp",
+            "durable_escalation_item"
+          ]
+        },
+        "escalated_source": {
+          "type": "string",
+          "enum": [
+            "work_item_received",
+            "first_exclusive_lease_claim",
+            "explicit_case_acknowledgement",
+            "first_accepted_case_task",
+            "first_planner_step_admitted",
+            "first_kernel_binding",
+            "terminal_case_timestamp",
+            "durable_escalation_item"
+          ]
+        },
+        "mapping_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "SlaPauseConditionBindingV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "pause_condition_id",
+        "allowed_source_event_classes",
+        "allowed_case_block_classes",
+        "allowed_clarification_reason_codes",
+        "required_evidence_class_ids",
+        "maximum_single_pause_seconds",
+        "maximum_cumulative_pause_seconds",
+        "automatic_pause_allowed",
+        "approval_required",
+        "binding_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "pause_condition_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "allowed_source_event_classes": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+          }
+        },
+        "allowed_case_block_classes": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+          }
+        },
+        "allowed_clarification_reason_codes": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+          }
+        },
+        "required_evidence_class_ids": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+          }
+        },
+        "maximum_single_pause_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maximum_cumulative_pause_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "automatic_pause_allowed": {
+          "type": "boolean"
+        },
+        "approval_required": {
+          "type": "boolean"
+        },
+        "binding_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "InternalRouteBindingV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routing_class_id",
+        "internal_inbox_id"
+      ],
+      "properties": {
+        "routing_class_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        "internal_inbox_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        }
+      }
+    }
+  }
+}

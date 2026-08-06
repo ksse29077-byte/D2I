@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EscalationResolutionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resolution_id",
+    "escalation_item_sha256",
+    "latest_acknowledgement_sha256",
+    "resolution_disposition",
+    "resolved_at_unix_seconds",
+    "follow_up_work_item_reference",
+    "external_handling_reference_sha256",
+    "evidence_ids",
+    "signer_key_id",
+    "resolution_sha256",
+    "signature_hex"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "resolution_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "escalation_item_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "latest_acknowledgement_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "resolution_disposition": {
+      "type": "string",
+      "enum": [
+        "handled_externally",
+        "no_action_required",
+        "follow_up_work_created",
+        "explicit_refusal_confirmed",
+        "escalation_accepted",
+        "superseded"
+      ]
+    },
+    "resolved_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "follow_up_work_item_reference": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "external_handling_reference_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "signer_key_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "resolution_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "signature_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{128}$"
+    }
+  }
+}

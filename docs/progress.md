@@ -415,7 +415,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-700 - Role-level Reporting, SLA and Escalation`
+`D2I-WORK-800 - Open Digital Employee Shadow Mode`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -444,5 +444,24 @@ in an actual model-backed Path C, and quarantines offline learning candidates
 without production mutation. The General Office `1.0.0` and memory-enabled
 `1.1.0` Role bundles are independently compiled and verified; `1.1.0` memory
 evidence binds its exact contract, signed approval, signed delegation, and
-active Role Instance rather than fixture hashes. WORK-700 is the first active
-task.
+active Role Instance rather than fixture hashes. WORK-700 is complete and
+WORK-800 is the first active task.
+
+WORK-700 now has a platform-neutral Role Operations crate, 30 strict schemas,
+General Office 1.2.0 fixture, protected Desktop store, inspection CLI, and an
+official runner. Its actual WORK-600-bound five-Case Completion E2E reports
+three SLA-compliant and two breached Cases, one approved 100-second pause, one
+human handoff, one explicit refusal, four evidence-covered KPI results, four
+internal reports/publications/receipts, two exactly-once escalations, and zero
+duplicate breaches or escalations. Signed routing-registry approval, exact
+internal destination binding, signed publication receipts, and durable inbox
+receipt binding were also verified fail-closed. The Completion report hash is
+`sha256:1ef005ed42946686f00943e08ec948df0badbd83c1af891ecb0baeb416f25185`;
+the snapshot and 128 Case x 100 replay hashes are
+`sha256:d30e3c05eac1706c1ed024d7a0cb73c0c9b7efb802eee27075b5d2dd75ad0024`
+and
+`sha256:1f8add213c3642bb417eb68cd996dd1c7e98a7c5123d1c78cf1a997f0726fd1d`.
+Protected store/audit terminal hashes were verified and process, credential,
+activation, profile, store, and lock residuals were all zero. The official
+All and Completion runners, fmt, Clippy, full workspace tests, and release
+build passed. WORK-800 has not started.

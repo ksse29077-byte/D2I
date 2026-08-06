@@ -35,9 +35,27 @@ Track K is complete. Do not create KRN-600.
 - `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **complete**
 - `D2I-WORK-500` Situation Model and Adaptive Planner - **complete**
 - `D2I-WORK-600` Episodic Memory and Case Learning Records - **complete**
-- `D2I-WORK-700` Role-level Reporting, SLA and Escalation - **active**
-- `D2I-WORK-800` Open Digital Employee Shadow Mode
+- `D2I-WORK-700` Role-level Reporting, SLA and Escalation - **complete**
+- `D2I-WORK-800` Open Digital Employee Shadow Mode - **active**
 - `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
+
+WORK-700's completed official gate is:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-role-reporting-sla-escalation-v1.ps1 `
+  -Mode Completion `
+  -Runtime C:\path\to\llama-cli.exe `
+  -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
+  -OutputRoot target\d2i-workforce-operations\completion
+```
+
+`All` is deterministic and model-free. `Completion` reruns WORK-600 with the
+approved local runtime/model, then proves five General Office Cases, protected
+operations persistence/audit, internal-only publication, escalation
+acknowledgement/resolution, 128 Case x 100 replay, and terminal cleanup. It is
+complete only when `finished.json` has `role_operations_evidence=true`.
+The next active task is `D2I-WORK-800 - Open Digital Employee Shadow Mode`.
 
 ## Track X - Execution Plane Expansion
 

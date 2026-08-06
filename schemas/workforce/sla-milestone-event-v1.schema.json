@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SlaMilestoneEventV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "case_id",
+    "sla_binding_sha256",
+    "milestone",
+    "source",
+    "occurred_at_unix_seconds",
+    "source_artifact_sha256",
+    "source_ledger_head_sha256",
+    "evidence_ids",
+    "event_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "sla_binding_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "milestone": {
+      "type": "string",
+      "enum": [
+        "received",
+        "acknowledged",
+        "begun",
+        "resolved",
+        "escalated"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "work_item_received",
+        "first_exclusive_lease_claim",
+        "explicit_case_acknowledgement",
+        "first_accepted_case_task",
+        "first_planner_step_admitted",
+        "first_kernel_binding",
+        "terminal_case_timestamp",
+        "durable_escalation_item"
+      ]
+    },
+    "occurred_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "source_artifact_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "source_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "event_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

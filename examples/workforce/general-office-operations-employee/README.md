@@ -22,5 +22,11 @@ WORK-600 seals both terminal paths as reference-only Episodes. This canonical
 the separately compiled `general-office-operations-employee-memory-v1`
 fixture alone tests signed summaries and quarantined offline candidates.
 
+WORK-700 uses a third separately compiled `1.2.0` fixture in
+`general-office-operations-employee-operations-v1`. It adds report obligations
+and KPI declarations only; it reuses the same read-only capability and
+authority ceiling. New approval, delegation, and Role Instance artifacts are
+required for that version.
+
 All identifiers in this directory are example-owned domain vocabulary. The
 generic Radar, Intake, Work Item, and Case crates do not interpret these names.

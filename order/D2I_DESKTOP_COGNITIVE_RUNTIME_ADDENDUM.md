@@ -22,9 +22,19 @@ separated Situation Models, a model-neutral provider boundary, a pinned local
 model process, one-step validated planning, fresh re-observation, and adaptive
 KRN closure. WORK-600 adds exactly-once reference-only terminal Episodes,
 Role-policy-bounded exact retrieval, signed summaries, a protected Desktop
-memory store, and quarantined offline learning candidates. The active next
-task is `D2I-WORK-700 - Role-level Reporting, SLA and Escalation`. Production
-connectors remain unimplemented.
+memory store, and quarantined offline learning candidates. WORK-700 adds
+evidence-grounded Role reporting, pause-aware SLA projections, protected
+internal publication, and exactly-bound escalation. The active next task is
+`D2I-WORK-800 - Open Digital Employee Shadow Mode`.
+
+WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
+current-user/SYSTEM DACL-protected content-addressed store. It consumes only
+verified Role, Case, Queue, Planner/KRN, Episode, and protected audit hashes;
+its reports, internal receipts, acknowledgements, and resolutions cannot mint
+policy, activation, execution, completion, or Case-reopen authority. No
+background Windows service or external delivery plane is introduced.
+Production connectors remain unimplemented. WORK-700's official All and
+Completion gates are complete; WORK-800 has not started.
 
 ## Active Product Goal
 

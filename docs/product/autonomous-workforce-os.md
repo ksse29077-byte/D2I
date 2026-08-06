@@ -191,8 +191,8 @@ state.
 - `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership. **Complete**
 - `D2I-WORK-500`: Situation Model and Adaptive Planner. **Complete**
 - `D2I-WORK-600`: Episodic Memory and Case Learning Records. **Complete**
-- `D2I-WORK-700`: Role-level Reporting, SLA and Escalation. **First active task**
-- `D2I-WORK-800`: Open Digital Employee Shadow Mode.
+- `D2I-WORK-700`: Role-level Reporting, SLA and Escalation. **Complete**
+- `D2I-WORK-800`: Open Digital Employee Shadow Mode. **First active task**
 - `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation.
 
 ### Track X - Execution Plane Expansion
@@ -278,5 +278,21 @@ context, runs a pinned local model behind a zero-capability process boundary,
 admits only one exact semantic next step, and replans after fresh verified
 state. WORK-600 seals terminal Cases as reference-only Episodes, applies exact
 Role memory boundaries, uses only signed historical summaries, and exports
-quarantined offline candidates without changing production intelligence. The
-active next task is `D2I-WORK-700 - Role-level Reporting, SLA and Escalation`.
+quarantined offline candidates without changing production intelligence.
+WORK-700 applies immutable Role operations declarations to authoritative
+evidence, produces pause-aware SLA and closed integer KPI projections, and
+routes non-authoritative reports and escalations only to protected internal
+inboxes. The active next task is
+`D2I-WORK-800 - Open Digital Employee Shadow Mode`.
+
+WORK-700 applies existing immutable Role KPI, SLA, reporting, and escalation
+declarations to authoritative Case, Queue/Ownership, Planner/KRN, Episode, and
+protected audit hashes. Its signed profile can only narrow a Role. Trusted
+caller time and approved pause evidence produce additive SLA runtime states;
+closed integer formulas produce evidence-covered metrics; reports and internal
+publication receipts remain non-authoritative. Human handoff, acknowledgement,
+and resolution are exactly bound but grant no execution or Case-reopen
+authority. External delivery and background operation remain outside this
+task. The completed five-Case General Office E2E proves approved pause handling,
+breach detection, human handoff, explicit refusal, internal publication and
+acknowledged escalation with zero residual runtime state.

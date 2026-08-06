@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SlaPauseConditionBindingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pause_condition_id",
+    "allowed_source_event_classes",
+    "allowed_case_block_classes",
+    "allowed_clarification_reason_codes",
+    "required_evidence_class_ids",
+    "maximum_single_pause_seconds",
+    "maximum_cumulative_pause_seconds",
+    "automatic_pause_allowed",
+    "approval_required",
+    "binding_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "pause_condition_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "allowed_source_event_classes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "allowed_case_block_classes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "allowed_clarification_reason_codes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "required_evidence_class_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "maximum_single_pause_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maximum_cumulative_pause_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "automatic_pause_allowed": {
+      "type": "boolean"
+    },
+    "approval_required": {
+      "type": "boolean"
+    },
+    "binding_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

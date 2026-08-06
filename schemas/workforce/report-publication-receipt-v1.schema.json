@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReportPublicationReceiptV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "publication_sha256",
+    "internal_inbox_ledger_head_sha256",
+    "durable_object_sha256",
+    "publication_sequence",
+    "status",
+    "recorded_at_unix_seconds",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "publication_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "internal_inbox_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "durable_object_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "publication_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "published_to_internal_route",
+        "duplicate",
+        "rejected",
+        "route_unavailable",
+        "evidence_incomplete"
+      ]
+    },
+    "recorded_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "receipt_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

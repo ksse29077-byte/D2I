@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MetricEvidenceCoverageV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "metric_binding_sha256",
+    "measurement_window_sha256",
+    "expected_population_count",
+    "observed_population_count",
+    "covered_population_count",
+    "missing_evidence_count",
+    "conflicting_evidence_count",
+    "coverage_millionths",
+    "evidence_class_ids",
+    "status",
+    "coverage_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "metric_binding_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "measurement_window_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "expected_population_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "observed_population_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "covered_population_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "missing_evidence_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "conflicting_evidence_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "coverage_millionths": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence_class_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "partial",
+        "insufficient",
+        "conflicting",
+        "not_applicable"
+      ]
+    },
+    "coverage_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

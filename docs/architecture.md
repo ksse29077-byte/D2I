@@ -503,3 +503,31 @@ append-only hash chain, atomic deterministic index, one-writer coordination,
 retention/tombstone persistence, rollback/tamper detection, and reference-only
 crash repair. Recovery never replays a provider, action, activation, KRN run,
 or adapter operation.
+
+## Evidence-Grounded Role Operations
+
+WORK-700 adds the platform-neutral `d2i-role-operations` projection above
+authoritative Role, Case, Queue/Ownership, Planner/KRN, Episode, and protected
+audit state. A signed Operations Profile may only narrow the immutable Role
+Contract. Core consumes trusted caller time, preserves the absolute
+`CaseSlaBindingV1` baseline, and derives pause-aware effective deadlines with
+checked integer arithmetic.
+
+Milestone events exact-bind received, acknowledged, begun, resolved, and
+escalated states to their authoritative ledger classes. Pause intervals bind
+approved event, block or clarification classes and finite evidence-backed
+bounds. KPI IDs remain Role-owned while formulas are closed, generic,
+integer-only operations. Missing or conflicting coverage suppresses values.
+
+Role snapshots and reports contain hashes, typed IDs, counts, and coverage;
+they are not execution or completion authority. Separately signed routing
+registries map opaque Role routing classes only to protected internal inbox
+IDs. Publication receipts do not claim external delivery. Operational
+attention and mandatory human handoff remain distinct, and signed
+acknowledgement/resolution records cannot approve execution or reopen a Case.
+
+Desktop persists these artifacts in a current-user/SYSTEM DACL-protected,
+content-addressed object store with an append-only hash chain, atomic derived
+index, one writer, rollback/tamper rejection, and index-only crash repair.
+WORK-700 is one-shot: no daemon, timer service, external connector, or Shadow
+Mode comparison is introduced.

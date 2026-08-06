@@ -19,3 +19,9 @@ restart. It performs no enterprise API call, Task, activation, or adapter use.
 For WORK-400, Safety remains a domain-owned compatibility fixture. Its opaque
 work class follows the same Queue policy, ordering, lease, and ownership
 contract as General Office, HR, and IT; Core contains no Safety branch.
+
+WORK-700 maps this Role's five KPI IDs to the same closed generic formula
+engine used by General Office, HR, and IT fixtures. In particular, incomplete
+false-completion review coverage produces `insufficient_evidence`, not zero or
+success. Safety identifiers remain fixture-owned and Core contains no Safety
+formula or routing branch.

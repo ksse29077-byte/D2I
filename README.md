@@ -258,6 +258,24 @@ canonical General Office hash-only policy, runs an actual signed-summary Path
 C where fresh observation omits SetValue, quarantines a two-Episode candidate,
 and proves 128-Episode deterministic replay with zero production mutation.
 
+Run the WORK-700 Role Operations gate after WORK-600 with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-role-reporting-sla-escalation-v1.ps1 `
+  -Mode Completion `
+  -Runtime C:\path\to\llama-cli.exe `
+  -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
+  -OutputRoot target\d2i-workforce-operations\completion
+```
+
+It preserves immutable Case SLA baselines, applies only approved pause time,
+calculates evidence-covered Role KPIs, creates non-authoritative reports,
+publishes to protected internal inboxes, and tracks exactly-once escalation,
+acknowledgement, and resolution. It adds no external delivery or background
+service. WORK-700 is complete; the first active task is
+`D2I-WORK-800 - Open Digital Employee Shadow Mode`.
+
 ## Checks
 
 ```text

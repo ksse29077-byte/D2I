@@ -1,0 +1,25 @@
+[package]
+name = "d2i-role-operations"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-cognitive-recovery = { path = "../d2i-cognitive-recovery" }
+d2i-role-contract = { path = "../d2i-role-contract" }
+d2i-work-case = { path = "../d2i-work-case" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+serde_yaml.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-operations"
+path = "src/bin/d2i-operations.rs"

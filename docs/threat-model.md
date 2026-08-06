@@ -539,3 +539,33 @@ Residual risks are external trusted-time and chain-head anchoring, organization
 key custody, semantic quality of approved summaries, physical secure deletion,
 and the narrow General Office Windows fixture. None creates fallback authority,
 online self-modification, fuzzy retrieval, or production promotion.
+
+## WORK-700 Role Operations Threats
+
+WORK-700 addresses Role/profile substitution, KPI target or direction changes,
+OS-clock dependence, time rollback or tick replay, Case/SLA/ledger-head
+substitution, baseline deadline mutation, duplicate or inverted milestones,
+unauthorized/overlapping/unbounded pauses, arithmetic overflow, duplicate
+breaches, incomplete or conflicting KPI evidence, zero-population success,
+false-completion measurement without review coverage, report trigger/class/
+evidence substitution, raw content in reports, unsigned or expired routing,
+cross-organization and wildcard routes, personal or external destinations,
+duplicate publication, mandatory escalation suppression, severity downgrade,
+duplicate escalation, unsigned or replayed acknowledgement/resolution, store
+rollback, object/index mismatch, DACL drift, reparse traversal, and concurrent
+writers.
+
+Mitigations include exact Role/delegation/profile hashes, signed approvals,
+trusted caller time chains, immutable SLA baselines, closed milestone and KPI
+enums, integer-only checked arithmetic, explicit evidence coverage, exact
+report obligations, internal-inbox-only signed registries, source-bound
+escalation reason and authority validation, separate signed acknowledgement
+and resolution, content-addressed objects, append-only hash chains, atomic
+indexes, one writer, and index-only crash repair. Forbidden secret, recipient,
+locator, command, raw UI, and chain-of-thought markers fail closed.
+
+Residual risks are external time and ledger-head anchoring, organization key
+custody, production internal-inbox access control, and the narrow General
+Office fixture. There is no external delivery connector, background scheduler,
+automatic policy/Role/KPI mutation, Case reopen, activation, or execution
+fallback in WORK-700.

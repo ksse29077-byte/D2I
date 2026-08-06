@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoleOperationsSnapshotV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "organization_id",
+    "role_contract_id",
+    "role_contract_version",
+    "role_contract_sha256",
+    "role_instance_ids",
+    "measurement_window_sha256",
+    "operations_profile_sha256",
+    "total_cases",
+    "active_cases",
+    "blocked_cases",
+    "awaiting_clarification_cases",
+    "awaiting_verification_cases",
+    "escalation_pending_cases",
+    "terminal_cases",
+    "verified_complete_cases",
+    "explicit_refusal_cases",
+    "escalated_cases",
+    "sla_compliant_cases",
+    "sla_at_risk_cases",
+    "sla_paused_cases",
+    "sla_breached_cases",
+    "open_escalation_count",
+    "acknowledged_escalation_count",
+    "overdue_escalation_count",
+    "metric_result_hashes",
+    "case_sla_state_hashes",
+    "breach_hashes",
+    "terminal_episode_hashes",
+    "role_ledger_head_sha256",
+    "case_ledger_head_sha256",
+    "queue_ledger_head_sha256",
+    "planner_ledger_head_sha256",
+    "memory_store_head_sha256",
+    "audit_ledger_head_sha256",
+    "evidence_ids",
+    "snapshot_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "organization_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "role_instance_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "measurement_window_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "operations_profile_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "total_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "active_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "blocked_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "awaiting_clarification_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "awaiting_verification_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "escalation_pending_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "terminal_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "verified_complete_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "explicit_refusal_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "escalated_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sla_compliant_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sla_at_risk_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sla_paused_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sla_breached_cases": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "open_escalation_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "acknowledged_escalation_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "overdue_escalation_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "metric_result_hashes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "case_sla_state_hashes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "breach_hashes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "terminal_episode_hashes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "role_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "case_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "queue_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "planner_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "memory_store_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "audit_ledger_head_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "snapshot_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

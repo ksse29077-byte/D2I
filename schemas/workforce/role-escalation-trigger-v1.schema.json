@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RoleEscalationTriggerV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trigger_id",
+    "organization_id",
+    "role_contract_sha256",
+    "case_id",
+    "trigger_source_kind",
+    "source_artifact_sha256",
+    "reason_codes",
+    "safety_severity",
+    "authority_impact",
+    "sla_breach_sha256",
+    "kpi_breach_sha256",
+    "case_escalation_request_sha256",
+    "detected_at_unix_seconds",
+    "evidence_ids",
+    "trigger_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "trigger_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "organization_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+    },
+    "role_contract_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "trigger_source_kind": {
+      "type": "string",
+      "enum": [
+        "case_mandatory_escalation",
+        "recovery_escalation",
+        "authority_exceeded",
+        "policy_unknown",
+        "unsafe_verification",
+        "legal_approval",
+        "high_criticality",
+        "sensitive_input",
+        "sla_breach",
+        "kpi_breach",
+        "report_publication_failure",
+        "role_suspended_or_revoked",
+        "escalation_pending_timeout"
+      ]
+    },
+    "source_artifact_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "reason_codes": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "safety_severity": {
+      "type": "string",
+      "enum": [
+        "routine",
+        "elevated",
+        "high",
+        "unsafe"
+      ]
+    },
+    "authority_impact": {
+      "type": "string",
+      "enum": [
+        "none",
+        "operational_attention",
+        "requires_authorized_human"
+      ]
+    },
+    "sla_breach_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "kpi_breach_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "case_escalation_request_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "detected_at_unix_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_ids": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,511}$"
+      }
+    },
+    "trigger_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
