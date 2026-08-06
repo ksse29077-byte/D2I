@@ -1,0 +1,135 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/memory-augmented-case-context-v1.schema.json",
+    "title":  "MemoryAugmentedCaseContextV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "approved_case_context_sha256",
+                     "current_case_id",
+                     "current_case_instance_sha256",
+                     "current_work_grant_sha256",
+                     "current_lease_sha256",
+                     "current_situation_model_sha256",
+                     "memory_namespace_sha256",
+                     "reuse_policy",
+                     "retrieved_episode_hashes",
+                     "approved_summary_hashes",
+                     "query_receipt_sha256",
+                     "memory_use_policy_sha256",
+                     "historical_trust_class",
+                     "expires_at_unix_ms",
+                     "evidence_ids",
+                     "augmented_context_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "approved_case_context_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "current_case_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "current_case_instance_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "current_work_grant_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "current_lease_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "current_situation_model_sha256":  {
+                                                              "anyOf":  [
+                                                                            {
+                                                                                "type":  "string",
+                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                "maxLength":  71
+                                                                            },
+                                                                            {
+                                                                                "type":  "null"
+                                                                            }
+                                                                        ]
+                                                          },
+                       "memory_namespace_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "reuse_policy":  {
+                                            "enum":  [
+                                                         "forbidden",
+                                                         "hash_reference_only",
+                                                         "approved_summary_only"
+                                                     ]
+                                        },
+                       "retrieved_episode_hashes":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                      "maxLength":  71
+                                                                  }
+                                                    },
+                       "approved_summary_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "query_receipt_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "memory_use_policy_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "historical_trust_class":  {
+                                                      "enum":  [
+                                                                   "historical_non_authoritative"
+                                                               ]
+                                                  },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  256
+                                                      }
+                                        },
+                       "augmented_context_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    }
+                   },
+    "additionalProperties":  false
+}

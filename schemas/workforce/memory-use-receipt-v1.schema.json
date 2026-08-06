@@ -1,0 +1,160 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/memory-use-receipt-v1.schema.json",
+    "title":  "MemoryUseReceiptV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "current_case_id",
+                     "current_case_instance_sha256",
+                     "current_work_grant_sha256",
+                     "planner_generation",
+                     "query_sha256",
+                     "query_result_sha256",
+                     "episode_hashes",
+                     "approved_summary_hashes",
+                     "reuse_policy",
+                     "namespace_sha256",
+                     "role_memory_boundary_sha256",
+                     "provider_invocation_sha256",
+                     "situation_model_sha256",
+                     "use_purpose",
+                     "trust_class",
+                     "used_at_unix_ms",
+                     "expires_at_unix_ms",
+                     "evidence_ids",
+                     "receipt_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "current_case_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "current_case_instance_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "current_work_grant_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "planner_generation":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "query_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "query_result_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "episode_hashes":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        }
+                                          },
+                       "approved_summary_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "reuse_policy":  {
+                                            "enum":  [
+                                                         "forbidden",
+                                                         "hash_reference_only",
+                                                         "approved_summary_only"
+                                                     ]
+                                        },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "role_memory_boundary_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "provider_invocation_sha256":  {
+                                                          "anyOf":  [
+                                                                        {
+                                                                            "type":  "string",
+                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                            "maxLength":  71
+                                                                        },
+                                                                        {
+                                                                            "type":  "null"
+                                                                        }
+                                                                    ]
+                                                      },
+                       "situation_model_sha256":  {
+                                                      "anyOf":  [
+                                                                    {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    },
+                                                                    {
+                                                                        "type":  "null"
+                                                                    }
+                                                                ]
+                                                  },
+                       "use_purpose":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  4096
+                                       },
+                       "trust_class":  {
+                                           "enum":  [
+                                                        "historical_non_authoritative"
+                                                    ]
+                                       },
+                       "used_at_unix_ms":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  9007199254740991
+                                           },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  256
+                                                      }
+                                        },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   },
+    "additionalProperties":  false
+}

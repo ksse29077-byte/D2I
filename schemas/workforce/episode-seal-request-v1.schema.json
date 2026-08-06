@@ -1,0 +1,78 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-seal-request-v1.schema.json",
+    "title":  "EpisodeSealRequestV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "request_id",
+                     "requested_at_unix_ms",
+                     "trusted_now_unix_ms",
+                     "terminal_record_present",
+                     "episode",
+                     "namespace",
+                     "namespace_approval",
+                     "authoritative_heads",
+                     "existing_episode_sha256",
+                     "source_references_resolvable"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "request_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  4096
+                                      },
+                       "requested_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  9007199254740991
+                                                },
+                       "trusted_now_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  9007199254740991
+                                               },
+                       "terminal_record_present":  {
+                                                       "type":  "boolean"
+                                                   },
+                       "episode":  {
+                                       "type":  "object",
+                                       "maxProperties":  128
+                                   },
+                       "namespace":  {
+                                         "type":  "object",
+                                         "maxProperties":  128
+                                     },
+                       "namespace_approval":  {
+                                                  "type":  "object",
+                                                  "maxProperties":  128
+                                              },
+                       "authoritative_heads":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "items":  {
+                                                                 "type":  "object",
+                                                                 "maxProperties":  128
+                                                             }
+                                               },
+                       "existing_episode_sha256":  {
+                                                       "anyOf":  [
+                                                                     {
+                                                                         "type":  "string",
+                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                         "maxLength":  71
+                                                                     },
+                                                                     {
+                                                                         "type":  "null"
+                                                                     }
+                                                                 ]
+                                                   },
+                       "source_references_resolvable":  {
+                                                            "type":  "boolean"
+                                                        }
+                   },
+    "additionalProperties":  false
+}

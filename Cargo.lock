@@ -271,6 +271,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "d2i-case-learning"
+version = "0.9.0"
+dependencies = [
+ "d2i-episodic-memory",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "d2i-cli"
 version = "0.9.0"
 dependencies = [
@@ -339,8 +350,10 @@ dependencies = [
  "d2i-action-selection",
  "d2i-adaptive-planner",
  "d2i-application-semantics",
+ "d2i-case-learning",
  "d2i-cognitive-ir",
  "d2i-cognitive-recovery",
+ "d2i-episodic-memory",
  "d2i-intelligence-provider",
  "d2i-module-sdk",
  "d2i-policy-admission",
@@ -366,6 +379,18 @@ version = "0.9.0"
 dependencies = [
  "d2i-compiler",
  "d2i-core",
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-episodic-memory"
+version = "0.9.0"
+dependencies = [
+ "d2i-role-contract",
  "ed25519-dalek",
  "jsonschema",
  "serde",

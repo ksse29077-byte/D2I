@@ -12,10 +12,11 @@ The compiler and package architecture remains unchanged by Workforce
 governance. `D2I-WORK-100 - Role Contract v1`, `D2I-WORK-200 - Work Item /
 Case Contract v1`, `D2I-WORK-300 - Work Radar and Work Intake`, and
 `D2I-WORK-400 - Work Queue, Scheduler and Case Ownership`, and
-`D2I-WORK-500 - Situation Model and Adaptive Planner` are complete
+`D2I-WORK-500 - Situation Model and Adaptive Planner` and `D2I-WORK-600 -
+Episodic Memory and Case Learning Records` are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. The active next task is `D2I-WORK-600 - Episodic Memory
-and Case Learning Records`.
+runtime boundaries. The active next task is `D2I-WORK-700 - Role-level
+Reporting, SLA and Escalation`.
 
 ## Product Context
 

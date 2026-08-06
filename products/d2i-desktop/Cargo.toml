@@ -19,6 +19,8 @@ d2i-work-queue = { path = "../../crates/d2i-work-queue" }
 d2i-situation-model = { path = "../../crates/d2i-situation-model" }
 d2i-intelligence-provider = { path = "../../crates/d2i-intelligence-provider" }
 d2i-adaptive-planner = { path = "../../crates/d2i-adaptive-planner" }
+d2i-episodic-memory = { path = "../../crates/d2i-episodic-memory" }
+d2i-case-learning = { path = "../../crates/d2i-case-learning" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }
 d2i-windows-host = { path = "../../crates/d2i-windows-host" }
@@ -63,3 +65,7 @@ path = "src/bin/d2i-work500-evaluator.rs"
 [[bin]]
 name = "d2i-work500-model-e2e"
 path = "src/bin/d2i-work500-model-e2e.rs"
+
+[[bin]]
+name = "d2i-work600-memory-e2e"
+path = "src/bin/d2i-work600-memory-e2e.rs"

@@ -2,14 +2,67 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$WindowTitle,
     [Parameter(Mandatory = $true)]
-    [string]$OutputPath
+    [string]$OutputPath,
+    [string]$ReadyPath
 )
 
 $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
-$form = New-Object System.Windows.Forms.Form
+public sealed class D2INonActivatingObservationForm : Form
+{
+    private const int WsExNoActivate = 0x08000000;
+    private const uint SwpNoSize = 0x0001;
+    private const uint SwpNoMove = 0x0002;
+    private const uint SwpNoActivate = 0x0010;
+    private static readonly IntPtr HwndBottom = new IntPtr(1);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool SetWindowPos(
+        IntPtr window,
+        IntPtr insertAfter,
+        int x,
+        int y,
+        int width,
+        int height,
+        uint flags);
+
+    protected override bool ShowWithoutActivation
+    {
+        get { return true; }
+    }
+
+    protected override CreateParams CreateParams
+    {
+        get
+        {
+            CreateParams parameters = base.CreateParams;
+            parameters.ExStyle |= WsExNoActivate;
+            return parameters;
+        }
+    }
+
+    protected override void OnShown(EventArgs eventArgs)
+    {
+        base.OnShown(eventArgs);
+        SetWindowPos(
+            Handle,
+            HwndBottom,
+            0,
+            0,
+            0,
+            0,
+            SwpNoSize | SwpNoMove | SwpNoActivate);
+    }
+}
+"@ -ReferencedAssemblies System.Windows.Forms
+
+$form = New-Object D2INonActivatingObservationForm
 $form.Text = $WindowTitle
 $form.Size = New-Object System.Drawing.Size(720, 560)
 $form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
@@ -103,7 +156,14 @@ $hidden.Visible = $false
 $form.Controls.Add($hidden)
 
 $form.Add_Shown({
-    $form.Activate()
+    $form.Update()
+    if ($ReadyPath) {
+        [System.IO.File]::WriteAllText(
+            $ReadyPath,
+            "ready",
+            [System.Text.UTF8Encoding]::new($false)
+        )
+    }
 })
 
 [System.Windows.Forms.Application]::Run($form)

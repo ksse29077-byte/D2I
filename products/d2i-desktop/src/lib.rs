@@ -11,6 +11,7 @@ mod cognitive_recovery;
 mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
+mod episodic_memory;
 mod executor;
 mod local_model_provider;
 mod policy;
@@ -141,6 +142,11 @@ pub use d2i_trusted_action_execution::{
     TrustedExecutionBindingRequestV1, TrustedExecutionError, TrustedExecutionSessionV1,
     TrustedExecutionStatusV1, TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
     TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+};
+pub use episodic_memory::{
+    initialize_episodic_memory_store, recover_episodic_memory_store, verify_episodic_memory_store,
+    EpisodicMemoryStoreV1, EpisodicMemoryStoreVerificationV1, MemoryStoreLedgerRecordV1,
+    MemoryStoreRecordKindV1,
 };
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
 pub use local_model_provider::{

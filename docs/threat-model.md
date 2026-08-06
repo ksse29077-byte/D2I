@@ -514,3 +514,28 @@ custody, external time and ledger-head anchoring, and the narrow General Office
 fixture surface. These risks do not create direct execution authority. A
 failed, stale, ambiguous, conflicting, unavailable, or unverified result fails
 closed or produces bounded clarification/escalation.
+
+## WORK-600 Episodic Memory And Learning Threats
+
+WORK-600 addresses Case-history substitution, non-terminal sealing, stale or
+missing ledger heads, duplicate Case semantics, cross-organization or
+cross-Role retrieval, unsigned/expired summaries, memory prompt injection,
+historical authority expansion, stale observations, raw credential/UI/locator
+retention, unbounded scans, candidate poisoning, automatic promotion, store
+rollback, object/index mismatch, DACL drift, reparse traversal, concurrent
+writers, partial durability, and crash replay.
+
+Mitigations include terminal-only deterministic Episode IDs, exact source
+sequence/head and artifact hashes, signed namespace and summary binding,
+Role-policy intersection, exact typed query filters, bounded deterministic
+ordering, `historical_non_authoritative` labeling, fresh-observation priority,
+one-consumption use receipts, prohibited marker/data-class checks, finite
+retention, permanent tombstones, current-user DACL fingerprints,
+content-addressed objects, append-only hash chains, atomic indexes, one writer,
+and reference-only crash repair. Learning candidates remain quarantined and
+offline export requires identical production hashes before and after.
+
+Residual risks are external trusted-time and chain-head anchoring, organization
+key custody, semantic quality of approved summaries, physical secure deletion,
+and the narrow General Office Windows fixture. None creates fallback authority,
+online self-modification, fuzzy retrieval, or production promotion.

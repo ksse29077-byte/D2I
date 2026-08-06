@@ -1,0 +1,57 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-tombstone-v1.schema.json",
+    "title":  "EpisodeTombstoneV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "episode_id",
+                     "episode_sha256",
+                     "namespace_sha256",
+                     "tombstoned_at_unix_ms",
+                     "reason_code",
+                     "protected_audit_sha256",
+                     "tombstone_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "episode_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  4096
+                                      },
+                       "episode_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "tombstoned_at_unix_ms":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  9007199254740991
+                                                 },
+                       "reason_code":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  4096
+                                       },
+                       "protected_audit_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "tombstone_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            }
+                   },
+    "additionalProperties":  false
+}

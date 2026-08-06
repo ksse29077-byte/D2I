@@ -1,0 +1,147 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episodic-memory-replay-report-v1.schema.json",
+    "title":  "EpisodicMemoryReplayReportV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "total_episodes",
+                     "verified_complete",
+                     "explicit_refusal",
+                     "escalated",
+                     "query_matches",
+                     "summaries_returned",
+                     "hash_only_references_returned",
+                     "denied_reuse",
+                     "candidates_generated",
+                     "candidates_quarantined",
+                     "tombstones",
+                     "input_bytes",
+                     "output_bytes",
+                     "peak_records",
+                     "logical_operations",
+                     "critical_error_count",
+                     "episode_set_sha256",
+                     "index_sha256",
+                     "query_sha256",
+                     "attachment_sha256",
+                     "candidate_set_sha256",
+                     "normalized_report_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "total_episodes":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  9007199254740991
+                                          },
+                       "verified_complete":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  9007199254740991
+                                             },
+                       "explicit_refusal":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  9007199254740991
+                                            },
+                       "escalated":  {
+                                         "type":  "integer",
+                                         "minimum":  0,
+                                         "maximum":  9007199254740991
+                                     },
+                       "query_matches":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  9007199254740991
+                                         },
+                       "summaries_returned":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "hash_only_references_returned":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  9007199254740991
+                                                         },
+                       "denied_reuse":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  9007199254740991
+                                        },
+                       "candidates_generated":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  9007199254740991
+                                                },
+                       "candidates_quarantined":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  9007199254740991
+                                                  },
+                       "tombstones":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  9007199254740991
+                                      },
+                       "input_bytes":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  9007199254740991
+                                       },
+                       "output_bytes":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  9007199254740991
+                                        },
+                       "peak_records":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  9007199254740991
+                                        },
+                       "logical_operations":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "critical_error_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  9007199254740991
+                                                },
+                       "episode_set_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "index_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "query_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "attachment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "candidate_set_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "normalized_report_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    }
+                   },
+    "additionalProperties":  false
+}

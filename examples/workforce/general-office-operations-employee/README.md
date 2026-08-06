@@ -17,5 +17,10 @@ semantic action at a time. An incorrect value follows SetValue then Save; an
 already-correct value skips SetValue and follows Save. Both paths cross the
 existing Safe Execution Kernel and require independent verified closure.
 
+WORK-600 seals both terminal paths as reference-only Episodes. This canonical
+`1.0.0` Role remains `hash_reference_only` with learning candidates disabled;
+the separately compiled `general-office-operations-employee-memory-v1`
+fixture alone tests signed summaries and quarantined offline candidates.
+
 All identifiers in this directory are example-owned domain vocabulary. The
 generic Radar, Intake, Work Item, and Case crates do not interpret these names.

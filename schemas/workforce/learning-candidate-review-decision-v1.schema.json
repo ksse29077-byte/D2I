@@ -1,0 +1,86 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/learning-candidate-review-decision-v1.schema.json",
+    "title":  "LearningCandidateReviewDecisionV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "candidate_sha256",
+                     "evaluation_sha256",
+                     "decision",
+                     "reviewer_id",
+                     "signing_key_id",
+                     "decided_at_unix_ms",
+                     "expires_at_unix_ms",
+                     "evidence_ids",
+                     "decision_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "candidate_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "evaluation_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "decision":  {
+                                        "enum":  [
+                                                     "quarantined",
+                                                     "rejected",
+                                                     "exported_for_offline_evaluation",
+                                                     "evaluation_passed",
+                                                     "evaluation_failed",
+                                                     "approved_for_offline_build",
+                                                     "archived"
+                                                 ]
+                                    },
+                       "reviewer_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  4096
+                                       },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  4096
+                                          },
+                       "decided_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  256
+                                                      }
+                                        },
+                       "decision_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   },
+    "additionalProperties":  false
+}

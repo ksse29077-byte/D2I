@@ -117,6 +117,23 @@ pub enum WindowsDeploymentAuditEventKind {
     RoleBoundTaskStarted,
     RoleBoundTaskTerminal,
     RoleLedgerRejected,
+    MemoryStoreStarted,
+    MemoryNamespaceVerified,
+    EpisodeSealRequested,
+    EpisodeSealed,
+    EpisodeSealRejected,
+    MemoryObjectStored,
+    MemoryQueryAccepted,
+    MemoryQueryRejected,
+    EpisodeSummaryVerified,
+    MemoryAttachmentCreated,
+    MemoryUseRecorded,
+    LearningCandidateQuarantined,
+    LearningExportCreated,
+    MemoryReplayVerified,
+    MemoryTamperRejected,
+    MemoryStoreRecovered,
+    MemoryStoreCleaned,
 }
 
 /// Outcome classification with no unrestricted payload.

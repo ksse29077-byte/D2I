@@ -5,7 +5,8 @@
 `D2I-WORK-100 - Role Contract v1`, `D2I-WORK-200 - Work Item / Case
 Contract v1`, `D2I-WORK-300 - Work Radar and Work Intake`, and
 `D2I-WORK-400 - Work Queue, Scheduler and Case Ownership`, and
-`D2I-WORK-500 - Situation Model and Adaptive Planner` are complete. The platform now has
+`D2I-WORK-500 - Situation Model and Adaptive Planner` and `D2I-WORK-600 -
+Episodic Memory and Case Learning Records` are complete. The platform now has
 deterministic immutable Role contracts, exact organization approval, bounded
 signed delegation, persistent protected Role Instances, one-time task
 admission, existing authority/recovery projections, and a role-bound KRN-500
@@ -19,8 +20,11 @@ chains, signed-pool ownership reassignment, restart recovery, and a
 non-executable Work Grant. WORK-500 adds approved Case context, provenance-
 separated Situation Models, a model-neutral provider boundary, a pinned local
 model process, one-step validated planning, fresh re-observation, and adaptive
-KRN closure. The active next task is `D2I-WORK-600 - Episodic Memory and Case
-Learning Records`. Production connectors remain unimplemented.
+KRN closure. WORK-600 adds exactly-once reference-only terminal Episodes,
+Role-policy-bounded exact retrieval, signed summaries, a protected Desktop
+memory store, and quarantined offline learning candidates. The active next
+task is `D2I-WORK-700 - Role-level Reporting, SLA and Escalation`. Production
+connectors remain unimplemented.
 
 ## Active Product Goal
 

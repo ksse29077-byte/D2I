@@ -25,6 +25,8 @@ members = [
     "crates/d2i-situation-model",
     "crates/d2i-intelligence-provider",
     "crates/d2i-adaptive-planner",
+    "crates/d2i-episodic-memory",
+    "crates/d2i-case-learning",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

@@ -415,7 +415,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-600 - Episodic Memory and Case Learning Records`
+`D2I-WORK-700 - Role-level Reporting, SLA and Escalation`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -437,4 +437,12 @@ ownership reassignment, non-executable grants, crash repair, and 128-Case
 deterministic replay. WORK-500 now proves actual bounded local-model goal and
 situation interpretation, validated one-step adaptive planning, fresh
 replanning, existing KRN execution, adaptive path divergence, and verified
-closure. WORK-600 is next; episodic memory is not implemented.
+closure. WORK-600 now seals terminal Cases exactly once as reference-only
+Episodes, enforces Role memory policy, stores them in a protected Desktop
+ledger/index, attaches only signed historical summaries, prefers fresh state
+in an actual model-backed Path C, and quarantines offline learning candidates
+without production mutation. The General Office `1.0.0` and memory-enabled
+`1.1.0` Role bundles are independently compiled and verified; `1.1.0` memory
+evidence binds its exact contract, signed approval, signed delegation, and
+active Role Instance rather than fixture hashes. WORK-700 is the first active
+task.

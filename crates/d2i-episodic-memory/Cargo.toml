@@ -1,0 +1,22 @@
+[package]
+name = "d2i-episodic-memory"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-role-contract = { path = "../d2i-role-contract" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-memory"
+path = "src/bin/d2i-memory.rs"

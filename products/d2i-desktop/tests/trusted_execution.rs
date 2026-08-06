@@ -54,7 +54,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Mutex, MutexGuard};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 static UIA_FIXTURE_LOCK: Mutex<()> = Mutex::new(());
@@ -100,7 +100,43 @@ fn ok<T, E: Debug>(result: Result<T, E>) -> T {
 }
 
 fn lock_uia_fixture() -> MutexGuard<'static, ()> {
-    ok(UIA_FIXTURE_LOCK.lock())
+    match UIA_FIXTURE_LOCK.lock() {
+        Ok(guard) => guard,
+        Err(poisoned) => poisoned.into_inner(),
+    }
+}
+
+fn wait_for_uia_fixture(fixture: &mut ChildGuard, ready_path: &Path) {
+    let deadline = Instant::now() + Duration::from_secs(10);
+    loop {
+        assert!(
+            ok(fixture.0.try_wait()).is_none(),
+            "UIA fixture exited before publishing readiness"
+        );
+        if ready_path.is_file() {
+            assert_eq!(ok(fs::read_to_string(ready_path)), "ready");
+            return;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "UIA fixture did not publish readiness before its deadline"
+        );
+        std::thread::sleep(Duration::from_millis(50));
+    }
+}
+
+fn wait_for_file_contents(path: &Path, expected: &[u8]) {
+    let deadline = Instant::now() + Duration::from_secs(5);
+    loop {
+        if fs::read(path).is_ok_and(|bytes| bytes == expected) {
+            return;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "UIA fixture output did not reach the expected value before its deadline"
+        );
+        std::thread::sleep(Duration::from_millis(50));
+    }
 }
 
 fn assert_reobserve_schema<T: Serialize>(artifact: &T) {
@@ -1313,6 +1349,7 @@ fn actual_windows_uia_failure_recovers_through_a_wholly_fresh_second_cycle() {
     let executable_hash = sha(&ok(fs::read(&powershell)));
     let title = format!("D2I Actual Recovery {}", std::process::id());
     let output_path = temp.path().join("actual-recovery-value.txt");
+    let ready_path = temp.path().join("actual-recovery-ready.txt");
     let script = ok(fs::canonicalize(
         Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests")
@@ -1326,11 +1363,12 @@ fn actual_windows_uia_failure_recovers_through_a_wholly_fresh_second_cycle() {
         .arg(&title)
         .arg("-OutputPath")
         .arg(&output_path)
+        .arg("-ReadyPath")
+        .arg(&ready_path)
         .spawn());
     let process_id = child.id();
     let mut fixture_process = ChildGuard(child);
-    std::thread::sleep(Duration::from_millis(1_500));
-    assert!(ok(fixture_process.0.try_wait()).is_none());
+    wait_for_uia_fixture(&mut fixture_process, &ready_path);
 
     let configuration = configuration(&executable_hash);
     let configuration_hash = ok(configuration.configuration_hash());
@@ -1384,7 +1422,7 @@ fn actual_windows_uia_failure_recovers_through_a_wholly_fresh_second_cycle() {
     );
     assert_eq!(first.verdict, VerificationVerdictV2::Failed);
     assert_ne!(first.source.state_hash, first.fresh.state_hash);
-    assert_eq!(ok(fs::read(&output_path)), temporary_value);
+    wait_for_file_contents(&output_path, temporary_value);
 
     let trigger = ok(RecoveryTriggerV1 {
         schema_version: RECOVERY_SCHEMA_VERSION,
@@ -1571,7 +1609,7 @@ fn actual_windows_uia_failure_recovers_through_a_wholly_fresh_second_cycle() {
     assert_ne!(first.admission_sha256, second.admission_sha256);
     assert_ne!(first.activation_record_hash, second.activation_record_hash);
     assert_ne!(first.receipt_sha256, second.receipt_sha256);
-    assert_eq!(ok(fs::read(&output_path)), final_value);
+    wait_for_file_contents(&output_path, final_value);
 
     let unsafe_cycle = run_actual_unsafe_toggle(&temp, &configuration, &target, &second.fresh, now);
     assert_eq!(unsafe_cycle.verdict, VerificationVerdictV2::Unsafe);
@@ -1715,6 +1753,7 @@ fn cognitive_admission_binds_to_one_shot_windows_uia_execution() {
     let executable_hash = sha(&ok(fs::read(&powershell)));
     let title = format!("D2I Trusted Execution {}", std::process::id());
     let output_path = temp.path().join("trusted-uia-value.txt");
+    let ready_path = temp.path().join("trusted-uia-ready.txt");
     let script = ok(fs::canonicalize(
         Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests")
@@ -1728,14 +1767,12 @@ fn cognitive_admission_binds_to_one_shot_windows_uia_execution() {
         .arg(&title)
         .arg("-OutputPath")
         .arg(&output_path)
+        .arg("-ReadyPath")
+        .arg(&ready_path)
         .spawn());
     let process_id = child.id();
     let mut fixture_process = ChildGuard(child);
-    std::thread::sleep(Duration::from_millis(1_500));
-    assert!(
-        ok(fixture_process.0.try_wait()).is_none(),
-        "UIA fixture exited before trusted execution"
-    );
+    wait_for_uia_fixture(&mut fixture_process, &ready_path);
 
     let configuration = configuration(&executable_hash);
     let (windows_admission, session_id) = certified_admission(&configuration, &temp, now);
@@ -1844,13 +1881,7 @@ fn cognitive_admission_binds_to_one_shot_windows_uia_execution() {
             .any(|value| value == "not-postcondition-verified"),
         "adapter attempt was presented as a verified postcondition"
     );
-    for _ in 0..50 {
-        if fs::read(&output_path).is_ok_and(|bytes| bytes == payload_bytes) {
-            break;
-        }
-        std::thread::sleep(Duration::from_millis(100));
-    }
-    assert_eq!(ok(fs::read(&output_path)), payload_bytes);
+    wait_for_file_contents(&output_path, &payload_bytes);
     for _ in 0..30 {
         if !process_exists(worker_process_id) {
             break;
@@ -1901,6 +1932,7 @@ fn live_execution_is_freshly_reobserved_and_verified() {
     let executable_hash = sha(&ok(fs::read(&powershell)));
     let title = format!("D2I Reobserve Verification {}", std::process::id());
     let output_path = temp.path().join("reobserve-uia-value.txt");
+    let ready_path = temp.path().join("reobserve-uia-ready.txt");
     let script = ok(fs::canonicalize(
         Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests")
@@ -1914,11 +1946,12 @@ fn live_execution_is_freshly_reobserved_and_verified() {
         .arg(&title)
         .arg("-OutputPath")
         .arg(&output_path)
+        .arg("-ReadyPath")
+        .arg(&ready_path)
         .spawn());
     let process_id = child.id();
     let mut fixture_process = ChildGuard(child);
-    std::thread::sleep(Duration::from_millis(1_500));
-    assert!(ok(fixture_process.0.try_wait()).is_none());
+    wait_for_uia_fixture(&mut fixture_process, &ready_path);
 
     let configuration = configuration(&executable_hash);
     let configuration_hash = ok(configuration.configuration_hash());
@@ -2114,13 +2147,7 @@ fn live_execution_is_freshly_reobserved_and_verified() {
     let execution = ok(to_verification_bound_execution_v2(&receipt));
     drop(executor);
     assert!(!process_exists(mutation_worker_id));
-    for _ in 0..50 {
-        if fs::read(&output_path).is_ok_and(|bytes| bytes == payload_bytes) {
-            break;
-        }
-        std::thread::sleep(Duration::from_millis(100));
-    }
-    assert_eq!(ok(fs::read(&output_path)), payload_bytes);
+    wait_for_file_contents(&output_path, &payload_bytes);
 
     let reobservation_request = ok(ReobservationRequestV1::new(
         &execution_binding,

@@ -1,0 +1,21 @@
+[package]
+name = "d2i-case-learning"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-episodic-memory = { path = "../d2i-episodic-memory" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-case-learning"
+path = "src/bin/d2i-case-learning.rs"

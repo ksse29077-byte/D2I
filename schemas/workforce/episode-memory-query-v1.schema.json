@@ -1,0 +1,88 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-memory-query-v1.schema.json",
+    "title":  "EpisodeMemoryQueryV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "query_id",
+                     "organization_id",
+                     "namespace_id",
+                     "namespace_sha256",
+                     "current_role_contract_sha256",
+                     "current_case_id",
+                     "requested_policy",
+                     "filters",
+                     "maximum_results",
+                     "issued_at_unix_ms",
+                     "expires_at_unix_ms",
+                     "query_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "query_id":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  4096
+                                    },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "namespace_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  4096
+                                        },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "current_role_contract_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "current_case_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "requested_policy":  {
+                                                "enum":  [
+                                                             "forbidden",
+                                                             "hash_reference_only",
+                                                             "approved_summary_only"
+                                                         ]
+                                            },
+                       "filters":  {
+                                       "type":  "object",
+                                       "maxProperties":  128
+                                   },
+                       "maximum_results":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  9007199254740991
+                                           },
+                       "issued_at_unix_ms":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  9007199254740991
+                                             },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "query_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        }
+                   },
+    "additionalProperties":  false
+}

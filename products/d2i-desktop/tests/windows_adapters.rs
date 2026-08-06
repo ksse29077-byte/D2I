@@ -100,6 +100,25 @@ impl Drop for ChildGuard {
     }
 }
 
+fn wait_for_uia_fixture(fixture: &mut ChildGuard, ready_path: &Path) {
+    let deadline = Instant::now() + Duration::from_secs(10);
+    loop {
+        assert!(
+            ok(fixture.0.try_wait()).is_none(),
+            "UIA fixture exited before publishing readiness"
+        );
+        if ready_path.is_file() {
+            assert_eq!(ok(fs::read_to_string(ready_path)), "ready");
+            return;
+        }
+        assert!(
+            Instant::now() < deadline,
+            "UIA fixture did not publish readiness before its deadline"
+        );
+        std::thread::sleep(Duration::from_millis(50));
+    }
+}
+
 fn sha(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))
 }
@@ -917,6 +936,7 @@ fn signed_uia_binding_lists_windows_through_isolated_worker() {
     ));
     let executable_hash = sha(&ok(fs::read(&powershell)));
     let title = format!("D2I UI List Fixture {}", std::process::id());
+    let ready_path = temp.path().join("uia-list-ready.txt");
     let script = ok(fs::canonicalize(
         Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests")
@@ -930,14 +950,12 @@ fn signed_uia_binding_lists_windows_through_isolated_worker() {
         .arg(&title)
         .arg("-OutputPath")
         .arg(temp.path().join("uia-list-value.txt"))
+        .arg("-ReadyPath")
+        .arg(&ready_path)
         .spawn());
     let process_id = child.id();
     let mut fixture_process = ChildGuard(child);
-    std::thread::sleep(Duration::from_millis(1_500));
-    assert!(
-        ok(fixture_process.0.try_wait()).is_none(),
-        "Windows Forms list fixture exited before UI Automation"
-    );
+    wait_for_uia_fixture(&mut fixture_process, &ready_path);
     let mut configuration = base_configuration(WindowsAdapterKind::UiAutomation);
     configuration
         .ui_allowed_executable_hashes
@@ -1012,6 +1030,7 @@ fn activated_uia_observer_reads_actual_fixture_without_side_effects() {
     let executable_hash = sha(&ok(fs::read(&powershell)));
     let title = format!("D2I UI Observation Fixture {}", std::process::id());
     let output_path = temp.path().join("uia-observation-value.txt");
+    let ready_path = temp.path().join("uia-observation-ready.txt");
     let script = ok(fs::canonicalize(
         Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests")
@@ -1025,14 +1044,12 @@ fn activated_uia_observer_reads_actual_fixture_without_side_effects() {
         .arg(&title)
         .arg("-OutputPath")
         .arg(&output_path)
+        .arg("-ReadyPath")
+        .arg(&ready_path)
         .spawn());
     let process_id = child.id();
     let mut fixture_process = ChildGuard(child);
-    std::thread::sleep(Duration::from_millis(1_500));
-    assert!(
-        ok(fixture_process.0.try_wait()).is_none(),
-        "Windows Forms observation fixture exited before UI Automation"
-    );
+    wait_for_uia_fixture(&mut fixture_process, &ready_path);
     assert!(
         !output_path.exists(),
         "fixture output changed before observation"
@@ -1251,6 +1268,7 @@ fn signed_uia_binding_mutates_actual_windows_form_text() {
     let executable_hash = sha(&ok(fs::read(&powershell)));
     let title = format!("D2I UI Fixture {}", std::process::id());
     let output_path = temp.path().join("uia-value.txt");
+    let ready_path = temp.path().join("uia-mutation-ready.txt");
     let script = ok(fs::canonicalize(
         Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests")
@@ -1264,14 +1282,12 @@ fn signed_uia_binding_mutates_actual_windows_form_text() {
         .arg(&title)
         .arg("-OutputPath")
         .arg(&output_path)
+        .arg("-ReadyPath")
+        .arg(&ready_path)
         .spawn());
     let process_id = child.id();
     let mut fixture_process = ChildGuard(child);
-    std::thread::sleep(Duration::from_millis(1_500));
-    assert!(
-        ok(fixture_process.0.try_wait()).is_none(),
-        "Windows Forms fixture exited before UI Automation"
-    );
+    wait_for_uia_fixture(&mut fixture_process, &ready_path);
 
     let mut configuration = base_configuration(WindowsAdapterKind::UiAutomation);
     configuration

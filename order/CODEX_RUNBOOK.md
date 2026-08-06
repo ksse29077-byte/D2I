@@ -34,8 +34,8 @@ Track K is complete. Do not create KRN-600.
 - `D2I-WORK-300` Work Radar and Work Intake - **complete**
 - `D2I-WORK-400` Work Queue, Scheduler and Case Ownership - **complete**
 - `D2I-WORK-500` Situation Model and Adaptive Planner - **complete**
-- `D2I-WORK-600` Episodic Memory and Case Learning Records - **active**
-- `D2I-WORK-700` Role-level Reporting, SLA and Escalation
+- `D2I-WORK-600` Episodic Memory and Case Learning Records - **complete**
+- `D2I-WORK-700` Role-level Reporting, SLA and Escalation - **active**
 - `D2I-WORK-800` Open Digital Employee Shadow Mode
 - `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
 

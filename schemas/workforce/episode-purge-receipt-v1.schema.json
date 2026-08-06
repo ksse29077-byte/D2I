@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.example/schemas/workforce/episode-purge-receipt-v1.schema.json",
+  "title": "EpisodePurgeReceiptV1",
+  "type": "object",
+  "required": ["schema_version", "episode_id", "episode_sha256", "tombstone_sha256", "object_removed", "summary_removed", "secure_erase_claimed", "completed_at_unix_ms", "receipt_sha256"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "episode_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "episode_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "tombstone_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "object_removed": { "type": "boolean" },
+    "summary_removed": { "type": "boolean" },
+    "secure_erase_claimed": { "const": false },
+    "completed_at_unix_ms": { "type": "integer", "minimum": 1 },
+    "receipt_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  },
+  "additionalProperties": false
+}

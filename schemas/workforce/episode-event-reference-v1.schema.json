@@ -1,0 +1,127 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-event-reference-v1.schema.json",
+    "title":  "EpisodeEventReferenceV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "event_sequence",
+                     "event_kind",
+                     "occurred_at_unix_ms",
+                     "source_ledger_class",
+                     "source_ledger_id",
+                     "source_ledger_sequence",
+                     "source_ledger_head_sha256",
+                     "source_artifact_type",
+                     "source_artifact_id",
+                     "source_artifact_sha256",
+                     "trust_class",
+                     "evidence_ids",
+                     "event_reference_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "event_sequence":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  9007199254740991
+                                          },
+                       "event_kind":  {
+                                          "enum":  [
+                                                       "work_received",
+                                                       "intake_admitted",
+                                                       "case_opened",
+                                                       "queue_enqueued",
+                                                       "ownership_assigned",
+                                                       "lease_claimed",
+                                                       "goal_understood",
+                                                       "provider_invoked",
+                                                       "situation_modeled",
+                                                       "plan_created",
+                                                       "next_step_admitted",
+                                                       "kernel_bound",
+                                                       "action_attempted",
+                                                       "observation_captured",
+                                                       "verification_passed",
+                                                       "verification_failed",
+                                                       "recovery_applied",
+                                                       "clarification_requested",
+                                                       "escalation_requested",
+                                                       "requirement_satisfied",
+                                                       "case_terminal",
+                                                       "memory_use",
+                                                       "audit_terminal"
+                                                   ]
+                                      },
+                       "occurred_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  9007199254740991
+                                               },
+                       "source_ledger_class":  {
+                                                   "enum":  [
+                                                                "role",
+                                                                "intake",
+                                                                "case",
+                                                                "queue_ownership",
+                                                                "planner",
+                                                                "protected_audit",
+                                                                "evidence_index",
+                                                                "terminal_case"
+                                                            ]
+                                               },
+                       "source_ledger_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  4096
+                                            },
+                       "source_ledger_sequence":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  9007199254740991
+                                                  },
+                       "source_ledger_head_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "source_artifact_type":  {
+                                                    "type":  "string",
+                                                    "minLength":  1,
+                                                    "maxLength":  4096
+                                                },
+                       "source_artifact_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  4096
+                                              },
+                       "source_artifact_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "trust_class":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  4096
+                                       },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  256
+                                                      }
+                                        },
+                       "event_reference_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  }
+                   },
+    "additionalProperties":  false
+}

@@ -1,0 +1,63 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-seal-receipt-v1.schema.json",
+    "title":  "EpisodeSealReceiptV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "request_id",
+                     "episode_id",
+                     "episode_sha256",
+                     "namespace_sha256",
+                     "decision_sha256",
+                     "sealed_at_unix_ms",
+                     "source_ledger_heads_sha256",
+                     "receipt_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "request_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  4096
+                                      },
+                       "episode_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  4096
+                                      },
+                       "episode_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "decision_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "sealed_at_unix_ms":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  9007199254740991
+                                             },
+                       "source_ledger_heads_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   },
+    "additionalProperties":  false
+}

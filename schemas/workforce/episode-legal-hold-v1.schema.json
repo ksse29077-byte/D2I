@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.example/schemas/workforce/episode-legal-hold-v1.schema.json",
+  "title": "EpisodeLegalHoldV1",
+  "type": "object",
+  "required": ["schema_version", "hold_id", "episode_id", "episode_sha256", "organization_id", "issued_at_unix_ms", "expires_at_unix_ms", "signer_id", "signing_key_id", "evidence_ids", "signature_hex"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "hold_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "episode_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "episode_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "organization_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "issued_at_unix_ms": { "type": "integer", "minimum": 1 },
+    "expires_at_unix_ms": { "type": "integer", "minimum": 1 },
+    "signer_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "signing_key_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "evidence_ids": { "type": "array", "maxItems": 256, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 256 } },
+    "signature_hex": { "type": "string", "pattern": "^[0-9a-f]{128}$" }
+  },
+  "additionalProperties": false
+}

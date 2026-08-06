@@ -480,3 +480,26 @@ existing Action Selection, Policy, Activation, Trusted Execution,
 re-observation, and Verification chain. Remaining plan text is never executed
 after a state change. Fresh Situation Model generation drives replan,
 clarification, escalation, or verified Case closure.
+
+## Reference-Only Episodic Memory And Case Learning
+
+WORK-600 consumes only verified terminal Case state. Role, Intake, Case,
+Queue/Ownership, Planner, protected audit, Evidence Index, and terminal Case
+ledgers remain authoritative. `d2i-episodic-memory` seals a bounded projection
+of their exact IDs, sequence/head references, and hashes; it never copies raw
+source payloads or grants execution, reopening, completion, or mutation
+authority.
+
+Role and signed namespace policy choose `forbidden`, `hash_reference_only`, or
+`approved_summary_only` reuse. Exact typed filters produce deterministic
+terminal-time/ID/hash ordering. Historical context is always
+`historical_non_authoritative`; current observation, policy, authority, Case,
+and evidence take precedence. `d2i-case-learning` emits only quarantined
+offline candidates and cannot alter a model, prompt, Role, Policy, Application
+Pack, routing decision, or production package.
+
+`d2i-desktop` owns the current-user DACL-protected content-addressed store,
+append-only hash chain, atomic deterministic index, one-writer coordination,
+retention/tombstone persistence, rollback/tamper detection, and reference-only
+crash repair. Recovery never replays a provider, action, activation, KRN run,
+or adapter operation.

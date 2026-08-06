@@ -1,0 +1,73 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-retention-record-v1.schema.json",
+    "title":  "EpisodeRetentionRecordV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "episode_id",
+                     "episode_sha256",
+                     "namespace_sha256",
+                     "retention_class_id",
+                     "retained_from_unix_ms",
+                     "expires_at_unix_ms",
+                     "maximum_retention_days",
+                     "status",
+                     "record_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "episode_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  4096
+                                      },
+                       "episode_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "retention_class_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  4096
+                                              },
+                       "retained_from_unix_ms":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  9007199254740991
+                                                 },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "maximum_retention_days":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  9007199254740991
+                                                  },
+                       "status":  {
+                                      "enum":  [
+                                                   "active",
+                                                   "held",
+                                                   "expired",
+                                                   "tombstoned",
+                                                   "purged"
+                                               ]
+                                  },
+                       "record_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   },
+    "additionalProperties":  false
+}

@@ -94,6 +94,13 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   capability, target, value, precondition, postcondition, Case, lease, and
   generation binding. `products/d2i-desktop` owns the protected planner ledger
   and pinned local-model Windows process boundary.
+- `crates/d2i-episodic-memory`: terminal-only reference/hash Episodes, signed
+  approved summaries, exact Role-policy-bounded query, historical context,
+  retention/tombstone, strict schemas, and deterministic replay.
+- `crates/d2i-case-learning`: quarantined learning candidates, offline
+  evaluation/review records, and zero-production-mutation export bundles.
+  `products/d2i-desktop` owns their protected current-user store, ledger,
+  index, crash repair, and actual memory-aware Qwen/KRN product evidence.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.
@@ -234,6 +241,22 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 `All` covers deterministic WORK-500 contracts. Only `Completion` can set
 `product_intelligence_evidence=true`; it additionally requires actual model
 evaluation, adaptive Windows KRN execution, regressions, and terminal cleanup.
+
+Run the WORK-600 product gate with the same approved local artifacts:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-episodic-memory-learning-v1.ps1 `
+  -Mode Completion `
+  -Runtime C:\path\to\llama-cli.exe `
+  -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
+  -OutputRoot target\d2i-workforce-memory\completion
+```
+
+It seals actual WORK-500 Path A/B as exactly-one Episodes, preserves the
+canonical General Office hash-only policy, runs an actual signed-summary Path
+C where fresh observation omits SetValue, quarantines a two-Episode candidate,
+and proves 128-Episode deterministic replay with zero production mutation.
 
 ## Checks
 

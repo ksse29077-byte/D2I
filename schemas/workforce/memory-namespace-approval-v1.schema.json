@@ -1,0 +1,74 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/memory-namespace-approval-v1.schema.json",
+    "title":  "MemoryNamespaceApprovalV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "namespace_sha256",
+                     "organization_id",
+                     "signer_id",
+                     "signing_key_id",
+                     "issued_at_unix_ms",
+                     "expires_at_unix_ms",
+                     "nonce",
+                     "evidence_ids",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "signer_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  4096
+                                     },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  4096
+                                          },
+                       "issued_at_unix_ms":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  9007199254740991
+                                             },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "nonce":  {
+                                     "type":  "string",
+                                     "minLength":  1,
+                                     "maxLength":  4096
+                                 },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  256
+                                                      }
+                                        },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   },
+    "additionalProperties":  false
+}

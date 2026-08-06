@@ -1,0 +1,70 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/episode-memory-query-result-v1.schema.json",
+    "title":  "EpisodeMemoryQueryResultV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "query_sha256",
+                     "reuse_policy",
+                     "historical_trust_class",
+                     "episode_references",
+                     "approved_summaries",
+                     "denied_reason_codes",
+                     "result_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "query_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "reuse_policy":  {
+                                            "enum":  [
+                                                         "forbidden",
+                                                         "hash_reference_only",
+                                                         "approved_summary_only"
+                                                     ]
+                                        },
+                       "historical_trust_class":  {
+                                                      "enum":  [
+                                                                   "historical_non_authoritative"
+                                                               ]
+                                                  },
+                       "episode_references":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "items":  {
+                                                                "type":  "object",
+                                                                "maxProperties":  128
+                                                            }
+                                              },
+                       "approved_summaries":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "items":  {
+                                                                "type":  "object",
+                                                                "maxProperties":  128
+                                                            }
+                                              },
+                       "denied_reason_codes":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  256
+                                                             }
+                                               },
+                       "result_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   },
+    "additionalProperties":  false
+}

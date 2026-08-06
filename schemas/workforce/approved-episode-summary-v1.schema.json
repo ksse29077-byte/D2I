@@ -1,0 +1,234 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.example/schemas/workforce/approved-episode-summary-v1.schema.json",
+    "title":  "ApprovedEpisodeSummaryV1",
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "summary_id",
+                     "summary_generation",
+                     "episode_sha256",
+                     "organization_id",
+                     "namespace_sha256",
+                     "role_contract_sha256",
+                     "work_class_id",
+                     "responsibility_id",
+                     "terminal_outcome",
+                     "situation_class_ids",
+                     "completed_subgoal_ids",
+                     "recovery_class_ids",
+                     "clarification_reason_codes",
+                     "escalation_reason_codes",
+                     "semantic_target_ids",
+                     "capability_ids",
+                     "verified_outcome_class_ids",
+                     "concise_summary",
+                     "data_class_ids",
+                     "redaction_proof_ids",
+                     "valid_from_unix_ms",
+                     "valid_to_unix_ms",
+                     "signer_id",
+                     "signing_key_id",
+                     "evidence_ids",
+                     "summary_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "summary_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  4096
+                                      },
+                       "summary_generation":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "episode_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "namespace_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "work_class_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  4096
+                                         },
+                       "responsibility_id":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  4096
+                                             },
+                       "terminal_outcome":  {
+                                                "enum":  [
+                                                             "verified_complete",
+                                                             "explicit_refusal",
+                                                             "escalated"
+                                                         ]
+                                            },
+                       "situation_class_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  256
+                                                             }
+                                               },
+                       "completed_subgoal_ids":  {
+                                                     "type":  "array",
+                                                     "maxItems":  512,
+                                                     "uniqueItems":  true,
+                                                     "items":  {
+                                                                   "type":  "string",
+                                                                   "minLength":  1,
+                                                                   "maxLength":  256
+                                                               }
+                                                 },
+                       "recovery_class_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  256
+                                                            }
+                                              },
+                       "clarification_reason_codes":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  256
+                                                                    }
+                                                      },
+                       "escalation_reason_codes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  256
+                                                                 }
+                                                   },
+                       "semantic_target_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  256
+                                                             }
+                                               },
+                       "capability_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  256
+                                                        }
+                                          },
+                       "verified_outcome_class_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  256
+                                                                    }
+                                                      },
+                       "concise_summary":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  4096
+                                           },
+                       "data_class_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  256
+                                                        }
+                                          },
+                       "redaction_proof_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  256
+                                                             }
+                                               },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  9007199254740991
+                                              },
+                       "valid_to_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  9007199254740991
+                                            },
+                       "signer_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  4096
+                                     },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  4096
+                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  256
+                                                      }
+                                        },
+                       "summary_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   },
+    "additionalProperties":  false
+}

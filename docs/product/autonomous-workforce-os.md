@@ -190,8 +190,8 @@ state.
 - `D2I-WORK-300`: Work Radar and Work Intake. **Complete**
 - `D2I-WORK-400`: Work Queue, Scheduler and Case Ownership. **Complete**
 - `D2I-WORK-500`: Situation Model and Adaptive Planner. **Complete**
-- `D2I-WORK-600`: Episodic Memory and Case Learning Records. **First active task**
-- `D2I-WORK-700`: Role-level Reporting, SLA and Escalation.
+- `D2I-WORK-600`: Episodic Memory and Case Learning Records. **Complete**
+- `D2I-WORK-700`: Role-level Reporting, SLA and Escalation. **First active task**
 - `D2I-WORK-800`: Open Digital Employee Shadow Mode.
 - `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation.
 
@@ -273,8 +273,10 @@ WORK-400 now reconciles persistent Cases into a protected Queue, selects one
 eligible Case with trusted-time deterministic ordering, creates an exclusive
 lease and non-executable Work Grant, and recovers audited ownership transfer
 from a signed exact Role pool. These artifacts grant no execution authority.
-WORK-500 now builds provenance-separated Situation Models from approved Case
+WORK-500 builds provenance-separated Situation Models from approved Case
 context, runs a pinned local model behind a zero-capability process boundary,
 admits only one exact semantic next step, and replans after fresh verified
-state. The active next task is `D2I-WORK-600 - Episodic Memory and Case
-Learning Records`.
+state. WORK-600 seals terminal Cases as reference-only Episodes, applies exact
+Role memory boundaries, uses only signed historical summaries, and exports
+quarantined offline candidates without changing production intelligence. The
+active next task is `D2I-WORK-700 - Role-level Reporting, SLA and Escalation`.
