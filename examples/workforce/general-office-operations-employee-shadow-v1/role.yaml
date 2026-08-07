@@ -1,0 +1,169 @@
+schema_version: 1
+role_contract_id: general-office-operations-employee
+role_version: 1.3.0
+display_name: General Office Operations Employee
+purpose: Evaluate bounded general office Cases in blinded non-executing Shadow Mode with evidence-grounded reporting.
+organization_scope:
+  organization_id: example-office-organization
+  business_unit_ids: [general-office]
+  site_ids: [example-head-office]
+  domain_ids: [general-office-operations]
+  environment_ids: [shadow-mode]
+  jurisdiction_ids: [example-jurisdiction]
+responsibilities:
+  - responsibility_id: internal-record-maintenance
+    outcome_class_ids: [internal-record-update-prepared]
+    accepted_work_class_ids: [office.record.update]
+    evidence_class_ids: [approved-record-reference]
+    reporting_obligation_ids: [report-office-escalation, report-office-periodic, report-office-shadow-evaluation, report-office-sla-breach, report-office-work]
+    description: Prepare an approved internal employee-record update for bounded handling.
+accepted_work_classes:
+  - work_class_id: office.record.update
+    contract_version: 1.0.0
+    responsibility_id: internal-record-maintenance
+    allowed_priority_classes: [routine, normal, elevated, urgent]
+    sla_profile_id: office-standard
+    maximum_risk: reversible
+    required_application_pack_ids: [kernel-e2e-name-save]
+    required_integration_ids: [windows-shadow-reference]
+    required_capability_ids: [uia.set_value]
+    permitted_observation_source_ids: [shadow-reference-winforms]
+    clarification_allowed: true
+    automatic_recovery_allowed: true
+    mandatory_escalation_reason_codes: [policy_unknown, sensitive_input]
+prohibited_work_class_ids: [office.record.delete]
+authority_ceiling: shadow-evaluation-confirmation-only
+application_bindings:
+  - application_pack_id: kernel-e2e-name-save
+    application_pack_sha256: sha256:63af89c06cb5a7b6623e1619718a9a4f3d8346d1387acb52ea339b8ad710411e
+    integration_ids: [windows-shadow-reference]
+    allowed_semantic_target_ids: [employee_name_input, save_button]
+    allowed_capability_ids: [uia.set_value]
+    observation_source_ids: [shadow-reference-winforms]
+    environment_ids: [shadow-mode]
+observation_sources:
+  - observation_source_id: shadow-reference-winforms
+    source_kind: desktop_uia
+    integration_id: windows-shadow-reference
+    trust_floor: signed-runtime-binding
+    read_only: true
+    event_class_ids: [authenticated-reference-step]
+    application_pack_id: kernel-e2e-name-save
+    maximum_staleness_seconds: 300
+    enabled: true
+capability_policy:
+  allowed_capability_ids: [uia.set_value]
+  prohibited_capability_ids: [process.launch, uia.set_protected]
+  autonomous_capability_ids: []
+  confirmation_capability_ids: [uia.set_value]
+  escalation_only_capability_ids: []
+  capability_group_ids: [shadow-reference-record-update]
+  semantic_target_ids: [employee_name_input, save_button]
+  maximum_attempts_per_capability: 1
+risk_policy:
+  maximum_autonomous_risk: read_only
+  maximum_confirmable_risk: reversible
+  mandatory_escalation_risk: business_state_change
+  irreversible_actions_allowed: false
+  high_criticality_automatic_allowed: false
+  unknown_policy_behavior: escalate
+  unsafe_verification_behavior: escalate
+working_calendar:
+  calendar_id: office-business-hours
+  timezone_id: Asia/Seoul
+  weekly_windows:
+    - { weekday: 0, start_minute_local: 540, end_minute_local: 1080 }
+    - { weekday: 1, start_minute_local: 540, end_minute_local: 1080 }
+    - { weekday: 2, start_minute_local: 540, end_minute_local: 1080 }
+    - { weekday: 3, start_minute_local: 540, end_minute_local: 1080 }
+    - { weekday: 4, start_minute_local: 540, end_minute_local: 1080 }
+  blackout_date_ids: []
+  emergency_override_policy: signed_reference_only
+  outside_window_behavior: deny_new_work
+  calendar_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+kpi_definitions:
+  - { kpi_id: escalation-rate, metric_id: escalation_rate, direction: at_most, target_millionths: 400000, target_integer: null, measurement_window_id: fixture-run, evidence_class_ids: [operational-escalation-item], warning_threshold: 500000, breach_behavior: report, enabled: true }
+  - { kpi_id: human-touches-per-case, metric_id: human_touches_per_case, direction: at_most, target_millionths: 400000, target_integer: null, measurement_window_id: fixture-run, evidence_class_ids: [authenticated-human-interaction], warning_threshold: 600000, breach_behavior: report, enabled: true }
+  - { kpi_id: sla-compliance, metric_id: sla_compliance_rate, direction: at_least, target_millionths: 400000, target_integer: null, measurement_window_id: fixture-run, evidence_class_ids: [authoritative-sla-runtime-state], warning_threshold: 200000, breach_behavior: report, enabled: true }
+  - { kpi_id: verified-closure-rate, metric_id: verified_closure_rate, direction: at_least, target_millionths: 400000, target_integer: null, measurement_window_id: fixture-run, evidence_class_ids: [verified-case-outcome], warning_threshold: 200000, breach_behavior: report, enabled: true }
+sla_profiles:
+  - sla_profile_id: office-standard
+    priority_class: normal
+    acknowledge_within_seconds: 300
+    begin_within_seconds: 900
+    resolve_within_seconds: 86400
+    escalation_after_seconds: 43200
+    pause_conditions: [awaiting-approved-reference]
+    evidence_class_ids: [role-task-admission]
+reporting_obligations:
+  - obligation_id: report-office-escalation
+    trigger: on_escalation
+    report_class_id: office-escalation
+    routing_class_id: office-supervision
+    required_evidence_class_ids: [operational-escalation-item]
+    frequency_profile_id: null
+    retention_class_id: office-audit
+    enabled: true
+  - obligation_id: report-office-periodic
+    trigger: periodic
+    report_class_id: office-operations-periodic
+    routing_class_id: office-supervision
+    required_evidence_class_ids: [operations-snapshot]
+    frequency_profile_id: fixture-run
+    retention_class_id: office-audit
+    enabled: true
+  - obligation_id: report-office-shadow-evaluation
+    trigger: periodic
+    report_class_id: office-shadow-evaluation
+    routing_class_id: office-supervision
+    required_evidence_class_ids: [shadow-evaluation-report]
+    frequency_profile_id: shadow-cohort-close
+    retention_class_id: office-audit
+    enabled: true
+  - obligation_id: report-office-sla-breach
+    trigger: sla_breach
+    report_class_id: office-sla-breach
+    routing_class_id: office-supervision
+    required_evidence_class_ids: [sla-breach-record]
+    frequency_profile_id: null
+    retention_class_id: office-audit
+    enabled: true
+  - obligation_id: report-office-work
+    trigger: on_task_complete
+    report_class_id: office-work-result
+    routing_class_id: office-supervision
+    required_evidence_class_ids: [verified-task-outcome]
+    frequency_profile_id: null
+    retention_class_id: office-audit
+    enabled: true
+memory_boundary:
+  allowed_memory_namespace_ids: [office-approved-summaries]
+  prohibited_data_class_ids: [credential, personal-recipient, raw-locator, raw-ui-payload]
+  retention_class_id: office-audit
+  maximum_retention_days: 30
+  raw_credentials_allowed: false
+  raw_ui_payload_allowed: false
+  cross_case_reuse_policy: approved_summary_only
+  learning_candidate_allowed: true
+  memory_boundary_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+escalation_policy:
+  escalation_policy_id: office-human-exception
+  routing_class_by_severity: { elevated: office-supervision, unsafe: security-review }
+  mandatory_reason_codes: [authority_exceeded, policy_unknown, sensitive_input, unsafe_verification]
+  authority_exceeded_route_class: office-supervision
+  unsafe_route_class: security-review
+  legal_review_route_class: legal-review
+  policy_conflict_route_class: office-governance
+  maximum_pending_seconds: 86400
+  evidence_class_ids: [role-task-admission, verified-task-outcome]
+human_exception_policy:
+  autonomous_reason_codes: [routine_delegated_work, safe_bounded_recovery]
+  confirmation_reason_codes: [approved_clarification]
+  mandatory_escalation_reason_codes: [authority_exceeded, high_criticality, irreversible_change, legal_approval, material_ambiguity, policy_unknown, sensitive_input, unsafe_verification]
+  prohibited_automatic_reason_codes: [authority_exceeded, high_criticality, irreversible_change, legal_approval, material_ambiguity, policy_unknown, sensitive_input, unsafe_verification]
+  human_touch_budget: 1
+  policy_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+policy_set_id: office-shadow-policy
+policy_set_version: 1.0.0
+policy_set_sha256: sha256:3333333333333333333333333333333333333333333333333333333333333333
+evidence_ids: [approved-office-role-shadow-v1, shadow-mode-only]

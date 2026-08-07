@@ -1,0 +1,109 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/reference-operator-attestation-v1.schema.json",
+    "title":  "ReferenceOperatorAttestationV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "attestation_id",
+                     "assignment_sha256",
+                     "session_id",
+                     "actor_class_id",
+                     "recorder_mode",
+                     "interactive_session",
+                     "participation_approval_sha256",
+                     "fixture_identity_sha256",
+                     "process_identity_sha256",
+                     "started_at_unix_ms",
+                     "ended_at_unix_ms",
+                     "evidence_ids",
+                     "attestation_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "attestation_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "assignment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "session_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "actor_class_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "recorder_mode":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "interactive_human",
+                                                          "instrumented_reference_operator",
+                                                          "recorded_deterministic_fixture"
+                                                      ]
+                                         },
+                       "interactive_session":  {
+                                                   "type":  "boolean"
+                                               },
+                       "participation_approval_sha256":  {
+                                                             "type":  "string",
+                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                             "maxLength":  71
+                                                         },
+                       "fixture_identity_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "process_identity_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "started_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "ended_at_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "attestation_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

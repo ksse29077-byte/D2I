@@ -1,0 +1,108 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-cycle-v1.schema.json",
+    "title":  "ShadowCycleV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "session_id",
+                     "cycle_index",
+                     "pre_action_observation_sha256",
+                     "situation_model_sha256",
+                     "shadow_proposal_sha256",
+                     "commitment_sha256",
+                     "human_reference_step_sha256",
+                     "post_action_observation_sha256",
+                     "verification_result_sha256",
+                     "comparison_sha256",
+                     "adjudication_sha256",
+                     "status",
+                     "previous_cycle_sha256",
+                     "cycle_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "session_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "cycle_index":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "pre_action_observation_sha256":  {
+                                                             "type":  "string",
+                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                             "maxLength":  71
+                                                         },
+                       "situation_model_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "shadow_proposal_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "commitment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "human_reference_step_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "post_action_observation_sha256":  {
+                                                              "type":  "string",
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                              "maxLength":  71
+                                                          },
+                       "verification_result_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "comparison_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "adjudication_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "proposal_committed",
+                                                   "reference_durable",
+                                                   "observation_durable",
+                                                   "verified",
+                                                   "revealed",
+                                                   "adjudicated",
+                                                   "aborted_stale",
+                                                   "invalid"
+                                               ]
+                                  },
+                       "previous_cycle_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "cycle_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        }
+                   }
+}

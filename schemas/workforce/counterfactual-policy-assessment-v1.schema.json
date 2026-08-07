@@ -1,0 +1,133 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/counterfactual-policy-assessment-v1.schema.json",
+    "title":  "CounterfactualPolicyAssessmentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "assessment_id",
+                     "shadow_proposal_sha256",
+                     "role_contract_sha256",
+                     "delegation_sha256",
+                     "policy_set_sha256",
+                     "case_contract_sha256",
+                     "capability_id",
+                     "semantic_target_id",
+                     "risk_class_id",
+                     "disposition",
+                     "reason_codes",
+                     "execution_forbidden",
+                     "admission_artifact_absent",
+                     "activation_artifact_absent",
+                     "evidence_ids",
+                     "assessment_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "assessment_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "shadow_proposal_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "delegation_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "policy_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "case_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "capability_id":  {
+                                             "type":  [
+                                                          "string",
+                                                          "null"
+                                                      ],
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "semantic_target_id":  {
+                                                  "type":  [
+                                                               "string",
+                                                               "null"
+                                                           ],
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                              },
+                       "risk_class_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "disposition":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "would_allow",
+                                                        "would_require_confirmation",
+                                                        "would_deny",
+                                                        "would_escalate",
+                                                        "insufficient_evidence",
+                                                        "unsupported"
+                                                    ]
+                                       },
+                       "reason_codes":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "execution_forbidden":  {
+                                                   "type":  "boolean"
+                                               },
+                       "admission_artifact_absent":  {
+                                                         "type":  "boolean"
+                                                     },
+                       "activation_artifact_absent":  {
+                                                          "type":  "boolean"
+                                                      },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "assessment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

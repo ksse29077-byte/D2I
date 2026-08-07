@@ -1,0 +1,134 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-evidence-coverage-v1.schema.json",
+    "title":  "ShadowEvidenceCoverageV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "cohort_sha256",
+                     "expected_case_count",
+                     "enrolled_case_count",
+                     "model_inference_case_count",
+                     "interactive_case_count",
+                     "instrumented_case_count",
+                     "completed_session_count",
+                     "adjudicated_session_count",
+                     "complete_evidence_count",
+                     "missing_evidence_count",
+                     "conflicting_evidence_count",
+                     "excluded_case_count",
+                     "exclusion_reason_codes",
+                     "coverage_millionths",
+                     "status",
+                     "evidence_ids",
+                     "coverage_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "expected_case_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "enrolled_case_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "model_inference_case_count":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "interactive_case_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "instrumented_case_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "completed_session_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "adjudicated_session_count":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "complete_evidence_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "missing_evidence_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "conflicting_evidence_count":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "excluded_case_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "exclusion_reason_codes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                }
+                                                  },
+                       "coverage_millionths":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  1000000
+                                               },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "complete",
+                                                   "partial",
+                                                   "insufficient",
+                                                   "conflicting",
+                                                   "invalid"
+                                               ]
+                                  },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "coverage_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           }
+                   }
+}

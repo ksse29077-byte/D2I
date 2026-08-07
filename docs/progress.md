@@ -415,7 +415,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-800 - Open Digital Employee Shadow Mode`
+`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -444,8 +444,8 @@ in an actual model-backed Path C, and quarantines offline learning candidates
 without production mutation. The General Office `1.0.0` and memory-enabled
 `1.1.0` Role bundles are independently compiled and verified; `1.1.0` memory
 evidence binds its exact contract, signed approval, signed delegation, and
-active Role Instance rather than fixture hashes. WORK-700 is complete and
-WORK-800 is the first active task.
+active Role Instance rather than fixture hashes. WORK-700 and WORK-800 are
+complete, and WORK-900 is the first active task.
 
 WORK-700 now has a platform-neutral Role Operations crate, 30 strict schemas,
 General Office 1.2.0 fixture, protected Desktop store, inspection CLI, and an
@@ -464,4 +464,35 @@ and
 Protected store/audit terminal hashes were verified and process, credential,
 activation, profile, store, and lock residuals were all zero. The official
 All and Completion runners, fmt, Clippy, full workspace tests, and release
-build passed. WORK-800 has not started.
+build passed.
+
+WORK-800 now provides the platform-neutral Shadow contract, 31 strict schemas,
+the General Office Shadow Role 1.3.0, a current-user/SYSTEM protected Desktop
+store and audit, commitment-before-reference blinding, independent comparison
+and adjudication, WORK-600 quarantine-only divergence ingress, WORK-700
+internal-only publication, and deterministic 128 Session x 100 replay. The
+actual pinned Qwen3-4B holdout completed 60 Cases and 80 provider invocations
+with 30 natural-language paraphrases and no invalid output, execution attempt,
+adapter invocation, or network access. Five Windows sessions include one real
+interactive reference session; mandatory escalation misses, false completion,
+authority expansion, forbidden capabilities, secret leakage, and critical
+errors are all zero. Readiness is `eligible_for_work900_design` and grants no
+execution authority.
+
+Completion now uses canonical resumable checkpoints. A sealed provider
+validity binding keeps the model/runtime/prompt/provider descriptor exact for
+the bounded 24-hour holdout window. Case artifacts are written atomically,
+cleanup precedes success checkpointing, dependency invalidation is transitive,
+and secret-scanned diagnostics survive child cleanup. The final repeated
+Completion reused 72 of 72 checkpoints with zero fresh steps, no model or
+interactive replay. The run-specific checkpoint-set, source-tree, and
+`finished.json` hashes are recorded in the canonical `finished.json`; the
+stable holdout report hash is
+`sha256:d853918b5d5e9ae15ad1ed9797793192a0a1cdf1ec38d7bb49fd66665917addc`,
+Completion report hash
+`sha256:7af3939883090cf7b4122c4459d7d6b97d7e92c3ee3af9ccd0d4a0526931e71d`,
+and readiness hash
+`sha256:a6dfa9bfb8e2f8e160a943a62e99a2e33a032eb966aed733e0814f1e4c022f93`.
+The independent 16-step `All` run also completed with zero failures.
+Process, credential, activation, profile, protected-store, and lock residuals
+are all zero. WORK-900 has not started.

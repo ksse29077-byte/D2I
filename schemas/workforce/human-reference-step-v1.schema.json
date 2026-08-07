@@ -1,0 +1,212 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/human-reference-step-v1.schema.json",
+    "title":  "HumanReferenceStepV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "step_id",
+                     "session_id",
+                     "cycle_index",
+                     "assignment_sha256",
+                     "actor_class_id",
+                     "recorder_mode",
+                     "decision_class",
+                     "reference_operation_class_id",
+                     "capability_classification_id",
+                     "semantic_target_id",
+                     "approved_argument_artifact_sha256",
+                     "pre_action_observation_id",
+                     "pre_action_observation_sha256",
+                     "pre_action_observation_sequence",
+                     "post_action_observation_id",
+                     "post_action_observation_sha256",
+                     "post_action_observation_sequence",
+                     "action_started_at_unix_ms",
+                     "action_completed_at_unix_ms",
+                     "verification_result_sha256",
+                     "policy_assessment_sha256",
+                     "result_class",
+                     "evidence_ids",
+                     "step_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "step_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                   },
+                       "session_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "cycle_index":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "assignment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "actor_class_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "recorder_mode":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "interactive_human",
+                                                          "instrumented_reference_operator",
+                                                          "recorded_deterministic_fixture"
+                                                      ]
+                                         },
+                       "decision_class":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "act",
+                                                           "clarify",
+                                                           "escalate",
+                                                           "declare_complete",
+                                                           "refuse",
+                                                           "stop",
+                                                           "no_action"
+                                                       ]
+                                          },
+                       "reference_operation_class_id":  {
+                                                            "type":  [
+                                                                         "string",
+                                                                         "null"
+                                                                     ],
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                        },
+                       "capability_classification_id":  {
+                                                            "type":  [
+                                                                         "string",
+                                                                         "null"
+                                                                     ],
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                        },
+                       "semantic_target_id":  {
+                                                  "type":  [
+                                                               "string",
+                                                               "null"
+                                                           ],
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                              },
+                       "approved_argument_artifact_sha256":  {
+                                                                 "type":  [
+                                                                              "string",
+                                                                              "null"
+                                                                          ],
+                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                 "maxLength":  71
+                                                             },
+                       "pre_action_observation_id":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                     },
+                       "pre_action_observation_sha256":  {
+                                                             "type":  "string",
+                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                             "maxLength":  71
+                                                         },
+                       "pre_action_observation_sequence":  {
+                                                               "type":  "integer",
+                                                               "minimum":  0,
+                                                               "maximum":  18446744073709551615
+                                                           },
+                       "post_action_observation_id":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      },
+                       "post_action_observation_sha256":  {
+                                                              "type":  "string",
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                              "maxLength":  71
+                                                          },
+                       "post_action_observation_sequence":  {
+                                                                "type":  "integer",
+                                                                "minimum":  0,
+                                                                "maximum":  18446744073709551615
+                                                            },
+                       "action_started_at_unix_ms":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "action_completed_at_unix_ms":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  18446744073709551615
+                                                       },
+                       "verification_result_sha256":  {
+                                                          "type":  [
+                                                                       "string",
+                                                                       "null"
+                                                                   ],
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "policy_assessment_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "result_class":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "applied",
+                                                         "clarification_requested",
+                                                         "escalated",
+                                                         "completion_asserted",
+                                                         "refused",
+                                                         "stopped",
+                                                         "no_action",
+                                                         "failed"
+                                                     ]
+                                        },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "step_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                           "maxLength":  71
+                                       },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

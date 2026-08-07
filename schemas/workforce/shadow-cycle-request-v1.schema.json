@@ -1,0 +1,107 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-cycle-request-v1.schema.json",
+    "title":  "ShadowCycleRequestV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "request_id",
+                     "profile_sha256",
+                     "cohort_sha256",
+                     "enrollment_sha256",
+                     "session_sha256",
+                     "cycle_index",
+                     "fresh_observation_id",
+                     "fresh_observation_sha256",
+                     "fresh_observation_sequence",
+                     "case_context_sha256",
+                     "policy_set_sha256",
+                     "deadline_unix_ms",
+                     "evidence_ids",
+                     "request_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "request_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "enrollment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "session_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cycle_index":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "fresh_observation_id":  {
+                                                    "type":  "string",
+                                                    "minLength":  1,
+                                                    "maxLength":  512,
+                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                },
+                       "fresh_observation_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "fresh_observation_sequence":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  18446744073709551615
+                                                      },
+                       "case_context_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "policy_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "deadline_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "request_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

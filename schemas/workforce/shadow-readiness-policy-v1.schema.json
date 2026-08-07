@@ -1,0 +1,210 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-readiness-policy-v1.schema.json",
+    "title":  "ShadowReadinessPolicyV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "policy_id",
+                     "policy_version",
+                     "organization_id",
+                     "role_contract_sha256",
+                     "minimum_model_backed_cases",
+                     "minimum_interactive_sessions",
+                     "minimum_instrumented_sessions",
+                     "minimum_windows_sessions",
+                     "minimum_evidence_coverage_millionths",
+                     "minimum_proposal_validity_millionths",
+                     "minimum_decision_class_agreement_millionths",
+                     "minimum_policy_disposition_agreement_millionths",
+                     "minimum_verified_outcome_agreement_millionths",
+                     "minimum_mandatory_escalation_recall_millionths",
+                     "minimum_clarification_precision_millionths",
+                     "minimum_clarification_recall_millionths",
+                     "maximum_unnecessary_ai_action_millionths",
+                     "maximum_missed_required_action_millionths",
+                     "maximum_false_completion_count",
+                     "maximum_forbidden_capability_count",
+                     "maximum_authority_expansion_count",
+                     "maximum_secret_leakage_count",
+                     "maximum_direct_execution_attempt_count",
+                     "maximum_unblinded_cycle_count",
+                     "maximum_critical_error_count",
+                     "required_domain_fixture_ids",
+                     "required_windows_fixture_ids",
+                     "evidence_ids",
+                     "policy_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "policy_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "policy_version":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "minimum_model_backed_cases":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "minimum_interactive_sessions":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "minimum_instrumented_sessions":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "minimum_windows_sessions":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "minimum_evidence_coverage_millionths":  {
+                                                                    "type":  "integer",
+                                                                    "minimum":  0,
+                                                                    "maximum":  1000000
+                                                                },
+                       "minimum_proposal_validity_millionths":  {
+                                                                    "type":  "integer",
+                                                                    "minimum":  0,
+                                                                    "maximum":  1000000
+                                                                },
+                       "minimum_decision_class_agreement_millionths":  {
+                                                                           "type":  "integer",
+                                                                           "minimum":  0,
+                                                                           "maximum":  1000000
+                                                                       },
+                       "minimum_policy_disposition_agreement_millionths":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  1000000
+                                                                           },
+                       "minimum_verified_outcome_agreement_millionths":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  1000000
+                                                                         },
+                       "minimum_mandatory_escalation_recall_millionths":  {
+                                                                              "type":  "integer",
+                                                                              "minimum":  0,
+                                                                              "maximum":  1000000
+                                                                          },
+                       "minimum_clarification_precision_millionths":  {
+                                                                          "type":  "integer",
+                                                                          "minimum":  0,
+                                                                          "maximum":  1000000
+                                                                      },
+                       "minimum_clarification_recall_millionths":  {
+                                                                       "type":  "integer",
+                                                                       "minimum":  0,
+                                                                       "maximum":  1000000
+                                                                   },
+                       "maximum_unnecessary_ai_action_millionths":  {
+                                                                        "type":  "integer",
+                                                                        "minimum":  0,
+                                                                        "maximum":  1000000
+                                                                    },
+                       "maximum_missed_required_action_millionths":  {
+                                                                         "type":  "integer",
+                                                                         "minimum":  0,
+                                                                         "maximum":  1000000
+                                                                     },
+                       "maximum_false_completion_count":  {
+                                                              "type":  "integer",
+                                                              "minimum":  0,
+                                                              "maximum":  4294967295
+                                                          },
+                       "maximum_forbidden_capability_count":  {
+                                                                  "type":  "integer",
+                                                                  "minimum":  0,
+                                                                  "maximum":  4294967295
+                                                              },
+                       "maximum_authority_expansion_count":  {
+                                                                 "type":  "integer",
+                                                                 "minimum":  0,
+                                                                 "maximum":  4294967295
+                                                             },
+                       "maximum_secret_leakage_count":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "maximum_direct_execution_attempt_count":  {
+                                                                      "type":  "integer",
+                                                                      "minimum":  0,
+                                                                      "maximum":  4294967295
+                                                                  },
+                       "maximum_unblinded_cycle_count":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "maximum_critical_error_count":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "required_domain_fixture_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "required_windows_fixture_ids":  {
+                                                            "type":  "array",
+                                                            "maxItems":  512,
+                                                            "uniqueItems":  true,
+                                                            "items":  {
+                                                                          "type":  "string",
+                                                                          "minLength":  1,
+                                                                          "maxLength":  512,
+                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                      }
+                                                        },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "policy_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

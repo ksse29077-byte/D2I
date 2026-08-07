@@ -36,8 +36,8 @@ Track K is complete. Do not create KRN-600.
 - `D2I-WORK-500` Situation Model and Adaptive Planner - **complete**
 - `D2I-WORK-600` Episodic Memory and Case Learning Records - **complete**
 - `D2I-WORK-700` Role-level Reporting, SLA and Escalation - **complete**
-- `D2I-WORK-800` Open Digital Employee Shadow Mode - **active**
-- `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
+- `D2I-WORK-800` Open Digital Employee Shadow Mode - **complete**
+- `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation - **active**
 
 WORK-700's completed official gate is:
 
@@ -55,7 +55,11 @@ approved local runtime/model, then proves five General Office Cases, protected
 operations persistence/audit, internal-only publication, escalation
 acknowledgement/resolution, 128 Case x 100 replay, and terminal cleanup. It is
 complete only when `finished.json` has `role_operations_evidence=true`.
-The next active task is `D2I-WORK-800 - Open Digital Employee Shadow Mode`.
+WORK-800 Completion is resumable only through canonical, exact-bound safe
+checkpoints. Use `-Resume`; use `-Fresh` to discard all WORK-800 checkpoints;
+and use `-ReuseVerifiedPredecessorEvidence` only for sealed WORK-700 evidence.
+The next active task is
+`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`.
 
 ## Track X - Execution Plane Expansion
 

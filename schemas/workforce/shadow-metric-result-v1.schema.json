@@ -1,0 +1,98 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-metric-result-v1.schema.json",
+    "title":  "ShadowMetricResultV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "metric_id",
+                     "numerator",
+                     "denominator",
+                     "value_millionths",
+                     "count_value",
+                     "status",
+                     "threshold_millionths",
+                     "threshold_count",
+                     "evidence_ids",
+                     "metric_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "metric_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "numerator":  {
+                                         "type":  "integer",
+                                         "minimum":  0,
+                                         "maximum":  18446744073709551615
+                                     },
+                       "denominator":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  18446744073709551615
+                                       },
+                       "value_millionths":  {
+                                                "type":  [
+                                                             "integer",
+                                                             "null"
+                                                         ],
+                                                "minimum":  0,
+                                                "maximum":  1000000
+                                            },
+                       "count_value":  {
+                                           "type":  [
+                                                        "integer",
+                                                        "null"
+                                                    ],
+                                           "minimum":  0,
+                                           "maximum":  18446744073709551615
+                                       },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "passed",
+                                                   "failed",
+                                                   "insufficient_evidence",
+                                                   "not_applicable"
+                                               ]
+                                  },
+                       "threshold_millionths":  {
+                                                    "type":  [
+                                                                 "integer",
+                                                                 "null"
+                                                             ],
+                                                    "minimum":  0,
+                                                    "maximum":  1000000
+                                                },
+                       "threshold_count":  {
+                                               "type":  [
+                                                            "integer",
+                                                            "null"
+                                                        ],
+                                               "minimum":  0,
+                                               "maximum":  18446744073709551615
+                                           },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "metric_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

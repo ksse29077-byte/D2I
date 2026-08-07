@@ -1,0 +1,134 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-case-enrollment-v1.schema.json",
+    "title":  "ShadowCaseEnrollmentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "enrollment_id",
+                     "cohort_sha256",
+                     "organization_id",
+                     "role_contract_sha256",
+                     "source_case_id",
+                     "case_contract_sha256",
+                     "current_case_instance_sha256",
+                     "work_item_sha256",
+                     "work_class_id",
+                     "responsibility_id",
+                     "reference_operator_assignment_sha256",
+                     "shadow_observation_grant_sha256",
+                     "enrolled_at_unix_ms",
+                     "expires_at_unix_ms",
+                     "scenario_class_ids",
+                     "evidence_ids",
+                     "enrollment_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "enrollment_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "source_case_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "case_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "current_case_instance_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "work_item_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "work_class_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "responsibility_id":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  512,
+                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                             },
+                       "reference_operator_assignment_sha256":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                },
+                       "shadow_observation_grant_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           },
+                       "enrolled_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "scenario_class_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                            }
+                                              },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "enrollment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

@@ -1,0 +1,192 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-evaluation-cohort-v1.schema.json",
+    "title":  "ShadowEvaluationCohortV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "cohort_id",
+                     "organization_id",
+                     "role_contract_sha256",
+                     "profile_sha256",
+                     "readiness_policy_sha256",
+                     "provider_descriptor_sha256",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "prompt_template_hashes",
+                     "dataset_split_id",
+                     "case_enrollment_ids",
+                     "work_class_strata",
+                     "scenario_class_ids",
+                     "domain_fixture_ids",
+                     "randomization_seed",
+                     "cohort_sealed_at_unix_ms",
+                     "evaluation_starts_at_unix_ms",
+                     "evaluation_ends_at_unix_ms",
+                     "exclusion_policy_id",
+                     "allowed_exclusion_reason_codes",
+                     "evidence_ids",
+                     "cohort_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "cohort_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "readiness_policy_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "provider_descriptor_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "prompt_template_hashes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "dataset_split_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                            },
+                       "case_enrollment_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  512,
+                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                             }
+                                               },
+                       "work_class_strata":  {
+                                                 "type":  "array",
+                                                 "maxItems":  512,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                           }
+                                             },
+                       "scenario_class_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                            }
+                                              },
+                       "domain_fixture_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                            }
+                                              },
+                       "randomization_seed":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "cohort_sealed_at_unix_ms":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  18446744073709551615
+                                                    },
+                       "evaluation_starts_at_unix_ms":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  18446744073709551615
+                                                        },
+                       "evaluation_ends_at_unix_ms":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  18446744073709551615
+                                                      },
+                       "exclusion_policy_id":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512,
+                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                               },
+                       "allowed_exclusion_reason_codes":  {
+                                                              "type":  "array",
+                                                              "maxItems":  512,
+                                                              "uniqueItems":  true,
+                                                              "items":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                        }
+                                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

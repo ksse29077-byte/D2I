@@ -17,6 +17,7 @@ mod local_model_provider;
 mod policy;
 mod role_instance;
 mod role_operations;
+mod shadow_mode;
 mod trusted_execution;
 mod windows_activation;
 mod windows_adapters;
@@ -166,6 +167,13 @@ pub use role_operations::{
     initialize_role_operations_store, verify_role_operations_store, RoleOperationsArtifactV1,
     RoleOperationsStoreRecordKindV1, RoleOperationsStoreRecordV1, RoleOperationsStoreV1,
     RoleOperationsStoreVerificationV1,
+};
+pub use shadow_mode::{
+    collect_shadow_fixture_observation, initialize_shadow_store, plan_shadow_recovery,
+    recover_shadow_store, verify_shadow_store, ShadowDivergenceCandidateV1,
+    ShadowFixtureObservationV1, ShadowRecoveryPlanV1, ShadowRecoveryWindowV1,
+    ShadowStoreArtifactV1, ShadowStoreRecordKindV1, ShadowStoreRecordV1, ShadowStoreV1,
+    ShadowStoreVerificationV1,
 };
 pub use trusted_execution::{
     build_cognitive_desktop_action_intent, project_windows_activation,

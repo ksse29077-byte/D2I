@@ -1,0 +1,163 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-participation-approval-v1.schema.json",
+    "title":  "ShadowParticipationApprovalV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "approval_id",
+                     "organization_id",
+                     "actor_class_id",
+                     "allowed_application_ids",
+                     "allowed_observation_classes",
+                     "prohibited_collection_classes",
+                     "retention_class_id",
+                     "maximum_retention_days",
+                     "no_keylogging",
+                     "no_global_mouse_hook",
+                     "no_screen_recording",
+                     "no_clipboard",
+                     "data_class_allowlist",
+                     "valid_from_unix_ms",
+                     "valid_to_unix_ms",
+                     "signer_id",
+                     "signing_key_id",
+                     "evidence_ids",
+                     "approval_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "approval_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                       },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "actor_class_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "allowed_application_ids":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                 }
+                                                   },
+                       "allowed_observation_classes":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "prohibited_collection_classes":  {
+                                                             "type":  "array",
+                                                             "maxItems":  512,
+                                                             "uniqueItems":  true,
+                                                             "items":  {
+                                                                           "type":  "string",
+                                                                           "minLength":  1,
+                                                                           "maxLength":  512,
+                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                       }
+                                                         },
+                       "retention_class_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                              },
+                       "maximum_retention_days":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "no_keylogging":  {
+                                             "type":  "boolean"
+                                         },
+                       "no_global_mouse_hook":  {
+                                                    "type":  "boolean"
+                                                },
+                       "no_screen_recording":  {
+                                                   "type":  "boolean"
+                                               },
+                       "no_clipboard":  {
+                                            "type":  "boolean"
+                                        },
+                       "data_class_allowlist":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                              }
+                                                },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "valid_to_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "signer_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "approval_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

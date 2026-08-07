@@ -1,0 +1,159 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-session-evaluation-v1.schema.json",
+    "title":  "ShadowSessionEvaluationV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "session_sha256",
+                     "cycle_comparison_hashes",
+                     "adjudication_hashes",
+                     "human_outcome_sha256",
+                     "ai_terminal_prediction",
+                     "actual_verified_terminal_outcome",
+                     "ai_action_count",
+                     "human_action_count",
+                     "unnecessary_ai_action_count",
+                     "unnecessary_human_action_count",
+                     "ai_missed_action_count",
+                     "human_missed_action_count",
+                     "clarification_correct",
+                     "escalation_correct",
+                     "completion_correct",
+                     "policy_compliant",
+                     "critical_error_codes",
+                     "metric_contribution_hashes",
+                     "evidence_ids",
+                     "evaluation_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "session_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cycle_comparison_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "adjudication_hashes":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                 "maxLength":  71
+                                                             }
+                                               },
+                       "human_outcome_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "ai_terminal_prediction":  {
+                                                      "type":  "string",
+                                                      "enum":  [
+                                                                   "act",
+                                                                   "clarify",
+                                                                   "escalate",
+                                                                   "declare_complete",
+                                                                   "refuse",
+                                                                   "stop",
+                                                                   "no_action"
+                                                               ]
+                                                  },
+                       "actual_verified_terminal_outcome":  {
+                                                                "type":  "boolean"
+                                                            },
+                       "ai_action_count":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "human_action_count":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "unnecessary_ai_action_count":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  4294967295
+                                                       },
+                       "unnecessary_human_action_count":  {
+                                                              "type":  "integer",
+                                                              "minimum":  0,
+                                                              "maximum":  4294967295
+                                                          },
+                       "ai_missed_action_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "human_missed_action_count":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "clarification_correct":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "escalation_correct":  {
+                                                  "type":  "boolean"
+                                              },
+                       "completion_correct":  {
+                                                  "type":  "boolean"
+                                              },
+                       "policy_compliant":  {
+                                                "type":  "boolean"
+                                            },
+                       "critical_error_codes":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                              }
+                                                },
+                       "metric_contribution_hashes":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    }
+                                                      },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "evaluation_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

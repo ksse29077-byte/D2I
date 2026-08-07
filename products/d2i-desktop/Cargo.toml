@@ -14,6 +14,7 @@ d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
 d2i-policy-admission = { path = "../../crates/d2i-policy-admission" }
 d2i-role-contract = { path = "../../crates/d2i-role-contract" }
 d2i-role-operations = { path = "../../crates/d2i-role-operations" }
+d2i-shadow-mode = { path = "../../crates/d2i-shadow-mode" }
 d2i-work-case = { path = "../../crates/d2i-work-case" }
 d2i-work-intake = { path = "../../crates/d2i-work-intake" }
 d2i-work-queue = { path = "../../crates/d2i-work-queue" }

@@ -1,0 +1,339 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-mode-profile-v1.schema.json",
+    "title":  "ShadowModeProfileV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "profile_id",
+                     "profile_version",
+                     "organization_id",
+                     "role_contract_id",
+                     "role_contract_version",
+                     "role_contract_sha256",
+                     "delegation_sha256",
+                     "role_instance_scope",
+                     "policy_set_sha256",
+                     "allowed_work_class_ids",
+                     "allowed_responsibility_ids",
+                     "allowed_application_pack_hashes",
+                     "allowed_integration_ids",
+                     "allowed_observation_source_ids",
+                     "allowed_semantic_target_ids",
+                     "allowed_capability_ids",
+                     "provider_descriptor_sha256",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "prompt_template_hashes",
+                     "allowed_reference_operator_class_ids",
+                     "allowed_recorder_modes",
+                     "blinding_mode",
+                     "approved_equivalence_bindings",
+                     "maximum_cases",
+                     "maximum_cycles_per_case",
+                     "maximum_proposals_per_cycle",
+                     "maximum_observation_bytes",
+                     "maximum_report_bytes",
+                     "maximum_store_bytes",
+                     "retention_class_id",
+                     "maximum_retention_days",
+                     "readiness_policy_sha256",
+                     "internal_routing_class_id",
+                     "evidence_ids",
+                     "profile_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "profile_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "profile_version":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                            },
+                       "role_contract_version":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                 },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "delegation_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "role_instance_scope":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  512,
+                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                             }
+                                               },
+                       "policy_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "allowed_work_class_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                }
+                                                  },
+                       "allowed_responsibility_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                    }
+                                                      },
+                       "allowed_application_pack_hashes":  {
+                                                               "type":  "array",
+                                                               "maxItems":  512,
+                                                               "uniqueItems":  true,
+                                                               "items":  {
+                                                                             "type":  "string",
+                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                             "maxLength":  71
+                                                                         }
+                                                           },
+                       "allowed_integration_ids":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                 }
+                                                   },
+                       "allowed_observation_source_ids":  {
+                                                              "type":  "array",
+                                                              "maxItems":  512,
+                                                              "uniqueItems":  true,
+                                                              "items":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                        }
+                                                          },
+                       "allowed_semantic_target_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "allowed_capability_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                }
+                                                  },
+                       "provider_descriptor_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "prompt_template_hashes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "allowed_reference_operator_class_ids":  {
+                                                                    "type":  "array",
+                                                                    "maxItems":  512,
+                                                                    "uniqueItems":  true,
+                                                                    "items":  {
+                                                                                  "type":  "string",
+                                                                                  "minLength":  1,
+                                                                                  "maxLength":  512,
+                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                              }
+                                                                },
+                       "allowed_recorder_modes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "enum":  [
+                                                                                 "interactive_human",
+                                                                                 "instrumented_reference_operator",
+                                                                                 "recorded_deterministic_fixture"
+                                                                             ]
+                                                                }
+                                                  },
+                       "blinding_mode":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "proposal_committed_and_hidden_until_reference_durable"
+                                                      ]
+                                         },
+                       "approved_equivalence_bindings":  {
+                                                             "type":  "array",
+                                                             "maxItems":  512,
+                                                             "uniqueItems":  true,
+                                                             "items":  {
+                                                                           "type":  "object",
+                                                                           "additionalProperties":  false,
+                                                                           "required":  [
+                                                                                            "left_operation_class_id",
+                                                                                            "right_operation_class_id",
+                                                                                            "binding_sha256"
+                                                                                        ],
+                                                                           "properties":  {
+                                                                                              "left_operation_class_id":  {
+                                                                                                                              "type":  "string",
+                                                                                                                              "minLength":  1,
+                                                                                                                              "maxLength":  512,
+                                                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                                          },
+                                                                                              "right_operation_class_id":  {
+                                                                                                                               "type":  "string",
+                                                                                                                               "minLength":  1,
+                                                                                                                               "maxLength":  512,
+                                                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                                           },
+                                                                                              "binding_sha256":  {
+                                                                                                                     "type":  "string",
+                                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                     "maxLength":  71
+                                                                                                                 }
+                                                                                          }
+                                                                       }
+                                                         },
+                       "maximum_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "maximum_cycles_per_case":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "maximum_proposals_per_cycle":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  4294967295
+                                                       },
+                       "maximum_observation_bytes":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "maximum_report_bytes":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "maximum_store_bytes":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "retention_class_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                              },
+                       "maximum_retention_days":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "readiness_policy_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "internal_routing_class_id":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                     },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

@@ -360,6 +360,7 @@ dependencies = [
  "d2i-role-contract",
  "d2i-role-operations",
  "d2i-runtime-api",
+ "d2i-shadow-mode",
  "d2i-situation-model",
  "d2i-trusted-action-execution",
  "d2i-windows-host",
@@ -552,6 +553,17 @@ version = "0.9.0"
 dependencies = [
  "planus",
  "serde",
+]
+
+[[package]]
+name = "d2i-shadow-mode"
+version = "0.9.0"
+dependencies = [
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

@@ -273,8 +273,32 @@ It preserves immutable Case SLA baselines, applies only approved pause time,
 calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
-service. WORK-700 is complete; the first active task is
-`D2I-WORK-800 - Open Digital Employee Shadow Mode`.
+service. WORK-700 and WORK-800 are complete; the first active task is
+`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`.
+
+Run the deterministic WORK-800 contracts, schemas, protected store,
+observation fixture, replay, and predecessor regression with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-open-digital-employee-shadow-v1.ps1 `
+  -Mode All `
+  -OutputRoot target\d2i-workforce-shadow\all
+```
+
+The separate `Completion` mode requires the pinned Qwen3-4B and llama.cpp
+artifacts plus `-ReferenceMode Interactive`. It runs a sealed 60-Case holdout,
+five Windows Shadow sessions, blinded commitment and independent adjudication,
+signed readiness, WORK-700 internal publication, WORK-600 quarantine, and
+cleanup gates. Shadow readiness never grants execution or activation.
+
+Use `-Resume` after a transient failure. A step is skipped only when its
+canonical checkpoint, current normalized inputs, produced artifact hashes,
+dependency hashes, cleanup result, and zero-residual state all verify. Use
+`-Fresh` to discard WORK-800 checkpoints. The explicit
+`-ReuseVerifiedPredecessorEvidence` switch verifies sealed WORK-700 evidence;
+it never substitutes for the WORK-800 holdout, interactive evidence,
+readiness, or report.
 
 ## Checks
 

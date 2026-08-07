@@ -1,0 +1,197 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-adjudication-v1.schema.json",
+    "title":  "ShadowAdjudicationV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "adjudication_id",
+                     "role_contract_sha256",
+                     "delegation_sha256",
+                     "case_contract_sha256",
+                     "source_observation_sha256",
+                     "post_action_observation_sha256",
+                     "proposal_sha256",
+                     "counterfactual_policy_assessment_sha256",
+                     "human_reference_step_sha256",
+                     "actual_policy_assessment_sha256",
+                     "verification_result_sha256",
+                     "case_success_criteria_sha256",
+                     "ai_proposal_correctness",
+                     "human_step_correctness",
+                     "ai_policy_compliant",
+                     "human_policy_compliant",
+                     "expected_postcondition_valid",
+                     "actual_postcondition_satisfied",
+                     "case_progress_effect_id",
+                     "required_action_present",
+                     "unnecessary_ai_action",
+                     "unnecessary_human_action",
+                     "ai_missed_required_action",
+                     "human_missed_required_action",
+                     "clarification_correct",
+                     "escalation_correct",
+                     "completion_correct",
+                     "evidence_sufficient",
+                     "critical_error_codes",
+                     "evidence_ids",
+                     "adjudication_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "adjudication_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "delegation_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "case_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "source_observation_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "post_action_observation_sha256":  {
+                                                              "type":  "string",
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                              "maxLength":  71
+                                                          },
+                       "proposal_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "counterfactual_policy_assessment_sha256":  {
+                                                                       "type":  "string",
+                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                       "maxLength":  71
+                                                                   },
+                       "human_reference_step_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "actual_policy_assessment_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           },
+                       "verification_result_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "case_success_criteria_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "ai_proposal_correctness":  {
+                                                       "type":  "string",
+                                                       "enum":  [
+                                                                    "correct",
+                                                                    "incorrect",
+                                                                    "insufficient_evidence",
+                                                                    "counterfactual_unobserved"
+                                                                ]
+                                                   },
+                       "human_step_correctness":  {
+                                                      "type":  "string",
+                                                      "enum":  [
+                                                                   "correct",
+                                                                   "incorrect",
+                                                                   "insufficient_evidence",
+                                                                   "counterfactual_unobserved"
+                                                               ]
+                                                  },
+                       "ai_policy_compliant":  {
+                                                   "type":  "boolean"
+                                               },
+                       "human_policy_compliant":  {
+                                                      "type":  "boolean"
+                                                  },
+                       "expected_postcondition_valid":  {
+                                                            "type":  "boolean"
+                                                        },
+                       "actual_postcondition_satisfied":  {
+                                                              "type":  "boolean"
+                                                          },
+                       "case_progress_effect_id":  {
+                                                       "type":  "string",
+                                                       "minLength":  1,
+                                                       "maxLength":  512,
+                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                   },
+                       "required_action_present":  {
+                                                       "type":  "boolean"
+                                                   },
+                       "unnecessary_ai_action":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "unnecessary_human_action":  {
+                                                        "type":  "boolean"
+                                                    },
+                       "ai_missed_required_action":  {
+                                                         "type":  "boolean"
+                                                     },
+                       "human_missed_required_action":  {
+                                                            "type":  "boolean"
+                                                        },
+                       "clarification_correct":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "escalation_correct":  {
+                                                  "type":  "boolean"
+                                              },
+                       "completion_correct":  {
+                                                  "type":  "boolean"
+                                              },
+                       "evidence_sufficient":  {
+                                                   "type":  "boolean"
+                                               },
+                       "critical_error_codes":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                              }
+                                                },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "adjudication_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               }
+                   }
+}

@@ -1,0 +1,287 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/role-shadow-evaluation-snapshot-v1.schema.json",
+    "title":  "RoleShadowEvaluationSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "snapshot_id",
+                     "organization_id",
+                     "role_contract_id",
+                     "role_contract_version",
+                     "role_contract_sha256",
+                     "profile_sha256",
+                     "cohort_sha256",
+                     "readiness_policy_sha256",
+                     "provider_descriptor_sha256",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "prompt_template_hashes",
+                     "total_sessions",
+                     "completed_sessions",
+                     "invalid_sessions",
+                     "interactive_sessions",
+                     "instrumented_sessions",
+                     "model_backed_cases",
+                     "windows_sessions",
+                     "exact_matches",
+                     "semantic_equivalents",
+                     "safe_alternatives",
+                     "ai_correct_human_incorrect",
+                     "human_correct_ai_incorrect",
+                     "both_incorrect",
+                     "ai_unnecessary_actions",
+                     "ai_missed_actions",
+                     "false_completions",
+                     "mandatory_escalation_cases",
+                     "mandatory_escalation_misses",
+                     "forbidden_capability_count",
+                     "authority_expansion_count",
+                     "direct_execution_attempt_count",
+                     "secret_leakage_count",
+                     "unblinded_cycle_count",
+                     "metric_result_hashes",
+                     "coverage_sha256",
+                     "critical_error_count",
+                     "shadow_store_head_sha256",
+                     "protected_audit_head_sha256",
+                     "evidence_ids",
+                     "snapshot_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "snapshot_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                       },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                            },
+                       "role_contract_version":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                 },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "readiness_policy_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "provider_descriptor_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "prompt_template_hashes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "total_sessions":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "completed_sessions":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "invalid_sessions":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "interactive_sessions":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "instrumented_sessions":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "model_backed_cases":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "windows_sessions":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "exact_matches":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "semantic_equivalents":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "safe_alternatives":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "ai_correct_human_incorrect":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "human_correct_ai_incorrect":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "both_incorrect":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "ai_unnecessary_actions":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "ai_missed_actions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "false_completions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "mandatory_escalation_cases":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "mandatory_escalation_misses":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  4294967295
+                                                       },
+                       "forbidden_capability_count":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "authority_expansion_count":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "direct_execution_attempt_count":  {
+                                                              "type":  "integer",
+                                                              "minimum":  0,
+                                                              "maximum":  4294967295
+                                                          },
+                       "secret_leakage_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "unblinded_cycle_count":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "metric_result_hashes":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                  "maxLength":  71
+                                                              }
+                                                },
+                       "coverage_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "critical_error_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "shadow_store_head_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "protected_audit_head_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "snapshot_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           }
+                   }
+}

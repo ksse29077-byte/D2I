@@ -1,3 +1,4 @@
+use crate::shadow_mode::ShadowDivergenceCandidateV1;
 use crate::{read_bounded, sha256_bytes, write_new, DesktopError};
 use d2i_case_learning::{validate_candidate, LearningCandidateV1};
 use d2i_episodic_memory::{
@@ -26,6 +27,7 @@ pub enum MemoryStoreRecordKindV1 {
     EpisodeStored,
     SummaryPublished,
     CandidateQuarantined,
+    ShadowCandidateQuarantined,
     TombstoneRecorded,
     IndexRepaired,
 }
@@ -61,6 +63,7 @@ struct MemoryStoreIndexV1 {
     episodes: Vec<EpisodeIndexEntryV1>,
     summaries_by_episode: BTreeMap<String, String>,
     candidate_hashes: Vec<String>,
+    shadow_candidate_hashes: Vec<String>,
     tombstoned_episode_hashes: Vec<String>,
     index_sha256: String,
 }
@@ -96,6 +99,7 @@ pub struct EpisodicMemoryStoreVerificationV1 {
     pub episode_count: u32,
     pub summary_count: u32,
     pub candidate_count: u32,
+    pub shadow_candidate_count: u32,
     pub tombstone_count: u32,
     pub object_count: u32,
     pub total_store_bytes: u64,
@@ -143,6 +147,7 @@ pub fn initialize_episodic_memory_store(
         episodes: Vec::new(),
         summaries_by_episode: BTreeMap::new(),
         candidate_hashes: Vec::new(),
+        shadow_candidate_hashes: Vec::new(),
         tombstoned_episode_hashes: Vec::new(),
         index_sha256: ZERO_HASH.to_owned(),
     };
@@ -322,6 +327,56 @@ impl EpisodicMemoryStoreV1 {
             )?;
             index
                 .candidate_hashes
+                .push(candidate.candidate_sha256.clone());
+            Ok(candidate.candidate_sha256.clone())
+        })
+    }
+
+    /// Stores a Shadow divergence in the WORK-600 quarantine without
+    /// representing it as a terminal-Episode learning candidate.
+    pub fn quarantine_shadow_candidate(
+        &mut self,
+        candidate: &ShadowDivergenceCandidateV1,
+        recorded_at_unix_ms: u64,
+    ) -> Result<String, DesktopError> {
+        self.mutate(|root, manifest, ledger, index| {
+            candidate.validate()?;
+            if candidate.organization_id != manifest.organization_id
+                || candidate.memory_namespace_id != manifest.namespace_id
+                || candidate.memory_namespace_sha256 != manifest.namespace_sha256
+                || candidate.role_contract_sha256 != manifest.namespace.role_contract_sha256
+                || !manifest
+                    .namespace
+                    .allowed_work_class_ids
+                    .contains(&candidate.work_class_id)
+                || !manifest.namespace.learning_candidate_allowed
+            {
+                return Err(DesktopError::AccessDenied(
+                    "Shadow candidate crosses or is disabled by the WORK-600 namespace".to_owned(),
+                ));
+            }
+            if index
+                .shadow_candidate_hashes
+                .contains(&candidate.candidate_sha256)
+            {
+                return Ok(candidate.candidate_sha256.clone());
+            }
+            persist_object(
+                root,
+                &candidate.candidate_sha256,
+                "shadow-candidate",
+                candidate,
+            )?;
+            append_record(
+                ledger,
+                MemoryStoreRecordKindV1::ShadowCandidateQuarantined,
+                &manifest.namespace_sha256,
+                &candidate.candidate_id,
+                &candidate.candidate_sha256,
+                recorded_at_unix_ms,
+            )?;
+            index
+                .shadow_candidate_hashes
                 .push(candidate.candidate_sha256.clone());
             Ok(candidate.candidate_sha256.clone())
         })
@@ -513,6 +568,7 @@ pub fn verify_episodic_memory_store(
         episode_count: index.episodes.len() as u32,
         summary_count: index.summaries_by_episode.len() as u32,
         candidate_count: index.candidate_hashes.len() as u32,
+        shadow_candidate_count: index.shadow_candidate_hashes.len() as u32,
         tombstone_count: index.tombstoned_episode_hashes.len() as u32,
         object_count,
         total_store_bytes,
@@ -596,6 +652,12 @@ fn list_objects(root: &Path) -> Result<Vec<RecoveredObject>, DesktopError> {
                 "candidate",
                 MemoryStoreRecordKindV1::CandidateQuarantined,
             )
+        } else if let Some(hex) = name.strip_suffix(".shadow-candidate.json") {
+            (
+                hex,
+                "shadow-candidate",
+                MemoryStoreRecordKindV1::ShadowCandidateQuarantined,
+            )
         } else {
             return Err(DesktopError::Integrity(
                 "unknown memory object filename".to_owned(),
@@ -614,8 +676,16 @@ fn list_objects(root: &Path) -> Result<Vec<RecoveredObject>, DesktopError> {
                 (value.summary_id, value.summary_sha256)
             }
             _ => {
-                let value: LearningCandidateV1 = parse_json_strict(&bytes).map_err(memory_error)?;
-                (value.candidate_id, value.candidate_sha256)
+                if suffix == "shadow-candidate" {
+                    let value: ShadowDivergenceCandidateV1 = parse_json_strict(&bytes)
+                        .map_err(|error| DesktopError::Integrity(error.to_string()))?;
+                    value.validate()?;
+                    (value.candidate_id, value.candidate_sha256)
+                } else {
+                    let value: LearningCandidateV1 =
+                        parse_json_strict(&bytes).map_err(memory_error)?;
+                    (value.candidate_id, value.candidate_sha256)
+                }
             }
         };
         if actual != hash {
@@ -637,6 +707,7 @@ fn rebuild_index_from_objects(
     let mut episodes = Vec::new();
     let mut summaries = BTreeMap::new();
     let mut candidates = Vec::new();
+    let mut shadow_candidates = Vec::new();
     for object in list_objects(root)? {
         match object.kind {
             MemoryStoreRecordKindV1::EpisodeStored => {
@@ -656,6 +727,9 @@ fn rebuild_index_from_objects(
                 summaries.insert(value.episode_sha256, value.summary_sha256);
             }
             MemoryStoreRecordKindV1::CandidateQuarantined => candidates.push(object.hash),
+            MemoryStoreRecordKindV1::ShadowCandidateQuarantined => {
+                shadow_candidates.push(object.hash)
+            }
             _ => {}
         }
     }
@@ -673,6 +747,7 @@ fn rebuild_index_from_objects(
         episodes,
         summaries_by_episode: summaries,
         candidate_hashes: candidates,
+        shadow_candidate_hashes: shadow_candidates,
         tombstoned_episode_hashes: old.tombstoned_episode_hashes,
         index_sha256: ZERO_HASH.to_owned(),
     };
@@ -727,6 +802,15 @@ fn verify_index_objects(
         if !records.contains(hash.as_str()) || !object_path(root, hash, "candidate")?.is_file() {
             return Err(DesktopError::Integrity(
                 "candidate index/object/ledger mismatch".to_owned(),
+            ));
+        }
+    }
+    for hash in &index.shadow_candidate_hashes {
+        if !records.contains(hash.as_str())
+            || !object_path(root, hash, "shadow-candidate")?.is_file()
+        {
+            return Err(DesktopError::Integrity(
+                "Shadow candidate index/object/ledger mismatch".to_owned(),
             ));
         }
     }
@@ -813,6 +897,8 @@ fn normalize_index(index: &mut MemoryStoreIndexV1) -> Result<(), DesktopError> {
     });
     index.candidate_hashes.sort();
     index.candidate_hashes.dedup();
+    index.shadow_candidate_hashes.sort();
+    index.shadow_candidate_hashes.dedup();
     index.tombstoned_episode_hashes.sort();
     index.tombstoned_episode_hashes.dedup();
     let mut ids = BTreeSet::new();
@@ -1121,6 +1207,7 @@ mod tests {
             ],
             summaries_by_episode: BTreeMap::new(),
             candidate_hashes: Vec::new(),
+            shadow_candidate_hashes: Vec::new(),
             tombstoned_episode_hashes: Vec::new(),
             index_sha256: ZERO_HASH.to_owned(),
         };

@@ -672,18 +672,27 @@ fn validate_goal_output_binding(
         .evidence_refs
         .iter()
         .any(|value| !request.evidence_ids.contains(value))
-        || output.success_criteria.iter().any(|criterion| {
-            !request
-                .case_outcome_requirement_ids
-                .contains(&criterion.target_state_id)
-        })
-        || output
-            .forbidden_outcomes
-            .iter()
-            .any(|value| !request.forbidden_outcomes.contains(value))
     {
         return Err(IntelligenceProviderError::Unauthorized(
-            "model Goal output references data outside the approved request".to_owned(),
+            "model Goal output contains an unapproved evidence reference".to_owned(),
+        ));
+    }
+    if output.success_criteria.iter().any(|criterion| {
+        !request
+            .case_outcome_requirement_ids
+            .contains(&criterion.target_state_id)
+    }) {
+        return Err(IntelligenceProviderError::Unauthorized(
+            "model Goal output contains an unapproved success criterion target".to_owned(),
+        ));
+    }
+    if output
+        .forbidden_outcomes
+        .iter()
+        .any(|value| !request.forbidden_outcomes.contains(value))
+    {
+        return Err(IntelligenceProviderError::Unauthorized(
+            "model Goal output contains an unapproved forbidden outcome".to_owned(),
         ));
     }
     Ok(())
@@ -710,28 +719,40 @@ fn validate_situation_output_binding(
         .map(|fact| &fact.fact_id)
         .chain(output.model_inferences.iter().map(|fact| &fact.fact_id))
         .collect::<std::collections::BTreeSet<_>>();
-    if output.evidence_refs.iter().any(&evidence_is_unapproved)
-        || output
-            .model_inferences
-            .iter()
-            .flat_map(|fact| fact.evidence_refs.iter())
-            .any(&evidence_is_unapproved)
-        || output.unknowns.iter().any(|unknown| {
-            !request
-                .unresolved_requirement_ids
-                .contains(&unknown.requirement_id)
-                || unknown.evidence_refs.iter().any(&evidence_is_unapproved)
-        })
-        || output.conflicts.iter().any(|conflict| {
-            conflict.evidence_refs.iter().any(&evidence_is_unapproved)
-                || conflict
-                    .fact_ids
-                    .iter()
-                    .any(|fact_id| !known_fact_ids.contains(fact_id))
-        })
+    if output.evidence_refs.iter().any(&evidence_is_unapproved) {
+        return Err(IntelligenceProviderError::Unauthorized(
+            "model situation output contains an unapproved evidence reference".to_owned(),
+        ));
+    }
+    if output
+        .model_inferences
+        .iter()
+        .flat_map(|fact| fact.evidence_refs.iter())
+        .any(&evidence_is_unapproved)
     {
         return Err(IntelligenceProviderError::Unauthorized(
-            "model situation output references data outside the approved request".to_owned(),
+            "model situation inference contains an unapproved evidence reference".to_owned(),
+        ));
+    }
+    if output.unknowns.iter().any(|unknown| {
+        !request
+            .unresolved_requirement_ids
+            .contains(&unknown.requirement_id)
+            || unknown.evidence_refs.iter().any(&evidence_is_unapproved)
+    }) {
+        return Err(IntelligenceProviderError::Unauthorized(
+            "model situation output contains an unapproved unknown requirement".to_owned(),
+        ));
+    }
+    if output.conflicts.iter().any(|conflict| {
+        conflict.evidence_refs.iter().any(&evidence_is_unapproved)
+            || conflict
+                .fact_ids
+                .iter()
+                .any(|fact_id| !known_fact_ids.contains(fact_id))
+    }) {
+        return Err(IntelligenceProviderError::Unauthorized(
+            "model situation output contains an unapproved conflict binding".to_owned(),
         ));
     }
     Ok(())

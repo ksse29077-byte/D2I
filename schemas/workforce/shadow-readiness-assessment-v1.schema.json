@@ -1,0 +1,153 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-readiness-assessment-v1.schema.json",
+    "title":  "ShadowReadinessAssessmentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "assessment_id",
+                     "organization_id",
+                     "role_contract_sha256",
+                     "profile_sha256",
+                     "cohort_sha256",
+                     "readiness_policy_sha256",
+                     "shadow_snapshot_sha256",
+                     "evaluated_metric_hashes",
+                     "passed_threshold_ids",
+                     "failed_threshold_ids",
+                     "critical_blocker_codes",
+                     "status",
+                     "assessed_at_unix_ms",
+                     "evidence_ids",
+                     "assessment_sha256",
+                     "signing_key_id",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "assessment_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "readiness_policy_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "shadow_snapshot_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "evaluated_metric_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "passed_threshold_ids":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                              }
+                                                },
+                       "failed_threshold_ids":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                              }
+                                                },
+                       "critical_blocker_codes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                }
+                                                  },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "insufficient_evidence",
+                                                   "blocked_by_critical_error",
+                                                   "not_ready",
+                                                   "eligible_for_work900_design"
+                                               ]
+                                  },
+                       "assessed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "assessment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

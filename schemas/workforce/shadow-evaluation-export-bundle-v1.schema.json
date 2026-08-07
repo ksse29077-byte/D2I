@@ -1,0 +1,192 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-evaluation-export-bundle-v1.schema.json",
+    "title":  "ShadowEvaluationExportBundleV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "bundle_id",
+                     "profile_approval_hashes",
+                     "cohort_sha256",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "prompt_template_hashes",
+                     "enrollment_hashes",
+                     "session_hashes",
+                     "proposal_commitment_hashes",
+                     "human_attestation_hashes",
+                     "comparison_hashes",
+                     "adjudication_hashes",
+                     "metric_hashes",
+                     "readiness_assessment_sha256",
+                     "report_publication_hashes",
+                     "protected_audit_terminal_sha256",
+                     "schema_ids",
+                     "evidence_ids",
+                     "bundle_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "bundle_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "profile_approval_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "prompt_template_hashes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "enrollment_hashes":  {
+                                                 "type":  "array",
+                                                 "maxItems":  512,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           }
+                                             },
+                       "session_hashes":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        }
+                                          },
+                       "proposal_commitment_hashes":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    }
+                                                      },
+                       "human_attestation_hashes":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                      "maxLength":  71
+                                                                  }
+                                                    },
+                       "comparison_hashes":  {
+                                                 "type":  "array",
+                                                 "maxItems":  512,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           }
+                                             },
+                       "adjudication_hashes":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                 "maxLength":  71
+                                                             }
+                                               },
+                       "metric_hashes":  {
+                                             "type":  "array",
+                                             "maxItems":  512,
+                                             "uniqueItems":  true,
+                                             "items":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       }
+                                         },
+                       "readiness_assessment_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "report_publication_hashes":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                       "maxLength":  71
+                                                                   }
+                                                     },
+                       "protected_audit_terminal_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           },
+                       "schema_ids":  {
+                                          "type":  "array",
+                                          "maxItems":  512,
+                                          "uniqueItems":  true,
+                                          "items":  {
+                                                        "type":  "string",
+                                                        "minLength":  1,
+                                                        "maxLength":  512,
+                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                    }
+                                      },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "bundle_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

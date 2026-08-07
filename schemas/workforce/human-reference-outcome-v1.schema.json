@@ -1,0 +1,125 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/human-reference-outcome-v1.schema.json",
+    "title":  "HumanReferenceOutcomeV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "session_id",
+                     "case_enrollment_sha256",
+                     "terminal_reference_decision",
+                     "final_observation_sha256",
+                     "verification_result_hashes",
+                     "satisfied_requirement_ids",
+                     "unsatisfied_requirement_ids",
+                     "policy_compliant",
+                     "human_exception_status_id",
+                     "completion_asserted",
+                     "independently_verified_outcome",
+                     "evidence_ids",
+                     "outcome_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "session_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "case_enrollment_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "terminal_reference_decision":  {
+                                                           "type":  "string",
+                                                           "enum":  [
+                                                                        "act",
+                                                                        "clarify",
+                                                                        "escalate",
+                                                                        "declare_complete",
+                                                                        "refuse",
+                                                                        "stop",
+                                                                        "no_action"
+                                                                    ]
+                                                       },
+                       "final_observation_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "verification_result_hashes":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    }
+                                                      },
+                       "satisfied_requirement_ids":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                   }
+                                                     },
+                       "unsatisfied_requirement_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "policy_compliant":  {
+                                                "type":  "boolean"
+                                            },
+                       "human_exception_status_id":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                     },
+                       "completion_asserted":  {
+                                                   "type":  "boolean"
+                                               },
+                       "independently_verified_outcome":  {
+                                                              "type":  "boolean"
+                                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "outcome_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

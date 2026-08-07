@@ -1,0 +1,190 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-replay-report-v1.schema.json",
+    "title":  "ShadowReplayReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "replay_id",
+                     "session_count",
+                     "repetitions",
+                     "completed_sessions",
+                     "invalid_sessions",
+                     "interactive_sessions",
+                     "instrumented_sessions",
+                     "exact_matches",
+                     "semantic_equivalents",
+                     "safe_alternatives",
+                     "ai_correct_human_incorrect",
+                     "human_correct_ai_incorrect",
+                     "both_incorrect",
+                     "ai_unnecessary_actions",
+                     "ai_missed_actions",
+                     "false_completions",
+                     "mandatory_escalation_misses",
+                     "unblinded_cycles",
+                     "direct_execution_attempts",
+                     "critical_errors",
+                     "cohort_sha256",
+                     "session_set_sha256",
+                     "comparison_set_sha256",
+                     "adjudication_set_sha256",
+                     "metric_set_sha256",
+                     "readiness_sha256",
+                     "normalized_report_sha256",
+                     "logical_operations",
+                     "report_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "replay_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "session_count":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "repetitions":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "completed_sessions":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "invalid_sessions":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "interactive_sessions":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "instrumented_sessions":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "exact_matches":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "semantic_equivalents":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "safe_alternatives":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "ai_correct_human_incorrect":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "human_correct_ai_incorrect":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "both_incorrect":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "ai_unnecessary_actions":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "ai_missed_actions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "false_completions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "mandatory_escalation_misses":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  4294967295
+                                                       },
+                       "unblinded_cycles":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "direct_execution_attempts":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "critical_errors":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "session_set_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "comparison_set_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "adjudication_set_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "metric_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "readiness_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "normalized_report_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "logical_operations":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "report_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

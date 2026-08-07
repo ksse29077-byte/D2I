@@ -1,0 +1,189 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-evaluation-report-v1.schema.json",
+    "title":  "ShadowEvaluationReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "organization_id",
+                     "role_contract_id",
+                     "role_contract_version",
+                     "role_contract_sha256",
+                     "profile_sha256",
+                     "cohort_sha256",
+                     "readiness_policy_sha256",
+                     "evaluation_snapshot_sha256",
+                     "coverage_sha256",
+                     "metric_result_hashes",
+                     "readiness_assessment_sha256",
+                     "critical_error_codes",
+                     "divergence_candidate_hashes",
+                     "data_class_ids",
+                     "redaction_proof_ids",
+                     "retention_class_id",
+                     "reporting_obligation_id",
+                     "report_class_id",
+                     "routing_class_id",
+                     "evidence_ids",
+                     "report_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                            },
+                       "role_contract_version":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                 },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "readiness_policy_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "evaluation_snapshot_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "coverage_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "metric_result_hashes":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                  "maxLength":  71
+                                                              }
+                                                },
+                       "readiness_assessment_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "critical_error_codes":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                              }
+                                                },
+                       "divergence_candidate_hashes":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                         "maxLength":  71
+                                                                     }
+                                                       },
+                       "data_class_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                        }
+                                          },
+                       "redaction_proof_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  512,
+                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                             }
+                                               },
+                       "retention_class_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                              },
+                       "reporting_obligation_id":  {
+                                                       "type":  "string",
+                                                       "minLength":  1,
+                                                       "maxLength":  512,
+                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                   },
+                       "report_class_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "routing_class_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "report_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

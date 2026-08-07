@@ -1,0 +1,90 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-proposal-commitment-v1.schema.json",
+    "title":  "ShadowProposalCommitmentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "commitment_id",
+                     "session_id",
+                     "cycle_index",
+                     "source_observation_sha256",
+                     "proposal_sha256",
+                     "counterfactual_policy_assessment_sha256",
+                     "committed_at_unix_ms",
+                     "reveal_allowed_after_event_class_id",
+                     "protected_object_sha256",
+                     "evidence_ids",
+                     "commitment_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "commitment_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "session_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "cycle_index":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "source_observation_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "proposal_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "counterfactual_policy_assessment_sha256":  {
+                                                                       "type":  "string",
+                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                       "maxLength":  71
+                                                                   },
+                       "committed_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "reveal_allowed_after_event_class_id":  {
+                                                                   "type":  "string",
+                                                                   "minLength":  1,
+                                                                   "maxLength":  512,
+                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                               },
+                       "protected_object_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "commitment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

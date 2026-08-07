@@ -1,0 +1,148 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-step-comparison-v1.schema.json",
+    "title":  "ShadowStepComparisonV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "comparison_id",
+                     "session_id",
+                     "cycle_index",
+                     "proposal_sha256",
+                     "human_reference_step_sha256",
+                     "shared_pre_action_observation_sha256",
+                     "decision_class_match",
+                     "capability_match",
+                     "semantic_target_match",
+                     "argument_artifact_match",
+                     "precondition_set_match",
+                     "expected_postcondition_set_match",
+                     "risk_class_match",
+                     "policy_disposition_match",
+                     "clarification_match",
+                     "escalation_match",
+                     "completion_match",
+                     "verified_outcome_effect_match",
+                     "status",
+                     "equivalence_binding_sha256",
+                     "evidence_ids",
+                     "comparison_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "comparison_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "session_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "cycle_index":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "proposal_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "human_reference_step_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "shared_pre_action_observation_sha256":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                },
+                       "decision_class_match":  {
+                                                    "type":  "boolean"
+                                                },
+                       "capability_match":  {
+                                                "type":  "boolean"
+                                            },
+                       "semantic_target_match":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "argument_artifact_match":  {
+                                                       "type":  "boolean"
+                                                   },
+                       "precondition_set_match":  {
+                                                      "type":  "boolean"
+                                                  },
+                       "expected_postcondition_set_match":  {
+                                                                "type":  "boolean"
+                                                            },
+                       "risk_class_match":  {
+                                                "type":  "boolean"
+                                            },
+                       "policy_disposition_match":  {
+                                                        "type":  "boolean"
+                                                    },
+                       "clarification_match":  {
+                                                   "type":  "boolean"
+                                               },
+                       "escalation_match":  {
+                                                "type":  "boolean"
+                                            },
+                       "completion_match":  {
+                                                "type":  "boolean"
+                                            },
+                       "verified_outcome_effect_match":  {
+                                                             "type":  "boolean"
+                                                         },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "exact_match",
+                                                   "approved_semantic_equivalent",
+                                                   "safe_alternative",
+                                                   "ai_correct_human_incorrect",
+                                                   "human_correct_ai_incorrect",
+                                                   "both_correct_different_route",
+                                                   "both_incorrect",
+                                                   "ai_unnecessary_action",
+                                                   "human_unnecessary_action",
+                                                   "ai_missed_required_action",
+                                                   "human_missed_required_action",
+                                                   "counterfactual_unobserved",
+                                                   "insufficient_evidence",
+                                                   "incomparable"
+                                               ]
+                                  },
+                       "equivalence_binding_sha256":  {
+                                                          "type":  [
+                                                                       "string",
+                                                                       "null"
+                                                                   ],
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "comparison_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

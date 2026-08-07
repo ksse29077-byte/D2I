@@ -1,0 +1,119 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/shadow-cycle-result-v1.schema.json",
+    "title":  "ShadowCycleResultV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "request_sha256",
+                     "session_sha256",
+                     "cycle_sha256",
+                     "proposal_sha256",
+                     "commitment_sha256",
+                     "human_reference_step_sha256",
+                     "comparison_sha256",
+                     "adjudication_sha256",
+                     "status",
+                     "execution_attempt_count",
+                     "activation_artifact_count",
+                     "case_mutation_count",
+                     "adapter_mutation_count",
+                     "evidence_ids",
+                     "result_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "request_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "session_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "cycle_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "proposal_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "commitment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "human_reference_step_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "comparison_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "adjudication_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "proposal_committed",
+                                                   "reference_durable",
+                                                   "observation_durable",
+                                                   "verified",
+                                                   "revealed",
+                                                   "adjudicated",
+                                                   "aborted_stale",
+                                                   "invalid"
+                                               ]
+                                  },
+                       "execution_attempt_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "activation_artifact_count":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "case_mutation_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "adapter_mutation_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "result_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

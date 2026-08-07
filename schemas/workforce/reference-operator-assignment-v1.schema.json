@@ -1,0 +1,130 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/reference-operator-assignment-v1.schema.json",
+    "title":  "ReferenceOperatorAssignmentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "assignment_id",
+                     "organization_id",
+                     "cohort_sha256",
+                     "case_enrollment_id",
+                     "actor_class_id",
+                     "recorder_mode",
+                     "allowed_application_pack_sha256",
+                     "allowed_semantic_target_ids",
+                     "allowed_reference_operation_class_ids",
+                     "valid_from_unix_ms",
+                     "valid_to_unix_ms",
+                     "participation_approval_sha256",
+                     "evidence_ids",
+                     "assignment_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "assignment_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         },
+                       "case_enrollment_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                              },
+                       "actor_class_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "recorder_mode":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "interactive_human",
+                                                          "instrumented_reference_operator",
+                                                          "recorded_deterministic_fixture"
+                                                      ]
+                                         },
+                       "allowed_application_pack_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           },
+                       "allowed_semantic_target_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "allowed_reference_operation_class_ids":  {
+                                                                     "type":  "array",
+                                                                     "maxItems":  512,
+                                                                     "uniqueItems":  true,
+                                                                     "items":  {
+                                                                                   "type":  "string",
+                                                                                   "minLength":  1,
+                                                                                   "maxLength":  512,
+                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                               }
+                                                                 },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "valid_to_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "participation_approval_sha256":  {
+                                                             "type":  "string",
+                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                             "maxLength":  71
+                                                         },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "assignment_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

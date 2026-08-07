@@ -25,3 +25,8 @@ engine used by General Office, HR, and IT fixtures. In particular, incomplete
 false-completion review coverage produces `insufficient_evidence`, not zero or
 success. Safety identifiers remain fixture-owned and Core contains no Safety
 formula or routing branch.
+
+WORK-800 keeps Safety as a domain-specific cross-domain compatibility trace.
+It uses the same blinded proposal, human-reference, independent adjudication,
+integer metric, and quarantine contracts as General Office. Safety IDs remain
+fixture-owned, and no interactive Safety execution is performed.

@@ -135,6 +135,32 @@ impl PinnedWork500ModelSuiteV1 {
         &self.planning.descriptor
     }
 
+    /// Rebinds only the descriptor validity window for a bounded resumable
+    /// evaluation. Model, runtime, prompt, schema, and resource bindings remain
+    /// unchanged, and an expired or future-issued window is rejected.
+    pub fn rebind_descriptor_validity_for_resume(
+        &mut self,
+        issued_at_unix_seconds: u64,
+        current_time_unix_seconds: u64,
+    ) -> Result<(), IntelligenceProviderError> {
+        if issued_at_unix_seconds > current_time_unix_seconds.saturating_add(60)
+            || current_time_unix_seconds > issued_at_unix_seconds.saturating_add(86_400)
+        {
+            return Err(IntelligenceProviderError::Unauthorized(
+                "resumable provider descriptor validity window is stale or future-issued"
+                    .to_owned(),
+            ));
+        }
+        for binding in [&mut self.goal, &mut self.situation, &mut self.planning] {
+            let mut descriptor = binding.descriptor.clone();
+            descriptor.valid_from_unix_seconds = issued_at_unix_seconds.saturating_sub(60);
+            descriptor.expires_at_unix_seconds = issued_at_unix_seconds.saturating_add(86_400);
+            descriptor.descriptor_sha256 = ZERO_HASH.to_owned();
+            binding.descriptor = descriptor.seal()?;
+        }
+        Ok(())
+    }
+
     pub fn understand_goal(
         &self,
         mut request: GoalUnderstandingRequestV1,

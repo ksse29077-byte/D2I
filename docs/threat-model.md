@@ -569,3 +569,39 @@ custody, production internal-inbox access control, and the narrow General
 Office fixture. There is no external delivery connector, background scheduler,
 automatic policy/Role/KPI mutation, Case reopen, activation, or execution
 fallback in WORK-700.
+
+## WORK-800 Shadow Evaluation Threats
+
+WORK-800 addresses profile, policy, cohort, enrollment, grant, assignment,
+operator, provider/model/runtime/prompt, Application Pack, Case, organization,
+and observation substitution; stale or unsigned approval; post-hoc Case
+selection or relabeling; failed-output exclusion; duplicate Case/session/cycle;
+proposal or commitment substitution; reveal before the human step; mismatched
+pre-state; reference action fed back into model input; operator exposure to AI
+output; treating either lane as automatic gold; counterfactual success claims;
+false completion; missed mandatory escalation; readiness threshold
+substitution; readiness used as execution authority; and Shadow-to-live
+promotion.
+
+Privacy threats include global keyboard/mouse hooks, keystroke or coordinate
+storage, screenshots/video, clipboard reads, password fields, credentials,
+tokens, raw UI values, locators/selectors, personal names or contact details,
+unrelated application observation, and background monitoring. Mitigations are
+signed participation approval, exact process/session/fixture identity,
+allowlisted UIA targets, immediate value hashing, fixture-owned semantic
+events, bounded retention, prohibited-collection declarations, and an artifact
+scan. The recorder never controls the UI.
+
+Persistence threats include reparse traversal, DACL drift, rollback, immutable
+object mutation, orphan object/index state, duplicate phase, concurrent writer,
+partial commitment/reveal, and durable-write failure. The protected store uses
+content addressing, object ACL hashes, an append-only canonical hash chain,
+single-writer lock, rollback pin, derived index, pre-write contract validation,
+post-write poisoning, and ledger-only bounded repair. Protected audit records
+the lifecycle without raw sensitive content.
+
+Residual risks are organization and reference signing-key custody, trusted-time
+and external chain-head anchoring, model semantic quality, the narrow General
+Office fixture, and the operator's physical environment. WORK-800 has no live
+action path, external connector, continuous service, production learning,
+automatic Role/policy/model/prompt/capability change, or autonomy promotion.

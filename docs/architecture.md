@@ -531,3 +531,45 @@ content-addressed object store with an append-only hash chain, atomic derived
 index, one writer, rollback/tamper rejection, and index-only crash repair.
 WORK-700 is one-shot: no daemon, timer service, external connector, or Shadow
 Mode comparison is introduced.
+
+## Blinded Open Digital Employee Shadow Mode
+
+WORK-800 adds the platform-neutral `d2i-shadow-mode` evaluation layer without
+joining the execution path. Signed profile, readiness policy, cohort,
+participation, assignment, enrollment, and read-only grant artifacts exact-bind
+an approved Role, Case, provider/model/runtime/prompts, Application Pack,
+observation scope, and finite resource limits. They cannot claim or mutate a
+Case, issue execution authority, invoke KRN, or call a mutation adapter.
+
+Each AI proposal and pure counterfactual policy assessment bind a shared fresh
+pre-action observation and are committed to protected storage before the
+reference action begins. The operator cannot see the proposal. Reveal requires
+a durable signed semantic reference step and fresh post-action observation.
+Comparison uses exact Case/cycle/policy/pre-state binding; independent
+adjudication uses current policy, success criteria, observation, and verifier
+evidence, treating neither lane as automatic ground truth.
+
+Desktop supplies only exact-process, exact-session, allowlisted UIA reads and a
+fixture-owned semantic event channel. Values are hashed immediately. Global
+input hooks, screenshots/video, clipboard capture, raw UI payloads, locators,
+credentials, and personal recipient data are outside the plane. Instrumented
+fixtures are hidden and non-activating; Completion separately requires one
+explicit interactive reference session.
+
+The Shadow store is DACL protected, content addressed, append-only, and
+rollback pinned. Its index is derived and recoverable without replaying model
+or human activity. A sealed 60-Case Qwen3-4B holdout, five Windows sessions,
+integer metrics, deterministic replay, and a signed readiness policy produce a
+readiness assessment. `eligible_for_work900_design` is evidence only and is not
+accepted as an activation, confirmation, policy, or execution token. Learning
+divergence goes only to WORK-600 quarantine and reports only to the existing
+WORK-700 protected internal route.
+
+Completion is a dependency graph of atomic safe checkpoints, not a single
+long-lived process. Checkpoints bind source provenance, step-specific
+executable inputs, runner and normalized argument hashes, pinned artifacts,
+produced evidence, logs, cleanup, and residual state. The holdout additionally
+seals a 24-hour provider descriptor validity binding and each accepted Case.
+Only terminal Shadow sessions are reusable; an ambiguous action window resumes
+from fresh observation and never from the failed command. Final certification
+revalidates the entire checkpoint set and semantic product gates.
