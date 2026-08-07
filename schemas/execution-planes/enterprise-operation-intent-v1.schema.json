@@ -1,0 +1,125 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-operation-intent-v1.schema.json",
+    "title":  "EnterpriseOperationIntentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "intent_id",
+                     "case_sha256",
+                     "planner_cycle_sha256",
+                     "connector_pack_id",
+                     "connector_pack_sha256",
+                     "operation_id",
+                     "capability_id",
+                     "semantic_target_id",
+                     "resource_reference_id",
+                     "approved_argument_reference_hashes",
+                     "expected_state_transition_id",
+                     "expected_postcondition_id",
+                     "predicted_risk_class_id",
+                     "evidence_ids",
+                     "intent_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "intent_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "case_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                           "maxLength":  71
+                                       },
+                       "planner_cycle_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "connector_pack_id":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  512,
+                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                             },
+                       "connector_pack_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "operation_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "capability_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "semantic_target_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                              },
+                       "resource_reference_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "approved_argument_reference_hashes":  {
+                                                                  "type":  "array",
+                                                                  "maxItems":  512,
+                                                                  "uniqueItems":  true,
+                                                                  "items":  {
+                                                                                "type":  "string",
+                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                "maxLength":  71
+                                                                            }
+                                                              },
+                       "expected_state_transition_id":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        },
+                       "expected_postcondition_id":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                     },
+                       "predicted_risk_class_id":  {
+                                                       "type":  "string",
+                                                       "minLength":  1,
+                                                       "maxLength":  512,
+                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                   },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "intent_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

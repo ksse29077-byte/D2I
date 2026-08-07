@@ -275,7 +275,7 @@ publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
 The next active task is
-`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
+`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:
@@ -319,6 +319,29 @@ proves five zero-touch routine closures plus three exactly-once human
 exceptions. Use `-Resume` for a transient failure or `-Fresh` to discard safe
 checkpoints. Readiness and autonomy admission remain non-executable evidence.
 See `docs/workforce/limited-autonomy-human-exception-v1.md`.
+
+EDGE-100 adds a bounded enterprise API execution plane. Signed Connector Packs
+fix exact semantic operations, schemas, capabilities, targets, origins, and
+limits. Models cannot supply URLs, HTTP methods, headers, raw bodies, or
+credentials. Mutations preserve Policy, one-shot activation, and KRN authority
+and require optimistic concurrency, deterministic idempotency, and fresh remote
+verification before closure.
+
+Run deterministic EDGE-100 gates with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/edge/run-enterprise-api-plane-v1.ps1 `
+  -Mode All `
+  -OutputRoot target/d2i-edge-enterprise-api/all
+```
+
+Actual Completion additionally requires the pinned Qwen3-4B/llama.cpp and
+sealed WORK-900 evidence. It uses separate loopback server and connector worker
+processes, eight Work Items/Cases, actual socket reads and writes, bounded
+recovery, five verified closures, three human exceptions, protected evidence,
+and cleanup. Use `-Resume` after a transient failure. See
+`docs/execution-planes/enterprise-api-v1.md` and ADR 0037.
 
 ## Checks
 

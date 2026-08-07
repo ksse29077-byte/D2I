@@ -1,0 +1,551 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-connector-pack-v1.schema.json",
+    "title":  "EnterpriseConnectorPackV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "connector_pack_id",
+                     "connector_pack_version",
+                     "display_name",
+                     "system_family_id",
+                     "organization_scope_id",
+                     "environment_ids",
+                     "base_origin",
+                     "transport_profile_id",
+                     "credential_profile_id",
+                     "credential_reference_class_id",
+                     "operation_descriptors",
+                     "allowed_observation_operation_ids",
+                     "allowed_mutation_operation_ids",
+                     "request_schema_sha256s",
+                     "response_schema_sha256s",
+                     "resource_class_ids",
+                     "semantic_target_ids",
+                     "capability_ids",
+                     "rate_limit_per_minute",
+                     "retry_limit",
+                     "resource_limits",
+                     "redaction_policy_id",
+                     "tls_policy",
+                     "redirect_policy_id",
+                     "proxy_policy_id",
+                     "idempotency_policy_id",
+                     "concurrency_policy_id",
+                     "verification_policy_id",
+                     "signer_key_id",
+                     "evidence_ids",
+                     "pack_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "connector_pack_id":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  512,
+                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                             },
+                       "connector_pack_version":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512
+                                                  },
+                       "display_name":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512
+                                        },
+                       "system_family_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                            },
+                       "organization_scope_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "environment_ids":  {
+                                               "type":  "array",
+                                               "maxItems":  512,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  512,
+                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                         }
+                                           },
+                       "base_origin":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512
+                                       },
+                       "transport_profile_id":  {
+                                                    "type":  "string",
+                                                    "minLength":  1,
+                                                    "maxLength":  512,
+                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                },
+                       "credential_profile_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "credential_reference_class_id":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  512,
+                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                         },
+                       "operation_descriptors":  {
+                                                     "type":  "array",
+                                                     "maxItems":  512,
+                                                     "uniqueItems":  true,
+                                                     "items":  {
+                                                                   "type":  "object",
+                                                                   "additionalProperties":  false,
+                                                                   "required":  [
+                                                                                    "schema_version",
+                                                                                    "operation_id",
+                                                                                    "capability_id",
+                                                                                    "semantic_target_id",
+                                                                                    "resource_class_id",
+                                                                                    "operation_class",
+                                                                                    "http_method",
+                                                                                    "fixed_path_template",
+                                                                                    "allowed_path_parameter_ids",
+                                                                                    "allowed_query_parameter_ids",
+                                                                                    "request_schema_sha256",
+                                                                                    "response_schema_sha256",
+                                                                                    "success_status_codes",
+                                                                                    "side_effect_class",
+                                                                                    "idempotency_class",
+                                                                                    "optimistic_concurrency_required",
+                                                                                    "resource_version_field_id",
+                                                                                    "verification_operation_id",
+                                                                                    "retry_policy_id",
+                                                                                    "rate_budget_class_id",
+                                                                                    "maximum_request_bytes",
+                                                                                    "maximum_response_bytes",
+                                                                                    "data_class_ids",
+                                                                                    "evidence_ids",
+                                                                                    "descriptor_sha256"
+                                                                                ],
+                                                                   "properties":  {
+                                                                                      "schema_version":  {
+                                                                                                             "const":  1
+                                                                                                         },
+                                                                                      "operation_id":  {
+                                                                                                           "type":  "string",
+                                                                                                           "minLength":  1,
+                                                                                                           "maxLength":  512,
+                                                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                       },
+                                                                                      "capability_id":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  1,
+                                                                                                            "maxLength":  512,
+                                                                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                        },
+                                                                                      "semantic_target_id":  {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  512,
+                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                             },
+                                                                                      "resource_class_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                      "operation_class":  {
+                                                                                                              "type":  "string",
+                                                                                                              "enum":  [
+                                                                                                                           "observation",
+                                                                                                                           "mutation"
+                                                                                                                       ]
+                                                                                                          },
+                                                                                      "http_method":  {
+                                                                                                          "type":  "string",
+                                                                                                          "enum":  [
+                                                                                                                       "get",
+                                                                                                                       "post",
+                                                                                                                       "put",
+                                                                                                                       "patch",
+                                                                                                                       "delete"
+                                                                                                                   ]
+                                                                                                      },
+                                                                                      "fixed_path_template":  {
+                                                                                                                  "type":  "string",
+                                                                                                                  "minLength":  1,
+                                                                                                                  "maxLength":  512
+                                                                                                              },
+                                                                                      "allowed_path_parameter_ids":  {
+                                                                                                                         "type":  "array",
+                                                                                                                         "maxItems":  512,
+                                                                                                                         "uniqueItems":  true,
+                                                                                                                         "items":  {
+                                                                                                                                       "type":  "string",
+                                                                                                                                       "minLength":  1,
+                                                                                                                                       "maxLength":  512,
+                                                                                                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                   }
+                                                                                                                     },
+                                                                                      "allowed_query_parameter_ids":  {
+                                                                                                                          "type":  "array",
+                                                                                                                          "maxItems":  512,
+                                                                                                                          "uniqueItems":  true,
+                                                                                                                          "items":  {
+                                                                                                                                        "type":  "string",
+                                                                                                                                        "minLength":  1,
+                                                                                                                                        "maxLength":  512,
+                                                                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                    }
+                                                                                                                      },
+                                                                                      "request_schema_sha256":  {
+                                                                                                                    "type":  "string",
+                                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                    "maxLength":  71
+                                                                                                                },
+                                                                                      "response_schema_sha256":  {
+                                                                                                                     "type":  "string",
+                                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                     "maxLength":  71
+                                                                                                                 },
+                                                                                      "success_status_codes":  {
+                                                                                                                   "type":  "array",
+                                                                                                                   "maxItems":  512,
+                                                                                                                   "uniqueItems":  true,
+                                                                                                                   "items":  {
+                                                                                                                                 "type":  "integer",
+                                                                                                                                 "minimum":  0,
+                                                                                                                                 "maximum":  4294967295
+                                                                                                                             }
+                                                                                                               },
+                                                                                      "side_effect_class":  {
+                                                                                                                "type":  "string",
+                                                                                                                "enum":  [
+                                                                                                                             "read_only",
+                                                                                                                             "reversible_business_state_change"
+                                                                                                                         ]
+                                                                                                            },
+                                                                                      "idempotency_class":  {
+                                                                                                                "type":  "string",
+                                                                                                                "enum":  [
+                                                                                                                             "not_applicable",
+                                                                                                                             "client_key_required"
+                                                                                                                         ]
+                                                                                                            },
+                                                                                      "optimistic_concurrency_required":  {
+                                                                                                                              "type":  "boolean"
+                                                                                                                          },
+                                                                                      "resource_version_field_id":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  512,
+                                                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                    },
+                                                                                      "verification_operation_id":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  512,
+                                                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                    },
+                                                                                      "retry_policy_id":  {
+                                                                                                              "type":  "string",
+                                                                                                              "minLength":  1,
+                                                                                                              "maxLength":  512,
+                                                                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                          },
+                                                                                      "rate_budget_class_id":  {
+                                                                                                                   "type":  "string",
+                                                                                                                   "minLength":  1,
+                                                                                                                   "maxLength":  512,
+                                                                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                               },
+                                                                                      "maximum_request_bytes":  {
+                                                                                                                    "type":  "integer",
+                                                                                                                    "minimum":  0,
+                                                                                                                    "maximum":  4294967295
+                                                                                                                },
+                                                                                      "maximum_response_bytes":  {
+                                                                                                                     "type":  "integer",
+                                                                                                                     "minimum":  0,
+                                                                                                                     "maximum":  4294967295
+                                                                                                                 },
+                                                                                      "data_class_ids":  {
+                                                                                                             "type":  "array",
+                                                                                                             "maxItems":  512,
+                                                                                                             "uniqueItems":  true,
+                                                                                                             "items":  {
+                                                                                                                           "type":  "string",
+                                                                                                                           "minLength":  1,
+                                                                                                                           "maxLength":  512,
+                                                                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                       }
+                                                                                                         },
+                                                                                      "evidence_ids":  {
+                                                                                                           "type":  "array",
+                                                                                                           "maxItems":  512,
+                                                                                                           "uniqueItems":  true,
+                                                                                                           "items":  {
+                                                                                                                         "type":  "string",
+                                                                                                                         "minLength":  1,
+                                                                                                                         "maxLength":  512,
+                                                                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                     }
+                                                                                                       },
+                                                                                      "descriptor_sha256":  {
+                                                                                                                "type":  "string",
+                                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                "maxLength":  71
+                                                                                                            }
+                                                                                  }
+                                                               }
+                                                 },
+                       "allowed_observation_operation_ids":  {
+                                                                 "type":  "array",
+                                                                 "maxItems":  512,
+                                                                 "uniqueItems":  true,
+                                                                 "items":  {
+                                                                               "type":  "string",
+                                                                               "minLength":  1,
+                                                                               "maxLength":  512,
+                                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                           }
+                                                             },
+                       "allowed_mutation_operation_ids":  {
+                                                              "type":  "array",
+                                                              "maxItems":  512,
+                                                              "uniqueItems":  true,
+                                                              "items":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                        }
+                                                          },
+                       "request_schema_sha256s":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "response_schema_sha256s":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "resource_class_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                            }
+                                              },
+                       "semantic_target_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  512,
+                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                             }
+                                               },
+                       "capability_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "rate_limit_per_minute":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "retry_limit":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "resource_limits":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "maximum_request_bytes",
+                                                                "maximum_response_bytes",
+                                                                "maximum_response_depth",
+                                                                "maximum_response_items",
+                                                                "maximum_pages",
+                                                                "maximum_duration_ms"
+                                                            ],
+                                               "properties":  {
+                                                                  "maximum_request_bytes":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "maximum_response_bytes":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_response_depth":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_response_items":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_pages":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_duration_ms":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  18446744073709551615
+                                                                                          }
+                                                              }
+                                           },
+                       "redaction_policy_id":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512,
+                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                               },
+                       "tls_policy":  {
+                                          "type":  "object",
+                                          "additionalProperties":  false,
+                                          "required":  [
+                                                           "verify_os_trust_chain",
+                                                           "verify_hostname",
+                                                           "verify_expiry",
+                                                           "reject_weak_protocols",
+                                                           "pin_class",
+                                                           "pin_sha256"
+                                                       ],
+                                          "properties":  {
+                                                             "verify_os_trust_chain":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                             "verify_hostname":  {
+                                                                                     "type":  "boolean"
+                                                                                 },
+                                                             "verify_expiry":  {
+                                                                                   "type":  "boolean"
+                                                                               },
+                                                             "reject_weak_protocols":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                             "pin_class":  {
+                                                                               "type":  "string",
+                                                                               "minLength":  1,
+                                                                               "maxLength":  512
+                                                                           },
+                                                             "pin_sha256":  {
+                                                                                "anyOf":  [
+                                                                                              {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                                              {
+                                                                                                  "type":  "null"
+                                                                                              }
+                                                                                          ]
+                                                                            }
+                                                         }
+                                      },
+                       "redirect_policy_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                              },
+                       "proxy_policy_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "idempotency_policy_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "concurrency_policy_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "verification_policy_id":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512,
+                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                  },
+                       "signer_key_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "pack_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                           "maxLength":  71
+                                       },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

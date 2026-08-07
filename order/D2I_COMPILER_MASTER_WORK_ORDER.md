@@ -18,8 +18,8 @@ Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
 Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. Track W is complete. The active next task is
-`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
+runtime boundaries. Track W and EDGE-100 are complete. The active next task is
+`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
 
 WORK-700 is governed by ADR 0034 and
 `docs/workforce/role-reporting-sla-escalation-v1.md`. It preserves immutable
@@ -36,6 +36,13 @@ eligibility, and admission artifacts remain non-executable; actual authority
 continues through Role, Policy, one-shot activation, and KRN. The one-shot
 eight-Case coordinator has no background service, external connector, or
 online production mutation.
+
+EDGE-100 is governed by ADR 0037 and
+`docs/execution-planes/enterprise-api-v1.md`. It adds no Compiler IR, package
+format, runtime ABI, vendor taxonomy, or direct database path. Signed Connector
+Packs and approvals are non-executable configuration evidence. Existing Policy,
+one-shot activation, and KRN remain the only mutation authority, and fresh
+remote observation remains the closure gate.
 
 ## Product Context
 

@@ -1,0 +1,106 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-network-policy-v1.schema.json",
+    "title":  "EnterpriseNetworkPolicyV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "policy_id",
+                     "worker_executable_sha256",
+                     "exact_scheme",
+                     "exact_hostname",
+                     "exact_port",
+                     "exact_origin",
+                     "allow_loopback_test",
+                     "deny_redirects",
+                     "deny_ambient_proxy",
+                     "deny_other_hosts",
+                     "deny_other_ports",
+                     "deny_external_network",
+                     "valid_from_unix_ms",
+                     "valid_to_unix_ms",
+                     "evidence_ids",
+                     "policy_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "policy_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "worker_executable_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "exact_scheme":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512
+                                        },
+                       "exact_hostname":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512
+                                          },
+                       "exact_port":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "exact_origin":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512
+                                        },
+                       "allow_loopback_test":  {
+                                                   "type":  "boolean"
+                                               },
+                       "deny_redirects":  {
+                                              "type":  "boolean"
+                                          },
+                       "deny_ambient_proxy":  {
+                                                  "type":  "boolean"
+                                              },
+                       "deny_other_hosts":  {
+                                                "type":  "boolean"
+                                            },
+                       "deny_other_ports":  {
+                                                "type":  "boolean"
+                                            },
+                       "deny_external_network":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "valid_to_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "policy_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

@@ -1,0 +1,108 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-observation-request-v1.schema.json",
+    "title":  "EnterpriseObservationRequestV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "request_id",
+                     "connector_binding_sha256",
+                     "operation_id",
+                     "resource_reference_id",
+                     "case_sha256",
+                     "role_instance_sha256",
+                     "observation_sequence",
+                     "requested_field_class_ids",
+                     "maximum_bytes",
+                     "maximum_items",
+                     "trusted_time_unix_ms",
+                     "evidence_ids",
+                     "request_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "request_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "connector_binding_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "operation_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "resource_reference_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "case_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                           "maxLength":  71
+                                       },
+                       "role_instance_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "observation_sequence":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "requested_field_class_ids":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                   }
+                                                     },
+                       "maximum_bytes":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "maximum_items":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "trusted_time_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "request_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

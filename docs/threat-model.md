@@ -645,3 +645,29 @@ than internal microstage KRN latency measurement. v1 is a one-shot eight-Case,
 single-concurrency coordinator. It adds no daemon, external notification,
 connector, online learning, automatic Role/model/policy update, or Track X
 execution plane.
+
+## EDGE-100 Enterprise API Threats
+
+EDGE-100 treats Connector Packs, approvals, endpoint metadata, API responses,
+Work Items, and model output as untrusted until their exact contract is
+verified. The primary threats are arbitrary HTTP capability, SSRF, redirect or
+proxy escape, DNS/port substitution, credential disclosure, unbounded JSON or
+pagination, stale writes, duplicate mutation after timeout, false closure from
+a transport status, and treating approval evidence as execution authority.
+
+The mitigation is a signed closed operation set, exact endpoint binding,
+production HTTPS policy, deny redirect and ambient proxy, executable-hash-bound
+worker, opaque credential references, runtime-only secret injection, bounded
+strict JSON, request/response schema hashes, field allowlisting and redaction,
+optimistic concurrency, deterministic idempotency, and fresh remote
+verification. Existing Policy admission, one-shot activation, and KRN dispatch
+remain mandatory. Authentication failure, malformed response, untrusted action
+instruction, exhausted recovery, and unsafe verification become a terminal
+human exception rather than an expanded retry.
+
+The reference Completion proves actual loopback network behavior and wrong-port
+and metadata-endpoint rejection at the closed worker boundary. It does not
+install a production non-loopback WFP policy and does not establish vendor TLS
+certification. Before production use, deployment must add an exact destination
+network policy bound to the approved connector worker executable and an
+organization-approved credential broker without widening the model contract.

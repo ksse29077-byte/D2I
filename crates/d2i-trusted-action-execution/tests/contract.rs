@@ -76,6 +76,9 @@ impl OperationFixture {
         match self.adapter() {
             AdapterKindV1::Uia => ObservationSourceKind::Uia,
             AdapterKindV1::WebDriver => ObservationSourceKind::WebDriver,
+            AdapterKindV1::EnterpriseApi => {
+                panic!("desktop trusted-execution fixture cannot use enterprise API")
+            }
         }
     }
 
@@ -809,6 +812,9 @@ fn native_grounded_action_arguments_are_bound_without_weakening_fixture_compatib
         let source_kind = match kind.adapter() {
             AdapterKindV1::Uia => ObservationSourceKind::Uia,
             AdapterKindV1::WebDriver => ObservationSourceKind::WebDriver,
+            AdapterKindV1::EnterpriseApi => {
+                panic!("desktop trusted-execution fixture cannot use enterprise API")
+            }
         };
         let mut target = GroundedTargetBindingV1 {
             schema_version: 1,

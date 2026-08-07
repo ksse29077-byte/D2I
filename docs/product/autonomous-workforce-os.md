@@ -195,12 +195,13 @@ state.
 - `D2I-WORK-800`: Open Digital Employee Shadow Mode. **Complete**
 - `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation. **Complete**
 
-**Track W is complete.** The first active task is `D2I-EDGE-100`.
+**Track W is complete.** EDGE-100 is complete. The first active task is
+`D2I-EDGE-200`.
 
 ### Track X - Execution Plane Expansion
 
-- `D2I-EDGE-100`: Enterprise API / ERP / MES / CMMS planes.
-- `D2I-EDGE-200`: Sensor / Camera / IoT observation planes.
+- `D2I-EDGE-100`: Enterprise API / ERP / MES / CMMS planes. **Complete**
+- `D2I-EDGE-200`: Sensor / Camera / IoT observation planes. **First active**
 - `D2I-EDGE-300`: PLC / SCADA / OT supervised execution.
 - `D2I-EDGE-400`: Robot / AMR / Drone adapters.
 
@@ -210,6 +211,14 @@ Desktop is the first execution plane. New planes reuse the Cognitive Control
 Plane while retaining plane-specific trust, safety, activation, and
 verification. No generic cognitive component may assume it owns emergency
 control or physical safety interlocks.
+
+The enterprise API plane is the second concrete plane. It hosts separately
+approved, signed Connector Packs whose opaque system-family metadata can
+describe ERP, MES, CMMS, or an internal API without becoming Core taxonomy.
+It exposes closed semantic operations rather than arbitrary HTTP. Credentials
+remain opaque outside a trusted worker, and a mutation closes only after fresh
+remote verification. EDGE-100 reference evidence uses a hermetic loopback
+system and does not claim vendor or customer production certification.
 
 ## 19. Non-goals and Safety Boundaries
 

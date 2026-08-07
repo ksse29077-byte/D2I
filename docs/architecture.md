@@ -612,3 +612,32 @@ one. It is not a Windows service or external connector. Model process
 telemetry is measured from the Windows Job Object; runner stage timing is
 reported separately and does not masquerade aggregate KRN time as fabricated
 per-component latency.
+
+## Enterprise API Execution Plane
+
+EDGE-100 extends the existing execution-plane boundary with a closed
+`enterprise-api` adapter class. A signed `EnterpriseConnectorPackV1` maps
+opaque operation IDs to exact capabilities, semantic resources, request and
+response schemas, fixed HTTP methods and paths, concurrency, idempotency,
+verification, network, and finite resource rules. ERP, MES, CMMS, and internal
+API names remain fixture or pack metadata and never select Core behavior.
+
+The plane retains the authority sequence `Policy -> one-shot activation -> KRN
+-> trusted worker`. Connector Pack approval, endpoint binding, credential
+reference, operation intent, and operation binding are evidence and narrowing
+inputs, not execution permits. The model cannot call the worker or materialize
+HTTP. The worker is executable-hash bound and receives a runtime secret only
+through bounded stdin after trusted admission.
+
+Read-only API observations normalize schema-approved fields before they enter
+Situation or model context. Mutation receipts do not close a Case. Every
+successful or unknown-outcome mutation is followed by a separate fresh read
+and exact postcondition verification. Unknown outcomes never trigger blind
+replay. Protected storage is content addressed, append-only, hash chained,
+single-writer, bounded, and current-user hardened.
+
+The reference network profile is exact IPv4 loopback with one ephemeral port,
+deny redirects, deny ambient proxy, and no external connection. Production
+contracts require HTTPS and a separately deployed exact-destination policy for
+the connector executable. See ADR 0037 and
+`docs/execution-planes/enterprise-api-v1.md`.

@@ -1,0 +1,142 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-operation-receipt-v1.schema.json",
+    "title":  "EnterpriseOperationReceiptV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "receipt_id",
+                     "operation_binding_sha256",
+                     "activation_one_time_use_id",
+                     "request_sha256",
+                     "response_sha256",
+                     "result",
+                     "http_status",
+                     "bytes_sent",
+                     "bytes_received",
+                     "server_mutation_sequence",
+                     "idempotency_key_sha256",
+                     "started_at_unix_ms",
+                     "completed_at_unix_ms",
+                     "evidence_ids",
+                     "receipt_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "receipt_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "operation_binding_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "activation_one_time_use_id":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      },
+                       "request_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "response_sha256":  {
+                                               "anyOf":  [
+                                                             {
+                                                                 "type":  "string",
+                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                 "maxLength":  71
+                                                             },
+                                                             {
+                                                                 "type":  "null"
+                                                             }
+                                                         ]
+                                           },
+                       "result":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "succeeded",
+                                                   "already_satisfied",
+                                                   "stale_conflict",
+                                                   "rate_limited",
+                                                   "unauthorized",
+                                                   "malformed_response",
+                                                   "unknown_write_outcome",
+                                                   "rejected"
+                                               ]
+                                  },
+                       "http_status":  {
+                                           "anyOf":  [
+                                                         {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                                                         {
+                                                             "type":  "null"
+                                                         }
+                                                     ]
+                                       },
+                       "bytes_sent":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "bytes_received":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "server_mutation_sequence":  {
+                                                        "anyOf":  [
+                                                                      {
+                                                                          "type":  "integer",
+                                                                          "minimum":  0,
+                                                                          "maximum":  18446744073709551615
+                                                                      },
+                                                                      {
+                                                                          "type":  "null"
+                                                                      }
+                                                                  ]
+                                                    },
+                       "idempotency_key_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "started_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "completed_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

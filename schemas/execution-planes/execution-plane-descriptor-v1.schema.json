@@ -1,0 +1,159 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/execution-plane-descriptor-v1.schema.json",
+    "title":  "ExecutionPlaneDescriptorV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "execution_plane_id",
+                     "descriptor_version",
+                     "adapter_class_id",
+                     "supported_capability_ids",
+                     "supported_observation_class_ids",
+                     "supported_action_class_ids",
+                     "verification_class_ids",
+                     "security_profile_id",
+                     "resource_limits",
+                     "adapter_artifact_sha256",
+                     "evidence_ids",
+                     "descriptor_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "execution_plane_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                              },
+                       "descriptor_version":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512
+                                              },
+                       "adapter_class_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                            },
+                       "supported_capability_ids":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "minLength":  1,
+                                                                      "maxLength":  512,
+                                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                  }
+                                                    },
+                       "supported_observation_class_ids":  {
+                                                               "type":  "array",
+                                                               "maxItems":  512,
+                                                               "uniqueItems":  true,
+                                                               "items":  {
+                                                                             "type":  "string",
+                                                                             "minLength":  1,
+                                                                             "maxLength":  512,
+                                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                         }
+                                                           },
+                       "supported_action_class_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "verification_class_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                }
+                                                  },
+                       "security_profile_id":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512,
+                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                               },
+                       "resource_limits":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "maximum_request_bytes",
+                                                                "maximum_response_bytes",
+                                                                "maximum_response_depth",
+                                                                "maximum_response_items",
+                                                                "maximum_pages",
+                                                                "maximum_duration_ms"
+                                                            ],
+                                               "properties":  {
+                                                                  "maximum_request_bytes":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "maximum_response_bytes":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_response_depth":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_response_items":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_pages":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_duration_ms":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  18446744073709551615
+                                                                                          }
+                                                              }
+                                           },
+                       "adapter_artifact_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "descriptor_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

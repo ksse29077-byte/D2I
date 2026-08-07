@@ -11,6 +11,7 @@ mod cognitive_recovery;
 mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
+mod enterprise_api;
 mod episodic_memory;
 mod executor;
 mod limited_autonomy;
@@ -145,6 +146,13 @@ pub use d2i_trusted_action_execution::{
     TrustedExecutionBindingRequestV1, TrustedExecutionError, TrustedExecutionSessionV1,
     TrustedExecutionStatusV1, TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
     TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+};
+pub use enterprise_api::{
+    connector_worker_main, initialize_enterprise_api_store, recover_enterprise_api_store,
+    reference_enterprise_server_main, run_enterprise_observation_worker, EnterpriseApiStore,
+    EnterpriseApiStoreRecordV1, EnterpriseApiStoreVerificationV1, EnterpriseDispatchRequestV1,
+    EnterpriseFixtureBootstrapV1, EnterpriseFixtureReadyV1, EnterpriseKrnDispatcherV1,
+    EnterpriseWorkerRequestV1, EnterpriseWorkerResponseV1, ENTERPRISE_API_STORE_SCHEMA_VERSION,
 };
 pub use episodic_memory::{
     initialize_episodic_memory_store, recover_episodic_memory_store, verify_episodic_memory_store,

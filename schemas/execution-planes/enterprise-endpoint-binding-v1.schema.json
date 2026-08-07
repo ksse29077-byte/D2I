@@ -1,0 +1,122 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-endpoint-binding-v1.schema.json",
+    "title":  "EnterpriseEndpointBindingV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "binding_id",
+                     "connector_pack_sha256",
+                     "connector_approval_sha256",
+                     "exact_origin",
+                     "scheme",
+                     "hostname",
+                     "port",
+                     "environment_id",
+                     "environment_class",
+                     "resolved_endpoint_identity",
+                     "tls_profile_sha256",
+                     "network_policy_sha256",
+                     "credential_reference_id",
+                     "worker_executable_sha256",
+                     "valid_from_unix_ms",
+                     "valid_to_unix_ms",
+                     "binding_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "binding_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "connector_pack_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "connector_approval_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "exact_origin":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512
+                                        },
+                       "scheme":  {
+                                      "type":  "string",
+                                      "minLength":  1,
+                                      "maxLength":  512
+                                  },
+                       "hostname":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  512
+                                    },
+                       "port":  {
+                                    "type":  "integer",
+                                    "minimum":  0,
+                                    "maximum":  4294967295
+                                },
+                       "environment_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                          },
+                       "environment_class":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "production",
+                                                              "signed_test"
+                                                          ]
+                                             },
+                       "resolved_endpoint_identity":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512
+                                                      },
+                       "tls_profile_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "network_policy_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "credential_reference_id":  {
+                                                       "type":  "string",
+                                                       "minLength":  1,
+                                                       "maxLength":  512,
+                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                   },
+                       "worker_executable_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "valid_to_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

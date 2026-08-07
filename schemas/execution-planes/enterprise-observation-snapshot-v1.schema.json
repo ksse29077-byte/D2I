@@ -1,0 +1,161 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-observation-snapshot-v1.schema.json",
+    "title":  "EnterpriseObservationSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "observation_id",
+                     "sequence",
+                     "connector_sha256",
+                     "operation_sha256",
+                     "resource_identity",
+                     "resource_version",
+                     "normalized_approved_field_ids",
+                     "normalized_approved_values",
+                     "redacted_field_ids",
+                     "data_class_ids",
+                     "response_status_class_id",
+                     "response_schema_sha256",
+                     "raw_response_sha256",
+                     "normalized_state_sha256",
+                     "observed_at_unix_ms",
+                     "freshness_expires_at_unix_ms",
+                     "provenance_id",
+                     "evidence_ids",
+                     "observation_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "observation_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                          },
+                       "sequence":  {
+                                        "type":  "integer",
+                                        "minimum":  0,
+                                        "maximum":  18446744073709551615
+                                    },
+                       "connector_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "operation_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "resource_identity":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  512
+                                             },
+                       "resource_version":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512
+                                            },
+                       "normalized_approved_field_ids":  {
+                                                             "type":  "array",
+                                                             "maxItems":  512,
+                                                             "uniqueItems":  true,
+                                                             "items":  {
+                                                                           "type":  "string",
+                                                                           "minLength":  1,
+                                                                           "maxLength":  512,
+                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                       }
+                                                         },
+                       "normalized_approved_values":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512
+                                                                    }
+                                                      },
+                       "redacted_field_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                            }
+                                              },
+                       "data_class_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "response_status_class_id":  {
+                                                        "type":  "string",
+                                                        "minLength":  1,
+                                                        "maxLength":  512,
+                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                    },
+                       "response_schema_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "raw_response_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "normalized_state_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "observed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "freshness_expires_at_unix_ms":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  18446744073709551615
+                                                        },
+                       "provenance_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "observation_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              }
+                   }
+}

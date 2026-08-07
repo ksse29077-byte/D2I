@@ -1,0 +1,205 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-operation-descriptor-v1.schema.json",
+    "title":  "EnterpriseOperationDescriptorV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "operation_id",
+                     "capability_id",
+                     "semantic_target_id",
+                     "resource_class_id",
+                     "operation_class",
+                     "http_method",
+                     "fixed_path_template",
+                     "allowed_path_parameter_ids",
+                     "allowed_query_parameter_ids",
+                     "request_schema_sha256",
+                     "response_schema_sha256",
+                     "success_status_codes",
+                     "side_effect_class",
+                     "idempotency_class",
+                     "optimistic_concurrency_required",
+                     "resource_version_field_id",
+                     "verification_operation_id",
+                     "retry_policy_id",
+                     "rate_budget_class_id",
+                     "maximum_request_bytes",
+                     "maximum_response_bytes",
+                     "data_class_ids",
+                     "evidence_ids",
+                     "descriptor_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "operation_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "capability_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "semantic_target_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                              },
+                       "resource_class_id":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  512,
+                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                             },
+                       "operation_class":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "observation",
+                                                            "mutation"
+                                                        ]
+                                           },
+                       "http_method":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "get",
+                                                        "post",
+                                                        "put",
+                                                        "patch",
+                                                        "delete"
+                                                    ]
+                                       },
+                       "fixed_path_template":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512
+                                               },
+                       "allowed_path_parameter_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "allowed_query_parameter_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                     }
+                                                       },
+                       "request_schema_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "response_schema_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "success_status_codes":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "integer",
+                                                                  "minimum":  0,
+                                                                  "maximum":  4294967295
+                                                              }
+                                                },
+                       "side_effect_class":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "read_only",
+                                                              "reversible_business_state_change"
+                                                          ]
+                                             },
+                       "idempotency_class":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "not_applicable",
+                                                              "client_key_required"
+                                                          ]
+                                             },
+                       "optimistic_concurrency_required":  {
+                                                               "type":  "boolean"
+                                                           },
+                       "resource_version_field_id":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                     },
+                       "verification_operation_id":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                     },
+                       "retry_policy_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "rate_budget_class_id":  {
+                                                    "type":  "string",
+                                                    "minLength":  1,
+                                                    "maxLength":  512,
+                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                },
+                       "maximum_request_bytes":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "maximum_response_bytes":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "data_class_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "descriptor_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             }
+                   }
+}

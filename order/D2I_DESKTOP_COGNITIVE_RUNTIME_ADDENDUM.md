@@ -29,8 +29,8 @@ non-executing, model-backed Shadow evaluation with protected evidence and
 resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
 one-step limited autonomy, signed control and human-exception handling, and a
 bounded General Office duty cycle while preserving Policy, activation, and
-KRN as the only action path. Track W is complete. The active next task is
-`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
+KRN as the only action path. Track W and EDGE-100 are complete. The active next
+task is `D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
 
 WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
 current-user/SYSTEM DACL-protected content-addressed store. It consumes only
@@ -41,6 +41,14 @@ background Windows service or external delivery plane is introduced.
 Production connectors remain unimplemented. WORK-700, WORK-800, and WORK-900
 official Completion gates are complete. WORK-900 is one-shot and adds no
 background Windows service, connector, self-resume, or online mutation.
+
+EDGE-100 adds a Desktop-owned credential-isolated connector worker and a
+platform-neutral signed Connector Pack contract. The Cognitive layer selects
+only approved semantic operations; the worker alone materializes fixed HTTP
+requests and runtime-only credentials. Existing Policy admission, one-shot
+activation, executable-hash binding, KRN dispatch, protected audit, and fresh
+verification remain mandatory. The certified reference endpoint is exact IPv4
+loopback and is not a production vendor connector.
 
 ## Active Product Goal
 

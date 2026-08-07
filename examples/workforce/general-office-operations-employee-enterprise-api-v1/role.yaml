@@ -1,0 +1,145 @@
+schema_version: 1
+role_contract_id: general-office-operations-employee
+role_version: 1.5.0
+display_name: General Office Operations Employee
+purpose: Complete bounded internal work-order status updates through an approved enterprise API connector with fresh remote verification.
+organization_scope:
+  organization_id: example-office-organization
+  business_unit_ids: [general-office]
+  site_ids: [example-head-office]
+  domain_ids: [general-office-operations]
+  environment_ids: [enterprise-api-limited-autonomy]
+  jurisdiction_ids: [example-jurisdiction]
+responsibilities:
+  - responsibility_id: internal-work-order-maintenance
+    outcome_class_ids: [verified-work-order-status-update]
+    accepted_work_class_ids: [office.record.update]
+    evidence_class_ids: [fresh-enterprise-api-observation]
+    reporting_obligation_ids: [report-enterprise-work]
+    description: Apply an approved work-order status transition and independently verify it through a fresh API observation.
+accepted_work_classes:
+  - work_class_id: office.record.update
+    contract_version: 1.0.0
+    responsibility_id: internal-work-order-maintenance
+    allowed_priority_classes: [routine, normal, elevated]
+    sla_profile_id: office-enterprise-standard
+    maximum_risk: business_state_change
+    required_application_pack_ids: [reference-enterprise-work-order]
+    required_integration_ids: [reference-enterprise-api]
+    required_capability_ids: [enterprise_api.read, enterprise_api.write]
+    permitted_observation_source_ids: [reference-enterprise-work-orders]
+    clarification_allowed: true
+    automatic_recovery_allowed: true
+    mandatory_escalation_reason_codes: [policy_unknown, sensitive_input, unsafe_verification]
+prohibited_work_class_ids: [office.record.delete]
+authority_ceiling: bounded-enterprise-api-business-state
+application_bindings:
+  - application_pack_id: reference-enterprise-work-order
+    application_pack_sha256: sha256:5555555555555555555555555555555555555555555555555555555555555555
+    integration_ids: [reference-enterprise-api]
+    allowed_semantic_target_ids: [work_order.status]
+    allowed_capability_ids: [enterprise_api.read, enterprise_api.write]
+    observation_source_ids: [reference-enterprise-work-orders]
+    environment_ids: [enterprise-api-limited-autonomy]
+observation_sources:
+  - observation_source_id: reference-enterprise-work-orders
+    source_kind: enterprise_api
+    integration_id: reference-enterprise-api
+    trust_floor: signed-connector-endpoint-binding
+    read_only: true
+    event_class_ids: [approved-work-order-status-event]
+    application_pack_id: reference-enterprise-work-order
+    maximum_staleness_seconds: 30
+    enabled: true
+capability_policy:
+  allowed_capability_ids: [enterprise_api.read, enterprise_api.write]
+  prohibited_capability_ids: [enterprise_api.delete, process.launch]
+  autonomous_capability_ids: [enterprise_api.read, enterprise_api.write]
+  confirmation_capability_ids: []
+  escalation_only_capability_ids: []
+  capability_group_ids: [bounded-enterprise-work-order]
+  semantic_target_ids: [work_order.status]
+  maximum_attempts_per_capability: 2
+risk_policy:
+  maximum_autonomous_risk: business_state_change
+  maximum_confirmable_risk: business_state_change
+  mandatory_escalation_risk: high_criticality
+  irreversible_actions_allowed: false
+  high_criticality_automatic_allowed: false
+  unknown_policy_behavior: escalate
+  unsafe_verification_behavior: escalate
+working_calendar:
+  calendar_id: office-business-hours
+  timezone_id: Asia/Seoul
+  weekly_windows:
+    - { weekday: 0, start_minute_local: 0, end_minute_local: 1440 }
+    - { weekday: 1, start_minute_local: 0, end_minute_local: 1440 }
+    - { weekday: 2, start_minute_local: 0, end_minute_local: 1440 }
+    - { weekday: 3, start_minute_local: 0, end_minute_local: 1440 }
+    - { weekday: 4, start_minute_local: 0, end_minute_local: 1440 }
+    - { weekday: 5, start_minute_local: 0, end_minute_local: 1440 }
+    - { weekday: 6, start_minute_local: 0, end_minute_local: 1440 }
+  blackout_date_ids: []
+  emergency_override_policy: signed_reference_only
+  outside_window_behavior: deny_new_work
+  calendar_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+kpi_definitions:
+  - kpi_id: enterprise-verified-closure-rate
+    metric_id: verified_closure_rate
+    direction: at_least
+    target_millionths: 600000
+    target_integer: null
+    measurement_window_id: fixture-run
+    evidence_class_ids: [fresh-enterprise-api-observation]
+    warning_threshold: 500000
+    breach_behavior: report
+    enabled: true
+sla_profiles:
+  - sla_profile_id: office-enterprise-standard
+    priority_class: normal
+    acknowledge_within_seconds: 300
+    begin_within_seconds: 900
+    resolve_within_seconds: 86400
+    escalation_after_seconds: 43200
+    pause_conditions: [awaiting-enterprise-authorization]
+    evidence_class_ids: [role-task-admission]
+reporting_obligations:
+  - obligation_id: report-enterprise-work
+    trigger: on_task_complete
+    report_class_id: office-enterprise-work-result
+    routing_class_id: office-supervision
+    required_evidence_class_ids: [fresh-enterprise-api-observation]
+    frequency_profile_id: null
+    retention_class_id: office-audit
+    enabled: true
+memory_boundary:
+  allowed_memory_namespace_ids: [office-approved-summaries]
+  prohibited_data_class_ids: [credential, raw-api-payload, raw-locator]
+  retention_class_id: office-audit
+  maximum_retention_days: 30
+  raw_credentials_allowed: false
+  raw_ui_payload_allowed: false
+  cross_case_reuse_policy: approved_summary_only
+  learning_candidate_allowed: true
+  memory_boundary_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+escalation_policy:
+  escalation_policy_id: office-enterprise-human-exception
+  routing_class_by_severity: { elevated: office-supervision, unsafe: security-review }
+  mandatory_reason_codes: [authority_exceeded, policy_unknown, sensitive_input, unsafe_verification]
+  authority_exceeded_route_class: office-supervision
+  unsafe_route_class: security-review
+  legal_review_route_class: legal-review
+  policy_conflict_route_class: office-governance
+  maximum_pending_seconds: 86400
+  evidence_class_ids: [role-task-admission, fresh-enterprise-api-observation]
+human_exception_policy:
+  autonomous_reason_codes: [routine_delegated_work, safe_bounded_recovery]
+  confirmation_reason_codes: [approved_clarification]
+  mandatory_escalation_reason_codes: [authority_exceeded, high_criticality, irreversible_change, legal_approval, material_ambiguity, policy_unknown, sensitive_input, unsafe_verification]
+  prohibited_automatic_reason_codes: [authority_exceeded, high_criticality, irreversible_change, legal_approval, material_ambiguity, policy_unknown, sensitive_input, unsafe_verification]
+  human_touch_budget: 3
+  policy_sha256: sha256:0000000000000000000000000000000000000000000000000000000000000000
+policy_set_id: office-enterprise-api-policy
+policy_set_version: 1.0.0
+policy_set_sha256: sha256:6666666666666666666666666666666666666666666666666666666666666666
+evidence_ids: [approved-office-role-enterprise-api-v1, human-by-exception]

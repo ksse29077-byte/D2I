@@ -59,8 +59,8 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 
 ## Track X - Execution Plane Expansion
 
-- [ ] `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **first active task**
-- [ ] `D2I-EDGE-200` Sensor / Camera / IoT observation planes
+- [x] `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
+- [ ] `D2I-EDGE-200` Sensor / Camera / IoT observation planes - **first active task**
 - [ ] `D2I-EDGE-300` PLC / SCADA / OT supervised execution
 - [ ] `D2I-EDGE-400` Robot / AMR / Drone adapters
 

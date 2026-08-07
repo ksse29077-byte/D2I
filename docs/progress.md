@@ -415,7 +415,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`
+`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -445,8 +445,8 @@ without production mutation. The General Office `1.0.0` and memory-enabled
 `1.1.0` Role bundles are independently compiled and verified; `1.1.0` memory
 evidence binds its exact contract, signed approval, signed delegation, and
 active Role Instance rather than fixture hashes. WORK-700, WORK-800, and
-WORK-900 are complete. Track W is complete, and EDGE-100 is the first active
-task.
+WORK-900 and EDGE-100 are complete. Track W is complete, and EDGE-200 is the
+first active task.
 
 WORK-700 now has a platform-neutral Role Operations crate, 30 strict schemas,
 General Office 1.2.0 fixture, protected Desktop store, inspection CLI, and an
@@ -523,7 +523,8 @@ Save replay, deterministic 128 Case x 100 replay, protected store/audit
 verification, strict sensitive-artifact scanning, step-specific safe
 checkpoint reuse, per-model-invocation Job Object performance telemetry, and
 zero process, profile, activation, credential, store, or lock residuals.
-WORK-900 and Track W are complete. Track X has not started.
+WORK-900 and Track W are complete. Track X started with EDGE-100, which is now
+complete.
 
 The final WORK-900 Role, readiness, Profile, deployment, Completion, replay,
 certification, performance, and `finished.json` hashes are respectively
@@ -541,3 +542,39 @@ Eight actual provider calls took 178,045 ms in aggregate; measured peak model
 process/job memory was 2,614,284,288/2,615,558,144 bytes and model input plus
 output movement was 25,302 bytes. These are evidence-run measurements, not a
 general performance claim.
+
+## EDGE-100 Enterprise API Execution Plane
+
+EDGE-100 adds the platform-neutral `d2i-enterprise-api-plane` crate, 18 strict
+Draft 2020-12 schemas, an inspection-only CLI, a signed General Office 1.5.0
+Role fixture, a Desktop credential-isolated connector worker, a separate
+reference server process, a protected content-addressed connector store, and a
+resumable official runner. `AdapterKindV1::EnterpriseApi` is additive to the
+existing Policy admission boundary; existing UIA/Web trusted execution rejects
+that adapter so authority cannot cross planes accidentally.
+
+The actual eight-Case duty cycle uses sealed WORK-900 evidence, the pinned
+Qwen3-4B and llama.cpp hashes, actual IPv4 loopback sockets, seven model
+invocations, 13 reads, seven writes, one stale replan, one bounded rate-limit
+retry, and one commit-then-drop fresh-state resolution. It produced five
+verified closures and three human exceptions. Four writes were independently
+verified, including the unknown-outcome resolution. Blind replay, duplicate
+server mutation, wrong endpoint/operation/resource, forbidden operation,
+credential leakage, proxy use, redirect, external network, false completion,
+escalation miss, critical error, and owned residual state were zero.
+
+Signed Work Source approval and exact Intake mapping were separately exercised
+for eight observations, eight Work Items, and eight persistent Cases, with the
+existing Queue regression retained. Cross-domain deterministic fixtures prove
+that general enterprise, ERP, MES, and CMMS metadata does not change Core
+behavior. The protected store terminal and completion/certification hashes are
+verified by the official runner, including safe checkpoint resume after a
+harness-path correction.
+
+The certified implementation is a JSON API v1 reference loopback system, not a
+vendor connector or production customer certification. Production non-loopback
+deployment still requires an approved vendor/customer Connector Pack,
+credential broker integration, production HTTPS transport, and an exact
+destination policy bound to the connector worker executable. No direct
+database path, external communication, background service, or EDGE-200 sensor
+work was added. EDGE-200 is now the first active task.

@@ -30,6 +30,7 @@ members = [
     "crates/d2i-role-operations",
     "crates/d2i-shadow-mode",
     "crates/d2i-limited-autonomy",
+    "crates/d2i-enterprise-api-plane",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

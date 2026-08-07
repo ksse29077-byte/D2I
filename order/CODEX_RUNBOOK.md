@@ -66,15 +66,24 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. The next active task is
-`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
+`-Fresh` discards them. EDGE-100 is complete. The next active task is
+`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
 
 ## Track X - Execution Plane Expansion
 
-- `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **active**
-- `D2I-EDGE-200` Sensor / Camera / IoT observation planes
+- `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **complete**
+- `D2I-EDGE-200` Sensor / Camera / IoT observation planes - **active**
 - `D2I-EDGE-300` PLC / SCADA / OT supervised execution
 - `D2I-EDGE-400` Robot / AMR / Drone adapters
+
+EDGE-100 deterministic gates use
+`scripts/edge/run-enterprise-api-plane-v1.ps1 -Mode All`. Actual Completion
+requires the pinned Qwen3-4B/llama.cpp, a sealed clean WORK-900 evidence root,
+and `-ReuseVerifiedPredecessorEvidence`. Use `-Fresh` for a new certification
+or `-Resume` to reuse only canonical dependency-bound checkpoints. The runner
+must report eight Work Items/Cases, at least five API writes, five verified
+closures, three human exceptions, zero blind write replay, zero credential
+leakage, zero external network, and zero owned residual state.
 
 ## Solo Direct-to-Main
 

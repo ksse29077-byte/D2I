@@ -635,7 +635,7 @@
       }
     },
     "adapter_kind": {
-      "enum": ["uia", "web_driver"]
+      "enum": ["uia", "web_driver", "enterprise_api"]
     },
     "activation_eligibility": {
       "type": "object",

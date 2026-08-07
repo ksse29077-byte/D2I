@@ -1,0 +1,442 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/execution-planes/enterprise-api-completion-report-v1.schema.json",
+    "title":  "EnterpriseApiCompletionReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "complete",
+                     "enterprise_api_plane_evidence",
+                     "track_x_edge100_evidence",
+                     "source_tree_sha256",
+                     "connector_pack_sha256",
+                     "connector_approval_sha256",
+                     "endpoint_binding_sha256",
+                     "reference_server_sha256",
+                     "connector_worker_sha256",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "total_cases",
+                     "routine_cases",
+                     "verified_closures",
+                     "human_exceptions",
+                     "work_source_observations",
+                     "work_signals",
+                     "work_items",
+                     "persistent_cases",
+                     "queue_claims",
+                     "actual_model_invocations",
+                     "model_elapsed_milliseconds",
+                     "routine_human_touches",
+                     "actions_after_handoff",
+                     "api_requests",
+                     "api_reads",
+                     "api_writes",
+                     "verified_writes",
+                     "api_bytes_sent",
+                     "api_bytes_received",
+                     "api_2xx_responses",
+                     "api_4xx_responses",
+                     "api_5xx_responses",
+                     "api_no_response",
+                     "actual_connection_count",
+                     "allowed_connection_count",
+                     "denied_connection_count",
+                     "fresh_observations",
+                     "stale_conflicts",
+                     "rate_limit_events",
+                     "idempotency_resolutions",
+                     "unknown_write_outcomes",
+                     "blind_write_replays",
+                     "timeout_events",
+                     "retry_attempts",
+                     "duplicate_server_mutations",
+                     "network_policy_denials",
+                     "ssrf_attempts",
+                     "redirect_attempts",
+                     "proxy_use",
+                     "schema_failures",
+                     "wrong_endpoint",
+                     "wrong_operation",
+                     "wrong_resource",
+                     "forbidden_operation",
+                     "credential_leak",
+                     "external_network",
+                     "false_completion",
+                     "escalation_miss",
+                     "critical_errors",
+                     "checkpoint_set_sha256",
+                     "protected_audit_terminal_sha256",
+                     "residual_process",
+                     "residual_credential",
+                     "residual_network_policy",
+                     "residual_profile",
+                     "residual_store",
+                     "residual_lock",
+                     "evidence_ids",
+                     "finished_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "complete":  {
+                                        "type":  "boolean"
+                                    },
+                       "enterprise_api_plane_evidence":  {
+                                                             "type":  "boolean"
+                                                         },
+                       "track_x_edge100_evidence":  {
+                                                        "type":  "boolean"
+                                                    },
+                       "source_tree_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "connector_pack_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "connector_approval_sha256":  {
+                                                         "type":  "string",
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                         "maxLength":  71
+                                                     },
+                       "endpoint_binding_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "reference_server_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "connector_worker_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "total_cases":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "routine_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "verified_closures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "human_exceptions":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "work_source_observations":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "work_signals":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "work_items":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "persistent_cases":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "queue_claims":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "actual_model_invocations":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "model_elapsed_milliseconds":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  18446744073709551615
+                                                      },
+                       "routine_human_touches":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "actions_after_handoff":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "api_requests":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "api_reads":  {
+                                         "type":  "integer",
+                                         "minimum":  0,
+                                         "maximum":  4294967295
+                                     },
+                       "api_writes":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "verified_writes":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "api_bytes_sent":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  18446744073709551615
+                                          },
+                       "api_bytes_received":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "api_2xx_responses":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "api_4xx_responses":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "api_5xx_responses":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "api_no_response":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "actual_connection_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "allowed_connection_count":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "denied_connection_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "fresh_observations":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "stale_conflicts":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "rate_limit_events":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "idempotency_resolutions":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "unknown_write_outcomes":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "blind_write_replays":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "timeout_events":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "retry_attempts":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "duplicate_server_mutations":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "network_policy_denials":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "ssrf_attempts":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "redirect_attempts":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "proxy_use":  {
+                                         "type":  "integer",
+                                         "minimum":  0,
+                                         "maximum":  4294967295
+                                     },
+                       "schema_failures":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "wrong_endpoint":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "wrong_operation":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "wrong_resource":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "forbidden_operation":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "credential_leak":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "external_network":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "false_completion":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "escalation_miss":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "critical_errors":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "checkpoint_set_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "protected_audit_terminal_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           },
+                       "residual_process":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "residual_credential":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "residual_network_policy":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "residual_profile":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "residual_store":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "residual_lock":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "finished_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           }
+                   }
+}

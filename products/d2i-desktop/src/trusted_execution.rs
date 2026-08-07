@@ -1247,6 +1247,9 @@ fn bind_adapter(
         AdapterKindV1::WebDriver => Ok(TrustedWindowsAdapter::WebDriver(
             WindowsWebDriverAdapter::bind(admission.activation, configuration, now_unix_seconds)?,
         )),
+        AdapterKindV1::EnterpriseApi => Err(DesktopError::Precondition(
+            "enterprise API activation cannot bind a Windows desktop adapter".to_owned(),
+        )),
     }
 }
 
