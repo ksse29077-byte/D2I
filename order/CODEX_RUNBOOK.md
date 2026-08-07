@@ -66,14 +66,14 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. EDGE-100 and OFFICE-100 are complete. The next active
-task is `D2I-OFFICE-200 - HWP/HWPX and Word Document Work`.
+`-Fresh` discards them. EDGE-100, OFFICE-100, and OFFICE-200 are complete. The
+next active task is `D2I-OFFICE-300 - Excel / Spreadsheet Work`.
 
 ## Track O - General Office Capability Expansion
 
 - `D2I-OFFICE-100` capability intake and artifact workspace - **complete**
-- `D2I-OFFICE-200` HWP/HWPX and Word document work - **active**
-- `D2I-OFFICE-300` Excel / spreadsheet work
+- `D2I-OFFICE-200` HWP/HWPX and Word document work - **complete**
+- `D2I-OFFICE-300` Excel / spreadsheet work - **active**
 - `D2I-OFFICE-400` PowerPoint presentation work
 - `D2I-OFFICE-500` through `D2I-OFFICE-900` complete the general office loop
 
@@ -82,6 +82,17 @@ Run OFFICE-100 deterministic gates with
 adds sealed EDGE-100 predecessor verification and a fresh temporary-workspace
 A-J E2E. `-Resume`, `-Fresh`, and `-ReuseVerifiedPredecessorEvidence` use the
 shared Workforce checkpoint contract. No public MCP is downloaded or run.
+
+Run OFFICE-200 deterministic gates with
+`scripts/office/run-document-work-v1.ps1 -Mode All`. Actual Completion requires
+the pinned Qwen3-4B/llama.cpp, sealed OFFICE-100 evidence, installed desktop
+Word, `-ReuseVerifiedPredecessorEvidence`, and an elevated interactive session
+for the temporary exact WINWORD WFP policy. Use `-Resume` only with matching
+bounded inputs; use `-Fresh` for a new certification. Completion must retain
+HWPX >= 8, DOCX >= 5, actual Word COM >= 3, fresh reopen after each mutation,
+signed certification, zero safety failures, and zero owned residual state.
+Hancom Automation remains disabled without separate commercial license
+evidence and an approved licensed backend.
 
 ## Track X - Execution Plane Expansion
 

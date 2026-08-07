@@ -672,3 +672,25 @@ backend selection behind typed semantic operations. A worker is bound to one
 application, approved document, bounded Case, exact process/file identity, and
 exact semantic operation. Core contains no application-family branching. See
 ADR 0038 and `docs/office/general-office-capability-workspace-v1.md`.
+
+## Semantic Document Work
+
+OFFICE-200 adds an application-neutral document plane without changing the
+Safe Execution Kernel sequence. `DocumentSemanticSnapshotV1` lowers HWPX and
+DOCX package structure into bounded stable nodes. A capability pack, backend
+descriptor, signed backend approval, operation intent, and exact binding
+narrow one Policy admission and one activation to one mutation. Neither a
+backend approval nor a document observation is execution authority.
+
+HWPX and DOCX remain separate bounded ZIP/XML adapters. They reject traversal,
+decompression excess, malformed or active XML, external relationships, macros,
+OLE/ActiveX, and remote content before semantic observation. Each mutation
+creates a new generation. The child and parent independently reopen the saved
+package before a verified receipt and protected Office registry version exist.
+
+Live Word is a hidden current-user COM child with a fixed CLSID and closed
+operation lowering. It is exact-binary/session bound, macro-disabled, and WFP
+loopback-only during Completion. It is not available from a service or through
+a generic COM API. Legacy HWP requires separate Hancom Automation license
+evidence and approval; absent that evidence it remains a typed human exception.
+See ADR 0039 and `docs/office/document-work-v1.md`.

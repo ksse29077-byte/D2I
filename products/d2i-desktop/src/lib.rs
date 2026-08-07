@@ -11,9 +11,15 @@ mod cognitive_recovery;
 mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
+mod document_dispatch;
+mod document_file_worker;
+mod document_package;
+mod document_work;
+mod docx_document;
 mod enterprise_api;
 mod episodic_memory;
 mod executor;
+mod hwpx_document;
 mod limited_autonomy;
 mod local_model_provider;
 mod office_workspace;
@@ -37,6 +43,8 @@ mod windows_wfp_broker;
 mod windows_wfp_broker_runtime;
 mod windows_wfp_self_test;
 mod windows_worker;
+#[cfg(windows)]
+mod word_document;
 mod work500_model;
 mod work_intake;
 mod work_queue;
@@ -148,6 +156,16 @@ pub use d2i_trusted_action_execution::{
     TrustedExecutionStatusV1, TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
     TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
+pub use document_dispatch::{
+    DocumentAuthorityContextV1, DocumentDispatchOutcomeV1, DocumentDispatchV1,
+    DocumentKrnDispatcherConfigurationV1, DocumentKrnDispatcherV1,
+};
+pub use document_file_worker::{
+    document_file_worker_main, spawn_document_file_worker, DocumentFileWorkerRequestV1,
+    DocumentFileWorkerResponseV1,
+};
+pub use document_work::{default_document_resource_limits, ResolvedDocumentOperationV1};
+pub use docx_document::{create_docx_document, inspect_docx_document, mutate_docx_document};
 pub use enterprise_api::{
     connector_worker_main, initialize_enterprise_api_store, recover_enterprise_api_store,
     reference_enterprise_server_main, run_enterprise_observation_worker, EnterpriseApiStore,
@@ -161,6 +179,7 @@ pub use episodic_memory::{
     MemoryStoreRecordKindV1,
 };
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
+pub use hwpx_document::{create_hwpx_from_template, inspect_hwpx_document, mutate_hwpx_document};
 pub use limited_autonomy::{
     initialize_autonomy_store, recover_autonomy_store, verify_autonomy_store,
     AutonomyStoreArtifactV1, AutonomyStoreRecordKindV1, AutonomyStoreRecordV1, AutonomyStoreV1,
@@ -276,6 +295,12 @@ pub use windows_wfp_self_test::{
     run_windows_wfp_browser_egress_self_test, WindowsWfpBrowserEgressSelfTestReport,
     WindowsWfpConnectionEvent, WindowsWfpConnectionOutcome, WindowsWfpNetworkProbe,
     WindowsWfpProbeDisposition, WindowsWfpProbeServerTelemetry, WindowsWfpSelfTestCleanup,
+};
+#[cfg(windows)]
+pub use word_document::{
+    mutate_docx_with_word, spawn_word_document_worker, word_document_worker_main,
+    WordDocumentMutationReceiptV1, WordDocumentMutationV1, WordDocumentWorkerRequestV1,
+    WordDocumentWorkerResponseV1,
 };
 pub use work500_model::{
     PinnedWork500ModelSuiteV1, Work500ModelPathsV1, Work500ProviderCallV1, WORK500_MODEL_ID,

@@ -671,3 +671,33 @@ install a production non-loopback WFP policy and does not establish vendor TLS
 certification. Before production use, deployment must add an exact destination
 network policy bound to the approved connector worker executable and an
 organization-approved credential broker without widening the model contract.
+
+## OFFICE-200 Document Work Threats
+
+OFFICE-200 treats document packages, XML, document text, templates, images,
+styles, relationships, model output, backend metadata, and COM results as
+untrusted. Primary threats are ZIP traversal or expansion, XXE/entity access,
+duplicate semantic identity, active content, macro/OLE execution, external
+relationship fetch, model-selected raw XML/XPath/COM, wrong-document or stale
+generation mutation, original overwrite, reused activation, ambiguous-save
+blind replay, hidden-dialog hangs, broad process termination, and false success
+from a write call.
+
+Mitigations are bounded in-memory package parsing, strict relative unique
+entries, expansion and XML limits, declaration and active-content denial,
+closed semantic operations, stable node IDs, signed exact backend approval,
+Role/Case/lease/Work Grant/Policy/activation binding, immutable originals, one
+new generation per operation, atomic commit, and independent fresh reopen and
+semantic verification. Document content is data and cannot become authority.
+
+Live Word is restricted to a hidden interactive current-user child with fixed
+reviewed COM lowering, forced macro security, exact executable identity, finite
+timeout, owned-process accounting, and application-scoped WFP loopback-only
+egress. Pre-existing Word processes are protected. WFP objects and the
+temporary verifier AppContainer profile are removed on every terminal path.
+
+Residual risks are Microsoft and Hancom desktop application behavior, local
+signing-key custody, visual fidelity not represented by semantic structure,
+and unsupported existing features. Password protection, digital signatures,
+tracked-change fidelity, legacy HWP without licensed Automation, and active
+content become explicit exceptions rather than broadened authority.

@@ -1,0 +1,86 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-image-spec-v1.schema.json",
+    "title":  "DocumentImageSpecV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "image_spec_id",
+                     "artifact_id",
+                     "content_sha256",
+                     "media_type",
+                     "placement_class_id",
+                     "maximum_width_millimeters",
+                     "maximum_height_millimeters",
+                     "caption_payload_id",
+                     "embedded",
+                     "image_spec_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "image_spec_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "content_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          },
+                       "media_type":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "image/png",
+                                                       "image/jpeg"
+                                                   ]
+                                      },
+                       "placement_class_id":  {
+                                                  "type":  "string",
+                                                  "minLength":  1,
+                                                  "maxLength":  512,
+                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                              },
+                       "maximum_width_millimeters":  {
+                                                         "type":  "integer",
+                                                         "minimum":  1,
+                                                         "maximum":  1000
+                                                     },
+                       "maximum_height_millimeters":  {
+                                                          "type":  "integer",
+                                                          "minimum":  1,
+                                                          "maximum":  1000
+                                                      },
+                       "caption_payload_id":  {
+                                                  "oneOf":  [
+                                                                {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                },
+                                                                {
+                                                                    "type":  "null"
+                                                                }
+                                                            ]
+                                              },
+                       "embedded":  {
+                                        "const":  true
+                                    },
+                       "image_spec_sha256":  {
+                                                 "type":  "string",
+                                                 "maxLength":  71,
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                             }
+                   }
+}

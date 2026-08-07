@@ -1253,6 +1253,9 @@ fn bind_adapter(
         AdapterKindV1::OfficeWorkspace => Err(DesktopError::Precondition(
             "office workspace activation cannot bind a Windows desktop adapter".to_owned(),
         )),
+        AdapterKindV1::OfficeDocument => Err(DesktopError::Precondition(
+            "office document activation cannot bind a Windows desktop adapter".to_owned(),
+        )),
     }
 }
 

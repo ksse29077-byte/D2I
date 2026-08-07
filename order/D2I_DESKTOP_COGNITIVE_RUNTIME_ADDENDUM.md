@@ -29,9 +29,10 @@ non-executing, model-backed Shadow evaluation with protected evidence and
 resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
 one-step limited autonomy, signed control and human-exception handling, and a
 bounded General Office duty cycle while preserving Policy, activation, and
-KRN as the only action path. Track W, EDGE-100, and OFFICE-100 are complete.
-Track O has priority over remaining physical execution-plane expansion. The
-active next task is `D2I-OFFICE-200 - HWP/HWPX and Word Document Work`.
+KRN as the only action path. Track W, EDGE-100, OFFICE-100, and OFFICE-200 are
+complete. Track O has priority over remaining physical execution-plane
+expansion. The active next task is
+`D2I-OFFICE-300 - Excel / Spreadsheet Work`.
 
 WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
 current-user/SYSTEM DACL-protected content-addressed store. It consumes only
@@ -57,6 +58,14 @@ artifact and folder IDs rather than absolute paths. Signed workspace policy,
 root identity and DACL binding, Policy admission, one-shot activation, exact
 source hash/generation, and fresh post-operation inspection are mandatory.
 It does not edit Office content or connect a public MCP to production.
+
+OFFICE-200 adds a Desktop-owned trusted document dispatcher, separate bounded
+HWPX and DOCX package workers, and a hidden interactive-current-user Word COM
+worker. Cognitive artifacts contain semantic operation and node IDs, never
+raw XML/XPath/COM. Role, Case, lease, Work Grant, workspace, backend approval,
+Policy, one-shot activation, exact artifact generation, worker/application
+hash, and fresh post-save reopen are mandatory. Word is macro-disabled and WFP
+loopback-only for live Completion. Legacy HWP remains license-gated.
 
 ## Active Product Goal
 

@@ -200,8 +200,8 @@ state.
 ### Track O - General Office Capability Expansion
 
 - `D2I-OFFICE-100`: Capability source intake and artifact workspace. **Complete**
-- `D2I-OFFICE-200`: HWP/HWPX and Word document work. **First active**
-- `D2I-OFFICE-300`: Excel / spreadsheet work.
+- `D2I-OFFICE-200`: HWP/HWPX and Word document work. **Complete**
+- `D2I-OFFICE-300`: Excel / spreadsheet work. **First active**
 - `D2I-OFFICE-400`: PowerPoint presentation work.
 - `D2I-OFFICE-500`: PDF and document interchange.
 - `D2I-OFFICE-600`: Browser research and controlled download.

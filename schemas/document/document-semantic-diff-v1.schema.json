@@ -1,0 +1,145 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-semantic-diff-v1.schema.json",
+    "title":  "DocumentSemanticDiffV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "diff_id",
+                     "added_node_ids",
+                     "removed_node_ids",
+                     "changed_node_ids",
+                     "text_change_ids",
+                     "style_change_ids",
+                     "table_change_ids",
+                     "image_change_ids",
+                     "layout_change_ids",
+                     "unexpected_change_ids",
+                     "diff_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "diff_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "added_node_ids":  {
+                                              "type":  "array",
+                                              "minItems":  0,
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "removed_node_ids":  {
+                                                "type":  "array",
+                                                "minItems":  0,
+                                                "maxItems":  512,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "changed_node_ids":  {
+                                                "type":  "array",
+                                                "minItems":  0,
+                                                "maxItems":  512,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "text_change_ids":  {
+                                               "type":  "array",
+                                               "minItems":  0,
+                                               "maxItems":  512,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  512,
+                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                         }
+                                           },
+                       "style_change_ids":  {
+                                                "type":  "array",
+                                                "minItems":  0,
+                                                "maxItems":  512,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "table_change_ids":  {
+                                                "type":  "array",
+                                                "minItems":  0,
+                                                "maxItems":  512,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "image_change_ids":  {
+                                                "type":  "array",
+                                                "minItems":  0,
+                                                "maxItems":  512,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "layout_change_ids":  {
+                                                 "type":  "array",
+                                                 "minItems":  0,
+                                                 "maxItems":  512,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           }
+                                             },
+                       "unexpected_change_ids":  {
+                                                     "type":  "array",
+                                                     "minItems":  0,
+                                                     "maxItems":  512,
+                                                     "uniqueItems":  true,
+                                                     "items":  {
+                                                                   "type":  "string",
+                                                                   "minLength":  1,
+                                                                   "maxLength":  512,
+                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                               }
+                                                 },
+                       "diff_sha256":  {
+                                           "type":  "string",
+                                           "maxLength":  71,
+                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                       }
+                   }
+}

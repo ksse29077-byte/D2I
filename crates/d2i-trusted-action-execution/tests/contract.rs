@@ -82,6 +82,9 @@ impl OperationFixture {
             AdapterKindV1::OfficeWorkspace => {
                 panic!("desktop trusted-execution fixture cannot use office workspace")
             }
+            AdapterKindV1::OfficeDocument => {
+                panic!("desktop trusted-execution fixture cannot use office document")
+            }
         }
     }
 
@@ -820,6 +823,9 @@ fn native_grounded_action_arguments_are_bound_without_weakening_fixture_compatib
             }
             AdapterKindV1::OfficeWorkspace => {
                 panic!("desktop trusted-execution fixture cannot use office workspace")
+            }
+            AdapterKindV1::OfficeDocument => {
+                panic!("desktop trusted-execution fixture cannot use office document")
             }
         };
         let mut target = GroundedTargetBindingV1 {

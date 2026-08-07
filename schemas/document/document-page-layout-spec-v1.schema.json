@@ -1,0 +1,64 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-page-layout-spec-v1.schema.json",
+    "title":  "DocumentPageLayoutSpecV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "page_layout_spec_id",
+                     "page_size_id",
+                     "orientation",
+                     "top_margin_millimeters",
+                     "bottom_margin_millimeters",
+                     "left_margin_millimeters",
+                     "right_margin_millimeters",
+                     "page_layout_spec_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "page_layout_spec_id":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512,
+                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                               },
+                       "page_size_id":  {
+                                            "const":  "a4"
+                                        },
+                       "orientation":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "portrait",
+                                                        "landscape"
+                                                    ]
+                                       },
+                       "top_margin_millimeters":  {
+                                                      "type":  "integer",
+                                                      "minimum":  5,
+                                                      "maximum":  50
+                                                  },
+                       "bottom_margin_millimeters":  {
+                                                         "type":  "integer",
+                                                         "minimum":  5,
+                                                         "maximum":  50
+                                                     },
+                       "left_margin_millimeters":  {
+                                                       "type":  "integer",
+                                                       "minimum":  5,
+                                                       "maximum":  50
+                                                   },
+                       "right_margin_millimeters":  {
+                                                        "type":  "integer",
+                                                        "minimum":  5,
+                                                        "maximum":  50
+                                                    },
+                       "page_layout_spec_sha256":  {
+                                                       "type":  "string",
+                                                       "maxLength":  71,
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                   }
+                   }
+}

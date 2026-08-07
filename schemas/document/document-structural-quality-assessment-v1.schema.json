@@ -1,0 +1,123 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-structural-quality-assessment-v1.schema.json",
+    "title":  "DocumentStructuralQualityAssessmentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "assessment_id",
+                     "required_section_ids",
+                     "required_heading_ids",
+                     "required_table_spec_ids",
+                     "required_image_spec_ids",
+                     "nonempty_required_node_ids",
+                     "placeholder_text_forbidden",
+                     "unexpected_empty_cell_ids",
+                     "document_structure_valid",
+                     "quality_status",
+                     "assessment_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "assessment_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "required_section_ids":  {
+                                                    "type":  "array",
+                                                    "minItems":  0,
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                              }
+                                                },
+                       "required_heading_ids":  {
+                                                    "type":  "array",
+                                                    "minItems":  0,
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                              }
+                                                },
+                       "required_table_spec_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  0,
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "required_image_spec_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  0,
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "nonempty_required_node_ids":  {
+                                                          "type":  "array",
+                                                          "minItems":  0,
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "placeholder_text_forbidden":  {
+                                                          "type":  "boolean"
+                                                      },
+                       "unexpected_empty_cell_ids":  {
+                                                         "type":  "array",
+                                                         "minItems":  0,
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                   }
+                                                     },
+                       "document_structure_valid":  {
+                                                        "type":  "boolean"
+                                                    },
+                       "quality_status":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "passed",
+                                                           "failed",
+                                                           "inconclusive"
+                                                       ]
+                                          },
+                       "assessment_sha256":  {
+                                                 "type":  "string",
+                                                 "maxLength":  71,
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                             }
+                   }
+}

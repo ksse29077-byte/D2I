@@ -1,0 +1,509 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-work-completion-report-v1.schema.json",
+    "title":  "DocumentWorkCompletionReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "complete",
+                     "document_semantic_capability_evidence",
+                     "hwpx_document_work_evidence",
+                     "docx_document_work_evidence",
+                     "word_live_document_work_evidence",
+                     "office_workspace_lineage_evidence",
+                     "track_o_office200_evidence",
+                     "hancom_automation_live_evidence",
+                     "hancom_automation_reason_id",
+                     "hwp_legacy_mutation_status",
+                     "source_tree_sha256",
+                     "predecessor_finished_sha256",
+                     "word_executable_sha256",
+                     "model_artifact_sha256",
+                     "runtime_artifact_sha256",
+                     "document_cases",
+                     "routine_cases",
+                     "exception_security_cases",
+                     "verified_closures",
+                     "actual_qwen_cases",
+                     "provider_invocations",
+                     "replan_count",
+                     "clarification_count",
+                     "hwpx_mutations",
+                     "docx_mutations",
+                     "word_com_mutations",
+                     "fresh_document_reopens",
+                     "successful_operations",
+                     "verified_operations",
+                     "version_count",
+                     "provenance_count",
+                     "crash_windows_verified",
+                     "replay_report_sha256",
+                     "equivalence_report_sha256",
+                     "protected_audit_terminal_sha256",
+                     "performance",
+                     "safety",
+                     "residual",
+                     "finished_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "complete":  {
+                                        "type":  "boolean"
+                                    },
+                       "document_semantic_capability_evidence":  {
+                                                                     "type":  "boolean"
+                                                                 },
+                       "hwpx_document_work_evidence":  {
+                                                           "type":  "boolean"
+                                                       },
+                       "docx_document_work_evidence":  {
+                                                           "type":  "boolean"
+                                                       },
+                       "word_live_document_work_evidence":  {
+                                                                "type":  "boolean"
+                                                            },
+                       "office_workspace_lineage_evidence":  {
+                                                                 "type":  "boolean"
+                                                             },
+                       "track_o_office200_evidence":  {
+                                                          "type":  "boolean"
+                                                      },
+                       "hancom_automation_live_evidence":  {
+                                                               "type":  "boolean"
+                                                           },
+                       "hancom_automation_reason_id":  {
+                                                           "type":  "string",
+                                                           "minLength":  1,
+                                                           "maxLength":  512,
+                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                       },
+                       "hwp_legacy_mutation_status":  {
+                                                          "type":  "string",
+                                                          "enum":  [
+                                                                       "requires_licensed_hancom_backend",
+                                                                       "verified_with_licensed_hancom_backend"
+                                                                   ]
+                                                      },
+                       "source_tree_sha256":  {
+                                                  "type":  "string",
+                                                  "maxLength":  71,
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                              },
+                       "predecessor_finished_sha256":  {
+                                                           "type":  "string",
+                                                           "maxLength":  71,
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                       },
+                       "word_executable_sha256":  {
+                                                      "type":  "string",
+                                                      "maxLength":  71,
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "model_artifact_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "runtime_artifact_sha256":  {
+                                                       "type":  "string",
+                                                       "maxLength":  71,
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                   },
+                       "document_cases":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "routine_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "exception_security_cases":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "verified_closures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "actual_qwen_cases":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "provider_invocations":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "replan_count":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "clarification_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "hwpx_mutations":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "docx_mutations":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "word_com_mutations":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "fresh_document_reopens":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "successful_operations":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "verified_operations":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "version_count":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "provenance_count":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "crash_windows_verified":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "replay_report_sha256":  {
+                                                    "type":  "string",
+                                                    "maxLength":  71,
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "equivalence_report_sha256":  {
+                                                         "type":  "string",
+                                                         "maxLength":  71,
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                     },
+                       "protected_audit_terminal_sha256":  {
+                                                               "type":  "string",
+                                                               "maxLength":  71,
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                           },
+                       "performance":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "workspace_discovery_microseconds",
+                                                            "hwpx_parse_microseconds",
+                                                            "hwpx_mutation_microseconds",
+                                                            "hwpx_save_microseconds",
+                                                            "hwpx_verify_microseconds",
+                                                            "docx_parse_microseconds",
+                                                            "docx_mutation_microseconds",
+                                                            "docx_save_microseconds",
+                                                            "docx_verify_microseconds",
+                                                            "word_launch_microseconds",
+                                                            "word_open_microseconds",
+                                                            "word_operation_microseconds",
+                                                            "word_save_microseconds",
+                                                            "word_close_microseconds",
+                                                            "qwen_inference_microseconds",
+                                                            "bytes_read",
+                                                            "bytes_written",
+                                                            "peak_worker_memory_bytes",
+                                                            "peak_word_memory_bytes"
+                                                        ],
+                                           "properties":  {
+                                                              "workspace_discovery_microseconds":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                              "hwpx_parse_microseconds":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                              "hwpx_mutation_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                              "hwpx_save_microseconds":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                              "hwpx_verify_microseconds":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "docx_parse_microseconds":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                              "docx_mutation_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                              "docx_save_microseconds":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                              "docx_verify_microseconds":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "word_launch_microseconds":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "word_open_microseconds":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                              "word_operation_microseconds":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0
+                                                                                              },
+                                                              "word_save_microseconds":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                              "word_close_microseconds":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                              "qwen_inference_microseconds":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0
+                                                                                              },
+                                                              "bytes_read":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0
+                                                                             },
+                                                              "bytes_written":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0
+                                                                                },
+                                                              "peak_worker_memory_bytes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "peak_word_memory_bytes":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         }
+                                                          }
+                                       },
+                       "safety":  {
+                                      "type":  "object",
+                                      "additionalProperties":  false,
+                                      "required":  [
+                                                       "wrong_document",
+                                                       "wrong_node",
+                                                       "original_overwrite",
+                                                       "stale_write",
+                                                       "unexpected_document_drift",
+                                                       "duplicate_mutation",
+                                                       "raw_xml_from_model",
+                                                       "raw_com_from_model",
+                                                       "macro_execution",
+                                                       "external_link_fetch",
+                                                       "arbitrary_process",
+                                                       "arbitrary_command",
+                                                       "workspace_escape",
+                                                       "network_access",
+                                                       "credential_leak",
+                                                       "mandatory_escalation_miss",
+                                                       "false_completion",
+                                                       "critical_error"
+                                                   ],
+                                      "properties":  {
+                                                         "wrong_document":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                         "wrong_node":  {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  4294967295
+                                                                        },
+                                                         "original_overwrite":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "stale_write":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  4294967295
+                                                                         },
+                                                         "unexpected_document_drift":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                         "duplicate_mutation":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "raw_xml_from_model":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "raw_com_from_model":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "macro_execution":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "external_link_fetch":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                         "arbitrary_process":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               },
+                                                         "arbitrary_command":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               },
+                                                         "workspace_escape":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "network_access":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                         "credential_leak":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "mandatory_escalation_miss":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                         "false_completion":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "critical_error":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            }
+                                                     }
+                                  },
+                       "residual":  {
+                                        "type":  "object",
+                                        "additionalProperties":  false,
+                                        "required":  [
+                                                         "worker_owned_word_processes",
+                                                         "worker_owned_hwp_processes",
+                                                         "com_workers",
+                                                         "document_file_locks",
+                                                         "temporary_packages",
+                                                         "activations",
+                                                         "profiles",
+                                                         "credentials",
+                                                         "workspace_locks"
+                                                     ],
+                                        "properties":  {
+                                                           "worker_owned_word_processes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                           "worker_owned_hwp_processes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                           "com_workers":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "document_file_locks":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                           "temporary_packages":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                           "activations":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "profiles":  {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  4294967295
+                                                                        },
+                                                           "credentials":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "workspace_locks":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               }
+                                                       }
+                                    },
+                       "finished_sha256":  {
+                                               "type":  "string",
+                                               "maxLength":  71,
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           }
+                   }
+}

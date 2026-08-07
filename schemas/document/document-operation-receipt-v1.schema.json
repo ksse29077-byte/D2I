@@ -1,0 +1,139 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-operation-receipt-v1.schema.json",
+    "title":  "DocumentOperationReceiptV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "receipt_id",
+                     "binding_sha256",
+                     "backend_id",
+                     "worker_sha256",
+                     "operation",
+                     "pre_generation",
+                     "post_generation",
+                     "pre_content_sha256",
+                     "post_content_sha256",
+                     "pre_semantic_sha256",
+                     "post_semantic_sha256",
+                     "bytes_written",
+                     "application_receipt_ids",
+                     "started_at_unix_ms",
+                     "completed_at_unix_ms",
+                     "result_class",
+                     "receipt_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "receipt_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "worker_sha256":  {
+                                             "type":  "string",
+                                             "maxLength":  71,
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         },
+                       "operation":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "inspect",
+                                                      "create_from_template",
+                                                      "append_paragraph",
+                                                      "insert_heading",
+                                                      "replace_text",
+                                                      "apply_paragraph_style",
+                                                      "insert_table",
+                                                      "set_table_cell",
+                                                      "insert_image",
+                                                      "set_page_layout",
+                                                      "save_version",
+                                                      "remove_generated_node"
+                                                  ]
+                                     },
+                       "pre_generation":  {
+                                              "type":  "integer",
+                                              "minimum":  0
+                                          },
+                       "post_generation":  {
+                                               "type":  "integer",
+                                               "minimum":  0
+                                           },
+                       "pre_content_sha256":  {
+                                                  "type":  "string",
+                                                  "maxLength":  71,
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                              },
+                       "post_content_sha256":  {
+                                                   "type":  "string",
+                                                   "maxLength":  71,
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "pre_semantic_sha256":  {
+                                                   "type":  "string",
+                                                   "maxLength":  71,
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "post_semantic_sha256":  {
+                                                    "type":  "string",
+                                                    "maxLength":  71,
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "bytes_written":  {
+                                             "type":  "integer",
+                                             "minimum":  0
+                                         },
+                       "application_receipt_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  0,
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "started_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0
+                                              },
+                       "completed_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0
+                                                },
+                       "result_class":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "verified",
+                                                         "rejected",
+                                                         "stale",
+                                                         "unsupported",
+                                                         "unsafe",
+                                                         "recovery_required"
+                                                     ]
+                                        },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          }
+                   }
+}

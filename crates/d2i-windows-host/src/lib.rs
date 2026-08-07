@@ -2,6 +2,8 @@
 
 mod verifier_broker;
 mod wfp;
+#[cfg(windows)]
+mod word_automation;
 
 pub use verifier_broker::{
     accept_verifier_pipe, connect_verifier_pipe, current_process_has_sid,
@@ -16,6 +18,11 @@ pub use wfp::{
     install_wfp_loopback_policy, install_wfp_loopback_policy_with_verifier_network_denial,
     remove_wfp_loopback_policy, verify_wfp_loopback_policy,
     verify_wfp_loopback_policy_with_verifier_network_denial, WindowsWfpLoopbackPolicyIdentity,
+};
+#[cfg(windows)]
+pub use word_automation::{
+    execute_word_document_operation, installed_word_process_ids, WordAutomationOperationV1,
+    WordAutomationReceiptV1,
 };
 
 use std::fmt::{self, Display, Formatter};
@@ -309,6 +316,14 @@ pub fn process_session_id(process_id: u32) -> Result<u32, WindowsHostError> {
     platform::process_session_id(process_id)
 }
 
+/// Terminates only the exact PID whose executable matches the caller-bound image.
+pub fn terminate_process_if_exact_image(
+    process_id: u32,
+    expected_image: &Path,
+) -> Result<(), WindowsHostError> {
+    platform::terminate_process_if_exact_image(process_id, expected_image)
+}
+
 /// Returns the four-part product version embedded in a Windows executable.
 pub fn file_product_version(path: &Path) -> Result<String, WindowsHostError> {
     platform::file_product_version(path)
@@ -391,9 +406,9 @@ mod platform {
         GetExitCodeProcess, InitializeProcThreadAttributeList, OpenProcess, OpenProcessToken,
         QueryFullProcessImageNameW, ResumeThread, TerminateProcess, UpdateProcThreadAttribute,
         WaitForSingleObject, CREATE_NO_WINDOW, CREATE_SUSPENDED, CREATE_UNICODE_ENVIRONMENT,
-        EXTENDED_STARTUPINFO_PRESENT, LPPROC_THREAD_ATTRIBUTE_LIST, PROCESS_INFORMATION,
-        PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION,
-        PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES, STARTUPINFOEXW,
+        EXTENDED_STARTUPINFO_PRESENT, LPPROC_THREAD_ATTRIBUTE_LIST, PROCESS_ACCESS_RIGHTS,
+        PROCESS_INFORMATION, PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION,
+        PROCESS_TERMINATE, PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES, STARTUPINFOEXW,
     };
 
     pub(super) fn create_job(limits: WindowsJobLimits) -> Result<WindowsJob, WindowsHostError> {
@@ -1107,6 +1122,77 @@ mod platform {
         Ok(session_id)
     }
 
+    pub(super) fn terminate_process_if_exact_image(
+        process_id: u32,
+        expected_image: &Path,
+    ) -> Result<(), WindowsHostError> {
+        if process_id == 0 || !expected_image.is_file() {
+            return Err(WindowsHostError::new(
+                "termination requires a live PID and expected executable",
+            ));
+        }
+        let expected = expected_image
+            .canonicalize()
+            .map_err(|error| WindowsHostError::new(format!("expected image failed: {error}")))?;
+        // SAFETY: only query, synchronize, and terminate rights are requested for the exact PID.
+        let handle = unsafe {
+            OpenProcess(
+                PROCESS_ACCESS_RIGHTS(
+                    PROCESS_QUERY_LIMITED_INFORMATION.0 | PROCESS_TERMINATE.0 | 0x0010_0000,
+                ),
+                false,
+                process_id,
+            )
+        }
+        .map_err(|error| WindowsHostError::new(format!("OpenProcess failed: {error}")))?;
+        let result = (|| {
+            let mut buffer = vec![0_u16; 32_768];
+            let mut length = u32::try_from(buffer.len())
+                .map_err(|_| WindowsHostError::new("process path buffer overflow"))?;
+            // SAFETY: buffer and length describe writable UTF-16 storage for this process handle.
+            unsafe {
+                QueryFullProcessImageNameW(
+                    handle,
+                    PROCESS_NAME_WIN32,
+                    PWSTR(buffer.as_mut_ptr()),
+                    &raw mut length,
+                )
+            }
+            .map_err(|error| WindowsHostError::new(format!("process image failed: {error}")))?;
+            let used = usize::try_from(length)
+                .map_err(|_| WindowsHostError::new("process path length overflow"))?;
+            let actual = PathBuf::from(String::from_utf16(&buffer[..used]).map_err(|error| {
+                WindowsHostError::new(format!("process image UTF-16 failed: {error}"))
+            })?);
+            let actual_text = actual.to_string_lossy();
+            let expected_text = expected.to_string_lossy();
+            let actual_normalized = actual_text.strip_prefix(r"\\?\").unwrap_or(&actual_text);
+            let expected_normalized = expected_text
+                .strip_prefix(r"\\?\")
+                .unwrap_or(&expected_text);
+            if !actual_normalized.eq_ignore_ascii_case(expected_normalized) {
+                return Err(WindowsHostError::new(
+                    "PID image differs; refusing exact-image termination",
+                ));
+            }
+            // SAFETY: the process was identified through the same live handle and exact image.
+            unsafe { TerminateProcess(handle, 1) }.map_err(|error| {
+                WindowsHostError::new(format!("TerminateProcess failed: {error}"))
+            })?;
+            // SAFETY: waiting on the owned process handle is bounded.
+            let wait = unsafe { WaitForSingleObject(handle, 10_000) };
+            if wait != WAIT_OBJECT_0 {
+                return Err(WindowsHostError::new(
+                    "terminated process did not reach a signaled state",
+                ));
+            }
+            Ok(())
+        })();
+        // SAFETY: handle is owned by this function and closed exactly once.
+        let _ = unsafe { CloseHandle(handle) };
+        result
+    }
+
     pub(super) fn file_product_version(path: &Path) -> Result<String, WindowsHostError> {
         let path = wide_path(path)?;
         // SAFETY: `path` is NUL-terminated and all output pointers refer to
@@ -1674,6 +1760,13 @@ mod platform {
     }
 
     pub(super) fn process_session_id(_process_id: u32) -> Result<u32, WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn terminate_process_if_exact_image(
+        _process_id: u32,
+        _expected_image: &Path,
+    ) -> Result<(), WindowsHostError> {
         Err(unavailable())
     }
 

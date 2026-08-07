@@ -1,0 +1,181 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-operation-intent-v1.schema.json",
+    "title":  "DocumentOperationIntentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "intent_id",
+                     "case_id",
+                     "planner_cycle_id",
+                     "document_artifact_id",
+                     "document_generation",
+                     "semantic_state_sha256",
+                     "operation",
+                     "target_node_ids",
+                     "content_payload_ids",
+                     "style_spec_ids",
+                     "image_spec_ids",
+                     "table_spec_id",
+                     "page_layout_spec_id",
+                     "required_postcondition_ids",
+                     "risk_class",
+                     "intent_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "intent_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "planner_cycle_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                            },
+                       "document_artifact_id":  {
+                                                    "type":  "string",
+                                                    "minLength":  1,
+                                                    "maxLength":  512,
+                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                },
+                       "document_generation":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "semantic_state_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "operation":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "inspect",
+                                                      "create_from_template",
+                                                      "append_paragraph",
+                                                      "insert_heading",
+                                                      "replace_text",
+                                                      "apply_paragraph_style",
+                                                      "insert_table",
+                                                      "set_table_cell",
+                                                      "insert_image",
+                                                      "set_page_layout",
+                                                      "save_version",
+                                                      "remove_generated_node"
+                                                  ]
+                                     },
+                       "target_node_ids":  {
+                                               "type":  "array",
+                                               "minItems":  0,
+                                               "maxItems":  1,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  512,
+                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                         }
+                                           },
+                       "content_payload_ids":  {
+                                                   "type":  "array",
+                                                   "minItems":  0,
+                                                   "maxItems":  1,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  512,
+                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                             }
+                                               },
+                       "style_spec_ids":  {
+                                              "type":  "array",
+                                              "minItems":  0,
+                                              "maxItems":  1,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "image_spec_ids":  {
+                                              "type":  "array",
+                                              "minItems":  0,
+                                              "maxItems":  1,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "table_spec_id":  {
+                                             "oneOf":  [
+                                                           {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           },
+                                                           {
+                                                               "type":  "null"
+                                                           }
+                                                       ]
+                                         },
+                       "page_layout_spec_id":  {
+                                                   "oneOf":  [
+                                                                 {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 },
+                                                                 {
+                                                                     "type":  "null"
+                                                                 }
+                                                             ]
+                                               },
+                       "required_postcondition_ids":  {
+                                                          "type":  "array",
+                                                          "minItems":  1,
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "risk_class":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "read_only",
+                                                       "reversible",
+                                                       "business_state_change",
+                                                       "high"
+                                                   ]
+                                      },
+                       "intent_sha256":  {
+                                             "type":  "string",
+                                             "maxLength":  71,
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         }
+                   }
+}

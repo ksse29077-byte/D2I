@@ -1,0 +1,276 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-backend-descriptor-v1.schema.json",
+    "title":  "DocumentBackendDescriptorV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "backend_id",
+                     "backend_version",
+                     "backend_kind",
+                     "supported_formats",
+                     "supported_operations",
+                     "requires_application",
+                     "requires_license_evidence",
+                     "worker_artifact_sha256",
+                     "application_binary_sha256",
+                     "security_profile_id",
+                     "resource_limits",
+                     "backend_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "backend_version":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "backend_kind":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "hwpx_file",
+                                                         "docx_file",
+                                                         "word_com",
+                                                         "hancom_automation"
+                                                     ]
+                                        },
+                       "supported_formats":  {
+                                                 "type":  "array",
+                                                 "minItems":  1,
+                                                 "maxItems":  4,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "enum":  [
+                                                                            "hwpx",
+                                                                            "docx",
+                                                                            "hwp",
+                                                                            "doc"
+                                                                        ]
+                                                           }
+                                             },
+                       "supported_operations":  {
+                                                    "type":  "array",
+                                                    "minItems":  1,
+                                                    "maxItems":  12,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "enum":  [
+                                                                               "inspect",
+                                                                               "create_from_template",
+                                                                               "append_paragraph",
+                                                                               "insert_heading",
+                                                                               "replace_text",
+                                                                               "apply_paragraph_style",
+                                                                               "insert_table",
+                                                                               "set_table_cell",
+                                                                               "insert_image",
+                                                                               "set_page_layout",
+                                                                               "save_version",
+                                                                               "remove_generated_node"
+                                                                           ]
+                                                              }
+                                                },
+                       "requires_application":  {
+                                                    "type":  "boolean"
+                                                },
+                       "requires_license_evidence":  {
+                                                         "type":  "boolean"
+                                                     },
+                       "worker_artifact_sha256":  {
+                                                      "type":  "string",
+                                                      "maxLength":  71,
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "application_binary_sha256":  {
+                                                         "oneOf":  [
+                                                                       {
+                                                                           "type":  "string",
+                                                                           "maxLength":  71,
+                                                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                       },
+                                                                       {
+                                                                           "type":  "null"
+                                                                       }
+                                                                   ]
+                                                     },
+                       "security_profile_id":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512,
+                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                               },
+                       "resource_limits":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "maximum_document_bytes",
+                                                                "maximum_package_entries",
+                                                                "maximum_uncompressed_bytes",
+                                                                "maximum_compression_ratio",
+                                                                "maximum_xml_bytes",
+                                                                "maximum_xml_depth",
+                                                                "maximum_xml_nodes",
+                                                                "maximum_xml_attributes",
+                                                                "maximum_sections",
+                                                                "maximum_nodes",
+                                                                "maximum_tables",
+                                                                "maximum_table_rows",
+                                                                "maximum_table_columns",
+                                                                "maximum_table_cells",
+                                                                "maximum_images",
+                                                                "maximum_image_bytes",
+                                                                "maximum_total_embedded_bytes",
+                                                                "maximum_text_characters_per_node",
+                                                                "maximum_total_observed_characters",
+                                                                "maximum_generated_characters_per_case",
+                                                                "maximum_operations_per_case",
+                                                                "maximum_model_invocations",
+                                                                "maximum_save_generations",
+                                                                "maximum_worker_milliseconds",
+                                                                "maximum_application_session_milliseconds",
+                                                                "maximum_worker_memory_bytes"
+                                                            ],
+                                               "properties":  {
+                                                                  "maximum_document_bytes":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                  "maximum_package_entries":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                  "maximum_uncompressed_bytes":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                  "maximum_compression_ratio":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                  "maximum_xml_bytes":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                                  "maximum_xml_depth":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "maximum_xml_nodes":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "maximum_xml_attributes":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "maximum_sections":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                  "maximum_nodes":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_tables":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "maximum_table_rows":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "maximum_table_columns":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "maximum_table_cells":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "maximum_images":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "maximum_image_bytes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                  "maximum_total_embedded_bytes":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                  "maximum_text_characters_per_node":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                  "maximum_total_observed_characters":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        },
+                                                                  "maximum_generated_characters_per_case":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0,
+                                                                                                                "maximum":  4294967295
+                                                                                                            },
+                                                                  "maximum_operations_per_case":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                  "maximum_model_invocations":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                  "maximum_save_generations":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                  "maximum_worker_milliseconds":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0
+                                                                                                  },
+                                                                  "maximum_application_session_milliseconds":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                  "maximum_worker_memory_bytes":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0
+                                                                                                  }
+                                                              }
+                                           },
+                       "backend_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          }
+                   }
+}

@@ -1,0 +1,167 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-backend-approval-v1.schema.json",
+    "title":  "DocumentBackendApprovalV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "approval_id",
+                     "organization_id",
+                     "backend_descriptor_sha256",
+                     "capability_pack_sha256",
+                     "role_ids",
+                     "environment_ids",
+                     "allowed_formats",
+                     "allowed_operations",
+                     "application_binary_sha256s",
+                     "license_evidence_sha256s",
+                     "valid_from_unix_ms",
+                     "valid_until_unix_ms",
+                     "signer_id",
+                     "signing_key_id",
+                     "approval_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "approval_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "backend_descriptor_sha256":  {
+                                                         "type":  "string",
+                                                         "maxLength":  71,
+                                                         "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                     },
+                       "capability_pack_sha256":  {
+                                                      "type":  "string",
+                                                      "maxLength":  71,
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "role_ids":  {
+                                        "type":  "array",
+                                        "minItems":  1,
+                                        "maxItems":  512,
+                                        "uniqueItems":  true,
+                                        "items":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512,
+                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                  }
+                                    },
+                       "environment_ids":  {
+                                               "type":  "array",
+                                               "minItems":  1,
+                                               "maxItems":  512,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  512,
+                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                         }
+                                           },
+                       "allowed_formats":  {
+                                               "type":  "array",
+                                               "minItems":  1,
+                                               "maxItems":  4,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "enum":  [
+                                                                          "hwpx",
+                                                                          "docx",
+                                                                          "hwp",
+                                                                          "doc"
+                                                                      ]
+                                                         }
+                                           },
+                       "allowed_operations":  {
+                                                  "type":  "array",
+                                                  "minItems":  1,
+                                                  "maxItems":  12,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "enum":  [
+                                                                             "inspect",
+                                                                             "create_from_template",
+                                                                             "append_paragraph",
+                                                                             "insert_heading",
+                                                                             "replace_text",
+                                                                             "apply_paragraph_style",
+                                                                             "insert_table",
+                                                                             "set_table_cell",
+                                                                             "insert_image",
+                                                                             "set_page_layout",
+                                                                             "save_version",
+                                                                             "remove_generated_node"
+                                                                         ]
+                                                            }
+                                              },
+                       "application_binary_sha256s":  {
+                                                          "type":  "array",
+                                                          "minItems":  0,
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "maxLength":  71,
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                    }
+                                                      },
+                       "license_evidence_sha256s":  {
+                                                        "type":  "array",
+                                                        "minItems":  0,
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "maxLength":  71,
+                                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                  }
+                                                    },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0
+                                              },
+                       "valid_until_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "signer_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                          },
+                       "approval_sha256":  {
+                                               "type":  "string",
+                                               "maxLength":  71,
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

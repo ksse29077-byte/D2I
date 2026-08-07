@@ -603,5 +603,39 @@ signed certification, and zero temporary process/profile/lock/store residue.
 
 OFFICE-100 does not edit HWP, Excel, or PowerPoint content and adds no browser
 download, network share, email, messenger, production Python, or public MCP
-execution. The first active task is `D2I-OFFICE-200 - HWP/HWPX and Word
-Document Work`.
+execution.
+
+## OFFICE-200 HWPX and Word Document Work
+
+OFFICE-200 adds the platform-neutral `d2i-document-capability` crate, 19 strict
+Draft 2020-12 schemas, application-neutral semantic operations, signed backend
+approval, exact operation binding, semantic receipts/diffs/verifications,
+quality and cross-format reports, replay, Completion, certification, and an
+inspection-only CLI. Existing Policy admission gains the additive
+`OfficeDocument` adapter class; existing UIA/Web execution continues to reject
+it so document authority cannot cross planes.
+
+Desktop supplies separate bounded HWPX and DOCX ZIP/XML backends, a strict
+one-operation file worker, and a hidden current-user Word COM worker. Package
+tests reject traversal, duplicate/shadow entries, decompression excess,
+missing parts, malformed XML, XXE/entity declarations, escaping or external
+relationships, macros, OLE/ActiveX, and oversized content. Originals remain
+immutable; every mutation creates a new generation and is independently
+freshly reopened before protected Office registry persistence.
+
+The actual General Office report sequence uses 16 globally unique one-shot
+activations: eight HWPX mutations, five DOCX mutations, and three installed
+Word COM mutations. It records 32 fresh reopens, exact HWPX/DOCX semantic
+equivalence, 128 scenarios x 100 deterministic replay, protected audit, and
+signed terminal certification. Twelve actual pinned Qwen3-4B/llama.cpp calls
+include ten bounded plans, one goal draft, one clarification, and two replans.
+Word is hidden, macro-disabled, exact-binary-bound, and WFP loopback-only; the
+temporary WFP objects and verifier AppContainer profile are removed afterward.
+
+Hancom Office installation was inventoried, but no commercial Automation
+license evidence exists. HWPX is first-class without Hancom; legacy HWP status
+is exactly `requires_licensed_hancom_backend`. OFFICE-200 adds no public MCP,
+production Python/Node, browser, email, clipboard, macro, password bypass,
+background Office service, Excel, PowerPoint, or full PDF path. OFFICE-200 is
+complete and the first active task is
+`D2I-OFFICE-300 - Excel / Spreadsheet Work`.

@@ -1,0 +1,296 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-semantic-snapshot-v1.schema.json",
+    "title":  "DocumentSemanticSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "document_id",
+                     "artifact_id",
+                     "artifact_generation",
+                     "format_id",
+                     "backend_id",
+                     "document_property_ids",
+                     "section_ids",
+                     "ordered_nodes",
+                     "style_catalog_sha256",
+                     "image_refs",
+                     "table_refs",
+                     "page_layout_summary",
+                     "content_summary",
+                     "unsupported_feature_ids",
+                     "source_content_sha256",
+                     "semantic_state_sha256",
+                     "observed_at_unix_ms",
+                     "freshness_expires_at_unix_ms",
+                     "evidence_ids",
+                     "snapshot_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "document_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "artifact_generation":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "format_id":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "hwpx",
+                                                      "docx",
+                                                      "hwp",
+                                                      "doc"
+                                                  ]
+                                     },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "document_property_ids":  {
+                                                     "type":  "array",
+                                                     "minItems":  0,
+                                                     "maxItems":  512,
+                                                     "uniqueItems":  true,
+                                                     "items":  {
+                                                                   "type":  "string",
+                                                                   "minLength":  1,
+                                                                   "maxLength":  512,
+                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                               }
+                                                 },
+                       "section_ids":  {
+                                           "type":  "array",
+                                           "minItems":  1,
+                                           "maxItems":  512,
+                                           "uniqueItems":  true,
+                                           "items":  {
+                                                         "type":  "string",
+                                                         "minLength":  1,
+                                                         "maxLength":  512,
+                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                     }
+                                       },
+                       "ordered_nodes":  {
+                                             "type":  "array",
+                                             "minItems":  1,
+                                             "maxItems":  512,
+                                             "uniqueItems":  true,
+                                             "items":  {
+                                                           "type":  "object",
+                                                           "additionalProperties":  false,
+                                                           "required":  [
+                                                                            "node_id",
+                                                                            "node_kind",
+                                                                            "section_id",
+                                                                            "ordinal",
+                                                                            "style_id",
+                                                                            "text_excerpt",
+                                                                            "text_sha256",
+                                                                            "table_id",
+                                                                            "image_id",
+                                                                            "truncated"
+                                                                        ],
+                                                           "properties":  {
+                                                                              "node_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                          },
+                                                                              "node_kind":  {
+                                                                                                "type":  "string",
+                                                                                                "enum":  [
+                                                                                                             "paragraph",
+                                                                                                             "heading",
+                                                                                                             "table",
+                                                                                                             "image",
+                                                                                                             "page_break",
+                                                                                                             "section_break",
+                                                                                                             "header",
+                                                                                                             "footer"
+                                                                                                         ]
+                                                                                            },
+                                                                              "section_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                             },
+                                                                              "ordinal":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                              "style_id":  {
+                                                                                               "oneOf":  [
+                                                                                                             {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  512,
+                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "type":  "null"
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                              "text_excerpt":  {
+                                                                                                   "oneOf":  [
+                                                                                                                 {
+                                                                                                                     "type":  "string",
+                                                                                                                     "minLength":  1,
+                                                                                                                     "maxLength":  32768
+                                                                                                                 },
+                                                                                                                 {
+                                                                                                                     "type":  "null"
+                                                                                                                 }
+                                                                                                             ]
+                                                                                               },
+                                                                              "text_sha256":  {
+                                                                                                  "oneOf":  [
+                                                                                                                {
+                                                                                                                    "type":  "string",
+                                                                                                                    "maxLength":  71,
+                                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "type":  "null"
+                                                                                                                }
+                                                                                                            ]
+                                                                                              },
+                                                                              "table_id":  {
+                                                                                               "oneOf":  [
+                                                                                                             {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  512,
+                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "type":  "null"
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                              "image_id":  {
+                                                                                               "oneOf":  [
+                                                                                                             {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  512,
+                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "type":  "null"
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                              "truncated":  {
+                                                                                                "type":  "boolean"
+                                                                                            }
+                                                                          }
+                                                       }
+                                         },
+                       "style_catalog_sha256":  {
+                                                    "type":  "string",
+                                                    "maxLength":  71,
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "image_refs":  {
+                                          "type":  "array",
+                                          "minItems":  0,
+                                          "maxItems":  512,
+                                          "uniqueItems":  true,
+                                          "items":  {
+                                                        "type":  "string",
+                                                        "minLength":  1,
+                                                        "maxLength":  512,
+                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                    }
+                                      },
+                       "table_refs":  {
+                                          "type":  "array",
+                                          "minItems":  0,
+                                          "maxItems":  512,
+                                          "uniqueItems":  true,
+                                          "items":  {
+                                                        "type":  "string",
+                                                        "minLength":  1,
+                                                        "maxLength":  512,
+                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                    }
+                                      },
+                       "page_layout_summary":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512
+                                               },
+                       "content_summary":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  32768
+                                           },
+                       "unsupported_feature_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  0,
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "semantic_state_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "observed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "freshness_expires_at_unix_ms":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0
+                                                        },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "minItems":  0,
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "snapshot_sha256":  {
+                                               "type":  "string",
+                                               "maxLength":  71,
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           }
+                   }
+}

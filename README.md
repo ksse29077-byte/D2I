@@ -274,8 +274,8 @@ calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
-EDGE-100 and OFFICE-100 are also complete. The next active task is
-`D2I-OFFICE-200 - HWP/HWPX and Word Document Work`.
+EDGE-100, OFFICE-100, and OFFICE-200 are also complete. The next active task is
+`D2I-OFFICE-300 - Excel / Spreadsheet Work`.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:
@@ -360,6 +360,30 @@ sealed EDGE-100 evidence root. It creates only synthetic files in a fresh
 temporary approved workspace, runs Cases A-J, verifies cleanup, and writes a
 signed completion certification. See
 `docs/office/general-office-capability-workspace-v1.md` and ADR 0038.
+
+OFFICE-200 adds application-neutral document semantics, first-class bounded
+HWPX and DOCX package backends, and an interactive-current-user Word COM
+compatibility worker. Each Policy admission and activation performs one
+semantic mutation, saves a new generation, and requires an independent fresh
+reopen before verification. Legacy HWP remains separately license-gated.
+
+Run deterministic contracts, schemas, package attacks, file backends, and
+regressions without elevation:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/run-document-work-v1.ps1 `
+  -Mode All `
+  -OutputRoot target/office200-all `
+  -Fresh
+```
+
+`Completion` additionally requires sealed OFFICE-100 evidence, pinned
+Qwen3-4B/llama.cpp, installed desktop Word, and one elevated interactive
+deployment session for the exact temporary WINWORD WFP policy. It verifies 16
+Cases, 12 actual model calls, HWPX/DOCX/Word mutations, semantic equivalence,
+fresh reopens, signed certification, and zero residual state. See
+`docs/office/document-work-v1.md` and ADR 0039.
 
 ## Checks
 

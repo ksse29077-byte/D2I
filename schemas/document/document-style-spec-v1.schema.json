@@ -1,0 +1,60 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-style-spec-v1.schema.json",
+    "title":  "DocumentStyleSpecV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "style_spec_id",
+                     "style_role",
+                     "approved_template_style_id",
+                     "emphasis",
+                     "style_spec_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "style_spec_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                         },
+                       "style_role":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "body",
+                                                       "title",
+                                                       "heading_1",
+                                                       "heading_2",
+                                                       "caption",
+                                                       "table_header",
+                                                       "table_body",
+                                                       "emphasis"
+                                                   ]
+                                      },
+                       "approved_template_style_id":  {
+                                                          "oneOf":  [
+                                                                        {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                        },
+                                                                        {
+                                                                            "type":  "null"
+                                                                        }
+                                                                    ]
+                                                      },
+                       "emphasis":  {
+                                        "type":  "boolean"
+                                    },
+                       "style_spec_sha256":  {
+                                                 "type":  "string",
+                                                 "maxLength":  71,
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                             }
+                   }
+}

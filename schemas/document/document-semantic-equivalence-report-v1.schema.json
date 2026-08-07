@@ -1,0 +1,81 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/document/document-semantic-equivalence-report-v1.schema.json",
+    "title":  "DocumentSemanticEquivalenceReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "left_snapshot_sha256",
+                     "right_snapshot_sha256",
+                     "required_sections_match",
+                     "section_order_match",
+                     "textual_facts_match",
+                     "table_facts_match",
+                     "image_roles_match",
+                     "style_roles_match",
+                     "equivalent",
+                     "mismatch_ids",
+                     "report_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "left_snapshot_sha256":  {
+                                                    "type":  "string",
+                                                    "maxLength":  71,
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "right_snapshot_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "required_sections_match":  {
+                                                       "type":  "boolean"
+                                                   },
+                       "section_order_match":  {
+                                                   "type":  "boolean"
+                                               },
+                       "textual_facts_match":  {
+                                                   "type":  "boolean"
+                                               },
+                       "table_facts_match":  {
+                                                 "type":  "boolean"
+                                             },
+                       "image_roles_match":  {
+                                                 "type":  "boolean"
+                                             },
+                       "style_roles_match":  {
+                                                 "type":  "boolean"
+                                             },
+                       "equivalent":  {
+                                          "type":  "boolean"
+                                      },
+                       "mismatch_ids":  {
+                                            "type":  "array",
+                                            "minItems":  0,
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "report_sha256":  {
+                                             "type":  "string",
+                                             "maxLength":  71,
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         }
+                   }
+}
