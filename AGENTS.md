@@ -67,11 +67,13 @@ Episodic Memory -> SLA/Outcome Tracking -> Exception Escalation -> Role Report`
 The active order is:
 
 1. Track K, Safe Execution Kernel Closure: `D2I-KRN-100` through
-   `D2I-KRN-500`.
+   `D2I-KRN-500` (complete).
 2. Track W, Autonomous Workforce Layer: `D2I-WORK-100` through
-   `D2I-WORK-900`.
-3. Track X, Execution Plane Expansion: `D2I-EDGE-100` through
-   `D2I-EDGE-400`.
+   `D2I-WORK-900` (complete).
+3. `D2I-EDGE-100`, Enterprise API Execution Plane (complete).
+4. Track O, General Office Capability Expansion: `D2I-OFFICE-100` through
+   `D2I-OFFICE-900`.
+5. Remaining Track X: `D2I-EDGE-200` through `D2I-EDGE-400`.
 
 Work only on the explicitly requested task. Detect the completed baseline and
 the first incomplete active task from `order/TASKS.md`; never restart a legacy

@@ -274,8 +274,8 @@ calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
-The next active task is
-`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
+EDGE-100 and OFFICE-100 are also complete. The next active task is
+`D2I-OFFICE-200 - HWP/HWPX and Word Document Work`.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:
@@ -342,6 +342,24 @@ processes, eight Work Items/Cases, actual socket reads and writes, bounded
 recovery, five verified closures, three human exceptions, protected evidence,
 and cleanup. Use `-Resume` after a transient failure. See
 `docs/execution-planes/enterprise-api-v1.md` and ADR 0037.
+
+OFFICE-100 adds pinned public capability-source assessment and a safe local
+artifact workspace. It does not execute public MCP servers or edit Office file
+contents. Run the deterministic contract, schema, negative, recovery, and
+regression gates with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/run-office-capability-workspace-v1.ps1 `
+  -Mode All `
+  -OutputRoot target/d2i-office-capability-workspace/all
+```
+
+`Completion` additionally requires `-ReuseVerifiedPredecessorEvidence` and a
+sealed EDGE-100 evidence root. It creates only synthetic files in a fresh
+temporary approved workspace, runs Cases A-J, verifies cleanup, and writes a
+signed completion certification. See
+`docs/office/general-office-capability-workspace-v1.md` and ADR 0038.
 
 ## Checks
 

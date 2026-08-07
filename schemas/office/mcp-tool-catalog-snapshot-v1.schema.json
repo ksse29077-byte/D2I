@@ -1,0 +1,155 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/mcp-tool-catalog-snapshot-v1.schema.json",
+    "title":  "McpToolCatalogSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "source_record_sha256",
+                     "protocol_version",
+                     "transport_class",
+                     "server_name",
+                     "server_version",
+                     "tool_ids",
+                     "tool_input_schema_sha256s",
+                     "tool_output_schema_sha256s",
+                     "tool_side_effect_classes",
+                     "tool_filesystem_scope_classes",
+                     "tool_process_scope_classes",
+                     "tool_network_scope_classes",
+                     "catalog_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "source_record_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "protocol_version":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512
+                                            },
+                       "transport_class":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "documentation",
+                                                            "file_format",
+                                                            "stdio",
+                                                            "local_process",
+                                                            "com_automation",
+                                                            "remote_http"
+                                                        ]
+                                           },
+                       "server_name":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512
+                                       },
+                       "server_version":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512
+                                          },
+                       "tool_ids":  {
+                                        "type":  "array",
+                                        "maxItems":  512,
+                                        "uniqueItems":  true,
+                                        "items":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512,
+                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                  }
+                                    },
+                       "tool_input_schema_sha256s":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                       "maxLength":  71
+                                                                   }
+                                                     },
+                       "tool_output_schema_sha256s":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    }
+                                                      },
+                       "tool_side_effect_classes":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "enum":  [
+                                                                                   "read_only",
+                                                                                   "file_mutation",
+                                                                                   "application_mutation",
+                                                                                   "process_execution",
+                                                                                   "arbitrary_code"
+                                                                               ]
+                                                                  }
+                                                    },
+                       "tool_filesystem_scope_classes":  {
+                                                             "type":  "array",
+                                                             "maxItems":  512,
+                                                             "uniqueItems":  true,
+                                                             "items":  {
+                                                                           "type":  "string",
+                                                                           "enum":  [
+                                                                                        "none",
+                                                                                        "bounded_workspace",
+                                                                                        "approved_application",
+                                                                                        "arbitrary_local",
+                                                                                        "remote"
+                                                                                    ]
+                                                                       }
+                                                         },
+                       "tool_process_scope_classes":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "enum":  [
+                                                                                     "none",
+                                                                                     "bounded_workspace",
+                                                                                     "approved_application",
+                                                                                     "arbitrary_local",
+                                                                                     "remote"
+                                                                                 ]
+                                                                    }
+                                                      },
+                       "tool_network_scope_classes":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "enum":  [
+                                                                                     "none",
+                                                                                     "bounded_workspace",
+                                                                                     "approved_application",
+                                                                                     "arbitrary_local",
+                                                                                     "remote"
+                                                                                 ]
+                                                                    }
+                                                      },
+                       "catalog_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

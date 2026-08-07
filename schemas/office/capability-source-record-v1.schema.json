@@ -1,0 +1,227 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/capability-source-record-v1.schema.json",
+    "title":  "CapabilitySourceRecordV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "source_id",
+                     "source_kind",
+                     "source_name",
+                     "source_version",
+                     "source_revision",
+                     "source_content_sha256",
+                     "publisher_or_owner_id",
+                     "application_family_ids",
+                     "license_id",
+                     "license_source",
+                     "license_verified",
+                     "runtime_language_ids",
+                     "runtime_dependency_ids",
+                     "transport_class",
+                     "requires_network",
+                     "requires_local_application",
+                     "requires_python",
+                     "requires_node",
+                     "requires_com",
+                     "requires_admin",
+                     "exposes_arbitrary_code",
+                     "exposes_raw_filesystem",
+                     "exposes_network",
+                     "exposes_process_launch",
+                     "exposes_credentials",
+                     "known_security_advisory_ids",
+                     "tool_count",
+                     "tool_catalog_sha256",
+                     "assessment_status",
+                     "evidence_ids",
+                     "record_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "source_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "source_kind":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "official_api",
+                                                        "official_sdk",
+                                                        "public_mcp",
+                                                        "open_source_library",
+                                                        "public_skill",
+                                                        "manual_semantic_reference"
+                                                    ]
+                                       },
+                       "source_name":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512
+                                       },
+                       "source_version":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512
+                                          },
+                       "source_revision":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512
+                                           },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "publisher_or_owner_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "application_family_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                }
+                                                  },
+                       "license_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "license_source":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512
+                                          },
+                       "license_verified":  {
+                                                "type":  "boolean"
+                                            },
+                       "runtime_language_ids":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "minLength":  1,
+                                                                  "maxLength":  512,
+                                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                              }
+                                                },
+                       "runtime_dependency_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                }
+                                                  },
+                       "transport_class":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "documentation",
+                                                            "file_format",
+                                                            "stdio",
+                                                            "local_process",
+                                                            "com_automation",
+                                                            "remote_http"
+                                                        ]
+                                           },
+                       "requires_network":  {
+                                                "type":  "boolean"
+                                            },
+                       "requires_local_application":  {
+                                                          "type":  "boolean"
+                                                      },
+                       "requires_python":  {
+                                               "type":  "boolean"
+                                           },
+                       "requires_node":  {
+                                             "type":  "boolean"
+                                         },
+                       "requires_com":  {
+                                            "type":  "boolean"
+                                        },
+                       "requires_admin":  {
+                                              "type":  "boolean"
+                                          },
+                       "exposes_arbitrary_code":  {
+                                                      "type":  "boolean"
+                                                  },
+                       "exposes_raw_filesystem":  {
+                                                      "type":  "boolean"
+                                                  },
+                       "exposes_network":  {
+                                               "type":  "boolean"
+                                           },
+                       "exposes_process_launch":  {
+                                                      "type":  "boolean"
+                                                  },
+                       "exposes_credentials":  {
+                                                   "type":  "boolean"
+                                               },
+                       "known_security_advisory_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                     }
+                                                       },
+                       "tool_count":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "tool_catalog_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "assessment_status":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "research_only",
+                                                              "approved_as_reference",
+                                                              "approved_for_offline_conformance",
+                                                              "eligible_for_adapter_design",
+                                                              "rejected_for_runtime"
+                                                          ]
+                                             },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "record_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

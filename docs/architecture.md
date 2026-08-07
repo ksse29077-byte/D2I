@@ -641,3 +641,34 @@ deny redirects, deny ambient proxy, and no external connection. Production
 contracts require HTTPS and a separately deployed exact-destination policy for
 the connector executable. See ADR 0037 and
 `docs/execution-planes/enterprise-api-v1.md`.
+
+## General Office Capability and Artifact Workspace
+
+Track O starts with a quarantine boundary between public capability knowledge
+and execution. `CapabilitySourceRecordV1` pins source, revision, content hash,
+license, dependencies, exposure, advisories, and assessment. MCP catalogs are
+hash-only snapshots; `OfficeCapabilityCandidateV1` is always reference-only.
+No source status grants runtime approval, and no model can call an MCP server.
+Official application API/SDK documentation has higher authority than community
+tools.
+
+The workspace authority path is `semantic intent -> Policy -> one-shot
+activation -> KRN dispatcher -> executable-hash-bound file worker -> fresh
+filesystem verification`. The Cognitive plane sees artifact, workspace, and
+folder IDs plus bounded filenames. Only the trusted runtime resolves a signed
+local root binding. Network shares, removable media, symlinks, junctions,
+reparse points, traversal, device paths, ADS, and raw command/script arguments
+are rejected.
+
+Originals are immutable by default. Editing begins from a working copy;
+versions bind parent hash, source generation, receipt, Case, Role, and fresh
+verification. File writes use a durable temporary sibling and atomic move.
+External modification or lock-state change stops the operation and forces a
+fresh observation. The protected registry is content addressed, hash chained,
+single-writer, index-repairable, and rejects rollback or object mutation.
+
+Future HWP, Excel, and PowerPoint packs own application-specific planning and
+backend selection behind typed semantic operations. A worker is bound to one
+application, approved document, bounded Case, exact process/file identity, and
+exact semantic operation. Core contains no application-family branching. See
+ADR 0038 and `docs/office/general-office-capability-workspace-v1.md`.

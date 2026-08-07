@@ -66,13 +66,27 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. EDGE-100 is complete. The next active task is
-`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
+`-Fresh` discards them. EDGE-100 and OFFICE-100 are complete. The next active
+task is `D2I-OFFICE-200 - HWP/HWPX and Word Document Work`.
+
+## Track O - General Office Capability Expansion
+
+- `D2I-OFFICE-100` capability intake and artifact workspace - **complete**
+- `D2I-OFFICE-200` HWP/HWPX and Word document work - **active**
+- `D2I-OFFICE-300` Excel / spreadsheet work
+- `D2I-OFFICE-400` PowerPoint presentation work
+- `D2I-OFFICE-500` through `D2I-OFFICE-900` complete the general office loop
+
+Run OFFICE-100 deterministic gates with
+`scripts/office/run-office-capability-workspace-v1.ps1 -Mode All`. Completion
+adds sealed EDGE-100 predecessor verification and a fresh temporary-workspace
+A-J E2E. `-Resume`, `-Fresh`, and `-ReuseVerifiedPredecessorEvidence` use the
+shared Workforce checkpoint contract. No public MCP is downloaded or run.
 
 ## Track X - Execution Plane Expansion
 
 - `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **complete**
-- `D2I-EDGE-200` Sensor / Camera / IoT observation planes - **active**
+- `D2I-EDGE-200` Sensor / Camera / IoT observation planes
 - `D2I-EDGE-300` PLC / SCADA / OT supervised execution
 - `D2I-EDGE-400` Robot / AMR / Drone adapters
 

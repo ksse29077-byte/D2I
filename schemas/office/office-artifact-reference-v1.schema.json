@@ -1,0 +1,144 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/office-artifact-reference-v1.schema.json",
+    "title":  "OfficeArtifactReferenceV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "artifact_id",
+                     "workspace_id",
+                     "relative_path_token",
+                     "artifact_class",
+                     "file_format_id",
+                     "content_sha256",
+                     "byte_length",
+                     "creation_generation",
+                     "current_generation",
+                     "source_artifact_id",
+                     "parent_version_id",
+                     "immutable_original",
+                     "working_copy_state",
+                     "data_class_ids",
+                     "evidence_ids",
+                     "artifact_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "workspace_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "relative_path_token":  {
+                                                   "type":  "string",
+                                                   "minLength":  1,
+                                                   "maxLength":  512
+                                               },
+                       "artifact_class":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512
+                                          },
+                       "file_format_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                          },
+                       "content_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "byte_length":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  18446744073709551615
+                                       },
+                       "creation_generation":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "current_generation":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "source_artifact_id":  {
+                                                  "anyOf":  [
+                                                                {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                },
+                                                                {
+                                                                    "type":  "null"
+                                                                }
+                                                            ]
+                                              },
+                       "parent_version_id":  {
+                                                 "anyOf":  [
+                                                               {
+                                                                   "type":  "string",
+                                                                   "minLength":  1,
+                                                                   "maxLength":  512,
+                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                               },
+                                                               {
+                                                                   "type":  "null"
+                                                               }
+                                                           ]
+                                             },
+                       "immutable_original":  {
+                                                  "type":  "boolean"
+                                              },
+                       "working_copy_state":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "original",
+                                                               "working",
+                                                               "versioned",
+                                                               "verified_final"
+                                                           ]
+                                              },
+                       "data_class_ids":  {
+                                              "type":  "array",
+                                              "maxItems":  512,
+                                              "uniqueItems":  true,
+                                              "items":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                        }
+                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "artifact_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           }
+                   }
+}

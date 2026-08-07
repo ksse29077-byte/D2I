@@ -358,6 +358,7 @@ dependencies = [
  "d2i-intelligence-provider",
  "d2i-limited-autonomy",
  "d2i-module-sdk",
+ "d2i-office-capability",
  "d2i-policy-admission",
  "d2i-role-contract",
  "d2i-role-operations",
@@ -487,6 +488,17 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-office-capability"
+version = "0.9.0"
+dependencies = [
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
  "sha2",
 ]
 

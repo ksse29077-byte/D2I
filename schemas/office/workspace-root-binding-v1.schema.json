@@ -1,0 +1,80 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/workspace-root-binding-v1.schema.json",
+    "title":  "WorkspaceRootBindingV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "workspace_id",
+                     "canonical_root",
+                     "root_identity",
+                     "volume_identity",
+                     "security_descriptor_sha256",
+                     "reparse_forbidden",
+                     "symlink_forbidden",
+                     "network_share_allowed",
+                     "removable_media_allowed",
+                     "valid_from_unix_ms",
+                     "valid_until_unix_ms",
+                     "binding_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "workspace_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "canonical_root":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512
+                                          },
+                       "root_identity":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512
+                                         },
+                       "volume_identity":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512
+                                           },
+                       "security_descriptor_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "reparse_forbidden":  {
+                                                 "type":  "boolean"
+                                             },
+                       "symlink_forbidden":  {
+                                                 "type":  "boolean"
+                                             },
+                       "network_share_allowed":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "removable_media_allowed":  {
+                                                       "type":  "boolean"
+                                                   },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "valid_until_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

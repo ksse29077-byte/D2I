@@ -1,0 +1,128 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/workspace-observation-snapshot-v1.schema.json",
+    "title":  "WorkspaceObservationSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "observation_id",
+                     "workspace_id",
+                     "artifact_ids",
+                     "artifact_generations",
+                     "content_sha256s",
+                     "sizes",
+                     "formats",
+                     "lock_states",
+                     "write_states",
+                     "observed_at_unix_ms",
+                     "freshness_expires_at_unix_ms",
+                     "observation_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "observation_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                          },
+                       "workspace_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "artifact_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "artifact_generations":  {
+                                                    "type":  "array",
+                                                    "maxItems":  512,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "integer",
+                                                                  "minimum":  0,
+                                                                  "maximum":  18446744073709551615
+                                                              }
+                                                },
+                       "content_sha256s":  {
+                                               "type":  "array",
+                                               "maxItems":  512,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                             "maxLength":  71
+                                                         }
+                                           },
+                       "sizes":  {
+                                     "type":  "array",
+                                     "maxItems":  512,
+                                     "uniqueItems":  true,
+                                     "items":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               }
+                                 },
+                       "formats":  {
+                                       "type":  "array",
+                                       "maxItems":  512,
+                                       "uniqueItems":  true,
+                                       "items":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512
+                                                 }
+                                   },
+                       "lock_states":  {
+                                           "type":  "array",
+                                           "maxItems":  512,
+                                           "uniqueItems":  true,
+                                           "items":  {
+                                                         "type":  "string",
+                                                         "enum":  [
+                                                                      "unlocked",
+                                                                      "office_lock_present",
+                                                                      "external_write_lock"
+                                                                  ]
+                                                     }
+                                       },
+                       "write_states":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512
+                                                      }
+                                        },
+                       "observed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "freshness_expires_at_unix_ms":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  18446744073709551615
+                                                        },
+                       "observation_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              }
+                   }
+}

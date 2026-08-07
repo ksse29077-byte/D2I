@@ -1,0 +1,133 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/workspace-operation-binding-v1.schema.json",
+    "title":  "WorkspaceOperationBindingV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "binding_id",
+                     "role_contract_sha256",
+                     "role_instance_sha256",
+                     "case_sha256",
+                     "lease_sha256",
+                     "work_grant_sha256",
+                     "workspace_profile_sha256",
+                     "workspace_root_binding_sha256",
+                     "source_artifact_sha256",
+                     "source_generation",
+                     "operation_intent_sha256",
+                     "policy_decision_sha256",
+                     "cognitive_activation_admission_sha256",
+                     "expected_output_scope_token",
+                     "one_time_use_id",
+                     "expires_at_unix_ms",
+                     "binding_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "binding_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "role_instance_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "case_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                           "maxLength":  71
+                                       },
+                       "lease_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "work_grant_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "workspace_profile_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "workspace_root_binding_sha256":  {
+                                                             "type":  "string",
+                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                             "maxLength":  71
+                                                         },
+                       "source_artifact_sha256":  {
+                                                      "anyOf":  [
+                                                                    {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    },
+                                                                    {
+                                                                        "type":  "null"
+                                                                    }
+                                                                ]
+                                                  },
+                       "source_generation":  {
+                                                 "anyOf":  [
+                                                               {
+                                                                   "type":  "integer",
+                                                                   "minimum":  0,
+                                                                   "maximum":  18446744073709551615
+                                                               },
+                                                               {
+                                                                   "type":  "null"
+                                                               }
+                                                           ]
+                                             },
+                       "operation_intent_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "policy_decision_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "cognitive_activation_admission_sha256":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 },
+                       "expected_output_scope_token":  {
+                                                           "type":  "string",
+                                                           "minLength":  1,
+                                                           "maxLength":  512
+                                                       },
+                       "one_time_use_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

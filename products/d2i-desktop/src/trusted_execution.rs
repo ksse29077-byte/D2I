@@ -1250,6 +1250,9 @@ fn bind_adapter(
         AdapterKindV1::EnterpriseApi => Err(DesktopError::Precondition(
             "enterprise API activation cannot bind a Windows desktop adapter".to_owned(),
         )),
+        AdapterKindV1::OfficeWorkspace => Err(DesktopError::Precondition(
+            "office workspace activation cannot bind a Windows desktop adapter".to_owned(),
+        )),
     }
 }
 

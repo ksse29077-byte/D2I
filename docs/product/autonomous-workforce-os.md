@@ -195,13 +195,24 @@ state.
 - `D2I-WORK-800`: Open Digital Employee Shadow Mode. **Complete**
 - `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation. **Complete**
 
-**Track W is complete.** EDGE-100 is complete. The first active task is
-`D2I-EDGE-200`.
+**Track W is complete.** EDGE-100 is complete.
+
+### Track O - General Office Capability Expansion
+
+- `D2I-OFFICE-100`: Capability source intake and artifact workspace. **Complete**
+- `D2I-OFFICE-200`: HWP/HWPX and Word document work. **First active**
+- `D2I-OFFICE-300`: Excel / spreadsheet work.
+- `D2I-OFFICE-400`: PowerPoint presentation work.
+- `D2I-OFFICE-500`: PDF and document interchange.
+- `D2I-OFFICE-600`: Browser research and controlled download.
+- `D2I-OFFICE-700`: Email, messenger, review, and feedback loop.
+- `D2I-OFFICE-800`: Long-horizon multi-application project work.
+- `D2I-OFFICE-900`: General Office Digital Employee E2E.
 
 ### Track X - Execution Plane Expansion
 
 - `D2I-EDGE-100`: Enterprise API / ERP / MES / CMMS planes. **Complete**
-- `D2I-EDGE-200`: Sensor / Camera / IoT observation planes. **First active**
+- `D2I-EDGE-200`: Sensor / Camera / IoT observation planes.
 - `D2I-EDGE-300`: PLC / SCADA / OT supervised execution.
 - `D2I-EDGE-400`: Robot / AMR / Drone adapters.
 
@@ -219,6 +230,13 @@ It exposes closed semantic operations rather than arbitrary HTTP. Credentials
 remain opaque outside a trusted worker, and a mutation closes only after fresh
 remote verification. EDGE-100 reference evidence uses a hermetic loopback
 system and does not claim vendor or customer production certification.
+
+The General Office capability track precedes further physical execution-plane
+expansion because ordinary office work depends on safe document discovery,
+working copies, versions, provenance, and application-neutral semantic
+operations. Public skills and MCP servers are untrusted design inputs, never
+direct model execution authority. Official application APIs and SDKs remain
+the primary authority for later HWP, Excel, and PowerPoint packs.
 
 ## 19. Non-goals and Safety Boundaries
 

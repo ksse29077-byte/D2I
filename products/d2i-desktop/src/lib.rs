@@ -16,6 +16,7 @@ mod episodic_memory;
 mod executor;
 mod limited_autonomy;
 mod local_model_provider;
+mod office_workspace;
 mod policy;
 mod role_instance;
 mod role_operations;
@@ -168,6 +169,16 @@ pub use limited_autonomy::{
 pub use local_model_provider::{
     local_model_worker_main, LocalModelInvocationMetricsV1, LocalModelProcessConfigurationV1,
     LocalModelProcessProvider, VerifiedLocalModelArtifactsV1,
+};
+pub use office_workspace::{
+    artifact_reference_from_file, classify_workspace_operation_recovery,
+    create_workspace_root_binding, execute_file_worker_request, initialize_office_workspace_store,
+    observe_artifacts, office_file_worker_main, recover_office_workspace_store,
+    ArtifactReferenceInputV1, OfficeFileWorkerOperationV1, OfficeFileWorkerRequestV1,
+    OfficeFileWorkerResponseV1, OfficeWorkspaceAuthorityContextV1, OfficeWorkspaceDispatchV1,
+    OfficeWorkspaceKrnDispatcherV1, OfficeWorkspaceStore, OfficeWorkspaceStoreRecordV1,
+    OfficeWorkspaceStoreVerificationV1, WorkspaceRecoveryDispositionV1, WorkspaceRecoveryProbeV1,
+    OFFICE_WORKSPACE_STORE_SCHEMA_VERSION,
 };
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,

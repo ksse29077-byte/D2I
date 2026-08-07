@@ -1,0 +1,168 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/office-capability-candidate-v1.schema.json",
+    "title":  "OfficeCapabilityCandidateV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "candidate_id",
+                     "source_record_sha256",
+                     "source_tool_id",
+                     "application_family_id",
+                     "proposed_capability_id",
+                     "proposed_semantic_operation_id",
+                     "side_effect_class",
+                     "required_observation_class_ids",
+                     "required_precondition_ids",
+                     "required_postcondition_ids",
+                     "filesystem_scope",
+                     "application_scope",
+                     "risk_class",
+                     "prohibited_argument_classes",
+                     "reference_only",
+                     "evidence_ids",
+                     "candidate_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "candidate_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "source_record_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "source_tool_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                          },
+                       "application_family_id":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                 },
+                       "proposed_capability_id":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512,
+                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                  },
+                       "proposed_semantic_operation_id":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          },
+                       "side_effect_class":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "read_only",
+                                                              "file_mutation",
+                                                              "application_mutation",
+                                                              "process_execution",
+                                                              "arbitrary_code"
+                                                          ]
+                                             },
+                       "required_observation_class_ids":  {
+                                                              "type":  "array",
+                                                              "maxItems":  512,
+                                                              "uniqueItems":  true,
+                                                              "items":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                        }
+                                                          },
+                       "required_precondition_ids":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                   }
+                                                     },
+                       "required_postcondition_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "filesystem_scope":  {
+                                                "type":  "string",
+                                                "enum":  [
+                                                             "none",
+                                                             "bounded_workspace",
+                                                             "approved_application",
+                                                             "arbitrary_local",
+                                                             "remote"
+                                                         ]
+                                            },
+                       "application_scope":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "none",
+                                                              "bounded_workspace",
+                                                              "approved_application",
+                                                              "arbitrary_local",
+                                                              "remote"
+                                                          ]
+                                             },
+                       "risk_class":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "read_only",
+                                                       "reversible",
+                                                       "business_state_change",
+                                                       "high"
+                                                   ]
+                                      },
+                       "prohibited_argument_classes":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512
+                                                                     }
+                                                       },
+                       "reference_only":  {
+                                              "type":  "boolean"
+                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "candidate_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            }
+                   }
+}

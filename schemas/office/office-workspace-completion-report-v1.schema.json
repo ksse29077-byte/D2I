@@ -1,0 +1,326 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/office-workspace-completion-report-v1.schema.json",
+    "title":  "OfficeWorkspaceCompletionReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "complete",
+                     "office_capability_foundation_evidence",
+                     "office_workspace_evidence",
+                     "track_o_started",
+                     "source_tree_sha256",
+                     "predecessor_finished_sha256",
+                     "source_assessment_count",
+                     "excel_source_count",
+                     "powerpoint_source_count",
+                     "hwp_source_count",
+                     "official_source_count",
+                     "mcp_catalog_count",
+                     "rejected_runtime_source_count",
+                     "eligible_adapter_design_count",
+                     "workspace_cases",
+                     "routine_verified",
+                     "human_exceptions",
+                     "artifact_count",
+                     "operation_count",
+                     "version_count",
+                     "provenance_count",
+                     "stale_recoveries",
+                     "path_escape_count",
+                     "wrong_file_count",
+                     "original_overwrite_count",
+                     "duplicate_mutation_count",
+                     "stale_write_count",
+                     "reparse_escape_count",
+                     "symlink_escape_count",
+                     "raw_absolute_path_in_model_context_count",
+                     "arbitrary_command_count",
+                     "arbitrary_code_execution_count",
+                     "credential_leak_count",
+                     "network_access_count",
+                     "false_completion_count",
+                     "critical_error_count",
+                     "list_latency_microseconds",
+                     "hash_latency_microseconds",
+                     "copy_latency_microseconds",
+                     "rename_latency_microseconds",
+                     "move_latency_microseconds",
+                     "version_commit_latency_microseconds",
+                     "verification_latency_microseconds",
+                     "bytes_processed",
+                     "peak_memory_bytes",
+                     "replay_report_sha256",
+                     "protected_audit_terminal_sha256",
+                     "residual_process_count",
+                     "residual_profile_count",
+                     "residual_lock_count",
+                     "residual_store_count",
+                     "finished_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "complete":  {
+                                        "type":  "boolean"
+                                    },
+                       "office_capability_foundation_evidence":  {
+                                                                     "type":  "boolean"
+                                                                 },
+                       "office_workspace_evidence":  {
+                                                         "type":  "boolean"
+                                                     },
+                       "track_o_started":  {
+                                               "type":  "boolean"
+                                           },
+                       "source_tree_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "predecessor_finished_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "source_assessment_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "excel_source_count":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "powerpoint_source_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "hwp_source_count":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "official_source_count":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "mcp_catalog_count":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "rejected_runtime_source_count":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "eligible_adapter_design_count":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "workspace_cases":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "routine_verified":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "human_exceptions":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "artifact_count":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "operation_count":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "version_count":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "provenance_count":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "stale_recoveries":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "path_escape_count":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "wrong_file_count":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "original_overwrite_count":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "duplicate_mutation_count":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "stale_write_count":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "reparse_escape_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "symlink_escape_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "raw_absolute_path_in_model_context_count":  {
+                                                                        "type":  "integer",
+                                                                        "minimum":  0,
+                                                                        "maximum":  4294967295
+                                                                    },
+                       "arbitrary_command_count":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "arbitrary_code_execution_count":  {
+                                                              "type":  "integer",
+                                                              "minimum":  0,
+                                                              "maximum":  4294967295
+                                                          },
+                       "credential_leak_count":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "network_access_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "false_completion_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "critical_error_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "list_latency_microseconds":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "hash_latency_microseconds":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "copy_latency_microseconds":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "rename_latency_microseconds":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  18446744073709551615
+                                                       },
+                       "move_latency_microseconds":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "version_commit_latency_microseconds":  {
+                                                                   "type":  "integer",
+                                                                   "minimum":  0,
+                                                                   "maximum":  18446744073709551615
+                                                               },
+                       "verification_latency_microseconds":  {
+                                                                 "type":  "integer",
+                                                                 "minimum":  0,
+                                                                 "maximum":  18446744073709551615
+                                                             },
+                       "bytes_processed":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  18446744073709551615
+                                           },
+                       "peak_memory_bytes":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  18446744073709551615
+                                             },
+                       "replay_report_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "protected_audit_terminal_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                               "maxLength":  71
+                                                           },
+                       "residual_process_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "residual_profile_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "residual_lock_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "residual_store_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "finished_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           }
+                   }
+}

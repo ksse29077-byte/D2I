@@ -415,7 +415,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`
+`D2I-OFFICE-200 - HWP/HWPX and Word Document Work`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -577,4 +577,31 @@ deployment still requires an approved vendor/customer Connector Pack,
 credential broker integration, production HTTPS transport, and an exact
 destination policy bound to the connector worker executable. No direct
 database path, external communication, background service, or EDGE-200 sensor
-work was added. EDGE-200 is now the first active task.
+work was added.
+
+## OFFICE-100 General Office Capability and Artifact Workspace
+
+OFFICE-100 starts Track O ahead of the remaining physical execution planes.
+The platform-neutral `d2i-office-capability` crate defines strict source,
+catalog, capability-candidate, signed workspace, artifact, observation,
+operation, provenance, replay, completion, and certification contracts. Fifteen
+official/community sources are exact-revision locked: Excel, PowerPoint, and
+HWP/HWPX each include an official authority and multiple public MCP design
+references. Public MCPs remain reference-only or rejected for runtime; none is
+downloaded or executed by production.
+
+The Desktop implementation binds a current-user/SYSTEM hardened local root,
+signed profile, exact source hash/generation, Policy admission, one-shot
+activation, and a hidden executable-hash-bound file worker. Cognitive
+artifacts contain relative tokens and artifact IDs, never raw absolute paths.
+The actual synthetic A-J E2E verifies discovery, working copy, Korean rename,
+generation 1-to-2 commit, move to output, stale recovery, traversal and
+junction rejection, immutable-original denial, Office lock denial, and replay
+denial. It also verifies content-addressed protected persistence, crash windows
+A-H, 128 scenarios x 100 deterministic replay, fresh post-operation evidence,
+signed certification, and zero temporary process/profile/lock/store residue.
+
+OFFICE-100 does not edit HWP, Excel, or PowerPoint content and adds no browser
+download, network share, email, messenger, production Python, or public MCP
+execution. The first active task is `D2I-OFFICE-200 - HWP/HWPX and Word
+Document Work`.

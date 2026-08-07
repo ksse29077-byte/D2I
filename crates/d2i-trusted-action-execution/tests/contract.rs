@@ -79,6 +79,9 @@ impl OperationFixture {
             AdapterKindV1::EnterpriseApi => {
                 panic!("desktop trusted-execution fixture cannot use enterprise API")
             }
+            AdapterKindV1::OfficeWorkspace => {
+                panic!("desktop trusted-execution fixture cannot use office workspace")
+            }
         }
     }
 
@@ -814,6 +817,9 @@ fn native_grounded_action_arguments_are_bound_without_weakening_fixture_compatib
             AdapterKindV1::WebDriver => ObservationSourceKind::WebDriver,
             AdapterKindV1::EnterpriseApi => {
                 panic!("desktop trusted-execution fixture cannot use enterprise API")
+            }
+            AdapterKindV1::OfficeWorkspace => {
+                panic!("desktop trusted-execution fixture cannot use office workspace")
             }
         };
         let mut target = GroundedTargetBindingV1 {

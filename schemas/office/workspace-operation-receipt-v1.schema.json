@@ -1,0 +1,181 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/workspace-operation-receipt-v1.schema.json",
+    "title":  "WorkspaceOperationReceiptV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "receipt_id",
+                     "operation_intent_sha256",
+                     "binding_sha256",
+                     "source_artifact_sha256",
+                     "source_generation",
+                     "destination_artifact_sha256",
+                     "destination_generation",
+                     "operation_class",
+                     "status",
+                     "structured_result_code",
+                     "bytes_processed",
+                     "atomic_commit",
+                     "old_identity_sha256",
+                     "new_identity_sha256",
+                     "started_at_unix_ms",
+                     "completed_at_unix_ms",
+                     "verification_sha256",
+                     "receipt_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "receipt_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "operation_intent_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "source_artifact_sha256":  {
+                                                      "anyOf":  [
+                                                                    {
+                                                                        "type":  "string",
+                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                        "maxLength":  71
+                                                                    },
+                                                                    {
+                                                                        "type":  "null"
+                                                                    }
+                                                                ]
+                                                  },
+                       "source_generation":  {
+                                                 "anyOf":  [
+                                                               {
+                                                                   "type":  "integer",
+                                                                   "minimum":  0,
+                                                                   "maximum":  18446744073709551615
+                                                               },
+                                                               {
+                                                                   "type":  "null"
+                                                               }
+                                                           ]
+                                             },
+                       "destination_artifact_sha256":  {
+                                                           "anyOf":  [
+                                                                         {
+                                                                             "type":  "string",
+                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                             "maxLength":  71
+                                                                         },
+                                                                         {
+                                                                             "type":  "null"
+                                                                         }
+                                                                     ]
+                                                       },
+                       "destination_generation":  {
+                                                      "anyOf":  [
+                                                                    {
+                                                                        "type":  "integer",
+                                                                        "minimum":  0,
+                                                                        "maximum":  18446744073709551615
+                                                                    },
+                                                                    {
+                                                                        "type":  "null"
+                                                                    }
+                                                                ]
+                                                  },
+                       "operation_class":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "list_artifacts",
+                                                            "inspect_artifact",
+                                                            "create_folder",
+                                                            "import_artifact",
+                                                            "create_working_copy",
+                                                            "copy_artifact",
+                                                            "rename_artifact",
+                                                            "move_artifact",
+                                                            "commit_version",
+                                                            "export_copy",
+                                                            "restore_version",
+                                                            "compare_identity"
+                                                        ]
+                                           },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "verified",
+                                                   "rejected",
+                                                   "stale",
+                                                   "locked",
+                                                   "recovery_required"
+                                               ]
+                                  },
+                       "structured_result_code":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512
+                                                  },
+                       "bytes_processed":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  18446744073709551615
+                                           },
+                       "atomic_commit":  {
+                                             "type":  "boolean"
+                                         },
+                       "old_identity_sha256":  {
+                                                   "anyOf":  [
+                                                                 {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 },
+                                                                 {
+                                                                     "type":  "null"
+                                                                 }
+                                                             ]
+                                               },
+                       "new_identity_sha256":  {
+                                                   "anyOf":  [
+                                                                 {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 },
+                                                                 {
+                                                                     "type":  "null"
+                                                                 }
+                                                             ]
+                                               },
+                       "started_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "completed_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "verification_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

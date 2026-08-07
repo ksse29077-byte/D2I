@@ -1,0 +1,159 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/office/workspace-operation-intent-v1.schema.json",
+    "title":  "WorkspaceOperationIntentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "intent_id",
+                     "workspace_id",
+                     "operation",
+                     "source_artifact_id",
+                     "destination_folder_id",
+                     "destination_filename",
+                     "approved_content_sha256",
+                     "expected_source_content_sha256",
+                     "expected_source_generation",
+                     "case_id",
+                     "role_instance_id",
+                     "evidence_ids",
+                     "intent_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "intent_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "workspace_id":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  512,
+                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                        },
+                       "operation":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "list_artifacts",
+                                                      "inspect_artifact",
+                                                      "create_folder",
+                                                      "import_artifact",
+                                                      "create_working_copy",
+                                                      "copy_artifact",
+                                                      "rename_artifact",
+                                                      "move_artifact",
+                                                      "commit_version",
+                                                      "export_copy",
+                                                      "restore_version",
+                                                      "compare_identity"
+                                                  ]
+                                     },
+                       "source_artifact_id":  {
+                                                  "anyOf":  [
+                                                                {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                },
+                                                                {
+                                                                    "type":  "null"
+                                                                }
+                                                            ]
+                                              },
+                       "destination_folder_id":  {
+                                                     "anyOf":  [
+                                                                   {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                   },
+                                                                   {
+                                                                       "type":  "null"
+                                                                   }
+                                                               ]
+                                                 },
+                       "destination_filename":  {
+                                                    "anyOf":  [
+                                                                  {
+                                                                      "type":  "string",
+                                                                      "minLength":  1,
+                                                                      "maxLength":  512
+                                                                  },
+                                                                  {
+                                                                      "type":  "null"
+                                                                  }
+                                                              ]
+                                                },
+                       "approved_content_sha256":  {
+                                                       "anyOf":  [
+                                                                     {
+                                                                         "type":  "string",
+                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                         "maxLength":  71
+                                                                     },
+                                                                     {
+                                                                         "type":  "null"
+                                                                     }
+                                                                 ]
+                                                   },
+                       "expected_source_content_sha256":  {
+                                                              "anyOf":  [
+                                                                            {
+                                                                                "type":  "string",
+                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                "maxLength":  71
+                                                                            },
+                                                                            {
+                                                                                "type":  "null"
+                                                                            }
+                                                                        ]
+                                                          },
+                       "expected_source_generation":  {
+                                                          "anyOf":  [
+                                                                        {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  18446744073709551615
+                                                                        },
+                                                                        {
+                                                                            "type":  "null"
+                                                                        }
+                                                                    ]
+                                                      },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "role_instance_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "intent_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

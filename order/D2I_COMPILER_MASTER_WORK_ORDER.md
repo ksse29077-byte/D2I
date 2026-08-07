@@ -18,8 +18,9 @@ Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
 Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. Track W and EDGE-100 are complete. The active next task is
-`D2I-EDGE-200 - Sensor / Camera / IoT observation planes`.
+runtime boundaries. Track W, EDGE-100, and OFFICE-100 are complete. Track O now
+has priority over the remaining physical execution planes. The active next
+task is `D2I-OFFICE-200 - HWP/HWPX and Word Document Work`.
 
 WORK-700 is governed by ADR 0034 and
 `docs/workforce/role-reporting-sla-escalation-v1.md`. It preserves immutable
@@ -43,6 +44,12 @@ format, runtime ABI, vendor taxonomy, or direct database path. Signed Connector
 Packs and approvals are non-executable configuration evidence. Existing Policy,
 one-shot activation, and KRN remain the only mutation authority, and fresh
 remote observation remains the closure gate.
+
+OFFICE-100 is governed by ADR 0038 and
+`docs/office/general-office-capability-workspace-v1.md`. It changes no Compiler
+IR, package format, or runtime ABI. Public skills and MCP servers remain pinned
+untrusted research inputs. D2I-owned semantic contracts, Policy, activation,
+and a bounded trusted worker remain the only route to local file mutation.
 
 ## Product Context
 
