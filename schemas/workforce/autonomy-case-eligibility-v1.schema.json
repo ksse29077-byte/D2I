@@ -1,0 +1,184 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/autonomy-case-eligibility-v1.schema.json",
+    "title":  "AutonomyCaseEligibilityV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "eligibility_id",
+                     "role_instance_sha256",
+                     "autonomy_state_sha256",
+                     "deployment_approval_sha256",
+                     "autonomy_profile_sha256",
+                     "readiness_binding_sha256",
+                     "case_contract_sha256",
+                     "current_case_instance_sha256",
+                     "current_ownership_sha256",
+                     "queue_entry_sha256",
+                     "active_lease_sha256",
+                     "work_item_sha256",
+                     "source_approval_sha256",
+                     "work_class_id",
+                     "requested_capability_ids",
+                     "requested_semantic_target_ids",
+                     "risk_class",
+                     "policy_set_sha256",
+                     "health_snapshot_sha256",
+                     "evaluated_at_unix_ms",
+                     "status",
+                     "reason_codes",
+                     "eligibility_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "eligibility_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "role_instance_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "autonomy_state_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "deployment_approval_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "autonomy_profile_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "readiness_binding_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "case_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "current_case_instance_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "current_ownership_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "queue_entry_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "active_lease_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                   "maxLength":  71
+                                               },
+                       "work_item_sha256":  {
+                                                "type":  "string",
+                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                "maxLength":  71
+                                            },
+                       "source_approval_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "work_class_id":  {
+                                             "type":  "string",
+                                             "minLength":  1,
+                                             "maxLength":  512,
+                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                         },
+                       "requested_capability_ids":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "minLength":  1,
+                                                                      "maxLength":  512,
+                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                  }
+                                                    },
+                       "requested_semantic_target_ids":  {
+                                                             "type":  "array",
+                                                             "maxItems":  512,
+                                                             "uniqueItems":  true,
+                                                             "items":  {
+                                                                           "type":  "string",
+                                                                           "minLength":  1,
+                                                                           "maxLength":  512,
+                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                       }
+                                                         },
+                       "risk_class":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "read_only",
+                                                       "reversible",
+                                                       "business_state_change",
+                                                       "high_criticality"
+                                                   ]
+                                      },
+                       "policy_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "health_snapshot_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "evaluated_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "eligible",
+                                                   "human_confirmation_required",
+                                                   "human_exception_required",
+                                                   "not_eligible",
+                                                   "autonomy_paused",
+                                                   "out_of_scope",
+                                                   "expired"
+                                               ]
+                                  },
+                       "reason_codes":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "eligibility_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              }
+                   }
+}

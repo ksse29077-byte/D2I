@@ -95,6 +95,7 @@ enum ScenarioMode {
     Recovery,
     Unsafe,
     Clarification,
+    PausedAfterSet,
 }
 
 impl ScenarioMode {
@@ -105,9 +106,9 @@ impl ScenarioMode {
             "recovery" => Ok(Self::Recovery),
             "unsafe" => Ok(Self::Unsafe),
             "clarification" => Ok(Self::Clarification),
+            "paused_after_set" => Ok(Self::PausedAfterSet),
             _ => Err(
-                "mode must be happy, already_correct, recovery, unsafe, or clarification"
-                    .to_owned(),
+                "mode must be happy, already_correct, recovery, unsafe, clarification, or paused_after_set".to_owned(),
             ),
         }
     }
@@ -119,6 +120,7 @@ impl ScenarioMode {
             Self::Recovery => "recovery",
             Self::Unsafe => "unsafe",
             Self::Clarification => "clarification",
+            Self::PausedAfterSet => "happy",
         }
     }
 
@@ -127,6 +129,7 @@ impl ScenarioMode {
             Self::Happy | Self::AlreadyCorrect | Self::Recovery => KernelFinalOutcomeV1::Completed,
             Self::Unsafe => KernelFinalOutcomeV1::Escalated,
             Self::Clarification => KernelFinalOutcomeV1::ClarificationRequired,
+            Self::PausedAfterSet => KernelFinalOutcomeV1::Stopped,
         }
     }
 }
@@ -916,7 +919,11 @@ fn module_invocation(
     Ok(invocation)
 }
 
-fn authenticated_instruction(now_ms: u64) -> Result<AuthenticatedTaskInstructionV1, DesktopError> {
+fn authenticated_instruction(
+    now_ms: u64,
+    authenticated_role_id: &str,
+    organization_id: &str,
+) -> Result<AuthenticatedTaskInstructionV1, DesktopError> {
     let instruction_text = concat!(
         "목표: 로컬 직원 등록 폼의 이름을 D2I-E2E-VERIFIED-NAME으로 변경하고 저장\n",
         "범위: D2I WinForms E2E 테스트 애플리케이션\n",
@@ -929,8 +936,8 @@ fn authenticated_instruction(now_ms: u64) -> Result<AuthenticatedTaskInstruction
         locale: "ko-KR".to_owned(),
         source_id: "authenticated-local-e2e".to_owned(),
         authenticated_actor_id: ACTOR_ID.to_owned(),
-        authenticated_role_id: ROLE_ID.to_owned(),
-        organization_id: ORGANIZATION_ID.to_owned(),
+        authenticated_role_id: authenticated_role_id.to_owned(),
+        organization_id: organization_id.to_owned(),
         instruction_text: instruction_text.to_owned(),
         structured_success_criteria: vec![
             Postcondition {
@@ -1495,9 +1502,9 @@ fn policy_artifacts(
     let authority = DelegatedAuthorityContextV1 {
         schema_version: POLICY_ADMISSION_SCHEMA_VERSION,
         authority_id: "authority-kernel-e2e".to_owned(),
-        organization_id: ORGANIZATION_ID.to_owned(),
+        organization_id: instruction.organization_id.clone(),
         actor_id: ACTOR_ID.to_owned(),
-        role_id: ROLE_ID.to_owned(),
+        role_id: instruction.authenticated_role_id.clone(),
         policy_set_id: "policy-set-kernel-e2e".to_owned(),
         policy_set_version: "1.0.0".to_owned(),
         policy_set_sha256: digest("kernel-e2e-policy-set"),
@@ -1526,7 +1533,7 @@ fn policy_artifacts(
         policy_set_id: "policy-set-kernel-e2e".to_owned(),
         policy_set_version: "1.0.0".to_owned(),
         policy_set_sha256: digest("kernel-e2e-policy-set"),
-        organization_id: ORGANIZATION_ID.to_owned(),
+        organization_id: instruction.organization_id.clone(),
         policy_state: TrustedPolicyStateV1::Effective,
         allowed_risk_classes: vec![
             CognitiveRiskClass::ReadOnly,
@@ -1557,7 +1564,7 @@ fn policy_artifacts(
     let eligibility = ActivationEligibilityContextV1 {
         schema_version: POLICY_ADMISSION_SCHEMA_VERSION,
         eligibility_id: format!("eligibility-{label}"),
-        organization_id: ORGANIZATION_ID.to_owned(),
+        organization_id: instruction.organization_id.clone(),
         integration_id: activation.integration_id.clone(),
         application_pack_sha256: ready.application_pack_sha256.clone(),
         runtime_binding_id: activation.binding_id.clone(),
@@ -1597,8 +1604,8 @@ fn policy_artifacts(
             policy_ready_sha256: decision.policy_ready_sha256.clone(),
             proposal_sha256: decision.proposal_sha256.clone(),
             confirming_actor_id: ACTOR_ID.to_owned(),
-            confirming_role_id: ROLE_ID.to_owned(),
-            organization_id: ORGANIZATION_ID.to_owned(),
+            confirming_role_id: instruction.authenticated_role_id.clone(),
+            organization_id: instruction.organization_id.clone(),
             granted_at_unix_seconds: now.saturating_add(1),
             expires_at_unix_seconds: now.saturating_add(120),
             confirmation_proof_sha256: instruction.instruction_sha256.clone(),
@@ -1894,7 +1901,7 @@ fn run_action_cycle(
         runtime_package_sha256: digest("kernel-e2e-runtime-package"),
         generated_at_unix_ms: now_ms.saturating_add(1_000),
         expires_at_unix_ms: now_ms.saturating_add(120_000),
-        expected_organization_id: ORGANIZATION_ID.to_owned(),
+        expected_organization_id: instruction.organization_id.clone(),
         expected_integration_id: platform_activation.integration_id.clone(),
         expected_adapter_kind: AdapterKindV1::Uia,
         expected_activation_ledger_id: platform_activation.activation_ledger_id.clone(),
@@ -2679,6 +2686,8 @@ fn build_final_verification(
                 "criterion-passed"
             } else if mode == ScenarioMode::Clarification {
                 "clarification-blocked"
+            } else if mode == ScenarioMode::PausedAfterSet {
+                "operator-pause-blocked"
             } else {
                 "criterion-failed"
             },
@@ -2731,6 +2740,7 @@ fn build_final_verification(
         }
         ScenarioMode::Unsafe => FinalVerificationVerdictV1::Unsafe,
         ScenarioMode::Clarification => FinalVerificationVerdictV1::ClarificationRequired,
+        ScenarioMode::PausedAfterSet => FinalVerificationVerdictV1::Failed,
         ScenarioMode::Happy | ScenarioMode::AlreadyCorrect | ScenarioMode::Recovery => {
             FinalVerificationVerdictV1::Failed
         }
@@ -2785,6 +2795,7 @@ fn build_work_report(
         }
         ScenarioMode::Unsafe => vec!["protected-invariant-violation".to_owned()],
         ScenarioMode::Clarification => vec!["ambiguous-employee-name-target".to_owned()],
+        ScenarioMode::PausedAfterSet => vec!["operator-pause-before-save".to_owned()],
         ScenarioMode::Happy | ScenarioMode::AlreadyCorrect | ScenarioMode::Recovery => {
             vec!["final-goal-verification-failed".to_owned()]
         }
@@ -2808,7 +2819,10 @@ fn build_work_report(
         opinions: Vec::new(),
         opinion_basis: Vec::new(),
         uncertainties: Vec::new(),
-        user_decision_required: matches!(mode, ScenarioMode::Unsafe | ScenarioMode::Clarification),
+        user_decision_required: matches!(
+            mode,
+            ScenarioMode::Unsafe | ScenarioMode::Clarification | ScenarioMode::PausedAfterSet
+        ),
         build_id: KERNEL_TASK_RUNTIME_BUILD_ID.to_owned(),
         module_ids: vec![
             "cognitive-recovery-control-v1".to_owned(),
@@ -2832,10 +2846,14 @@ fn build_work_report(
                 logical_tick: 90,
             },
         ],
-        warnings: if mode == ScenarioMode::Unsafe {
-            vec!["automatic-retry-blocked-after-unsafe-verdict".to_owned()]
-        } else {
-            Vec::new()
+        warnings: match mode {
+            ScenarioMode::Unsafe => {
+                vec!["automatic-retry-blocked-after-unsafe-verdict".to_owned()]
+            }
+            ScenarioMode::PausedAfterSet => {
+                vec!["next-action-blocked-by-operator-pause".to_owned()]
+            }
+            _ => Vec::new(),
         },
     };
     report.validate()?;
@@ -3013,13 +3031,40 @@ fn prepare_role_binding(
         .iter()
         .find(|binding| binding.application_pack_id == pack.pack_id)
         .ok_or_else(|| DesktopError::AccessDenied("Role does not bind the KRN pack".to_owned()))?;
+    let work_class = contract
+        .accepted_work_classes
+        .iter()
+        .find(|work_class| {
+            work_class
+                .required_application_pack_ids
+                .iter()
+                .any(|value| value == &pack.pack_id)
+                && work_class
+                    .required_integration_ids
+                    .iter()
+                    .any(|value| value == INTEGRATION_ID)
+        })
+        .ok_or_else(|| {
+            DesktopError::AccessDenied("Role does not bind a KRN work class".to_owned())
+        })?;
+    let required_capabilities = vec!["uia.invoke".to_owned(), "uia.set_value".to_owned()];
+    let required_targets = vec!["employee_name_input".to_owned(), "save_button".to_owned()];
     if application.application_pack_sha256 != pack.pack_sha256
         || !application
             .integration_ids
             .iter()
             .any(|value| value == INTEGRATION_ID)
-        || contract.role_contract_id != ROLE_ID
-        || contract.organization_scope.organization_id != ORGANIZATION_ID
+        || !required_capabilities
+            .iter()
+            .all(|value| application.allowed_capability_ids.contains(value))
+        || !required_capabilities
+            .iter()
+            .all(|value| work_class.required_capability_ids.contains(value))
+        || !required_targets
+            .iter()
+            .all(|value| application.allowed_semantic_target_ids.contains(value))
+        || instruction.authenticated_role_id != contract.role_contract_id
+        || instruction.organization_id != contract.organization_scope.organization_id
     {
         return Err(DesktopError::AccessDenied(
             "Role source does not exactly bind the KRN fixture".to_owned(),
@@ -3032,7 +3077,7 @@ fn prepare_role_binding(
         RoleContractApprovalV1 {
             schema_version: ROLE_CONTRACT_SCHEMA_VERSION,
             approval_id: "kernel-e2e-role-approval".to_owned(),
-            organization_id: ORGANIZATION_ID.to_owned(),
+            organization_id: contract.organization_scope.organization_id.clone(),
             role_contract_id: contract.role_contract_id.clone(),
             role_version: contract.role_version.clone(),
             contract_sha256: contract.contract_sha256.clone(),
@@ -3053,22 +3098,25 @@ fn prepare_role_binding(
         RoleDelegationGrantV1 {
             schema_version: ROLE_CONTRACT_SCHEMA_VERSION,
             delegation_id: "kernel-e2e-role-delegation".to_owned(),
-            organization_id: ORGANIZATION_ID.to_owned(),
+            organization_id: contract.organization_scope.organization_id.clone(),
             role_instance_id: ACTOR_ID.to_owned(),
             role_contract_id: contract.role_contract_id.clone(),
             role_version: contract.role_version.clone(),
             contract_sha256: contract.contract_sha256.clone(),
             approval_sha256: approval.approval_sha256.clone(),
             delegated_scope: contract.organization_scope.clone(),
-            delegated_work_class_ids: vec!["workforce.kernel_e2e.name_save".to_owned()],
+            delegated_work_class_ids: vec![work_class.work_class_id.clone()],
             delegated_application_pack_ids: vec![pack.pack_id.clone()],
             delegated_integration_ids: vec![INTEGRATION_ID.to_owned()],
-            delegated_capability_ids: vec!["uia.invoke".to_owned(), "uia.set_value".to_owned()],
-            autonomous_capability_ids: vec!["uia.set_value".to_owned()],
-            confirmation_capability_ids: vec!["uia.invoke".to_owned()],
-            prohibited_capability_ids: vec!["uia.set_protected".to_owned()],
-            maximum_autonomous_risk: CognitiveRiskClass::Reversible,
-            maximum_confirmable_risk: CognitiveRiskClass::BusinessStateChange,
+            delegated_capability_ids: required_capabilities.clone(),
+            autonomous_capability_ids: contract.capability_policy.autonomous_capability_ids.clone(),
+            confirmation_capability_ids: contract
+                .capability_policy
+                .confirmation_capability_ids
+                .clone(),
+            prohibited_capability_ids: contract.capability_policy.prohibited_capability_ids.clone(),
+            maximum_autonomous_risk: contract.risk_policy.maximum_autonomous_risk,
+            maximum_confirmable_risk: contract.risk_policy.maximum_confirmable_risk,
             policy_set_sha256: contract.policy_set_sha256.clone(),
             valid_from_unix_seconds: now.saturating_sub(60).max(1),
             expires_at_unix_seconds: now.saturating_add(600),
@@ -3183,7 +3231,7 @@ fn prepare_role_binding(
         policy_set_id: contract.policy_set_id.clone(),
         policy_set_version: contract.policy_set_version.clone(),
         policy_set_sha256: contract.policy_set_sha256.clone(),
-        organization_id: ORGANIZATION_ID.to_owned(),
+        organization_id: contract.organization_scope.organization_id.clone(),
         policy_state: TrustedPolicyStateV1::Effective,
         allowed_risk_classes: vec![
             CognitiveRiskClass::ReadOnly,
@@ -3224,17 +3272,17 @@ fn prepare_role_binding(
         role_instance_sha256: active.instance_sha256.clone(),
         contract_sha256: contract.contract_sha256.clone(),
         delegation_sha256: delegation.delegation_sha256.clone(),
-        organization_id: ORGANIZATION_ID.to_owned(),
+        organization_id: contract.organization_scope.organization_id.clone(),
         authenticated_actor_id: instruction.authenticated_actor_id.clone(),
         authenticated_role_id: instruction.authenticated_role_id.clone(),
         authenticated_instruction_sha256: instruction.instruction_sha256.clone(),
         goal_spec_sha256: canonical_sha256(expected_goal).map_err(selection_error)?,
-        work_class_id: "workforce.kernel_e2e.name_save".to_owned(),
+        work_class_id: work_class.work_class_id.clone(),
         requested_application_pack_id: pack.pack_id.clone(),
         requested_application_pack_sha256: pack.pack_sha256.clone(),
         requested_integration_id: INTEGRATION_ID.to_owned(),
-        required_capability_ids: vec!["uia.invoke".to_owned(), "uia.set_value".to_owned()],
-        semantic_target_ids: vec!["employee_name_input".to_owned(), "save_button".to_owned()],
+        required_capability_ids: required_capabilities,
+        semantic_target_ids: required_targets,
         task_risk: CognitiveRiskClass::BusinessStateChange,
         trusted_policy_snapshot_sha256: policy.snapshot_sha256.clone(),
         policy_set_sha256: contract.policy_set_sha256.clone(),
@@ -3433,6 +3481,31 @@ fn seoul_local_time(now: u64) -> Result<(String, u8, u16), DesktopError> {
 }
 
 #[cfg(windows)]
+fn instruction_identity(role_source: Option<&Path>) -> Result<(String, String), DesktopError> {
+    let Some(role_source) = role_source else {
+        return Ok((ROLE_ID.to_owned(), ORGANIZATION_ID.to_owned()));
+    };
+    let source = fs::read(canonical_file(role_source, "role-source")?)
+        .map_err(|error| io_error("role-source", error))?;
+    let format = if role_source
+        .extension()
+        .and_then(|value| value.to_str())
+        .is_some_and(|value| value.eq_ignore_ascii_case("json"))
+    {
+        RoleCompileFormatV1::Json
+    } else {
+        RoleCompileFormatV1::Yaml
+    };
+    let contract = compile_role_source(&source, format)
+        .map_err(selection_error)?
+        .contract;
+    Ok((
+        contract.role_contract_id,
+        contract.organization_scope.organization_id,
+    ))
+}
+
+#[cfg(windows)]
 fn run_scenario(
     args: &RunnerArgs,
     temp: &TempRoot,
@@ -3440,7 +3513,8 @@ fn run_scenario(
 ) -> Result<ScenarioArtifacts, DesktopError> {
     let now = now_seconds()?;
     let now_ms = now.saturating_mul(1_000);
-    let instruction = authenticated_instruction(now_ms)?;
+    let (role_id, organization_id) = instruction_identity(args.role_source.as_deref())?;
+    let instruction = authenticated_instruction(now_ms, &role_id, &organization_id)?;
     instruction.validate(now_ms.saturating_add(1))?;
     let goal_payload = goal_compiler_payload(&instruction)?;
     let expected_goal = expected_kernel_goal(&instruction, &goal_payload)?;
@@ -3650,131 +3724,137 @@ fn run_scenario(
             fresh
         };
 
-        runtime.execute_next_step(
-            "save-action-cycle".to_owned(),
-            vec![save_source.state_hash.clone(), plan_sha256.clone()],
-            tick,
-        )?;
-        tick = tick.saturating_add(1);
-        let save = run_action_cycle(
-            args,
-            temp,
-            &mut modules,
-            &configuration,
-            &initial_target,
-            &save_source,
-            &instruction,
-            &goal,
-            &pack,
-            &plan,
-            ActionStepKind::Save,
-            "save-1",
-            if input_already_correct { 1 } else { 2 },
-            now,
-        )?;
-        runtime.record_action_verified(
-            "save-action-verified".to_owned(),
-            vec![save.receipt_sha256.clone()],
-            save.verified_result_sha256.clone(),
-            tick,
-        )?;
-        tick = tick.saturating_add(1);
-        audit_heads.extend(save.audit_chain_heads.iter().cloned());
+        if args.mode != ScenarioMode::PausedAfterSet {
+            runtime.execute_next_step(
+                "save-action-cycle".to_owned(),
+                vec![save_source.state_hash.clone(), plan_sha256.clone()],
+                tick,
+            )?;
+            tick = tick.saturating_add(1);
+            let save = run_action_cycle(
+                args,
+                temp,
+                &mut modules,
+                &configuration,
+                &initial_target,
+                &save_source,
+                &instruction,
+                &goal,
+                &pack,
+                &plan,
+                ActionStepKind::Save,
+                "save-1",
+                if input_already_correct { 1 } else { 2 },
+                now,
+            )?;
+            runtime.record_action_verified(
+                "save-action-verified".to_owned(),
+                vec![save.receipt_sha256.clone()],
+                save.verified_result_sha256.clone(),
+                tick,
+            )?;
+            tick = tick.saturating_add(1);
+            audit_heads.extend(save.audit_chain_heads.iter().cloned());
 
-        match args.mode {
-            ScenarioMode::Happy | ScenarioMode::AlreadyCorrect => {
-                if save.verdict != VerificationVerdictV2::Passed {
-                    return Err(DesktopError::Integrity(format!(
-                        "happy save action did not pass verification: {}",
-                        save.verification_diagnostic
-                    )));
+            match args.mode {
+                ScenarioMode::Happy | ScenarioMode::AlreadyCorrect => {
+                    if save.verdict != VerificationVerdictV2::Passed {
+                        return Err(DesktopError::Integrity(format!(
+                            "happy save action did not pass verification: {}",
+                            save.verification_diagnostic
+                        )));
+                    }
+                    runtime.advance(
+                        "save-action-advanced".to_owned(),
+                        vec![save.verified_result_sha256.clone()],
+                        tick,
+                    )?;
+                    tick = tick.saturating_add(1);
+                    executions.push(save);
                 }
-                runtime.advance(
-                    "save-action-advanced".to_owned(),
-                    vec![save.verified_result_sha256.clone()],
-                    tick,
-                )?;
-                tick = tick.saturating_add(1);
-                executions.push(save);
-            }
-            ScenarioMode::Recovery => {
-                if save.verdict != VerificationVerdictV2::Failed {
-                    return Err(DesktopError::Integrity(format!(
-                        "recovery fixture first save did not fail verification: {}",
-                        save.verification_diagnostic
-                    )));
+                ScenarioMode::Recovery => {
+                    if save.verdict != VerificationVerdictV2::Failed {
+                        return Err(DesktopError::Integrity(format!(
+                            "recovery fixture first save did not fail verification: {}",
+                            save.verification_diagnostic
+                        )));
+                    }
+                    let recovery = run_fresh_save_recovery(
+                        args,
+                        temp,
+                        &mut modules,
+                        &configuration,
+                        &initial_target,
+                        &save,
+                        &instruction,
+                        &goal,
+                        &pack,
+                        &plan,
+                        now,
+                    )?;
+                    runtime.recover(
+                        recovery.trigger_sha256.clone(),
+                        recovery.decision_sha256.clone(),
+                        tick,
+                    )?;
+                    tick = tick.saturating_add(1);
+                    runtime.execute_next_step(
+                        "save-recovery-action-cycle".to_owned(),
+                        vec![save.verified_result_sha256.clone()],
+                        tick,
+                    )?;
+                    tick = tick.saturating_add(1);
+                    let second = recovery.cycle.ok_or_else(|| {
+                        DesktopError::Integrity(
+                            "recovery omitted its fresh action cycle".to_owned(),
+                        )
+                    })?;
+                    runtime.record_action_verified(
+                        "save-recovery-action-verified".to_owned(),
+                        vec![second.receipt_sha256.clone()],
+                        second.verified_result_sha256.clone(),
+                        tick,
+                    )?;
+                    tick = tick.saturating_add(1);
+                    runtime.advance(
+                        "save-recovery-advanced".to_owned(),
+                        vec![recovery.result_sha256.clone()],
+                        tick,
+                    )?;
+                    tick = tick.saturating_add(1);
+                    audit_heads.push(recovery.audit_chain_head);
+                    audit_heads.extend(second.audit_chain_heads.iter().cloned());
+                    recovery_trigger_hashes.push(recovery.trigger_sha256);
+                    recovery_decision_hashes.push(recovery.decision_sha256);
+                    recovery_result_hashes.push(recovery.result_sha256);
+                    executions.push(save);
+                    executions.push(second);
                 }
-                let recovery = run_fresh_save_recovery(
-                    args,
-                    temp,
-                    &mut modules,
-                    &configuration,
-                    &initial_target,
-                    &save,
-                    &instruction,
-                    &goal,
-                    &pack,
-                    &plan,
-                    now,
-                )?;
-                runtime.recover(
-                    recovery.trigger_sha256.clone(),
-                    recovery.decision_sha256.clone(),
-                    tick,
-                )?;
-                tick = tick.saturating_add(1);
-                runtime.execute_next_step(
-                    "save-recovery-action-cycle".to_owned(),
-                    vec![save.verified_result_sha256.clone()],
-                    tick,
-                )?;
-                tick = tick.saturating_add(1);
-                let second = recovery.cycle.ok_or_else(|| {
-                    DesktopError::Integrity("recovery omitted its fresh action cycle".to_owned())
-                })?;
-                runtime.record_action_verified(
-                    "save-recovery-action-verified".to_owned(),
-                    vec![second.receipt_sha256.clone()],
-                    second.verified_result_sha256.clone(),
-                    tick,
-                )?;
-                tick = tick.saturating_add(1);
-                runtime.advance(
-                    "save-recovery-advanced".to_owned(),
-                    vec![recovery.result_sha256.clone()],
-                    tick,
-                )?;
-                tick = tick.saturating_add(1);
-                audit_heads.push(recovery.audit_chain_head);
-                audit_heads.extend(second.audit_chain_heads.iter().cloned());
-                recovery_trigger_hashes.push(recovery.trigger_sha256);
-                recovery_decision_hashes.push(recovery.decision_sha256);
-                recovery_result_hashes.push(recovery.result_sha256);
-                executions.push(save);
-                executions.push(second);
-            }
-            ScenarioMode::Unsafe => {
-                if save.verdict != VerificationVerdictV2::Unsafe {
-                    return Err(DesktopError::Integrity(
-                        "unsafe fixture did not produce a protected invariant verdict".to_owned(),
-                    ));
+                ScenarioMode::Unsafe => {
+                    if save.verdict != VerificationVerdictV2::Unsafe {
+                        return Err(DesktopError::Integrity(
+                            "unsafe fixture did not produce a protected invariant verdict"
+                                .to_owned(),
+                        ));
+                    }
+                    let recovery = run_unsafe_escalation(temp, &save, &goal, &plan, now)?;
+                    runtime.recover(
+                        recovery.trigger_sha256.clone(),
+                        recovery.decision_sha256.clone(),
+                        tick,
+                    )?;
+                    tick = tick.saturating_add(1);
+                    runtime.complete_recovery(recovery.result_sha256.clone(), tick)?;
+                    tick = tick.saturating_add(1);
+                    audit_heads.push(recovery.audit_chain_head);
+                    recovery_trigger_hashes.push(recovery.trigger_sha256);
+                    recovery_decision_hashes.push(recovery.decision_sha256);
+                    recovery_result_hashes.push(recovery.result_sha256);
+                    executions.push(save);
                 }
-                let recovery = run_unsafe_escalation(temp, &save, &goal, &plan, now)?;
-                runtime.recover(
-                    recovery.trigger_sha256.clone(),
-                    recovery.decision_sha256.clone(),
-                    tick,
-                )?;
-                tick = tick.saturating_add(1);
-                runtime.complete_recovery(recovery.result_sha256.clone(), tick)?;
-                tick = tick.saturating_add(1);
-                audit_heads.push(recovery.audit_chain_head);
-                recovery_trigger_hashes.push(recovery.trigger_sha256);
-                recovery_decision_hashes.push(recovery.decision_sha256);
-                recovery_result_hashes.push(recovery.result_sha256);
-                executions.push(save);
+                ScenarioMode::Clarification => unreachable!("handled before mutation"),
+                ScenarioMode::PausedAfterSet => unreachable!("save is blocked by pause"),
             }
-            ScenarioMode::Clarification => unreachable!("handled before mutation"),
         }
     }
 

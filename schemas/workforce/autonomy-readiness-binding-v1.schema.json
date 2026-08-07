@@ -1,0 +1,198 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/autonomy-readiness-binding-v1.schema.json",
+    "title":  "AutonomyReadinessBindingV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "binding_id",
+                     "organization_id",
+                     "target_role_contract_id",
+                     "target_role_contract_version",
+                     "shadow_role_sha256",
+                     "shadow_profile_sha256",
+                     "shadow_cohort_sha256",
+                     "shadow_readiness_policy_sha256",
+                     "shadow_readiness_assessment_sha256",
+                     "readiness_status",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "provider_descriptor_sha256",
+                     "prompt_template_hashes",
+                     "application_pack_hashes",
+                     "policy_set_sha256",
+                     "trusted_execution_compatibility_sha256",
+                     "evidence_coverage_sha256",
+                     "critical_error_count",
+                     "false_completion_count",
+                     "escalation_miss_count",
+                     "forbidden_capability_count",
+                     "authority_expansion_count",
+                     "assessed_at_unix_ms",
+                     "valid_until_unix_ms",
+                     "evidence_ids",
+                     "binding_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "binding_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "target_role_contract_id":  {
+                                                       "type":  "string",
+                                                       "minLength":  1,
+                                                       "maxLength":  512,
+                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                   },
+                       "target_role_contract_version":  {
+                                                            "type":  "string",
+                                                            "minLength":  1,
+                                                            "maxLength":  512,
+                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                        },
+                       "shadow_role_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "shadow_profile_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "shadow_cohort_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "shadow_readiness_policy_sha256":  {
+                                                              "type":  "string",
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                              "maxLength":  71
+                                                          },
+                       "shadow_readiness_assessment_sha256":  {
+                                                                  "type":  "string",
+                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                  "maxLength":  71
+                                                              },
+                       "readiness_status":  {
+                                                "type":  "string",
+                                                "enum":  [
+                                                             "eligible_for_work900_design"
+                                                         ]
+                                            },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "provider_descriptor_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "prompt_template_hashes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "application_pack_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "policy_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "trusted_execution_compatibility_sha256":  {
+                                                                      "type":  "string",
+                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                      "maxLength":  71
+                                                                  },
+                       "evidence_coverage_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "critical_error_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "false_completion_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "escalation_miss_count":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "forbidden_capability_count":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "authority_expansion_count":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "assessed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "valid_until_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

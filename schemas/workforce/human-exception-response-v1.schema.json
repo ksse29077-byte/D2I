@@ -1,0 +1,116 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/human-exception-response-v1.schema.json",
+    "title":  "HumanExceptionResponseV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "response_id",
+                     "handoff_sha256",
+                     "response_class",
+                     "actor_class_id",
+                     "approved_bounded_fact_sha256",
+                     "confirmation_artifact_sha256",
+                     "resolution_reference_sha256",
+                     "responded_at_unix_ms",
+                     "valid_until_unix_ms",
+                     "signing_key_id",
+                     "evidence_ids",
+                     "response_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "response_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                       },
+                       "handoff_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "response_class":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "provide_bounded_fact",
+                                                           "existing_confirmation",
+                                                           "decline",
+                                                           "external_handling",
+                                                           "create_followup_work"
+                                                       ]
+                                          },
+                       "actor_class_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "approved_bounded_fact_sha256":  {
+                                                            "type":  [
+                                                                         "string",
+                                                                         "null"
+                                                                     ],
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "confirmation_artifact_sha256":  {
+                                                            "type":  [
+                                                                         "string",
+                                                                         "null"
+                                                                     ],
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                            "maxLength":  71
+                                                        },
+                       "resolution_reference_sha256":  {
+                                                           "type":  [
+                                                                        "string",
+                                                                        "null"
+                                                                    ],
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       },
+                       "responded_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "valid_until_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "response_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

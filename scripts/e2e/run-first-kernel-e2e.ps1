@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Happy', 'AlreadyCorrect', 'Adaptive', 'Recovery', 'Unsafe', 'Clarification', 'All')]
+    [ValidateSet('Happy', 'AlreadyCorrect', 'Adaptive', 'Work900', 'Recovery', 'Unsafe', 'Clarification', 'PausedAfterSet', 'All')]
     [string]$Mode = 'All',
 
     [string]$OutputRoot,
@@ -244,6 +244,17 @@ try {
         $summaries.Add((Invoke-Scenario 'already_correct' 'already_correct' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
         $terminalExitCode = 0
     }
+    elseif ($Mode -eq 'Work900') {
+        $summaries.Add((Invoke-Scenario 'case-a-happy' 'happy' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-b-already-correct' 'already_correct' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-c-recovery' 'recovery' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-d-fresh-replan' 'already_correct' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-e-clarification' 'clarification' 10 'clarification_required' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-e-resume' 'happy' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-h-paused' 'paused_after_set' 12 'stopped' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $summaries.Add((Invoke-Scenario 'case-h-resume' 'already_correct' 0 'completed' $runner $worker $moduleHosts $moduleHashes $runRoot))
+        $terminalExitCode = 0
+    }
     else {
         $contract = switch ($Mode) {
             'Happy' { @('happy', 0, 'completed') }
@@ -251,6 +262,7 @@ try {
             'Recovery' { @('recovery', 0, 'completed') }
             'Unsafe' { @('unsafe', 11, 'escalated') }
             'Clarification' { @('clarification', 10, 'clarification_required') }
+            'PausedAfterSet' { @('paused_after_set', 12, 'stopped') }
         }
         $summaries.Add((Invoke-Scenario $contract[0] $contract[0] $contract[1] $contract[2] $runner $worker $moduleHosts $moduleHashes $runRoot))
         $terminalExitCode = $contract[1]

@@ -80,6 +80,13 @@ pub struct WindowsJobLimits {
     pub per_process_memory_bytes: u64,
 }
 
+/// Read-only memory accounting captured by a Windows Job Object.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct WindowsJobMemoryAccounting {
+    pub peak_process_memory_bytes: u64,
+    pub peak_job_memory_bytes: u64,
+}
+
 impl WindowsJobLimits {
     /// Validates conservative worker bounds.
     pub fn validate(self) -> Result<Self, WindowsHostError> {
@@ -132,6 +139,11 @@ impl WindowsJob {
     /// Terminates every process in this worker tree.
     pub fn terminate(&self) -> Result<(), WindowsHostError> {
         platform::terminate_job(self)
+    }
+
+    /// Returns peak memory counters for this job without changing its limits.
+    pub fn memory_accounting(&self) -> Result<WindowsJobMemoryAccounting, WindowsHostError> {
+        platform::job_memory_accounting(self)
     }
 }
 
@@ -321,6 +333,7 @@ mod platform {
     use super::{
         WindowsAppContainerChild, WindowsAppContainerPathAccess, WindowsAppContainerProfile,
         WindowsHostError, WindowsHostIdentity, WindowsJob, WindowsJobLimits,
+        WindowsJobMemoryAccounting,
     };
     use std::ffi::OsStr;
     use std::mem::size_of;
@@ -366,9 +379,9 @@ mod platform {
     };
     use windows::Win32::System::JobObjects::{
         AssignProcessToJobObject, CreateJobObjectW, JobObjectExtendedLimitInformation,
-        SetInformationJobObject, TerminateJobObject, JOBOBJECT_EXTENDED_LIMIT_INFORMATION,
-        JOB_OBJECT_LIMIT_ACTIVE_PROCESS, JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
-        JOB_OBJECT_LIMIT_PROCESS_MEMORY,
+        QueryInformationJobObject, SetInformationJobObject, TerminateJobObject,
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION, JOB_OBJECT_LIMIT_ACTIVE_PROCESS,
+        JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE, JOB_OBJECT_LIMIT_PROCESS_MEMORY,
     };
     use windows::Win32::System::RemoteDesktop::ProcessIdToSessionId;
     use windows::Win32::System::SystemInformation::GetTickCount64;
@@ -430,6 +443,33 @@ mod platform {
         // SAFETY: job.handle is a live owned Job Object handle.
         unsafe { TerminateJobObject(job.handle, 1) }
             .map_err(|error| WindowsHostError::new(format!("TerminateJobObject failed: {error}")))
+    }
+
+    pub(super) fn job_memory_accounting(
+        job: &WindowsJob,
+    ) -> Result<WindowsJobMemoryAccounting, WindowsHostError> {
+        let mut information = JOBOBJECT_EXTENDED_LIMIT_INFORMATION::default();
+        // SAFETY: information is writable for the exact structure size and the job handle
+        // remains owned and live for this call.
+        unsafe {
+            QueryInformationJobObject(
+                Some(job.handle),
+                JobObjectExtendedLimitInformation,
+                (&raw mut information).cast(),
+                u32::try_from(size_of::<JOBOBJECT_EXTENDED_LIMIT_INFORMATION>())
+                    .map_err(|_| WindowsHostError::new("job structure size overflow"))?,
+                None,
+            )
+        }
+        .map_err(|error| {
+            WindowsHostError::new(format!("QueryInformationJobObject failed: {error}"))
+        })?;
+        Ok(WindowsJobMemoryAccounting {
+            peak_process_memory_bytes: u64::try_from(information.PeakProcessMemoryUsed)
+                .map_err(|_| WindowsHostError::new("peak process memory overflow"))?,
+            peak_job_memory_bytes: u64::try_from(information.PeakJobMemoryUsed)
+                .map_err(|_| WindowsHostError::new("peak job memory overflow"))?,
+        })
     }
 
     pub(super) fn host_identity() -> Result<WindowsHostIdentity, WindowsHostError> {
@@ -1526,6 +1566,12 @@ mod platform {
     }
 
     pub(super) fn terminate_job(_job: &WindowsJob) -> Result<(), WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn job_memory_accounting(
+        _job: &WindowsJob,
+    ) -> Result<WindowsJobMemoryAccounting, WindowsHostError> {
         Err(unavailable())
     }
 

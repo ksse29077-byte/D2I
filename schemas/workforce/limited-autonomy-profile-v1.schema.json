@@ -1,0 +1,498 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/limited-autonomy-profile-v1.schema.json",
+    "title":  "LimitedAutonomyProfileV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "profile_id",
+                     "profile_version",
+                     "organization_id",
+                     "role_contract_id",
+                     "role_contract_version",
+                     "role_contract_sha256",
+                     "delegation_constraint_hashes",
+                     "policy_set_sha256",
+                     "model_sha256",
+                     "runtime_sha256",
+                     "provider_descriptor_sha256",
+                     "prompt_template_hashes",
+                     "application_pack_hashes",
+                     "allowed_work_class_ids",
+                     "allowed_responsibility_ids",
+                     "allowed_source_ids",
+                     "allowed_source_class_ids",
+                     "allowed_environment_ids",
+                     "autonomous_capability_ids",
+                     "confirmation_capability_ids",
+                     "prohibited_capability_ids",
+                     "allowed_semantic_target_ids",
+                     "maximum_autonomous_risk",
+                     "mandatory_human_exception_reason_codes",
+                     "automatic_recovery_class_ids",
+                     "maximum_cases_per_duty_cycle",
+                     "maximum_concurrent_cases",
+                     "maximum_actions_per_case",
+                     "maximum_model_invocations_per_case",
+                     "maximum_recovery_cycles",
+                     "maximum_reobservations_per_case",
+                     "maximum_total_autonomous_side_effects",
+                     "maximum_cycle_duration_ms",
+                     "maximum_case_duration_ms",
+                     "maximum_exception_pending_count",
+                     "maximum_exception_handoffs_per_cycle",
+                     "maximum_active_leases",
+                     "maximum_control_commands_per_cycle",
+                     "maximum_health_records_per_cycle",
+                     "maximum_store_objects",
+                     "maximum_store_bytes",
+                     "maximum_audit_records_per_cycle",
+                     "maximum_evidence_references",
+                     "maximum_report_bytes",
+                     "maximum_resume_checkpoints",
+                     "maximum_consecutive_failures",
+                     "maximum_verification_failures",
+                     "health_thresholds",
+                     "rollout_maximum_cases",
+                     "rollout_maximum_side_effects",
+                     "valid_from_unix_ms",
+                     "valid_to_unix_ms",
+                     "evidence_ids",
+                     "profile_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "profile_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "profile_version":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_id":  {
+                                                "type":  "string",
+                                                "minLength":  1,
+                                                "maxLength":  512,
+                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                            },
+                       "role_contract_version":  {
+                                                     "type":  "string",
+                                                     "minLength":  1,
+                                                     "maxLength":  512,
+                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                 },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "delegation_constraint_hashes":  {
+                                                            "type":  "array",
+                                                            "maxItems":  512,
+                                                            "uniqueItems":  true,
+                                                            "items":  {
+                                                                          "type":  "string",
+                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                          "maxLength":  71
+                                                                      }
+                                                        },
+                       "policy_set_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                 "maxLength":  71
+                                             },
+                       "model_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                            "maxLength":  71
+                                        },
+                       "runtime_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "provider_descriptor_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "prompt_template_hashes":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                    "maxLength":  71
+                                                                }
+                                                  },
+                       "application_pack_hashes":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                     "maxLength":  71
+                                                                 }
+                                                   },
+                       "allowed_work_class_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                }
+                                                  },
+                       "allowed_responsibility_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                    }
+                                                      },
+                       "allowed_source_ids":  {
+                                                  "type":  "array",
+                                                  "maxItems":  512,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                            }
+                                              },
+                       "allowed_source_class_ids":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "minLength":  1,
+                                                                      "maxLength":  512,
+                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                  }
+                                                    },
+                       "allowed_environment_ids":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                 }
+                                                   },
+                       "autonomous_capability_ids":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                   }
+                                                     },
+                       "confirmation_capability_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "prohibited_capability_ids":  {
+                                                         "type":  "array",
+                                                         "maxItems":  512,
+                                                         "uniqueItems":  true,
+                                                         "items":  {
+                                                                       "type":  "string",
+                                                                       "minLength":  1,
+                                                                       "maxLength":  512,
+                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                   }
+                                                     },
+                       "allowed_semantic_target_ids":  {
+                                                           "type":  "array",
+                                                           "maxItems":  512,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                     }
+                                                       },
+                       "maximum_autonomous_risk":  {
+                                                       "type":  "string",
+                                                       "enum":  [
+                                                                    "read_only",
+                                                                    "reversible",
+                                                                    "business_state_change",
+                                                                    "high_criticality"
+                                                                ]
+                                                   },
+                       "mandatory_human_exception_reason_codes":  {
+                                                                      "type":  "array",
+                                                                      "maxItems":  512,
+                                                                      "uniqueItems":  true,
+                                                                      "items":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                }
+                                                                  },
+                       "automatic_recovery_class_ids":  {
+                                                            "type":  "array",
+                                                            "maxItems":  512,
+                                                            "uniqueItems":  true,
+                                                            "items":  {
+                                                                          "type":  "string",
+                                                                          "minLength":  1,
+                                                                          "maxLength":  512,
+                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                      }
+                                                        },
+                       "maximum_cases_per_duty_cycle":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "maximum_concurrent_cases":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "maximum_actions_per_case":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "maximum_model_invocations_per_case":  {
+                                                                  "type":  "integer",
+                                                                  "minimum":  0,
+                                                                  "maximum":  4294967295
+                                                              },
+                       "maximum_recovery_cycles":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "maximum_reobservations_per_case":  {
+                                                               "type":  "integer",
+                                                               "minimum":  0,
+                                                               "maximum":  4294967295
+                                                           },
+                       "maximum_total_autonomous_side_effects":  {
+                                                                     "type":  "integer",
+                                                                     "minimum":  0,
+                                                                     "maximum":  4294967295
+                                                                 },
+                       "maximum_cycle_duration_ms":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  18446744073709551615
+                                                     },
+                       "maximum_case_duration_ms":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  18446744073709551615
+                                                    },
+                       "maximum_exception_pending_count":  {
+                                                               "type":  "integer",
+                                                               "minimum":  0,
+                                                               "maximum":  4294967295
+                                                           },
+                       "maximum_exception_handoffs_per_cycle":  {
+                                                                    "type":  "integer",
+                                                                    "minimum":  0,
+                                                                    "maximum":  4294967295
+                                                                },
+                       "maximum_active_leases":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "maximum_control_commands_per_cycle":  {
+                                                                  "type":  "integer",
+                                                                  "minimum":  0,
+                                                                  "maximum":  4294967295
+                                                              },
+                       "maximum_health_records_per_cycle":  {
+                                                                "type":  "integer",
+                                                                "minimum":  0,
+                                                                "maximum":  4294967295
+                                                            },
+                       "maximum_store_objects":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "maximum_store_bytes":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  18446744073709551615
+                                               },
+                       "maximum_audit_records_per_cycle":  {
+                                                               "type":  "integer",
+                                                               "minimum":  0,
+                                                               "maximum":  4294967295
+                                                           },
+                       "maximum_evidence_references":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  4294967295
+                                                       },
+                       "maximum_report_bytes":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "maximum_resume_checkpoints":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "maximum_consecutive_failures":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "maximum_verification_failures":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "health_thresholds":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "maximum_verification_failures",
+                                                                  "maximum_recovery_failures",
+                                                                  "maximum_provider_failures",
+                                                                  "maximum_sla_breaches",
+                                                                  "maximum_residual_failures",
+                                                                  "maximum_false_completions",
+                                                                  "maximum_authority_expansions",
+                                                                  "maximum_wrong_target_attempts",
+                                                                  "maximum_escalation_misses",
+                                                                  "maximum_secret_leakage"
+                                                              ],
+                                                 "properties":  {
+                                                                    "maximum_verification_failures":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                    "maximum_recovery_failures":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "maximum_provider_failures":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "maximum_sla_breaches":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                    "maximum_residual_failures":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "maximum_false_completions":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "maximum_authority_expansions":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                    "maximum_wrong_target_attempts":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                    "maximum_escalation_misses":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "maximum_secret_leakage":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               }
+                                                                }
+                                             },
+                       "rollout_maximum_cases":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "rollout_maximum_side_effects":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "valid_from_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "valid_to_unix_ms":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  18446744073709551615
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

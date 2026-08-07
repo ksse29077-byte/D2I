@@ -1,0 +1,112 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/autonomy-rollout-cohort-v1.schema.json",
+    "title":  "AutonomyRolloutCohortV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "cohort_id",
+                     "target_role_sha256",
+                     "autonomy_profile_sha256",
+                     "deployment_approval_sha256",
+                     "allowed_work_class_ids",
+                     "allowed_source_class_ids",
+                     "maximum_cases",
+                     "maximum_total_side_effects",
+                     "starts_at_unix_ms",
+                     "ends_at_unix_ms",
+                     "health_threshold_sha256",
+                     "evidence_ids",
+                     "cohort_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "cohort_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "target_role_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "autonomy_profile_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "deployment_approval_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "allowed_work_class_ids":  {
+                                                      "type":  "array",
+                                                      "maxItems":  512,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                }
+                                                  },
+                       "allowed_source_class_ids":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "minLength":  1,
+                                                                      "maxLength":  512,
+                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                  }
+                                                    },
+                       "maximum_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "maximum_total_side_effects":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "starts_at_unix_ms":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  18446744073709551615
+                                             },
+                       "ends_at_unix_ms":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  18446744073709551615
+                                           },
+                       "health_threshold_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "cohort_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

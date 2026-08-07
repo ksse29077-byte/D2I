@@ -4,7 +4,7 @@ $script:ZeroHash = 'sha256:' + ('0' * 64)
 $script:EmptyHash = 'sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
 $script:SensitivePattern = '(?i)(password\s*[:=]|api[_-]?key\s*[:=]|bearer\s+[a-z0-9._-]+|authorization\s*[:=]|raw[_ -]?(ui|locator|selector|coordinate|keystroke)\s*[:=]|chain[_ -]?of[_ -]?thought\s*[:=]|[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})'
 
-function Get-Work800Sha256Bytes {
+function Get-WorkforceSha256Bytes {
     param([Parameter(Mandatory)][byte[]]$Bytes)
 
     $hasher = [System.Security.Cryptography.SHA256]::Create()
@@ -17,13 +17,13 @@ function Get-Work800Sha256Bytes {
     return 'sha256:' + ([BitConverter]::ToString($digest) -replace '-', '').ToLowerInvariant()
 }
 
-function Get-Work800Sha256Text {
+function Get-WorkforceSha256Text {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
 
-    return Get-Work800Sha256Bytes ([System.Text.Encoding]::UTF8.GetBytes($Text))
+    return Get-WorkforceSha256Bytes ([System.Text.Encoding]::UTF8.GetBytes($Text))
 }
 
-function Get-Work800FileHash {
+function Get-WorkforceFileHash {
     param([Parameter(Mandatory)][string]$Path)
 
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
@@ -32,7 +32,7 @@ function Get-Work800FileHash {
     return 'sha256:' + (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
-function ConvertTo-Work800CanonicalNode {
+function ConvertTo-WorkforceCanonicalNode {
     param([AllowNull()][object]$Value)
 
     if ($null -eq $Value) {
@@ -54,14 +54,14 @@ function ConvertTo-Work800CanonicalNode {
     if ($Value -is [System.Collections.IDictionary]) {
         $result = [ordered]@{}
         foreach ($key in @($Value.Keys | ForEach-Object { [string]$_ } | Sort-Object)) {
-            $result[$key] = ConvertTo-Work800CanonicalNode $Value[$key]
+            $result[$key] = ConvertTo-WorkforceCanonicalNode $Value[$key]
         }
         return $result
     }
     if ($Value -is [System.Collections.IEnumerable]) {
         $result = @()
         foreach ($item in $Value) {
-            $result += ,(ConvertTo-Work800CanonicalNode $item)
+            $result += ,(ConvertTo-WorkforceCanonicalNode $item)
         }
         return ,$result
     }
@@ -69,34 +69,34 @@ function ConvertTo-Work800CanonicalNode {
     if ($properties.Count -gt 0) {
         $result = [ordered]@{}
         foreach ($property in @($properties | Sort-Object Name)) {
-            $result[$property.Name] = ConvertTo-Work800CanonicalNode $property.Value
+            $result[$property.Name] = ConvertTo-WorkforceCanonicalNode $property.Value
         }
         return $result
     }
     return [string]$Value
 }
 
-function ConvertTo-Work800CanonicalJson {
+function ConvertTo-WorkforceCanonicalJson {
     param([Parameter(Mandatory)][AllowNull()][object]$Value)
 
-    $node = ConvertTo-Work800CanonicalNode $Value
+    $node = ConvertTo-WorkforceCanonicalNode $Value
     return $node | ConvertTo-Json -Depth 64 -Compress
 }
 
-function Get-Work800ObjectHash {
+function Get-WorkforceObjectHash {
     param([Parameter(Mandatory)][object]$Value)
 
-    return Get-Work800Sha256Text (ConvertTo-Work800CanonicalJson $Value)
+    return Get-WorkforceSha256Text (ConvertTo-WorkforceCanonicalJson $Value)
 }
 
-function Get-Work800JsonNativeHash {
+function Get-WorkforceJsonNativeHash {
     param([Parameter(Mandatory)][object]$Value)
 
-    $native = (ConvertTo-Work800CanonicalJson $Value) | ConvertFrom-Json
-    return Get-Work800ObjectHash $native
+    $native = (ConvertTo-WorkforceCanonicalJson $Value) | ConvertFrom-Json
+    return Get-WorkforceObjectHash $native
 }
 
-function Assert-Work800NoSensitiveText {
+function Assert-WorkforceNoSensitiveText {
     param(
         [Parameter(Mandatory)][AllowEmptyString()][string]$Text,
         [string]$Label = 'checkpoint payload'
@@ -107,7 +107,7 @@ function Assert-Work800NoSensitiveText {
     }
 }
 
-function Write-Work800AtomicJson {
+function Write-WorkforceAtomicJson {
     param(
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][object]$Value,
@@ -119,10 +119,10 @@ function Write-Work800AtomicJson {
         throw 'Atomic JSON output must have a parent directory.'
     }
     New-Item -ItemType Directory -Path $parent -Force | Out-Null
-    $canonical = ConvertTo-Work800CanonicalJson $Value
-    Assert-Work800NoSensitiveText $canonical
+    $canonical = ConvertTo-WorkforceCanonicalJson $Value
+    Assert-WorkforceNoSensitiveText $canonical
     $text = if ($Pretty) {
-        (ConvertTo-Work800CanonicalNode $Value) | ConvertTo-Json -Depth 64
+        (ConvertTo-WorkforceCanonicalNode $Value) | ConvertTo-Json -Depth 64
     }
     else {
         $canonical
@@ -143,7 +143,7 @@ function Write-Work800AtomicJson {
     }
 }
 
-function Get-Work800PathSetHash {
+function Get-WorkforcePathSetHash {
     param(
         [Parameter(Mandatory)][string]$Root,
         [Parameter(Mandatory)][string[]]$RelativePaths
@@ -160,13 +160,13 @@ function Get-Work800PathSetHash {
         }
         $entries.Add([ordered]@{
             path = $relative.Replace('\\', '/')
-            sha256 = Get-Work800FileHash $path
+            sha256 = Get-WorkforceFileHash $path
         })
     }
-    return Get-Work800ObjectHash @($entries)
+    return Get-WorkforceObjectHash @($entries)
 }
 
-function Get-Work800SourceTreeHash {
+function Get-WorkforceSourceTreeHash {
     param(
         [Parameter(Mandatory)][string]$RepositoryRoot,
         [string[]]$ExcludeRelativePaths = @()
@@ -184,12 +184,13 @@ function Get-Work800SourceTreeHash {
     $paths = @(
         ($raw -join "`n") -split "`0" |
             Where-Object { $_ -and -not $excluded.Contains($_.Replace('\\', '/')) } |
+            Where-Object { Test-Path -LiteralPath (Join-Path $root $_) -PathType Leaf } |
             Sort-Object -Unique
     )
-    return Get-Work800PathSetHash -Root $root -RelativePaths $paths
+    return Get-WorkforcePathSetHash -Root $root -RelativePaths $paths
 }
 
-function Get-Work800BoundedArtifact {
+function Get-WorkforceBoundedArtifact {
     param(
         [Parameter(Mandatory)][string]$OutputRoot,
         [Parameter(Mandatory)][string]$Path
@@ -209,11 +210,11 @@ function Get-Work800BoundedArtifact {
     $relative = [Uri]::UnescapeDataString($rootUri.MakeRelativeUri($pathUri).ToString())
     return [ordered]@{
         path = $relative.Replace('\\', '/')
-        sha256 = Get-Work800FileHash $resolved
+        sha256 = Get-WorkforceFileHash $resolved
     }
 }
 
-function New-Work800Checkpoint {
+function New-WorkforceCheckpoint {
     param(
         [Parameter(Mandatory)][hashtable]$Context,
         [Parameter(Mandatory)][string]$StepId,
@@ -236,10 +237,10 @@ function New-Work800Checkpoint {
     )
 
     $artifacts = @($ProducedArtifactPaths | ForEach-Object {
-        Get-Work800BoundedArtifact -OutputRoot $OutputRoot -Path $_
+        Get-WorkforceBoundedArtifact -OutputRoot $OutputRoot -Path $_
     })
-    $stdout = if ($StdoutPath) { Get-Work800BoundedArtifact -OutputRoot $OutputRoot -Path $StdoutPath } else { $null }
-    $stderr = if ($StderrPath) { Get-Work800BoundedArtifact -OutputRoot $OutputRoot -Path $StderrPath } else { $null }
+    $stdout = if ($StdoutPath) { Get-WorkforceBoundedArtifact -OutputRoot $OutputRoot -Path $StdoutPath } else { $null }
+    $stderr = if ($StderrPath) { Get-WorkforceBoundedArtifact -OutputRoot $OutputRoot -Path $StderrPath } else { $null }
     $checkpoint = [ordered]@{
         schema_version = 1
         step_id = $StepId
@@ -281,32 +282,32 @@ function New-Work800Checkpoint {
             $withoutHash[$entry.Key] = $entry.Value
         }
     }
-    $checkpoint.checkpoint_sha256 = Get-Work800JsonNativeHash $withoutHash
-    Assert-Work800NoSensitiveText (ConvertTo-Work800CanonicalJson $checkpoint)
+    $checkpoint.checkpoint_sha256 = Get-WorkforceJsonNativeHash $withoutHash
+    Assert-WorkforceNoSensitiveText (ConvertTo-WorkforceCanonicalJson $checkpoint)
     return [pscustomobject]$checkpoint
 }
 
-function Write-Work800Checkpoint {
+function Write-WorkforceCheckpoint {
     param(
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][object]$Checkpoint
     )
 
-    Write-Work800AtomicJson -Path $Path -Value $Checkpoint -Pretty
-    $verified = Read-Work800Checkpoint -Path $Path
+    Write-WorkforceAtomicJson -Path $Path -Value $Checkpoint -Pretty
+    $verified = Read-WorkforceCheckpoint -Path $Path
     if ($verified.checkpoint_sha256 -ne $Checkpoint.checkpoint_sha256) {
         throw 'Checkpoint changed during its atomic write.'
     }
 }
 
-function Read-Work800Checkpoint {
+function Read-WorkforceCheckpoint {
     param([Parameter(Mandatory)][string]$Path)
 
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
         throw "Checkpoint does not exist: $Path"
     }
     $raw = Get-Content -Raw -LiteralPath $Path -Encoding UTF8
-    Assert-Work800NoSensitiveText $raw
+    Assert-WorkforceNoSensitiveText $raw
     $checkpoint = $raw | ConvertFrom-Json
     $expected = @(
         'schema_version', 'step_id', 'step_label', 'step_ordinal', 'status',
@@ -331,14 +332,14 @@ function Read-Work800Checkpoint {
             $withoutHash[$property.Name] = $property.Value
         }
     }
-    $calculatedHash = Get-Work800ObjectHash $withoutHash
+    $calculatedHash = Get-WorkforceObjectHash $withoutHash
     if ($calculatedHash -ne $checkpoint.checkpoint_sha256) {
         throw "Checkpoint canonical hash verification failed: expected $($checkpoint.checkpoint_sha256), calculated $calculatedHash."
     }
     return $checkpoint
 }
 
-function Test-Work800Checkpoint {
+function Test-WorkforceCheckpoint {
     param(
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][hashtable]$Context,
@@ -348,7 +349,7 @@ function Test-Work800Checkpoint {
     )
 
     try {
-        $checkpoint = Read-Work800Checkpoint -Path $Path
+        $checkpoint = Read-WorkforceCheckpoint -Path $Path
         if ($checkpoint.schema_version -ne 1 -or $checkpoint.status -ne 'verified_success' -or
             $checkpoint.exit_code -ne 0 -or -not $checkpoint.cleanup_verified -or
             $checkpoint.residual_process_count -ne 0 -or
@@ -368,7 +369,7 @@ function Test-Work800Checkpoint {
         }
         $actualDependencies = @($checkpoint.predecessor_evidence_sha256s | Sort-Object -Unique)
         $expectedDependencies = @($RequiredDependencyHashes | Sort-Object -Unique)
-        if ((ConvertTo-Work800CanonicalJson $actualDependencies) -ne (ConvertTo-Work800CanonicalJson $expectedDependencies)) {
+        if ((ConvertTo-WorkforceCanonicalJson $actualDependencies) -ne (ConvertTo-WorkforceCanonicalJson $expectedDependencies)) {
             throw 'Checkpoint predecessor binding changed.'
         }
         foreach ($artifact in @($checkpoint.produced_artifacts)) {
@@ -376,7 +377,7 @@ function Test-Work800Checkpoint {
             $root = [System.IO.Path]::GetFullPath($OutputRoot)
             if (-not $path.StartsWith($root + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase) -or
                 -not (Test-Path -LiteralPath $path -PathType Leaf) -or
-                (Get-Work800FileHash $path) -ne $artifact.sha256) {
+                (Get-WorkforceFileHash $path) -ne $artifact.sha256) {
                 throw "Checkpoint artifact changed: $($artifact.path)"
             }
         }
@@ -389,7 +390,7 @@ function Test-Work800Checkpoint {
                 continue
             }
             $path = Join-Path $OutputRoot $log[0]
-            if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or (Get-Work800FileHash $path) -ne $log[1]) {
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or (Get-WorkforceFileHash $path) -ne $log[1]) {
                 throw "Checkpoint log changed: $($log[0])"
             }
         }
@@ -400,7 +401,7 @@ function Test-Work800Checkpoint {
     }
 }
 
-function New-Work800ResumeManifest {
+function New-WorkforceResumeManifest {
     param(
         [Parameter(Mandatory)][hashtable]$Context,
         [Parameter(Mandatory)][string]$RunId,
@@ -432,15 +433,15 @@ function New-Work800ResumeManifest {
     foreach ($entry in $manifest.GetEnumerator()) {
         if ($entry.Key -ne 'manifest_sha256') { $withoutHash[$entry.Key] = $entry.Value }
     }
-    $manifest.manifest_sha256 = Get-Work800JsonNativeHash $withoutHash
+    $manifest.manifest_sha256 = Get-WorkforceJsonNativeHash $withoutHash
     return [pscustomobject]$manifest
 }
 
-function Read-Work800ResumeManifest {
+function Read-WorkforceResumeManifest {
     param([Parameter(Mandatory)][string]$Path)
 
     $raw = Get-Content -Raw -LiteralPath $Path -Encoding UTF8
-    Assert-Work800NoSensitiveText $raw
+    Assert-WorkforceNoSensitiveText $raw
     $manifest = $raw | ConvertFrom-Json
     $expected = @(
         'schema_version', 'run_id', 'source_tree_sha256', 'current_git_sha',
@@ -457,22 +458,22 @@ function Read-Work800ResumeManifest {
     foreach ($property in $manifest.PSObject.Properties) {
         if ($property.Name -ne 'manifest_sha256') { $withoutHash[$property.Name] = $property.Value }
     }
-    if ((Get-Work800ObjectHash $withoutHash) -ne $manifest.manifest_sha256) {
+    if ((Get-WorkforceObjectHash $withoutHash) -ne $manifest.manifest_sha256) {
         throw 'Resume manifest canonical hash verification failed.'
     }
     return $manifest
 }
 
-function Get-Work800CheckpointSetHash {
+function Get-WorkforceCheckpointSetHash {
     param([Parameter(Mandatory)][object[]]$Checkpoints)
 
     $set = @($Checkpoints | Sort-Object step_ordinal, step_id | ForEach-Object {
         [ordered]@{ step_id = $_.step_id; checkpoint_sha256 = $_.checkpoint_sha256 }
     })
-    return Get-Work800ObjectHash $set
+    return Get-WorkforceObjectHash $set
 }
 
-function Write-Work800FailureDiagnostic {
+function Write-WorkforceFailureDiagnostic {
     param(
         [Parameter(Mandatory)][string]$DiagnosticRoot,
         [Parameter(Mandatory)][hashtable]$Context,
@@ -503,7 +504,7 @@ function Write-Work800FailureDiagnostic {
         [System.IO.File]::WriteAllText($destination, $tail, [System.Text.UTF8Encoding]::new($false))
         return [pscustomobject]@{
             path = $DestinationName
-            sha256 = Get-Work800FileHash $Path
+            sha256 = Get-WorkforceFileHash $Path
             tail = $tail
         }
     }
@@ -536,16 +537,16 @@ function Write-Work800FailureDiagnostic {
     foreach ($entry in $failure.GetEnumerator()) {
         if ($entry.Key -ne 'failure_sha256') { $withoutHash[$entry.Key] = $entry.Value }
     }
-    $failure.failure_sha256 = Get-Work800JsonNativeHash $withoutHash
-    Write-Work800AtomicJson -Path (Join-Path $DiagnosticRoot 'failure.json') -Value $failure -Pretty
+    $failure.failure_sha256 = Get-WorkforceJsonNativeHash $withoutHash
+    Write-WorkforceAtomicJson -Path (Join-Path $DiagnosticRoot 'failure.json') -Value $failure -Pretty
     return [pscustomobject]$failure
 }
 
 Export-ModuleMember -Function @(
-    'Get-Work800Sha256Text', 'Get-Work800FileHash', 'ConvertTo-Work800CanonicalJson',
-    'Get-Work800ObjectHash', 'Assert-Work800NoSensitiveText', 'Write-Work800AtomicJson',
-    'Get-Work800PathSetHash', 'Get-Work800SourceTreeHash', 'Get-Work800BoundedArtifact',
-    'New-Work800Checkpoint', 'Write-Work800Checkpoint', 'Read-Work800Checkpoint',
-    'Test-Work800Checkpoint', 'New-Work800ResumeManifest', 'Read-Work800ResumeManifest',
-    'Get-Work800CheckpointSetHash', 'Write-Work800FailureDiagnostic'
+    'Get-WorkforceSha256Text', 'Get-WorkforceFileHash', 'ConvertTo-WorkforceCanonicalJson',
+    'Get-WorkforceObjectHash', 'Assert-WorkforceNoSensitiveText', 'Write-WorkforceAtomicJson',
+    'Get-WorkforcePathSetHash', 'Get-WorkforceSourceTreeHash', 'Get-WorkforceBoundedArtifact',
+    'New-WorkforceCheckpoint', 'Write-WorkforceCheckpoint', 'Read-WorkforceCheckpoint',
+    'Test-WorkforceCheckpoint', 'New-WorkforceResumeManifest', 'Read-WorkforceResumeManifest',
+    'Get-WorkforceCheckpointSetHash', 'Write-WorkforceFailureDiagnostic'
 )

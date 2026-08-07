@@ -273,8 +273,9 @@ It preserves immutable Case SLA baselines, applies only approved pause time,
 calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
-service. WORK-700 and WORK-800 are complete; the first active task is
-`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`.
+service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
+The next active task is
+`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:
@@ -299,6 +300,25 @@ dependency hashes, cleanup result, and zero-residual state all verify. Use
 `-ReuseVerifiedPredecessorEvidence` switch verifies sealed WORK-700 evidence;
 it never substitutes for the WORK-800 holdout, interactive evidence,
 readiness, or report.
+
+Run the deterministic WORK-900 contracts, strict schemas, Role fixture,
+protected store, negative suite, replay, and predecessor regressions with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/workforce/run-limited-autonomy-human-exception-v1.ps1 `
+  -Mode All `
+  -OutputRoot target\d2i-work900-all
+```
+
+The separate `Completion` mode requires sealed WORK-800 evidence and the
+pinned Qwen3-4B/llama.cpp artifacts. It independently compiles and approves
+General Office Role 1.4.0, runs one bounded eight-Case duty cycle through
+actual Radar/Intake, Queue, model, Policy, activation, and KRN paths, and
+proves five zero-touch routine closures plus three exactly-once human
+exceptions. Use `-Resume` for a transient failure or `-Fresh` to discard safe
+checkpoints. Readiness and autonomy admission remain non-executable evidence.
+See `docs/workforce/limited-autonomy-human-exception-v1.md`.
 
 ## Checks
 

@@ -1,0 +1,168 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/autonomy-deployment-approval-v1.schema.json",
+    "title":  "AutonomyDeploymentApprovalV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "approval_id",
+                     "organization_id",
+                     "target_role_sha256",
+                     "autonomy_profile_sha256",
+                     "readiness_binding_sha256",
+                     "approved_environment_ids",
+                     "approved_work_class_ids",
+                     "approved_capability_ids",
+                     "approved_semantic_target_ids",
+                     "approved_maximum_risk",
+                     "rollout_maximum_cases",
+                     "issued_at_unix_ms",
+                     "expires_at_unix_ms",
+                     "signer_id",
+                     "signing_key_id",
+                     "nonce",
+                     "evidence_ids",
+                     "approval_sha256",
+                     "signature_hex"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "approval_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                       },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "target_role_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                  "maxLength":  71
+                                              },
+                       "autonomy_profile_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                       "maxLength":  71
+                                                   },
+                       "readiness_binding_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "approved_environment_ids":  {
+                                                        "type":  "array",
+                                                        "maxItems":  512,
+                                                        "uniqueItems":  true,
+                                                        "items":  {
+                                                                      "type":  "string",
+                                                                      "minLength":  1,
+                                                                      "maxLength":  512,
+                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                  }
+                                                    },
+                       "approved_work_class_ids":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                 }
+                                                   },
+                       "approved_capability_ids":  {
+                                                       "type":  "array",
+                                                       "maxItems":  512,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                 }
+                                                   },
+                       "approved_semantic_target_ids":  {
+                                                            "type":  "array",
+                                                            "maxItems":  512,
+                                                            "uniqueItems":  true,
+                                                            "items":  {
+                                                                          "type":  "string",
+                                                                          "minLength":  1,
+                                                                          "maxLength":  512,
+                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                      }
+                                                        },
+                       "approved_maximum_risk":  {
+                                                     "type":  "string",
+                                                     "enum":  [
+                                                                  "read_only",
+                                                                  "reversible",
+                                                                  "business_state_change",
+                                                                  "high_criticality"
+                                                              ]
+                                                 },
+                       "rollout_maximum_cases":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "issued_at_unix_ms":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  18446744073709551615
+                                             },
+                       "expires_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "signer_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "signing_key_id":  {
+                                              "type":  "string",
+                                              "minLength":  1,
+                                              "maxLength":  512,
+                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                          },
+                       "nonce":  {
+                                     "type":  "string",
+                                     "minLength":  1,
+                                     "maxLength":  512,
+                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                 },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "approval_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           },
+                       "signature_hex":  {
+                                             "type":  "string",
+                                             "pattern":  "^[0-9a-f]{128}$",
+                                             "maxLength":  128
+                                         }
+                   }
+}

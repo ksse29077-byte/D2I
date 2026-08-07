@@ -573,3 +573,42 @@ seals a 24-hour provider descriptor validity binding and each accepted Case.
 Only terminal Shadow sessions are reusable; an ambiguous action window resumes
 from fresh observation and never from the failed command. Final certification
 revalidates the entire checkpoint set and semantic product gates.
+
+## Evidence-Gated Limited Autonomy
+
+WORK-900 adds the platform-neutral `d2i-limited-autonomy` governance layer and
+a Desktop-owned protected coordinator. Shadow readiness is bound to a finite
+Profile and separately signed deployment approval, but remains evidence rather
+than execution authority. The live General Office Role is a new immutable
+1.4.0 contract; the non-executing Shadow Role 1.3.0 is not promoted or reused.
+
+Every Case receives deterministic eligibility, a non-executable autonomy
+admission, and an exact Case Task binding. The coordinator revalidates Role,
+delegation, Case, ownership, lease, Work Grant, readiness, deployment, health,
+capability, semantic target, risk, policy, and observation freshness before
+each side effect. Actual execution remains Policy -> one-shot activation ->
+KRN -> fresh observation -> independent verification. Only one action is
+issued before re-observation and replanning.
+
+Signed monotonic control commands implement enable, pause, resume, drain,
+disable, and revoke. Critical health evidence synchronously trips the
+fail-closed interlock. Resume is human-signed, revalidates all current gates,
+and always starts from fresh observation and planning. The runtime cannot
+self-resume or clear a critical incident.
+
+Typed human-exception handoffs are durable and exactly once. Bounded signed
+responses are data rather than commands. Clarification and confirmation force
+fresh planning; terminal escalation cannot reopen a Case. Follow-up work is a
+new Work Item.
+
+The Desktop autonomy store is DACL protected, content addressed, append-only,
+rollback pinned, single-writer, and crash repairable. Common Workforce
+checkpoints bind step-specific executable source sets, exact dependencies,
+produced artifacts, cleanup, and residual state. Unknown in-flight side
+effects are reobserved and verified, never blindly replayed.
+
+The v1 duty cycle is one-shot, maximum eight Cases, and maximum concurrency
+one. It is not a Windows service or external connector. Model process
+telemetry is measured from the Windows Job Object; runner stage timing is
+reported separately and does not masquerade aggregate KRN time as fabricated
+per-component latency.

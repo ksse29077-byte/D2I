@@ -1,0 +1,268 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/limited-autonomy-completion-report-v1.schema.json",
+    "title":  "LimitedAutonomyCompletionReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "role_contract_sha256",
+                     "profile_sha256",
+                     "deployment_approval_sha256",
+                     "readiness_binding_sha256",
+                     "total_canary_cases",
+                     "routine_cases",
+                     "routine_verified_closure",
+                     "routine_human_touches",
+                     "human_exception_cases",
+                     "mandatory_exception_handoff_recall_millionths",
+                     "actual_model_backed_cases",
+                     "actual_krn_side_effect_actions",
+                     "observations",
+                     "actions",
+                     "provider_invocations",
+                     "false_completions",
+                     "wrong_targets",
+                     "wrong_actions",
+                     "duplicate_actions",
+                     "duplicate_claims",
+                     "authority_expansions",
+                     "forbidden_capabilities",
+                     "mandatory_escalation_misses",
+                     "secret_leakage",
+                     "network_accesses",
+                     "critical_errors",
+                     "autonomous_case_completion_rate_millionths",
+                     "human_touches_per_case_millionths",
+                     "routine_human_touches_per_case_millionths",
+                     "exception_rate_millionths",
+                     "verified_closure_rate_millionths",
+                     "false_completion_rate_millionths",
+                     "sla_compliance_millionths",
+                     "human_supervisor_count",
+                     "cases_per_human_supervisor_millionths",
+                     "autonomy_evidence",
+                     "human_by_exception_evidence",
+                     "track_w_completion_evidence",
+                     "completed_at_unix_ms",
+                     "evidence_ids",
+                     "report_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "profile_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          },
+                       "deployment_approval_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "readiness_binding_sha256":  {
+                                                        "type":  "string",
+                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                        "maxLength":  71
+                                                    },
+                       "total_canary_cases":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "routine_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "routine_verified_closure":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "routine_human_touches":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "human_exception_cases":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "mandatory_exception_handoff_recall_millionths":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  1000000
+                                                                         },
+                       "actual_model_backed_cases":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "actual_krn_side_effect_actions":  {
+                                                              "type":  "integer",
+                                                              "minimum":  0,
+                                                              "maximum":  4294967295
+                                                          },
+                       "observations":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "actions":  {
+                                       "type":  "integer",
+                                       "minimum":  0,
+                                       "maximum":  4294967295
+                                   },
+                       "provider_invocations":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "false_completions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "wrong_targets":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "wrong_actions":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "duplicate_actions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "duplicate_claims":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "authority_expansions":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "forbidden_capabilities":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "mandatory_escalation_misses":  {
+                                                           "type":  "integer",
+                                                           "minimum":  0,
+                                                           "maximum":  4294967295
+                                                       },
+                       "secret_leakage":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "network_accesses":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "critical_errors":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "autonomous_case_completion_rate_millionths":  {
+                                                                          "type":  "integer",
+                                                                          "minimum":  0,
+                                                                          "maximum":  1000000
+                                                                      },
+                       "human_touches_per_case_millionths":  {
+                                                                 "type":  "integer",
+                                                                 "minimum":  0,
+                                                                 "maximum":  4294967295
+                                                             },
+                       "routine_human_touches_per_case_millionths":  {
+                                                                         "type":  "integer",
+                                                                         "minimum":  0,
+                                                                         "maximum":  4294967295
+                                                                     },
+                       "exception_rate_millionths":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  1000000
+                                                     },
+                       "verified_closure_rate_millionths":  {
+                                                                "type":  "integer",
+                                                                "minimum":  0,
+                                                                "maximum":  1000000
+                                                            },
+                       "false_completion_rate_millionths":  {
+                                                                "type":  "integer",
+                                                                "minimum":  0,
+                                                                "maximum":  1000000
+                                                            },
+                       "sla_compliance_millionths":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  1000000
+                                                     },
+                       "human_supervisor_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "cases_per_human_supervisor_millionths":  {
+                                                                     "type":  "integer",
+                                                                     "minimum":  0,
+                                                                     "maximum":  4294967295
+                                                                 },
+                       "autonomy_evidence":  {
+                                                 "type":  "boolean"
+                                             },
+                       "human_by_exception_evidence":  {
+                                                           "type":  "boolean"
+                                                       },
+                       "track_w_completion_evidence":  {
+                                                           "type":  "boolean"
+                                                       },
+                       "completed_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  18446744073709551615
+                                                },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "report_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

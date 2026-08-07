@@ -53,11 +53,13 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 - [x] `D2I-WORK-600` Episodic Memory and Case Learning Records
 - [x] `D2I-WORK-700` Role-level Reporting, SLA and Escalation
 - [x] `D2I-WORK-800` Open Digital Employee Shadow Mode
-- [ ] `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation - **first active task**
+- [x] `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation
+
+**Track W complete.**
 
 ## Track X - Execution Plane Expansion
 
-- [ ] `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
+- [ ] `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **first active task**
 - [ ] `D2I-EDGE-200` Sensor / Camera / IoT observation planes
 - [ ] `D2I-EDGE-300` PLC / SCADA / OT supervised execution
 - [ ] `D2I-EDGE-400` Robot / AMR / Drone adapters

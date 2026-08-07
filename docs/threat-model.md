@@ -605,3 +605,43 @@ and external chain-head anchoring, model semantic quality, the narrow General
 Office fixture, and the operator's physical environment. WORK-800 has no live
 action path, external connector, continuous service, production learning,
 automatic Role/policy/model/prompt/capability change, or autonomy promotion.
+
+## WORK-900 Limited Autonomy Threats
+
+WORK-900 addresses Shadow readiness promoted as authority; reuse of the 1.3.0
+Shadow Role for live execution; unsigned, stale, replayed, cross-organization,
+or scope-expanded deployment approval; infinite or wildcard Profile limits;
+model-selected eligibility; stale Case, ownership, lease, Work Grant, policy,
+activation, observation, or plan; action-list blind execution; capability,
+target, risk, or authority expansion; policy or activation bypass; duplicate
+Case claims and side effects; and false completion.
+
+Control and exception threats include replayed enable/resume, unsigned resume,
+self-resume, ignored pause or revoke, ignored critical health evidence,
+duplicate handoff, continued autonomous action after mandatory escalation,
+unsigned or wrong-Case response, free-form response executed as a command,
+and terminal Case reopen. Mitigations are signed monotonic control generations,
+synchronous health interlock, per-action exact revalidation, exactly-once
+handoff/response ledgers, bounded typed response data, and fresh observation
+and planning after every response or resume.
+
+Persistence and recovery threats include rollback, DACL drift, reparse escape,
+concurrent writer, partial object/index updates, stale checkpoints, changed
+executable input, tampered evidence, and crash after a side effect. The
+protected content-addressed append-only store rejects rollback and repairs
+only derived indexes. Step-specific checkpoint dependency hashes prevent
+unsafe reuse. Unknown in-flight side effects are reobserved and verified and
+are never replayed blindly.
+
+Privacy threats remain raw UI, locators, selectors, coordinates, clipboard,
+credentials, tokens, personal contact data, and chain-of-thought in runtime
+artifacts or diagnostics. Contracts are bounded and hash-oriented, strict
+parsers reject secret fields, diagnostics are scanned/redacted, and actual
+model/KRN processes remain network denied and cleaned.
+
+Residual risks are organization signing-key custody, trusted-time and external
+ledger-head anchoring, the narrow General Office fixture, and aggregate rather
+than internal microstage KRN latency measurement. v1 is a one-shot eight-Case,
+single-concurrency coordinator. It adds no daemon, external notification,
+connector, online learning, automatic Role/model/policy update, or Track X
+execution plane.

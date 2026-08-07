@@ -1,0 +1,212 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/autonomy-health-snapshot-v1.schema.json",
+    "title":  "AutonomyHealthSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "window_id",
+                     "role_instance_sha256",
+                     "autonomy_state_sha256",
+                     "total_autonomous_cases",
+                     "verified_closure_cases",
+                     "exception_cases",
+                     "failed_cases",
+                     "false_completions",
+                     "unsafe_side_effects",
+                     "verification_failures",
+                     "recovery_failures",
+                     "policy_denials",
+                     "policy_bypasses",
+                     "activation_bypasses",
+                     "forbidden_proposals",
+                     "forbidden_executed_capabilities",
+                     "authority_expansions",
+                     "wrong_target_attempts",
+                     "duplicate_attempts",
+                     "escalation_misses",
+                     "secret_leakage",
+                     "residual_failures",
+                     "average_actions_per_case_millionths",
+                     "provider_failures",
+                     "sla_breaches",
+                     "threshold_state_ids",
+                     "critical_error_count",
+                     "health_status",
+                     "evidence_ids",
+                     "snapshot_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "window_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                     },
+                       "role_instance_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "autonomy_state_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "total_autonomous_cases":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "verified_closure_cases":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "exception_cases":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "failed_cases":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "false_completions":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "unsafe_side_effects":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "verification_failures":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "recovery_failures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "policy_denials":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "policy_bypasses":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "activation_bypasses":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "forbidden_proposals":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "forbidden_executed_capabilities":  {
+                                                               "type":  "integer",
+                                                               "minimum":  0,
+                                                               "maximum":  4294967295
+                                                           },
+                       "authority_expansions":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "wrong_target_attempts":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "duplicate_attempts":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "escalation_misses":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "secret_leakage":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "residual_failures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "average_actions_per_case_millionths":  {
+                                                                   "type":  "integer",
+                                                                   "minimum":  0,
+                                                                   "maximum":  4294967295
+                                                               },
+                       "provider_failures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "sla_breaches":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "threshold_state_ids":  {
+                                                   "type":  "array",
+                                                   "maxItems":  512,
+                                                   "uniqueItems":  true,
+                                                   "items":  {
+                                                                 "type":  "string",
+                                                                 "minLength":  1,
+                                                                 "maxLength":  512,
+                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                             }
+                                               },
+                       "critical_error_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "health_status":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "healthy",
+                                                          "warning",
+                                                          "pause_required",
+                                                          "critical"
+                                                      ]
+                                         },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "snapshot_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                               "maxLength":  71
+                                           }
+                   }
+}

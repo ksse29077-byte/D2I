@@ -33,7 +33,7 @@ if ($Fresh -and $Resume) {
     throw '-Fresh and -Resume cannot be used together.'
 }
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
-$checkpointModulePath = Join-Path $PSScriptRoot 'lib/Work800Checkpoint.psm1'
+$checkpointModulePath = Join-Path $PSScriptRoot 'lib/WorkforceCheckpoint.psm1'
 Import-Module -Force $checkpointModulePath
 if (-not $OutputRoot) {
     $OutputRoot = Join-Path $repoRoot 'target/d2i-workforce-shadow'
@@ -599,7 +599,7 @@ function Get-ExecutableSourcePaths([string]$Scope = 'all') {
                 $_ -and (
                     $_ -in @('Cargo.toml', 'Cargo.lock') -or
                     $_ -match '^(crates|products|modules|schemas|examples)/' -or
-                    ($_ -match '^scripts/' -and $_ -notmatch '^scripts/workforce/(?:run-open-digital-employee-shadow-v1\.ps1|test-open-digital-employee-shadow-resume\.ps1|lib/Work800Checkpoint\.psm1)$')
+                    ($_ -match '^scripts/' -and $_ -notmatch '^scripts/workforce/(?:run-open-digital-employee-shadow-v1\.ps1|test-open-digital-employee-shadow-resume\.ps1|lib/WorkforceCheckpoint\.psm1)$')
                 )
             } |
             Sort-Object -Unique
@@ -631,24 +631,24 @@ function Get-CompletionExecutableInputHash([string]$Scope = 'all') {
         $script:completionExecutableInputHashes = @{}
     }
     if (-not $script:completionExecutableInputHashes.ContainsKey($Scope)) {
-        $script:completionExecutableInputHashes[$Scope] = Get-Work800PathSetHash `
+        $script:completionExecutableInputHashes[$Scope] = Get-WorkforcePathSetHash `
             -Root $repoRoot -RelativePaths (Get-ExecutableSourcePaths $Scope)
     }
     return $script:completionExecutableInputHashes[$Scope]
 }
 
 function Get-RunnerHash {
-    return Get-Work800PathSetHash -Root $repoRoot -RelativePaths @(
+    return Get-WorkforcePathSetHash -Root $repoRoot -RelativePaths @(
         'scripts/workforce/run-open-digital-employee-shadow-v1.ps1',
-        'scripts/workforce/lib/Work800Checkpoint.psm1'
+        'scripts/workforce/lib/WorkforceCheckpoint.psm1'
     )
 }
 
 function Initialize-CompletionCheckpointState {
     Assert-ModelInputs
-    $sourceTreeHash = Get-Work800SourceTreeHash -RepositoryRoot $repoRoot -ExcludeRelativePaths @(
+    $sourceTreeHash = Get-WorkforceSourceTreeHash -RepositoryRoot $repoRoot -ExcludeRelativePaths @(
         'scripts/workforce/run-open-digital-employee-shadow-v1.ps1',
-        'scripts/workforce/lib/Work800Checkpoint.psm1'
+        'scripts/workforce/lib/WorkforceCheckpoint.psm1'
     )
     $arguments = [ordered]@{
         mode = 'completion'
@@ -663,13 +663,13 @@ function Initialize-CompletionCheckpointState {
         git_sha = (git -C $repoRoot rev-parse HEAD).Trim()
         runner_sha256 = Get-RunnerHash
         mode = 'completion'
-        normalized_arguments_sha256 = Get-Work800ObjectHash $arguments
+        normalized_arguments_sha256 = Get-WorkforceObjectHash $arguments
         model_sha256 = Get-Sha256 $Model
         runtime_sha256 = Get-Sha256 $Runtime
         role_contract_sha256 = 'sha256:9d04e9939326cbb8fce92ed7c748fd440b31257026e4b3dc25e7541544f02ef7'
         shadow_profile_sha256 = $zeroHash
         readiness_policy_sha256 = $zeroHash
-        cohort_sha256 = Get-Work800Sha256Text 'work800-new-shadow-holdout-v1:60:20-10-10-10-10'
+        cohort_sha256 = Get-WorkforceSha256Text 'work800-new-shadow-holdout-v1:60:20-10-10-10-10'
     }
     if ($Fresh) {
         foreach ($path in @(
@@ -693,7 +693,7 @@ function Initialize-CompletionCheckpointState {
     }
     New-Item -ItemType Directory -Path $checkpointRoot, $diagnosticRoot -Force | Out-Null
     if ($Resume -and (Test-Path -LiteralPath $resumeManifestPath -PathType Leaf)) {
-        $manifest = Read-Work800ResumeManifest $resumeManifestPath
+        $manifest = Read-WorkforceResumeManifest $resumeManifestPath
         if ($manifest.schema_version -ne 1 -or $manifest.mode -ne 'completion' -or
             $manifest.model_sha256 -ne $completionContext.model_sha256 -or
             $manifest.runtime_sha256 -ne $completionContext.runtime_sha256) {
@@ -708,15 +708,15 @@ function Initialize-CompletionCheckpointState {
 function Write-ResumeManifest {
     if (-not $completionContext) { return }
     $hashes = @($verifiedCheckpoints.Values | ForEach-Object checkpoint_sha256)
-    $manifest = New-Work800ResumeManifest `
+    $manifest = New-WorkforceResumeManifest `
         -Context $completionContext -RunId $completionRunId `
         -LastVerifiedCheckpoint $lastVerifiedCheckpoint `
         -VerifiedCheckpointHashes $hashes `
         -InvalidatedCheckpointIds @($invalidatedCheckpointIds) `
         -PendingStepId $pendingStepId -FailedStepId $failedStepId `
         -ResumeCount $resumeCount
-    Write-Work800AtomicJson -Path $resumeManifestPath -Value $manifest -Pretty
-    [void](Read-Work800ResumeManifest $resumeManifestPath)
+    Write-WorkforceAtomicJson -Path $resumeManifestPath -Value $manifest -Pretty
+    [void](Read-WorkforceResumeManifest $resumeManifestPath)
 }
 
 function Add-ReusedStep([object]$Checkpoint) {
@@ -738,7 +738,7 @@ function Add-ReusedStep([object]$Checkpoint) {
 
 function Remove-CheckpointAndDownstream([int]$Ordinal) {
     foreach ($file in Get-ChildItem -LiteralPath $checkpointRoot -File -Filter '*.json' -ErrorAction SilentlyContinue) {
-        try { $checkpoint = Read-Work800Checkpoint $file.FullName } catch { $checkpoint = $null }
+        try { $checkpoint = Read-WorkforceCheckpoint $file.FullName } catch { $checkpoint = $null }
         if ($null -eq $checkpoint -or $checkpoint.step_ordinal -ge $Ordinal) {
             if ($checkpoint -and -not $invalidatedCheckpointIds.Contains($checkpoint.step_id)) {
                 $invalidatedCheckpointIds.Add($checkpoint.step_id)
@@ -807,7 +807,7 @@ function Save-CompletionFailure([string]$StepId, [System.Management.Automation.E
         $verifiedCheckpoints[$lastVerifiedCheckpoint].checkpoint_sha256
     }
     else { $null }
-    $preCleanup = Write-Work800FailureDiagnostic `
+    $preCleanup = Write-WorkforceFailureDiagnostic `
         -DiagnosticRoot $diagnosticRoot -Context $completionContext `
         -FailedStepId $StepId -ExitCode 1 `
         -ExceptionClass $ErrorRecord.Exception.GetType().FullName `
@@ -821,7 +821,7 @@ function Save-CompletionFailure([string]$StepId, [System.Management.Automation.E
     $residual = Get-ResidualState
     $savedStdout = if ($preCleanup.stdout_path) { Join-Path $diagnosticRoot $preCleanup.stdout_path } else { $null }
     $savedStderr = if ($preCleanup.stderr_path) { Join-Path $diagnosticRoot $preCleanup.stderr_path } else { $null }
-    [void](Write-Work800FailureDiagnostic `
+    [void](Write-WorkforceFailureDiagnostic `
         -DiagnosticRoot $diagnosticRoot -Context $completionContext `
         -FailedStepId $StepId -ExitCode 1 `
         -ExceptionClass $ErrorRecord.Exception.GetType().FullName `
@@ -846,7 +846,7 @@ function Invoke-CheckpointedStep(
     $dependencyHashes = Get-DependencyHashes $DependencyIds
     $checkpointPath = Join-Path $checkpointRoot "$StepId.json"
     if ($Resume -and (Test-Path -LiteralPath $checkpointPath -PathType Leaf)) {
-        $result = Test-Work800Checkpoint -Path $checkpointPath -Context $Context `
+        $result = Test-WorkforceCheckpoint -Path $checkpointPath -Context $Context `
             -ExecutableInputSha256 $ExecutableInputSha256 -OutputRoot $OutputRoot `
             -RequiredDependencyHashes $dependencyHashes
         if ($result.Valid) {
@@ -873,7 +873,7 @@ function Invoke-CheckpointedStep(
             if ($step.stderr_path -and (Test-Path -LiteralPath $step.stderr_path -PathType Leaf)) { $artifacts += $step.stderr_path }
         }
         $lastStep = $newSteps | Select-Object -Last 1
-        $checkpoint = New-Work800Checkpoint `
+        $checkpoint = New-WorkforceCheckpoint `
             -Context $Context -StepId $StepId -StepLabel $StepLabel -StepOrdinal $Ordinal `
             -RequiredBindingFields $RequiredBindingFields `
             -ExecutableInputSha256 $ExecutableInputSha256 -OutputRoot $OutputRoot `
@@ -881,8 +881,8 @@ function Invoke-CheckpointedStep(
             -StdoutPath $(if ($lastStep) { $lastStep.stdout_path } else { $null }) `
             -StderrPath $(if ($lastStep) { $lastStep.stderr_path } else { $null }) `
             -PredecessorEvidenceSha256s $dependencyHashes
-        Write-Work800Checkpoint -Path $checkpointPath -Checkpoint $checkpoint
-        $verifiedCheckpoints[$StepId] = Read-Work800Checkpoint $checkpointPath
+        Write-WorkforceCheckpoint -Path $checkpointPath -Checkpoint $checkpoint
+        $verifiedCheckpoints[$StepId] = Read-WorkforceCheckpoint $checkpointPath
         $script:lastVerifiedCheckpoint = $StepId
         $script:pendingStepId = $null
         $script:freshStepCount++
@@ -1002,15 +1002,15 @@ function Write-HoldoutCaseCheckpoints {
             $artifact.artifact_sha256 -notmatch '^sha256:[0-9a-f]{64}$') {
             throw "Holdout Case artifact failed its closed binding: $stepId"
         }
-        $checkpoint = New-Work800Checkpoint `
+        $checkpoint = New-WorkforceCheckpoint `
             -Context $completionContext -StepId $stepId -StepLabel $stepId `
             -StepOrdinal (200 + $index) -RequiredBindingFields $bindings `
             -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
             -ProducedArtifactPaths @($path) -StdoutPath $stdout -StderrPath $stderr `
             -PredecessorEvidenceSha256s $dependencies
         $checkpointPath = Join-Path $checkpointRoot "$stepId.json"
-        Write-Work800Checkpoint -Path $checkpointPath -Checkpoint $checkpoint
-        $verifiedCheckpoints[$stepId] = Read-Work800Checkpoint $checkpointPath
+        Write-WorkforceCheckpoint -Path $checkpointPath -Checkpoint $checkpoint
+        $verifiedCheckpoints[$stepId] = Read-WorkforceCheckpoint $checkpointPath
     }
 }
 
@@ -1022,7 +1022,7 @@ function Test-HoldoutCheckpointSet {
     for ($index = 0; $index -lt 60; $index++) {
         $stepId = 'holdout-case-{0:D4}' -f $index
         $path = Join-Path $checkpointRoot "$stepId.json"
-        $result = Test-Work800Checkpoint -Path $path -Context $completionContext `
+        $result = Test-WorkforceCheckpoint -Path $path -Context $completionContext `
             -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
             -RequiredDependencyHashes $dependencies
         if (-not $result.Valid) { $bindingsValid = $false; continue }
@@ -1031,7 +1031,7 @@ function Test-HoldoutCheckpointSet {
     if (-not $bindingsValid) { return $false }
     $caseHashes = @(0..59 | ForEach-Object { $verifiedCheckpoints[('holdout-case-{0:D4}' -f $_)].checkpoint_sha256 })
     $aggregatePath = Join-Path $checkpointRoot '260-holdout-aggregate.json'
-    $aggregate = Test-Work800Checkpoint -Path $aggregatePath -Context $completionContext `
+    $aggregate = Test-WorkforceCheckpoint -Path $aggregatePath -Context $completionContext `
         -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
         -RequiredDependencyHashes $caseHashes
     if (-not $aggregate.Valid) { return $false }
@@ -1059,7 +1059,7 @@ function Invoke-CheckpointedHoldout {
         $caseHashes = @(0..59 | ForEach-Object { $verifiedCheckpoints[('holdout-case-{0:D4}' -f $_)].checkpoint_sha256 })
         $report = Join-Path $OutputRoot 'model-holdout-report.json'
         $holdoutStep = @($steps | Where-Object label -eq 'shadow-model-holdout' | Select-Object -Last 1)
-        $checkpoint = New-Work800Checkpoint `
+        $checkpoint = New-WorkforceCheckpoint `
             -Context $completionContext -StepId '260-holdout-aggregate' `
             -StepLabel 'holdout-aggregate' -StepOrdinal 260 `
             -RequiredBindingFields @('runner_sha256', 'normalized_arguments_sha256', 'model_sha256', 'runtime_sha256', 'cohort_sha256') `
@@ -1069,8 +1069,8 @@ function Invoke-CheckpointedHoldout {
             -StderrPath $(if ($holdoutStep) { $holdoutStep.stderr_path } else { $null }) `
             -PredecessorEvidenceSha256s $caseHashes
         $path = Join-Path $checkpointRoot '260-holdout-aggregate.json'
-        Write-Work800Checkpoint -Path $path -Checkpoint $checkpoint
-        $verifiedCheckpoints['260-holdout-aggregate'] = Read-Work800Checkpoint $path
+        Write-WorkforceCheckpoint -Path $path -Checkpoint $checkpoint
+        $verifiedCheckpoints['260-holdout-aggregate'] = Read-WorkforceCheckpoint $path
         $script:freshStepCount += 61
         $script:lastVerifiedCheckpoint = '260-holdout-aggregate'
         $script:pendingStepId = $null
@@ -1109,13 +1109,13 @@ function Write-SessionEvidenceArtifacts {
     $completion = Get-Content -Raw -LiteralPath (Join-Path $OutputRoot 'work800-completion-report.json') | ConvertFrom-Json
     $reportedHashes = @($completion.windows_session_evidence_hashes | Sort-Object)
     $actualHashes = @($evidence | ForEach-Object evidence_sha256 | Sort-Object)
-    if ((ConvertTo-Work800CanonicalJson $reportedHashes) -ne (ConvertTo-Work800CanonicalJson $actualHashes)) {
+    if ((ConvertTo-WorkforceCanonicalJson $reportedHashes) -ne (ConvertTo-WorkforceCanonicalJson $actualHashes)) {
         throw 'Windows session evidence differs from the terminal Completion report.'
     }
     $artifactRoot = Join-Path $OutputRoot 'shadow-session-artifacts'
     New-Item -ItemType Directory -Path $artifactRoot -Force | Out-Null
     for ($index = 0; $index -lt $evidence.Count; $index++) {
-        Write-Work800AtomicJson -Path (Join-Path $artifactRoot ("session-{0:D2}.json" -f $index)) `
+        Write-WorkforceAtomicJson -Path (Join-Path $artifactRoot ("session-{0:D2}.json" -f $index)) `
             -Value $evidence[$index] -Pretty
     }
 }
@@ -1129,30 +1129,30 @@ function Write-ShadowTerminalCheckpoints {
     $sessionOrdinals = @(400, 300, 310, 320, 330)
     for ($index = 0; $index -lt 5; $index++) {
         $artifact = Join-Path $OutputRoot ("shadow-session-artifacts/session-{0:D2}.json" -f $index)
-        $checkpoint = New-Work800Checkpoint `
+        $checkpoint = New-WorkforceCheckpoint `
             -Context $context -StepId $sessionIds[$index] -StepLabel $sessionIds[$index] `
             -StepOrdinal $sessionOrdinals[$index] -RequiredBindingFields $sessionBindings `
             -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
             -ProducedArtifactPaths @($artifact) `
             -PredecessorEvidenceSha256s @($holdoutHash)
         $path = Join-Path $checkpointRoot "$($sessionIds[$index]).json"
-        Write-Work800Checkpoint -Path $path -Checkpoint $checkpoint
-        $verifiedCheckpoints[$sessionIds[$index]] = Read-Work800Checkpoint $path
+        Write-WorkforceCheckpoint -Path $path -Checkpoint $checkpoint
+        $verifiedCheckpoints[$sessionIds[$index]] = Read-WorkforceCheckpoint $path
     }
     $sessionHashes = @($sessionIds | ForEach-Object { $verifiedCheckpoints[$_].checkpoint_sha256 })
     $readinessArtifacts = @(
         'shadow-coverage.json', 'shadow-metrics.json', 'shadow-snapshot.json',
         'shadow-readiness.json', 'shadow-replay-report.json'
     ) | ForEach-Object { Join-Path $OutputRoot "shadow-e2e/$_" }
-    $readiness = New-Work800Checkpoint `
+    $readiness = New-WorkforceCheckpoint `
         -Context $context -StepId '500-readiness' -StepLabel 'shadow-readiness' `
         -StepOrdinal 500 -RequiredBindingFields @($sessionBindings + 'readiness_policy_sha256') `
         -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
         -ProducedArtifactPaths $readinessArtifacts `
         -PredecessorEvidenceSha256s $sessionHashes
     $readinessPath = Join-Path $checkpointRoot '500-readiness.json'
-    Write-Work800Checkpoint -Path $readinessPath -Checkpoint $readiness
-    $verifiedCheckpoints['500-readiness'] = Read-Work800Checkpoint $readinessPath
+    Write-WorkforceCheckpoint -Path $readinessPath -Checkpoint $readiness
+    $verifiedCheckpoints['500-readiness'] = Read-WorkforceCheckpoint $readinessPath
     $reportArtifacts = @(
         (Join-Path $OutputRoot 'work800-completion-report.json'),
         (Join-Path $OutputRoot 'shadow-e2e/shadow-evaluation-report.json'),
@@ -1160,15 +1160,15 @@ function Write-ShadowTerminalCheckpoints {
         (Join-Path $OutputRoot 'shadow-e2e/internal-publication.json'),
         (Join-Path $OutputRoot 'shadow-e2e/internal-publication-receipt.json')
     )
-    $report = New-Work800Checkpoint `
+    $report = New-WorkforceCheckpoint `
         -Context $context -StepId '600-report' -StepLabel 'shadow-report' `
         -StepOrdinal 600 -RequiredBindingFields @($sessionBindings + 'readiness_policy_sha256') `
         -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
         -ProducedArtifactPaths $reportArtifacts `
         -PredecessorEvidenceSha256s @($verifiedCheckpoints['500-readiness'].checkpoint_sha256)
     $reportPath = Join-Path $checkpointRoot '600-report.json'
-    Write-Work800Checkpoint -Path $reportPath -Checkpoint $report
-    $verifiedCheckpoints['600-report'] = Read-Work800Checkpoint $reportPath
+    Write-WorkforceCheckpoint -Path $reportPath -Checkpoint $report
+    $verifiedCheckpoints['600-report'] = Read-WorkforceCheckpoint $reportPath
 }
 
 function Test-ShadowTerminalCheckpointSet {
@@ -1180,19 +1180,19 @@ function Test-ShadowTerminalCheckpointSet {
     $sessionBindings = @('runner_sha256', 'normalized_arguments_sha256', 'model_sha256', 'runtime_sha256', 'role_contract_sha256', 'shadow_profile_sha256', 'cohort_sha256')
     $sessionIds = @('400-interactive-session', '300-shadow-session-b', '310-shadow-session-c', '320-shadow-session-d', '330-shadow-session-e')
     foreach ($id in $sessionIds) {
-        $result = Test-Work800Checkpoint -Path (Join-Path $checkpointRoot "$id.json") `
+        $result = Test-WorkforceCheckpoint -Path (Join-Path $checkpointRoot "$id.json") `
             -Context $context -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
             -RequiredDependencyHashes @($holdoutHash)
         if (-not $result.Valid) { return $false }
         $verifiedCheckpoints[$id] = $result.Checkpoint
     }
     $sessionHashes = @($sessionIds | ForEach-Object { $verifiedCheckpoints[$_].checkpoint_sha256 })
-    $readiness = Test-Work800Checkpoint -Path (Join-Path $checkpointRoot '500-readiness.json') `
+    $readiness = Test-WorkforceCheckpoint -Path (Join-Path $checkpointRoot '500-readiness.json') `
         -Context $context -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
         -RequiredDependencyHashes $sessionHashes
     if (-not $readiness.Valid) { return $false }
     $verifiedCheckpoints['500-readiness'] = $readiness.Checkpoint
-    $report = Test-Work800Checkpoint -Path (Join-Path $checkpointRoot '600-report.json') `
+    $report = Test-WorkforceCheckpoint -Path (Join-Path $checkpointRoot '600-report.json') `
         -Context $context -ExecutableInputSha256 $inputHash -OutputRoot $OutputRoot `
         -RequiredDependencyHashes @($readiness.Checkpoint.checkpoint_sha256)
     if (-not $report.Valid) { return $false }
@@ -1248,7 +1248,7 @@ function Invoke-FinalCheckpointCertification {
     Invoke-InspectionChecks
     Assert-Cleanup
     $checkpointFiles = @(Get-ChildItem -LiteralPath $checkpointRoot -File -Filter '*.json')
-    $checkpoints = @($checkpointFiles | ForEach-Object { Read-Work800Checkpoint $_.FullName })
+    $checkpoints = @($checkpointFiles | ForEach-Object { Read-WorkforceCheckpoint $_.FullName })
     $requiredCount = if ($ReuseVerifiedPredecessorEvidence) { 1 + 3 + 61 + 7 } else { 8 + 3 + 61 + 7 }
     if ($checkpoints.Count -lt $requiredCount -or
         @($checkpoints | Where-Object { -not $_.cleanup_verified -or $_.exit_code -ne 0 }).Count -ne 0) {
@@ -1283,7 +1283,7 @@ function Write-Finished([bool]$ShadowEvidence) {
         reused_checkpoint_count = if ($Mode -eq 'Completion') { $reusedCheckpointCount } else { 0 }
         reused_predecessor_evidence_count = if ($Mode -eq 'Completion') { $reusedPredecessorEvidenceCount } else { 0 }
         checkpoint_set_sha256 = if ($Mode -eq 'Completion') {
-            Get-Work800CheckpointSetHash @($verifiedCheckpoints.Values)
+            Get-WorkforceCheckpointSetHash @($verifiedCheckpoints.Values)
         } else { $null }
         source_tree_sha256 = if ($Mode -eq 'Completion') { $completionContext.source_tree_sha256 } else { $null }
         git_head = (git -C $repoRoot rev-parse HEAD).Trim()
@@ -1318,16 +1318,16 @@ function Write-Finished([bool]$ShadowEvidence) {
             $withoutHash[$entry.Key] = $entry.Value
         }
     }
-    $native = (ConvertTo-Work800CanonicalJson $withoutHash) | ConvertFrom-Json
-    $finished.finished_sha256 = Get-Work800ObjectHash $native
+    $native = (ConvertTo-WorkforceCanonicalJson $withoutHash) | ConvertFrom-Json
+    $finished.finished_sha256 = Get-WorkforceObjectHash $native
     $path = Join-Path $OutputRoot 'finished.json'
-    Write-Work800AtomicJson -Path $path -Value $finished -Pretty
+    Write-WorkforceAtomicJson -Path $path -Value $finished -Pretty
     $written = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json
     $writtenWithoutHash = [ordered]@{}
     foreach ($property in $written.PSObject.Properties) {
         if ($property.Name -ne 'finished_sha256') { $writtenWithoutHash[$property.Name] = $property.Value }
     }
-    if ((Get-Work800ObjectHash $writtenWithoutHash) -ne $written.finished_sha256) {
+    if ((Get-WorkforceObjectHash $writtenWithoutHash) -ne $written.finished_sha256) {
         throw 'WORK-800 finished evidence canonical hash verification failed.'
     }
 }

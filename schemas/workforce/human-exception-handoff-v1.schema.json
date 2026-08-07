@@ -1,0 +1,174 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/human-exception-handoff-v1.schema.json",
+    "title":  "HumanExceptionHandoffV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "handoff_id",
+                     "organization_id",
+                     "role_contract_sha256",
+                     "role_instance_sha256",
+                     "case_id",
+                     "case_sha256",
+                     "autonomy_case_admission_sha256",
+                     "source_failure_sha256",
+                     "reason_codes",
+                     "severity",
+                     "situation_model_sha256",
+                     "current_observation_sha256",
+                     "case_progress_class_id",
+                     "applied_action_hashes",
+                     "unresolved_requirement_ids",
+                     "required_human_response_class_id",
+                     "work700_escalation_item_sha256",
+                     "internal_route_id",
+                     "created_at_unix_ms",
+                     "evidence_ids",
+                     "handoff_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "handoff_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                      },
+                       "organization_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                           },
+                       "role_contract_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "role_instance_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                    "maxLength":  71
+                                                },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                   },
+                       "case_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                           "maxLength":  71
+                                       },
+                       "autonomy_case_admission_sha256":  {
+                                                              "type":  "string",
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                              "maxLength":  71
+                                                          },
+                       "source_failure_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                     "maxLength":  71
+                                                 },
+                       "reason_codes":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "severity":  {
+                                        "type":  "string",
+                                        "enum":  [
+                                                     "clarification",
+                                                     "confirmation",
+                                                     "mandatory_escalation",
+                                                     "terminal_escalation"
+                                                 ]
+                                    },
+                       "situation_model_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                      "maxLength":  71
+                                                  },
+                       "current_observation_sha256":  {
+                                                          "type":  "string",
+                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                          "maxLength":  71
+                                                      },
+                       "case_progress_class_id":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512,
+                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                  },
+                       "applied_action_hashes":  {
+                                                     "type":  "array",
+                                                     "maxItems":  512,
+                                                     "uniqueItems":  true,
+                                                     "items":  {
+                                                                   "type":  "string",
+                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                   "maxLength":  71
+                                                               }
+                                                 },
+                       "unresolved_requirement_ids":  {
+                                                          "type":  "array",
+                                                          "maxItems":  512,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                    }
+                                                      },
+                       "required_human_response_class_id":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                            },
+                       "work700_escalation_item_sha256":  {
+                                                              "type":  "string",
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                              "maxLength":  71
+                                                          },
+                       "internal_route_id":  {
+                                                 "type":  "string",
+                                                 "minLength":  1,
+                                                 "maxLength":  512,
+                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                             },
+                       "created_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  18446744073709551615
+                                              },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "maxItems":  512,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                      }
+                                        },
+                       "handoff_sha256":  {
+                                              "type":  "string",
+                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                              "maxLength":  71
+                                          }
+                   }
+}

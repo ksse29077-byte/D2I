@@ -37,7 +37,9 @@ Track K is complete. Do not create KRN-600.
 - `D2I-WORK-600` Episodic Memory and Case Learning Records - **complete**
 - `D2I-WORK-700` Role-level Reporting, SLA and Escalation - **complete**
 - `D2I-WORK-800` Open Digital Employee Shadow Mode - **complete**
-- `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation - **active**
+- `D2I-WORK-900` Limited Autonomy and Human-by-Exception Operation - **complete**
+
+Track W is complete.
 
 WORK-700's completed official gate is:
 
@@ -58,12 +60,18 @@ complete only when `finished.json` has `role_operations_evidence=true`.
 WORK-800 Completion is resumable only through canonical, exact-bound safe
 checkpoints. Use `-Resume`; use `-Fresh` to discard all WORK-800 checkpoints;
 and use `-ReuseVerifiedPredecessorEvidence` only for sealed WORK-700 evidence.
-The next active task is
-`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`.
+WORK-900 Completion reuses only verified WORK-800 evidence, compiles a new
+General Office 1.4.0 Role, and runs a bounded eight-Case one-shot duty cycle.
+Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
+`-Mode All` for deterministic checks and `-Mode Completion` with the pinned
+runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
+actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
+`-Fresh` discards them. The next active task is
+`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
 
 ## Track X - Execution Plane Expansion
 
-- `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes
+- `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **active**
 - `D2I-EDGE-200` Sensor / Camera / IoT observation planes
 - `D2I-EDGE-300` PLC / SCADA / OT supervised execution
 - `D2I-EDGE-400` Robot / AMR / Drone adapters

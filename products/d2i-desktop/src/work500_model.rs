@@ -1,5 +1,6 @@
 use crate::{
-    LocalModelProcessConfigurationV1, LocalModelProcessProvider, VerifiedLocalModelArtifactsV1,
+    LocalModelInvocationMetricsV1, LocalModelProcessConfigurationV1, LocalModelProcessProvider,
+    VerifiedLocalModelArtifactsV1,
 };
 use d2i_intelligence_provider::{
     GoalUnderstandingRequestV1, GoalUnderstandingResultV1, IntelligenceProvider,
@@ -53,6 +54,7 @@ pub struct Work500ProviderCallV1<T> {
     pub descriptor: IntelligenceProviderDescriptorV1,
     pub invocation: IntelligenceProviderInvocationV1,
     pub result: T,
+    pub metrics: LocalModelInvocationMetricsV1,
 }
 
 #[derive(Debug, Clone)]
@@ -188,10 +190,16 @@ impl PinnedWork500ModelSuiteV1 {
             self.goal.artifacts.clone(),
         )?;
         let result = provider.understand_goal(request)?;
+        let metrics = provider.invocation_metrics()?.ok_or_else(|| {
+            IntelligenceProviderError::Integrity(
+                "successful goal invocation has no process metrics".to_owned(),
+            )
+        })?;
         Ok(Work500ProviderCallV1 {
             descriptor: self.goal.descriptor.clone(),
             invocation,
             result,
+            metrics,
         })
     }
 
@@ -223,10 +231,16 @@ impl PinnedWork500ModelSuiteV1 {
             self.situation.artifacts.clone(),
         )?;
         let result = provider.interpret_situation(request)?;
+        let metrics = provider.invocation_metrics()?.ok_or_else(|| {
+            IntelligenceProviderError::Integrity(
+                "successful situation invocation has no process metrics".to_owned(),
+            )
+        })?;
         Ok(Work500ProviderCallV1 {
             descriptor: self.situation.descriptor.clone(),
             invocation,
             result,
+            metrics,
         })
     }
 
@@ -257,10 +271,16 @@ impl PinnedWork500ModelSuiteV1 {
             self.planning.artifacts.clone(),
         )?;
         let result = provider.propose_next_steps(request)?;
+        let metrics = provider.invocation_metrics()?.ok_or_else(|| {
+            IntelligenceProviderError::Integrity(
+                "successful planning invocation has no process metrics".to_owned(),
+            )
+        })?;
         Ok(Work500ProviderCallV1 {
             descriptor: self.planning.descriptor.clone(),
             invocation,
             result,
+            metrics,
         })
     }
 }

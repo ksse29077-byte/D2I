@@ -1,0 +1,186 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/workforce/autonomous-role-duty-cycle-result-v1.schema.json",
+    "title":  "AutonomousRoleDutyCycleResultV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "cycle_id",
+                     "discovered_work",
+                     "admitted_work_items",
+                     "cases_created",
+                     "cases_scheduled",
+                     "cases_claimed",
+                     "autonomous_cases_started",
+                     "autonomous_cases_verified_complete",
+                     "clarification_handoffs",
+                     "mandatory_escalation_handoffs",
+                     "refusals",
+                     "paused_cases",
+                     "failures",
+                     "autonomous_actions",
+                     "provider_invocations",
+                     "recoveries",
+                     "human_touches",
+                     "episodes",
+                     "reports",
+                     "health_status",
+                     "terminal_status",
+                     "residual_process_count",
+                     "residual_profile_count",
+                     "residual_lock_count",
+                     "output_hashes",
+                     "result_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "cycle_id":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  512,
+                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                    },
+                       "discovered_work":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "admitted_work_items":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "cases_created":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "cases_scheduled":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "cases_claimed":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "autonomous_cases_started":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "autonomous_cases_verified_complete":  {
+                                                                  "type":  "integer",
+                                                                  "minimum":  0,
+                                                                  "maximum":  4294967295
+                                                              },
+                       "clarification_handoffs":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "mandatory_escalation_handoffs":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "refusals":  {
+                                        "type":  "integer",
+                                        "minimum":  0,
+                                        "maximum":  4294967295
+                                    },
+                       "paused_cases":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "failures":  {
+                                        "type":  "integer",
+                                        "minimum":  0,
+                                        "maximum":  4294967295
+                                    },
+                       "autonomous_actions":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "provider_invocations":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "recoveries":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "human_touches":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "episodes":  {
+                                        "type":  "integer",
+                                        "minimum":  0,
+                                        "maximum":  4294967295
+                                    },
+                       "reports":  {
+                                       "type":  "integer",
+                                       "minimum":  0,
+                                       "maximum":  4294967295
+                                   },
+                       "health_status":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "healthy",
+                                                          "warning",
+                                                          "pause_required",
+                                                          "critical"
+                                                      ]
+                                         },
+                       "terminal_status":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "idle",
+                                                            "bounded_limit_reached",
+                                                            "paused",
+                                                            "health_tripped",
+                                                            "failed"
+                                                        ]
+                                           },
+                       "residual_process_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "residual_profile_count":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "residual_lock_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "output_hashes":  {
+                                             "type":  "array",
+                                             "maxItems":  512,
+                                             "uniqueItems":  true,
+                                             "items":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                           "maxLength":  71
+                                                       }
+                                         },
+                       "result_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                             "maxLength":  71
+                                         }
+                   }
+}

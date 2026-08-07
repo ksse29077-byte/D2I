@@ -193,7 +193,9 @@ state.
 - `D2I-WORK-600`: Episodic Memory and Case Learning Records. **Complete**
 - `D2I-WORK-700`: Role-level Reporting, SLA and Escalation. **Complete**
 - `D2I-WORK-800`: Open Digital Employee Shadow Mode. **Complete**
-- `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation. **First active task**
+- `D2I-WORK-900`: Limited Autonomy and Human-by-Exception Operation. **Complete**
+
+**Track W is complete.** The first active task is `D2I-EDGE-100`.
 
 ### Track X - Execution Plane Expansion
 

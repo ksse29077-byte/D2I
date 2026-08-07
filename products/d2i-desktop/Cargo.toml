@@ -20,6 +20,7 @@ d2i-work-intake = { path = "../../crates/d2i-work-intake" }
 d2i-work-queue = { path = "../../crates/d2i-work-queue" }
 d2i-situation-model = { path = "../../crates/d2i-situation-model" }
 d2i-intelligence-provider = { path = "../../crates/d2i-intelligence-provider" }
+d2i-limited-autonomy = { path = "../../crates/d2i-limited-autonomy" }
 d2i-adaptive-planner = { path = "../../crates/d2i-adaptive-planner" }
 d2i-episodic-memory = { path = "../../crates/d2i-episodic-memory" }
 d2i-case-learning = { path = "../../crates/d2i-case-learning" }

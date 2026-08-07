@@ -188,6 +188,18 @@ pub struct LocalModelProcessProvider {
     invocation: IntelligenceProviderInvocationV1,
     artifacts: VerifiedLocalModelArtifactsV1,
     consumed: Mutex<bool>,
+    metrics: Mutex<Option<LocalModelInvocationMetricsV1>>,
+}
+
+/// Bounded telemetry from one isolated local-model invocation.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LocalModelInvocationMetricsV1 {
+    pub elapsed_milliseconds: u64,
+    pub peak_process_memory_bytes: u64,
+    pub peak_job_memory_bytes: u64,
+    pub input_bytes: u64,
+    pub output_bytes: u64,
 }
 
 impl LocalModelProcessProvider {
@@ -220,7 +232,22 @@ impl LocalModelProcessProvider {
             invocation,
             artifacts,
             consumed: Mutex::new(false),
+            metrics: Mutex::new(None),
         })
+    }
+
+    /// Returns telemetry only after a successful provider invocation.
+    pub fn invocation_metrics(
+        &self,
+    ) -> Result<Option<LocalModelInvocationMetricsV1>, IntelligenceProviderError> {
+        self.metrics
+            .lock()
+            .map(|metrics| metrics.clone())
+            .map_err(|_| {
+                IntelligenceProviderError::Unavailable(
+                    "provider metrics lock is poisoned".to_owned(),
+                )
+            })
     }
 
     fn invoke<TInput, TOutput>(
@@ -259,15 +286,20 @@ impl LocalModelProcessProvider {
         }
         let input_value = serde_json::to_value(input)
             .map_err(|error| IntelligenceProviderError::Invalid(error.to_string()))?;
-        let raw = self.invoke_appcontainer_worker(operation, input_value)?;
-        parse_strict_provider_json(&raw)
+        let (raw, metrics) = self.invoke_appcontainer_worker(operation, input_value)?;
+        let parsed = parse_strict_provider_json(&raw)?;
+        *self.metrics.lock().map_err(|_| {
+            IntelligenceProviderError::Unavailable("provider metrics lock is poisoned".to_owned())
+        })? = Some(metrics);
+        Ok(parsed)
     }
 
     fn invoke_appcontainer_worker(
         &self,
         _operation: ProviderOperationV1,
         typed_input: Value,
-    ) -> Result<Vec<u8>, IntelligenceProviderError> {
+    ) -> Result<(Vec<u8>, LocalModelInvocationMetricsV1), IntelligenceProviderError> {
+        let started = Instant::now();
         let configuration = self.artifacts.configuration();
         let nonce = secure_random_bytes::<16>()
             .map_err(|error| IntelligenceProviderError::Unavailable(error.to_string()))?;
@@ -417,8 +449,18 @@ impl LocalModelProcessProvider {
                 "local model output exceeds configured bound".to_owned(),
             ));
         }
+        let accounting = job
+            .memory_accounting()
+            .map_err(|error| IntelligenceProviderError::Process(error.to_string()))?;
+        let metrics = LocalModelInvocationMetricsV1 {
+            elapsed_milliseconds: u64::try_from(started.elapsed().as_millis()).unwrap_or(u64::MAX),
+            peak_process_memory_bytes: accounting.peak_process_memory_bytes,
+            peak_job_memory_bytes: accounting.peak_job_memory_bytes,
+            input_bytes: u64::try_from(prompt.len()).unwrap_or(u64::MAX),
+            output_bytes: u64::try_from(output.len()).unwrap_or(u64::MAX),
+        };
         drop(cleanup);
-        Ok(output)
+        Ok((output, metrics))
     }
 }
 

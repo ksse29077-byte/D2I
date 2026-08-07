@@ -14,11 +14,12 @@ Case Contract v1`, `D2I-WORK-300 - Work Radar and Work Intake`, and
 `D2I-WORK-400 - Work Queue, Scheduler and Case Ownership`, and
 `D2I-WORK-500 - Situation Model and Adaptive Planner`, `D2I-WORK-600 -
 Episodic Memory and Case Learning Records`, and `D2I-WORK-700 - Role-level
-Reporting, SLA and Escalation`, and `D2I-WORK-800 - Open Digital Employee
-Shadow Mode` are complete
+Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
+Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
+are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. The active next task is `D2I-WORK-900 - Limited Autonomy
-and Human-by-Exception Operation`.
+runtime boundaries. Track W is complete. The active next task is
+`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
 
 WORK-700 is governed by ADR 0034 and
 `docs/workforce/role-reporting-sla-escalation-v1.md`. It preserves immutable
@@ -27,6 +28,14 @@ runtime projections, uses closed evidence-grounded KPI formulas, and limits
 report publication and escalation to protected internal inboxes. It adds no
 Compiler IR, package format, runtime ABI, model, external connector, or
 background service. Its official All and Completion gates are complete.
+
+WORK-900 is governed by ADR 0036 and
+`docs/workforce/limited-autonomy-human-exception-v1.md`. It adds no Compiler IR,
+package format, or runtime ABI change. Its readiness, Profile, deployment,
+eligibility, and admission artifacts remain non-executable; actual authority
+continues through Role, Policy, one-shot activation, and KRN. The one-shot
+eight-Case coordinator has no background service, external connector, or
+online production mutation.
 
 ## Product Context
 

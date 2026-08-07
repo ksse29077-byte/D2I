@@ -26,8 +26,11 @@ memory store, and quarantined offline learning candidates. WORK-700 adds
 evidence-grounded Role reporting, pause-aware SLA projections, protected
 internal publication, and exactly-bound escalation. WORK-800 adds blinded,
 non-executing, model-backed Shadow evaluation with protected evidence and
-resumable exact-bound Completion checkpoints. The active next task is
-`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`.
+resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
+one-step limited autonomy, signed control and human-exception handling, and a
+bounded General Office duty cycle while preserving Policy, activation, and
+KRN as the only action path. Track W is complete. The active next task is
+`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`.
 
 WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
 current-user/SYSTEM DACL-protected content-addressed store. It consumes only
@@ -35,8 +38,9 @@ verified Role, Case, Queue, Planner/KRN, Episode, and protected audit hashes;
 its reports, internal receipts, acknowledgements, and resolutions cannot mint
 policy, activation, execution, completion, or Case-reopen authority. No
 background Windows service or external delivery plane is introduced.
-Production connectors remain unimplemented. WORK-700 and WORK-800 official
-Completion gates are complete; WORK-900 has not started.
+Production connectors remain unimplemented. WORK-700, WORK-800, and WORK-900
+official Completion gates are complete. WORK-900 is one-shot and adds no
+background Windows service, connector, self-resume, or online mutation.
 
 ## Active Product Goal
 

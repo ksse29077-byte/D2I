@@ -13,6 +13,7 @@ mod cognitive_verification_v2;
 mod contract;
 mod episodic_memory;
 mod executor;
+mod limited_autonomy;
 mod local_model_provider;
 mod policy;
 mod role_instance;
@@ -151,9 +152,14 @@ pub use episodic_memory::{
     MemoryStoreRecordKindV1,
 };
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
+pub use limited_autonomy::{
+    initialize_autonomy_store, recover_autonomy_store, verify_autonomy_store,
+    AutonomyStoreArtifactV1, AutonomyStoreRecordKindV1, AutonomyStoreRecordV1, AutonomyStoreV1,
+    AutonomyStoreVerificationV1,
+};
 pub use local_model_provider::{
-    local_model_worker_main, LocalModelProcessConfigurationV1, LocalModelProcessProvider,
-    VerifiedLocalModelArtifactsV1,
+    local_model_worker_main, LocalModelInvocationMetricsV1, LocalModelProcessConfigurationV1,
+    LocalModelProcessProvider, VerifiedLocalModelArtifactsV1,
 };
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,

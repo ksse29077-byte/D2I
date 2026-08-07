@@ -415,7 +415,7 @@ cargo build --workspace --release
 
 ## Next Task
 
-`D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
+`D2I-EDGE-100 - Enterprise API / ERP / MES / CMMS planes`
 
 KRN-500 is complete with actual module process invocation, two real UIA action
 cycles, per-action policy and activation, independent verification, bounded
@@ -444,8 +444,9 @@ in an actual model-backed Path C, and quarantines offline learning candidates
 without production mutation. The General Office `1.0.0` and memory-enabled
 `1.1.0` Role bundles are independently compiled and verified; `1.1.0` memory
 evidence binds its exact contract, signed approval, signed delegation, and
-active Role Instance rather than fixture hashes. WORK-700 and WORK-800 are
-complete, and WORK-900 is the first active task.
+active Role Instance rather than fixture hashes. WORK-700, WORK-800, and
+WORK-900 are complete. Track W is complete, and EDGE-100 is the first active
+task.
 
 WORK-700 now has a platform-neutral Role Operations crate, 30 strict schemas,
 General Office 1.2.0 fixture, protected Desktop store, inspection CLI, and an
@@ -495,4 +496,48 @@ and readiness hash
 `sha256:a6dfa9bfb8e2f8e160a943a62e99a2e33a032eb966aed733e0814f1e4c022f93`.
 The independent 16-step `All` run also completed with zero failures.
 Process, credential, activation, profile, protected-store, and lock residuals
-are all zero. WORK-900 has not started.
+are all zero.
+
+WORK-900 now provides the platform-neutral `d2i-limited-autonomy` contracts,
+18 strict schemas, General Office Role 1.4.0, signed readiness/deployment and
+control chains, deterministic per-Case eligibility/admission, exactly-once
+human exception handoff/response, finite health interlocks, crash directives,
+and a protected Desktop autonomy store. Readiness and admission are not
+execution authority; every side effect still uses current Role, delegation,
+ownership, lease, Work Grant, Policy, one-shot activation, KRN, fresh
+re-observation, and independent verification.
+
+The actual pinned Qwen3-4B/llama.cpp Completion ran one bounded eight-Case
+General Office duty cycle through actual WORK-300 Radar/Intake, WORK-400 Queue,
+eight provider invocations, and eight Windows KRN scenarios. Five routine
+Cases reached verified closure with zero routine human touches. Three typed
+exception Cases produced exactly-once handoffs; clarification consumed one
+bounded human fact and resumed from a fresh plan, and terminal escalations did
+not continue autonomously. Eleven actual side effects and 27 observations were
+verified with one bounded recovery. False completion, wrong target/action,
+duplicate claim/action, authority expansion, forbidden capability, escalation
+miss, secret leakage, network access, and critical errors were all zero.
+
+The Completion also proves signed pause/resume after SetValue without blind
+Save replay, deterministic 128 Case x 100 replay, protected store/audit
+verification, strict sensitive-artifact scanning, step-specific safe
+checkpoint reuse, per-model-invocation Job Object performance telemetry, and
+zero process, profile, activation, credential, store, or lock residuals.
+WORK-900 and Track W are complete. Track X has not started.
+
+The final WORK-900 Role, readiness, Profile, deployment, Completion, replay,
+certification, performance, and `finished.json` hashes are respectively
+`sha256:15adbd0ed07e2a38481f895fafa9736a03b672a6f5d53094dbd59ec5f2e9a078`,
+`sha256:e628ed6a8deb509c63feb60a5859baaee1fd9bc7158698bebbc4125c6722204d`,
+`sha256:3173abcee938c0e973189af73cdef354f89de6cbe835a623b55a9041df9c4326`,
+`sha256:d22114d5d0baa1b1c24d6739e92f0df760c9194584b61d383343b08b402f5fff`,
+`sha256:12bf10a8830e820a3c885d78c0f788dc3e903f5eefa5e6faa2df93499818d871`,
+`sha256:46d3945fc470b8d30fa3c41ea587f5b6e8aaab1cfac05da245526ca01fd2b03d`,
+`sha256:6b94dd94aa59f4b138097388ddc48247b995d9a911cc154336587f8079c05c29`,
+`sha256:af3a95f9933651c920d779d05d49d5ddd9cd75b04de7cec46688958e525b9cc2`,
+and
+`sha256:a8d66d9cb9b8a3723484807c81d8e988e706868499b7d7b197e552258e4e577d`.
+Eight actual provider calls took 178,045 ms in aggregate; measured peak model
+process/job memory was 2,614,284,288/2,615,558,144 bytes and model input plus
+output movement was 25,302 bytes. These are evidence-run measurements, not a
+general performance claim.
