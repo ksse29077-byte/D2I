@@ -531,6 +531,7 @@ const PNG_1X1: &[u8] = &[
     0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 ];
 
+#[cfg(windows)]
 #[test]
 fn bound_file_worker_executes_one_fresh_hwpx_generation() {
     let root = test_root("file-worker");

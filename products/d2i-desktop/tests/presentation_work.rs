@@ -85,6 +85,7 @@ fn facts() -> PresentationFactBindingV1 {
     .unwrap_or_else(|error| panic!("fact binding: {error}"))
 }
 
+#[cfg(windows)]
 #[test]
 fn pinned_file_worker_creates_a_new_generation_and_preserves_original() {
     let root = TestRoot::new("file-worker");

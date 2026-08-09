@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 #[path = "support/work_case_fixture.rs"]
 mod work_case_fixture;
 

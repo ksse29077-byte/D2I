@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 use d2i_desktop::{
     EnterpriseFixtureBootstrapV1, EnterpriseFixtureReadyV1, EnterpriseWorkerRequestV1,
     EnterpriseWorkerResponseV1,

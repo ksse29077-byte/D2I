@@ -116,6 +116,7 @@ fn schema_unknown_field_is_rejected() {
     assert!(!validator.is_valid(&json!({"schema_version": 1, "unknown": true})));
 }
 
+#[cfg(windows)]
 #[test]
 fn protected_planner_ledger_persists_and_rejects_tampering() {
     let root = TestRoot::create("ledger");

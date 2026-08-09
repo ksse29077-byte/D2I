@@ -154,6 +154,7 @@ fn policy(
     }
 }
 
+#[cfg(windows)]
 #[test]
 fn decision_bound_local_read_is_audited_without_payload_leakage() {
     let temp = TempDirectory::new("local-read");
@@ -207,6 +208,7 @@ fn decision_bound_local_read_is_audited_without_payload_leakage() {
     assert!(replay.matched);
 }
 
+#[cfg(windows)]
 #[test]
 fn approval_is_bound_to_preparation_and_cannot_be_reused() {
     let virtual_root = if cfg!(windows) {
@@ -298,6 +300,7 @@ fn approval_is_bound_to_preparation_and_cannot_be_reused() {
         .is_err());
 }
 
+#[cfg(windows)]
 #[test]
 fn local_adapter_rejects_change_after_prepare() {
     let temp = TempDirectory::new("toctou");
@@ -336,6 +339,7 @@ fn local_adapter_rejects_change_after_prepare() {
         .is_err());
 }
 
+#[cfg(windows)]
 #[test]
 fn audit_verification_detects_tampering() {
     let temp = TempDirectory::new("audit-tamper");

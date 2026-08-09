@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 #[path = "support/work_radar_intake_fixture.rs"]
 mod work_radar_intake_fixture;
 

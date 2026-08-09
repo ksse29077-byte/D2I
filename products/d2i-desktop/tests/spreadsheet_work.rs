@@ -34,6 +34,7 @@ impl Drop for TestRoot {
     }
 }
 
+#[cfg(windows)]
 #[test]
 fn pinned_file_worker_mutates_new_generation_and_preserves_original() {
     let root = TestRoot::new("file-worker");

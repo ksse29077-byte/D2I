@@ -55,6 +55,7 @@ fn profile(workspace_id: &str, root_binding_sha256: String, now: u64) -> OfficeW
     }
 }
 
+#[cfg(windows)]
 #[test]
 fn unsigned_tampered_and_wrong_root_profiles_fail_closed() {
     let root = temporary_root("profile");

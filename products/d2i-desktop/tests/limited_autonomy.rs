@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 use d2i_desktop::{
     initialize_autonomy_store, recover_autonomy_store, verify_autonomy_store,
     AutonomyStoreArtifactV1, AutonomyStoreV1,

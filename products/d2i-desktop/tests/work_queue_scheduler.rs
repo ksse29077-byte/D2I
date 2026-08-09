@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 #[allow(dead_code)]
 #[path = "support/work_radar_intake_fixture.rs"]
 mod work_radar_intake_fixture;

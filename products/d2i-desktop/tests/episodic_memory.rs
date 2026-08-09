@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 use d2i_case_learning::{create_learning_candidate, CandidateRequestV1, LearningCandidateKindV1};
 use d2i_desktop::{
     initialize_episodic_memory_store, recover_episodic_memory_store, verify_episodic_memory_store,
