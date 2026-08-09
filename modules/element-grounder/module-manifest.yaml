@@ -108,7 +108,7 @@ provenance_and_license:
   generated_artifact: false
   third_party_dependencies:
     - name: serde
-      version: 1.0.217
+      version: 1.0.220
       license: MIT-OR-Apache-2.0
       source: workspace-lock
     - name: serde_json

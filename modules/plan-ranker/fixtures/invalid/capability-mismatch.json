@@ -10,7 +10,7 @@
                                       "contract_version":  1,
                                       "build_id":  "plan-ranker-v1",
                                       "artifact_sha256":  "sha256:6927702fbe54cb77c0e0e1ec2a41db2826bbaccba88a76d166cec33605b48b2b",
-                                      "manifest_sha256":  "sha256:c0308825f59aa89e7a0821db8fd1849d336699418abe396634c6723587e1aa6a"
+                                      "manifest_sha256":  "sha256:e2bf6ed392fc153205d104f1ee98e3554a4ad9258c62addff5013ac9dea3e326"
                                   },
                        "requested_capability":  "cognitive.execute-side-effect",
                        "input_schema_id":  "cognitive-plan-ranking-input-v1",

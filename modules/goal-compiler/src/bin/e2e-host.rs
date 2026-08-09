@@ -1,7 +1,7 @@
 use d2i_goal_compiler::GoalCompiler;
 use d2i_module_sdk::{
-    canonical_json_bytes, invoke_module, load_module_manifest, parse_json_strict, InvocationContext,
-    ModuleInvocationEnvelope, SchemaCatalog,
+    canonical_json_bytes, invoke_module, load_module_manifest, parse_json_strict,
+    InvocationContext, ModuleInvocationEnvelope, SchemaCatalog,
 };
 use std::io::{Read, Write};
 use std::process::ExitCode;
@@ -44,8 +44,8 @@ fn run() -> Result<(), ()> {
             .collect(),
         invocation_trust_labels: invocation.trust_labels.clone(),
     };
-    let result = invoke_module(&GoalCompiler, &loaded, &schemas, &invocation, &context)
-        .map_err(|_| ())?;
+    let result =
+        invoke_module(&GoalCompiler, &loaded, &schemas, &invocation, &context).map_err(|_| ())?;
     let bytes = canonical_json_bytes(&result).map_err(|_| ())?;
     std::io::stdout().write_all(&bytes).map_err(|_| ())
 }

@@ -11,7 +11,7 @@ publish = false
 
 [dependencies]
 d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
-serde = { version = "=1.0.217", features = ["derive"] }
+serde = { version = "=1.0.220", features = ["derive"] }
 
 [dev-dependencies]
 jsonschema = { version = "=0.18.3", default-features = false, features = ["draft202012"] }

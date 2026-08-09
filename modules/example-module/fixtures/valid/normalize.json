@@ -11,7 +11,7 @@
       "contract_version": 1,
       "build_id": "example-module-v1",
       "artifact_sha256": "sha256:362210e9b3467858072efb1985eacbb6480878354b1f402110d5e55d45401910",
-      "manifest_sha256": "sha256:61321158a523a1eaea10d07f1563631cdb7206206ced10d71e1eeeef70e48e8d"
+      "manifest_sha256": "sha256:ec5ddc6e3dc4db8ee0fb187106204e99bea636d03e541d5641b8e2e0a210fe12"
     },
     "requested_capability": "example.normalize-text",
     "input_schema_id": "example-input-v1",

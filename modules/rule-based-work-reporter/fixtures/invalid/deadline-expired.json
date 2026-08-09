@@ -11,7 +11,7 @@
       "contract_version": 1,
       "build_id": "rule-based-work-reporter-v1",
       "artifact_sha256": "sha256:c819dae8da3ddf6c931af5086a40122d29817b5dacd3f94f778425eff2e39840",
-      "manifest_sha256": "sha256:d2c404a923beb9327bc2c5a4f7efec4b2a365144e68b41a3e6821158a389dcca"
+      "manifest_sha256": "sha256:bcf3dbe7e55358353bec2370b940b01652a41e9fdefe5ec6f485f45f5021a95f"
     },
     "requested_capability": "cognitive.work-report",
     "input_schema_id": "cognitive-work-report-input-v1",

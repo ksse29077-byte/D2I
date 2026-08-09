@@ -11,7 +11,7 @@
       "contract_version": 1,
       "build_id": "element-grounder-v1",
       "artifact_sha256": "sha256:aab8b666654894d70e7fd73beb6e922f383ec9864c9d1356637aa59a6f53c4f3",
-      "manifest_sha256": "sha256:62c7d9df8ce9de0a8be0eb4eb68082643c0ec007dc55714fb18b3b219de3b51b"
+      "manifest_sha256": "sha256:b9997821cb4564ae3b02f0589f3e59e384a4b5094fe3a1e2eb62adcd799ae2e5"
     },
     "requested_capability": "cognitive.element-ground",
     "input_schema_id": "element-grounding-input-v1",

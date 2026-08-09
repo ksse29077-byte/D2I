@@ -12,7 +12,7 @@ publish = false
 [dependencies]
 d2i-cognitive-ir = { path = "../../crates/d2i-cognitive-ir" }
 d2i-module-sdk = { path = "../../crates/d2i-module-sdk" }
-serde = { version = "=1.0.217", features = ["derive"] }
+serde = { version = "=1.0.220", features = ["derive"] }
 serde_json = "=1.0.138"
 
 [dev-dependencies]

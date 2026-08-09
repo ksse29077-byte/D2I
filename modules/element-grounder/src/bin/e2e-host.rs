@@ -1,7 +1,7 @@
 use d2i_element_grounder::ElementGrounder;
 use d2i_module_sdk::{
-    canonical_json_bytes, invoke_module, load_module_manifest, parse_json_strict, InvocationContext,
-    ModuleInvocationEnvelope, SchemaCatalog,
+    canonical_json_bytes, invoke_module, load_module_manifest, parse_json_strict,
+    InvocationContext, ModuleInvocationEnvelope, SchemaCatalog,
 };
 use std::io::{Read, Write};
 use std::process::ExitCode;

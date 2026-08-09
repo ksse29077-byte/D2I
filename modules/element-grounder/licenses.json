@@ -11,7 +11,7 @@
     },
     {
       "name": "serde",
-      "version": "1.0.217",
+      "version": "1.0.220",
       "license": "MIT-OR-Apache-2.0",
       "source": "workspace-lock"
     },

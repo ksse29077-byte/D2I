@@ -11,7 +11,7 @@
       "contract_version": 1,
       "build_id": "goal-compiler-v1",
       "artifact_sha256": "sha256:0f2e9c09488c592b3c812297df565dcddcb97da793a06321d72c01929fd06b29",
-      "manifest_sha256": "sha256:781ba48f6dbfa6b31ff02c46db1a41c9ea2c120075a8c2ec394a14f2d0c67af7"
+      "manifest_sha256": "sha256:a9352eea7268e211af85cf2b6a4cb2212078071dacc0bd8b7bef0a2815f23295"
     },
     "requested_capability": "cognitive.goal-compile",
     "input_schema_id": "goal-compilation-input-v1",
