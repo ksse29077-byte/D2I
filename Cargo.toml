@@ -33,6 +33,7 @@ members = [
     "crates/d2i-enterprise-api-plane",
     "crates/d2i-office-capability",
     "crates/d2i-document-capability",
+    "crates/d2i-spreadsheet-capability",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

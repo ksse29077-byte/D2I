@@ -1,0 +1,107 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-post-operation-verification-v1.schema.json",
+    "title":  "SpreadsheetPostOperationVerificationV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "verification_id",
+                     "binding_sha256",
+                     "receipt_sha256",
+                     "diff_sha256",
+                     "fresh_snapshot_sha256",
+                     "expected_postcondition_ids",
+                     "satisfied_postcondition_ids",
+                     "protected_invariant_ids",
+                     "status",
+                     "verified_at_unix_ms",
+                     "verification_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "verification_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          },
+                       "diff_sha256":  {
+                                           "type":  "string",
+                                           "maxLength":  71,
+                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                       },
+                       "fresh_snapshot_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "expected_postcondition_ids":  {
+                                                          "type":  "array",
+                                                          "minItems":  1,
+                                                          "maxItems":  32,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "satisfied_postcondition_ids":  {
+                                                           "type":  "array",
+                                                           "minItems":  0,
+                                                           "maxItems":  32,
+                                                           "uniqueItems":  true,
+                                                           "items":  {
+                                                                         "type":  "string",
+                                                                         "minLength":  1,
+                                                                         "maxLength":  512,
+                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                     }
+                                                       },
+                       "protected_invariant_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  1,
+                                                       "maxItems":  32,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "verified",
+                                                   "failed",
+                                                   "inconclusive",
+                                                   "unsupported",
+                                                   "unsafe"
+                                               ]
+                                  },
+                       "verified_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "verification_sha256":  {
+                                                   "type":  "string",
+                                                   "maxLength":  71,
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               }
+                   }
+}

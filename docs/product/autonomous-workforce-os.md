@@ -201,8 +201,8 @@ state.
 
 - `D2I-OFFICE-100`: Capability source intake and artifact workspace. **Complete**
 - `D2I-OFFICE-200`: HWP/HWPX and Word document work. **Complete**
-- `D2I-OFFICE-300`: Excel / spreadsheet work. **First active**
-- `D2I-OFFICE-400`: PowerPoint presentation work.
+- `D2I-OFFICE-300`: Excel / spreadsheet work. **Complete**
+- `D2I-OFFICE-400`: PowerPoint presentation work. **First active**
 - `D2I-OFFICE-500`: PDF and document interchange.
 - `D2I-OFFICE-600`: Browser research and controlled download.
 - `D2I-OFFICE-700`: Email, messenger, review, and feedback loop.
@@ -311,8 +311,7 @@ quarantined offline candidates without changing production intelligence.
 WORK-700 applies immutable Role operations declarations to authoritative
 evidence, produces pause-aware SLA and closed integer KPI projections, and
 routes non-authoritative reports and escalations only to protected internal
-inboxes. The active next task is
-`D2I-WORK-800 - Open Digital Employee Shadow Mode`.
+inboxes. Track W is complete.
 
 WORK-700 applies existing immutable Role KPI, SLA, reporting, and escalation
 declarations to authoritative Case, Queue/Ownership, Planner/KRN, Episode, and
@@ -325,3 +324,15 @@ authority. External delivery and background operation remain outside this
 task. The completed five-Case General Office E2E proves approved pause handling,
 breach detection, human handoff, explicit refusal, internal publication and
 acknowledged escalation with zero residual runtime state.
+
+OFFICE-300 keeps spreadsheet context proportional to the question rather than
+to workbook size. A private bounded semantic index executes a closed,
+deterministic query algebra and emits evidence-bound typed facts; a separate
+deterministic slicer admits only the facts that fit an explicit count, byte,
+and token budget. Models never receive workbook packages, raw worksheet XML,
+unselected cells, paths, formulas, or Excel automation objects. Mutation
+remains a separate Policy-, binding-, activation-, worker-, and fresh
+verification-bound path. The elevated WFP Completion gate is now certified
+with actual pinned Qwen, installed Excel, exact temporary WFP isolation,
+signed certification, protected audit, deterministic replay, and zero
+residual state. OFFICE-400 is the first active task.

@@ -1,10 +1,17 @@
 //! Narrow Win32 FFI wrappers used by the isolated desktop worker.
 
+#[cfg(windows)]
+mod excel_automation;
 mod verifier_broker;
 mod wfp;
 #[cfg(windows)]
 mod word_automation;
 
+#[cfg(windows)]
+pub use excel_automation::{
+    execute_excel_spreadsheet_operation, installed_excel_process_ids, ExcelAutomationFormulaV1,
+    ExcelAutomationOperationV1, ExcelAutomationReceiptV1, ExcelAutomationScalarV1,
+};
 pub use verifier_broker::{
     accept_verifier_pipe, connect_verifier_pipe, current_process_has_sid,
     grant_appcontainer_child_query_to_verifier, grant_current_process_query_to_verifier,

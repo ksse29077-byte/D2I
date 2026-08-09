@@ -1,0 +1,103 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-backend-descriptor-v1.schema.json",
+    "title":  "SpreadsheetBackendDescriptorV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "backend_id",
+                     "backend_kind",
+                     "supported_format_ids",
+                     "supported_operations",
+                     "requires_application",
+                     "application_sha256",
+                     "worker_sha256",
+                     "network_denied",
+                     "macro_disabled",
+                     "descriptor_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "backend_kind":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "xlsx_file",
+                                                         "csv_file",
+                                                         "excel_com"
+                                                     ]
+                                        },
+                       "supported_format_ids":  {
+                                                    "type":  "array",
+                                                    "minItems":  1,
+                                                    "maxItems":  2,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "enum":  [
+                                                                               "xlsx",
+                                                                               "csv"
+                                                                           ]
+                                                              }
+                                                },
+                       "supported_operations":  {
+                                                    "type":  "array",
+                                                    "minItems":  1,
+                                                    "maxItems":  9,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "enum":  [
+                                                                               "inspect",
+                                                                               "query",
+                                                                               "create_from_template",
+                                                                               "set_cell_value",
+                                                                               "set_cell_formula",
+                                                                               "append_table_row",
+                                                                               "apply_cell_style",
+                                                                               "create_table",
+                                                                               "save_version"
+                                                                           ]
+                                                              }
+                                                },
+                       "requires_application":  {
+                                                    "type":  "boolean"
+                                                },
+                       "application_sha256":  {
+                                                  "oneOf":  [
+                                                                {
+                                                                    "type":  "string",
+                                                                    "maxLength":  71,
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                },
+                                                                {
+                                                                    "type":  "null"
+                                                                }
+                                                            ]
+                                              },
+                       "worker_sha256":  {
+                                             "type":  "string",
+                                             "maxLength":  71,
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         },
+                       "network_denied":  {
+                                              "type":  "boolean"
+                                          },
+                       "macro_disabled":  {
+                                              "type":  "boolean"
+                                          },
+                       "descriptor_sha256":  {
+                                                 "type":  "string",
+                                                 "maxLength":  71,
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                             }
+                   }
+}

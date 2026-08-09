@@ -1,0 +1,57 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-work-replay-report-v1.schema.json",
+    "title":  "SpreadsheetWorkReplayReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "scenario_count",
+                     "runs_per_scenario",
+                     "query_hash_mismatch_count",
+                     "context_slice_hash_mismatch_count",
+                     "operation_hash_mismatch_count",
+                     "blind_replay_count",
+                     "report_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "scenario_count":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "runs_per_scenario":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "query_hash_mismatch_count":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "context_slice_hash_mismatch_count":  {
+                                                                 "type":  "integer",
+                                                                 "minimum":  0,
+                                                                 "maximum":  4294967295
+                                                             },
+                       "operation_hash_mismatch_count":  {
+                                                             "type":  "integer",
+                                                             "minimum":  0,
+                                                             "maximum":  4294967295
+                                                         },
+                       "blind_replay_count":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "report_sha256":  {
+                                             "type":  "string",
+                                             "maxLength":  71,
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         }
+                   }
+}

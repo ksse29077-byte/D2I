@@ -1,0 +1,648 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-operation-intent-v1.schema.json",
+    "title":  "SpreadsheetOperationIntentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "intent_id",
+                     "case_id",
+                     "workbook_id",
+                     "artifact_id",
+                     "source_generation",
+                     "source_content_sha256",
+                     "source_snapshot_sha256",
+                     "operation",
+                     "mutation",
+                     "query_sha256",
+                     "context_slice_sha256",
+                     "expected_postcondition_ids",
+                     "risk_class",
+                     "intent_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "intent_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "workbook_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "source_generation":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0
+                                             },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "source_snapshot_sha256":  {
+                                                      "type":  "string",
+                                                      "maxLength":  71,
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "operation":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "inspect",
+                                                      "query",
+                                                      "create_from_template",
+                                                      "set_cell_value",
+                                                      "set_cell_formula",
+                                                      "append_table_row",
+                                                      "apply_cell_style",
+                                                      "create_table",
+                                                      "save_version"
+                                                  ]
+                                     },
+                       "mutation":  {
+                                        "oneOf":  [
+                                                      {
+                                                          "oneOf":  [
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "target_cell_id",
+                                                                                             "value"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "set_cell_value"
+                                                                                                                 },
+                                                                                               "target_cell_id":  {
+                                                                                                                      "type":  "string",
+                                                                                                                      "minLength":  1,
+                                                                                                                      "maxLength":  512,
+                                                                                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                  },
+                                                                                               "value":  {
+                                                                                                             "oneOf":  [
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "blank"
+                                                                                                                                                                 }
+                                                                                                                                              }
+                                                                                                                           },
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type",
+                                                                                                                                                "value"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "text"
+                                                                                                                                                                 },
+                                                                                                                                                  "value":  {
+                                                                                                                                                                "type":  "string",
+                                                                                                                                                                "minLength":  1,
+                                                                                                                                                                "maxLength":  512
+                                                                                                                                                            }
+                                                                                                                                              }
+                                                                                                                           },
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type",
+                                                                                                                                                "value"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "integer"
+                                                                                                                                                                 },
+                                                                                                                                                  "value":  {
+                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                "minimum":  -9223372036854775808,
+                                                                                                                                                                "maximum":  9223372036854775807
+                                                                                                                                                            }
+                                                                                                                                              }
+                                                                                                                           },
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type",
+                                                                                                                                                "scaled_value",
+                                                                                                                                                "scale"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "decimal"
+                                                                                                                                                                 },
+                                                                                                                                                  "scaled_value":  {
+                                                                                                                                                                       "type":  "integer",
+                                                                                                                                                                       "minimum":  -9223372036854775808,
+                                                                                                                                                                       "maximum":  9223372036854775807
+                                                                                                                                                                   },
+                                                                                                                                                  "scale":  {
+                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                "minimum":  0,
+                                                                                                                                                                "maximum":  6
+                                                                                                                                                            }
+                                                                                                                                              }
+                                                                                                                           },
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type",
+                                                                                                                                                "value"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "boolean"
+                                                                                                                                                                 },
+                                                                                                                                                  "value":  {
+                                                                                                                                                                "type":  "boolean"
+                                                                                                                                                            }
+                                                                                                                                              }
+                                                                                                                           },
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type",
+                                                                                                                                                "days_since_unix_epoch"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "date"
+                                                                                                                                                                 },
+                                                                                                                                                  "days_since_unix_epoch":  {
+                                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                                "minimum":  -2147483648,
+                                                                                                                                                                                "maximum":  2147483647
+                                                                                                                                                                            }
+                                                                                                                                              }
+                                                                                                                           },
+                                                                                                                           {
+                                                                                                                               "type":  "object",
+                                                                                                                               "additionalProperties":  false,
+                                                                                                                               "required":  [
+                                                                                                                                                "value_type",
+                                                                                                                                                "code"
+                                                                                                                                            ],
+                                                                                                                               "properties":  {
+                                                                                                                                                  "value_type":  {
+                                                                                                                                                                     "const":  "error"
+                                                                                                                                                                 },
+                                                                                                                                                  "code":  {
+                                                                                                                                                               "type":  "string",
+                                                                                                                                                               "minLength":  1,
+                                                                                                                                                               "maxLength":  512,
+                                                                                                                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                           }
+                                                                                                                                              }
+                                                                                                                           }
+                                                                                                                       ]
+                                                                                                         }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "target_cell_id",
+                                                                                             "formula"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "set_cell_formula"
+                                                                                                                 },
+                                                                                               "target_cell_id":  {
+                                                                                                                      "type":  "string",
+                                                                                                                      "minLength":  1,
+                                                                                                                      "maxLength":  512,
+                                                                                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                  },
+                                                                                               "formula":  {
+                                                                                                               "oneOf":  [
+                                                                                                                             {
+                                                                                                                                 "type":  "object",
+                                                                                                                                 "additionalProperties":  false,
+                                                                                                                                 "required":  [
+                                                                                                                                                  "formula_kind",
+                                                                                                                                                  "source_range_id"
+                                                                                                                                              ],
+                                                                                                                                 "properties":  {
+                                                                                                                                                    "formula_kind":  {
+                                                                                                                                                                         "const":  "sum_range"
+                                                                                                                                                                     },
+                                                                                                                                                    "source_range_id":  {
+                                                                                                                                                                            "type":  "string",
+                                                                                                                                                                            "minLength":  1,
+                                                                                                                                                                            "maxLength":  512,
+                                                                                                                                                                            "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                        }
+                                                                                                                                                }
+                                                                                                                             },
+                                                                                                                             {
+                                                                                                                                 "type":  "object",
+                                                                                                                                 "additionalProperties":  false,
+                                                                                                                                 "required":  [
+                                                                                                                                                  "formula_kind",
+                                                                                                                                                  "left_cell_id",
+                                                                                                                                                  "right_cell_id"
+                                                                                                                                              ],
+                                                                                                                                 "properties":  {
+                                                                                                                                                    "formula_kind":  {
+                                                                                                                                                                         "const":  "difference"
+                                                                                                                                                                     },
+                                                                                                                                                    "left_cell_id":  {
+                                                                                                                                                                         "type":  "string",
+                                                                                                                                                                         "minLength":  1,
+                                                                                                                                                                         "maxLength":  512,
+                                                                                                                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                     },
+                                                                                                                                                    "right_cell_id":  {
+                                                                                                                                                                          "type":  "string",
+                                                                                                                                                                          "minLength":  1,
+                                                                                                                                                                          "maxLength":  512,
+                                                                                                                                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                      }
+                                                                                                                                                }
+                                                                                                                             },
+                                                                                                                             {
+                                                                                                                                 "type":  "object",
+                                                                                                                                 "additionalProperties":  false,
+                                                                                                                                 "required":  [
+                                                                                                                                                  "formula_kind",
+                                                                                                                                                  "left_cell_id",
+                                                                                                                                                  "right_cell_id"
+                                                                                                                                              ],
+                                                                                                                                 "properties":  {
+                                                                                                                                                    "formula_kind":  {
+                                                                                                                                                                         "const":  "product"
+                                                                                                                                                                     },
+                                                                                                                                                    "left_cell_id":  {
+                                                                                                                                                                         "type":  "string",
+                                                                                                                                                                         "minLength":  1,
+                                                                                                                                                                         "maxLength":  512,
+                                                                                                                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                     },
+                                                                                                                                                    "right_cell_id":  {
+                                                                                                                                                                          "type":  "string",
+                                                                                                                                                                          "minLength":  1,
+                                                                                                                                                                          "maxLength":  512,
+                                                                                                                                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                      }
+                                                                                                                                                }
+                                                                                                                             },
+                                                                                                                             {
+                                                                                                                                 "type":  "object",
+                                                                                                                                 "additionalProperties":  false,
+                                                                                                                                 "required":  [
+                                                                                                                                                  "formula_kind",
+                                                                                                                                                  "numerator_cell_id",
+                                                                                                                                                  "denominator_cell_id"
+                                                                                                                                              ],
+                                                                                                                                 "properties":  {
+                                                                                                                                                    "formula_kind":  {
+                                                                                                                                                                         "const":  "ratio"
+                                                                                                                                                                     },
+                                                                                                                                                    "numerator_cell_id":  {
+                                                                                                                                                                              "type":  "string",
+                                                                                                                                                                              "minLength":  1,
+                                                                                                                                                                              "maxLength":  512,
+                                                                                                                                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                          },
+                                                                                                                                                    "denominator_cell_id":  {
+                                                                                                                                                                                "type":  "string",
+                                                                                                                                                                                "minLength":  1,
+                                                                                                                                                                                "maxLength":  512,
+                                                                                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                            }
+                                                                                                                                                }
+                                                                                                                             }
+                                                                                                                         ]
+                                                                                                           }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "table_id",
+                                                                                             "values"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "append_table_row"
+                                                                                                                 },
+                                                                                               "table_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "values":  {
+                                                                                                              "type":  "array",
+                                                                                                              "minItems":  1,
+                                                                                                              "maxItems":  1024,
+                                                                                                              "uniqueItems":  false,
+                                                                                                              "items":  {
+                                                                                                                            "type":  "object",
+                                                                                                                            "additionalProperties":  false,
+                                                                                                                            "required":  [
+                                                                                                                                             "column_id",
+                                                                                                                                             "value"
+                                                                                                                                         ],
+                                                                                                                            "properties":  {
+                                                                                                                                               "column_id":  {
+                                                                                                                                                                 "type":  "string",
+                                                                                                                                                                 "minLength":  1,
+                                                                                                                                                                 "maxLength":  512,
+                                                                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                             },
+                                                                                                                                               "value":  {
+                                                                                                                                                             "oneOf":  [
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "blank"
+                                                                                                                                                                                                                 }
+                                                                                                                                                                                              }
+                                                                                                                                                                           },
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type",
+                                                                                                                                                                                                "value"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "text"
+                                                                                                                                                                                                                 },
+                                                                                                                                                                                                  "value":  {
+                                                                                                                                                                                                                "type":  "string",
+                                                                                                                                                                                                                "minLength":  1,
+                                                                                                                                                                                                                "maxLength":  512
+                                                                                                                                                                                                            }
+                                                                                                                                                                                              }
+                                                                                                                                                                           },
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type",
+                                                                                                                                                                                                "value"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "integer"
+                                                                                                                                                                                                                 },
+                                                                                                                                                                                                  "value":  {
+                                                                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                                                                "minimum":  -9223372036854775808,
+                                                                                                                                                                                                                "maximum":  9223372036854775807
+                                                                                                                                                                                                            }
+                                                                                                                                                                                              }
+                                                                                                                                                                           },
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type",
+                                                                                                                                                                                                "scaled_value",
+                                                                                                                                                                                                "scale"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "decimal"
+                                                                                                                                                                                                                 },
+                                                                                                                                                                                                  "scaled_value":  {
+                                                                                                                                                                                                                       "type":  "integer",
+                                                                                                                                                                                                                       "minimum":  -9223372036854775808,
+                                                                                                                                                                                                                       "maximum":  9223372036854775807
+                                                                                                                                                                                                                   },
+                                                                                                                                                                                                  "scale":  {
+                                                                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                                                                "minimum":  0,
+                                                                                                                                                                                                                "maximum":  6
+                                                                                                                                                                                                            }
+                                                                                                                                                                                              }
+                                                                                                                                                                           },
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type",
+                                                                                                                                                                                                "value"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "boolean"
+                                                                                                                                                                                                                 },
+                                                                                                                                                                                                  "value":  {
+                                                                                                                                                                                                                "type":  "boolean"
+                                                                                                                                                                                                            }
+                                                                                                                                                                                              }
+                                                                                                                                                                           },
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type",
+                                                                                                                                                                                                "days_since_unix_epoch"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "date"
+                                                                                                                                                                                                                 },
+                                                                                                                                                                                                  "days_since_unix_epoch":  {
+                                                                                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                                                                                "minimum":  -2147483648,
+                                                                                                                                                                                                                                "maximum":  2147483647
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                              }
+                                                                                                                                                                           },
+                                                                                                                                                                           {
+                                                                                                                                                                               "type":  "object",
+                                                                                                                                                                               "additionalProperties":  false,
+                                                                                                                                                                               "required":  [
+                                                                                                                                                                                                "value_type",
+                                                                                                                                                                                                "code"
+                                                                                                                                                                                            ],
+                                                                                                                                                                               "properties":  {
+                                                                                                                                                                                                  "value_type":  {
+                                                                                                                                                                                                                     "const":  "error"
+                                                                                                                                                                                                                 },
+                                                                                                                                                                                                  "code":  {
+                                                                                                                                                                                                               "type":  "string",
+                                                                                                                                                                                                               "minLength":  1,
+                                                                                                                                                                                                               "maxLength":  512,
+                                                                                                                                                                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                                                           }
+                                                                                                                                                                                              }
+                                                                                                                                                                           }
+                                                                                                                                                                       ]
+                                                                                                                                                         }
+                                                                                                                                           }
+                                                                                                                        }
+                                                                                                          }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "target_cell_id",
+                                                                                             "style_id"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "apply_cell_style"
+                                                                                                                 },
+                                                                                               "target_cell_id":  {
+                                                                                                                      "type":  "string",
+                                                                                                                      "minLength":  1,
+                                                                                                                      "maxLength":  512,
+                                                                                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                  },
+                                                                                               "style_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "sheet_id",
+                                                                                             "table_id",
+                                                                                             "column_ids"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "create_table"
+                                                                                                                 },
+                                                                                               "sheet_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "table_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "column_ids":  {
+                                                                                                                  "type":  "array",
+                                                                                                                  "minItems":  1,
+                                                                                                                  "maxItems":  1024,
+                                                                                                                  "uniqueItems":  true,
+                                                                                                                  "items":  {
+                                                                                                                                "type":  "string",
+                                                                                                                                "minLength":  1,
+                                                                                                                                "maxLength":  512,
+                                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                            }
+                                                                                                              }
+                                                                                           }
+                                                                        }
+                                                                    ]
+                                                      },
+                                                      {
+                                                          "type":  "null"
+                                                      }
+                                                  ]
+                                    },
+                       "query_sha256":  {
+                                            "oneOf":  [
+                                                          {
+                                                              "type":  "string",
+                                                              "maxLength":  71,
+                                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                          },
+                                                          {
+                                                              "type":  "null"
+                                                          }
+                                                      ]
+                                        },
+                       "context_slice_sha256":  {
+                                                    "oneOf":  [
+                                                                  {
+                                                                      "type":  "string",
+                                                                      "maxLength":  71,
+                                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                  },
+                                                                  {
+                                                                      "type":  "null"
+                                                                  }
+                                                              ]
+                                                },
+                       "expected_postcondition_ids":  {
+                                                          "type":  "array",
+                                                          "minItems":  1,
+                                                          "maxItems":  32,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "risk_class":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "read_only",
+                                                       "reversible",
+                                                       "business_state_change",
+                                                       "high"
+                                                   ]
+                                      },
+                       "intent_sha256":  {
+                                             "type":  "string",
+                                             "maxLength":  71,
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         }
+                   }
+}

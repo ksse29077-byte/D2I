@@ -18,6 +18,8 @@ mod document_work;
 mod docx_document;
 mod enterprise_api;
 mod episodic_memory;
+#[cfg(windows)]
+mod excel_spreadsheet;
 mod executor;
 mod hwpx_document;
 mod limited_autonomy;
@@ -27,6 +29,10 @@ mod policy;
 mod role_instance;
 mod role_operations;
 mod shadow_mode;
+mod spreadsheet_dispatch;
+mod spreadsheet_file_worker;
+mod spreadsheet_package;
+mod spreadsheet_work;
 mod trusted_execution;
 mod windows_activation;
 mod windows_adapters;
@@ -48,6 +54,7 @@ mod word_document;
 mod work500_model;
 mod work_intake;
 mod work_queue;
+mod xlsx_spreadsheet;
 
 pub use adapter::{
     ActionOutcome, ActionOutcomeStatus, AdapterExecution, DesktopAdapter, DesktopAdapterDescriptor,
@@ -178,6 +185,12 @@ pub use episodic_memory::{
     EpisodicMemoryStoreV1, EpisodicMemoryStoreVerificationV1, MemoryStoreLedgerRecordV1,
     MemoryStoreRecordKindV1,
 };
+#[cfg(windows)]
+pub use excel_spreadsheet::{
+    excel_spreadsheet_worker_main, mutate_xlsx_with_excel, spawn_excel_spreadsheet_worker,
+    ExcelSpreadsheetMutationReceiptV1, ExcelSpreadsheetMutationV1, ExcelSpreadsheetWorkerRequestV1,
+    ExcelSpreadsheetWorkerResponseV1,
+};
 pub use executor::{DesktopActionPreparation, DesktopExecutor};
 pub use hwpx_document::{create_hwpx_from_template, inspect_hwpx_document, mutate_hwpx_document};
 pub use limited_autonomy::{
@@ -219,6 +232,15 @@ pub use shadow_mode::{
     ShadowStoreArtifactV1, ShadowStoreRecordKindV1, ShadowStoreRecordV1, ShadowStoreV1,
     ShadowStoreVerificationV1,
 };
+pub use spreadsheet_dispatch::{
+    SpreadsheetAuthorityContextV1, SpreadsheetDispatchOutcomeV1, SpreadsheetDispatchV1,
+    SpreadsheetKrnDispatcherConfigurationV1, SpreadsheetKrnDispatcherV1,
+};
+pub use spreadsheet_file_worker::{
+    spawn_spreadsheet_file_worker, spreadsheet_file_worker_main, SpreadsheetFileWorkerRequestV1,
+    SpreadsheetFileWorkerResponseV1,
+};
+pub use spreadsheet_work::{validate_spreadsheet_mutation, ResolvedSpreadsheetOperationV1};
 pub use trusted_execution::{
     build_cognitive_desktop_action_intent, project_windows_activation,
     to_verification_bound_execution_v2, validate_cognitive_desktop_action_intent,
@@ -316,6 +338,7 @@ pub use work_queue::{
     WorkQueueLedgerEventKindV1, WorkQueueLedgerRecordV1, WorkQueueLedgerV1,
     WorkQueueLedgerVerificationV1,
 };
+pub use xlsx_spreadsheet::{create_xlsx_workbook, inspect_xlsx_workbook, mutate_xlsx_workbook};
 
 use sha2::{Digest, Sha256};
 use std::error::Error;

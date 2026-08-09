@@ -1,6 +1,6 @@
 # D2I Progress Snapshot
 
-Date: 2026-08-05
+Date: 2026-08-09
 
 ## Current Completed Scope
 
@@ -637,5 +637,42 @@ license evidence exists. HWPX is first-class without Hancom; legacy HWP status
 is exactly `requires_licensed_hancom_backend`. OFFICE-200 adds no public MCP,
 production Python/Node, browser, email, clipboard, macro, password bypass,
 background Office service, Excel, PowerPoint, or full PDF path. OFFICE-200 is
-complete and the first active task is
-`D2I-OFFICE-300 - Excel / Spreadsheet Work`.
+complete. OFFICE-300 follows below and is also complete.
+
+## OFFICE-300 Excel / Spreadsheet Work (Complete)
+
+The implementation now includes the platform-neutral
+`d2i-spreadsheet-capability` crate, 15 strict Draft 2020-12 schemas, a private
+typed workbook index, closed lookup/filter/aggregate queries, evidence-bound
+typed facts, deterministic context slicing, Situation projection, signed
+backend approvals, exact operation bindings, receipts/diffs/verifications,
+replay, Completion, certification, and an inspection-only CLI.
+
+Desktop adds bounded XLSX ZIP/XML parsing, deterministic file mutation, hidden
+hash-pinned workers, a dedicated spreadsheet KRN dispatcher, and a fixed Excel
+COM worker. Package admission rejects traversal, duplicate/shadow entries,
+ZIP64/encryption/expansion excess, malformed active XML, external links,
+connections, query tables, macros, scripts, OLE, ActiveX, and executable
+content. Raw formulas and generic COM are absent from the contract.
+
+The large-context test scans 20,000 rows x 8 columns (160,000 cells), emits 128
+bounded query facts, and selects only eight facts. An actual pinned Qwen3-4B
+call used a 5,455-byte context slice and 7,949-byte Situation request with zero
+raw workbook dumps. Installed Excel 16.0.20228.20158 at the pinned executable
+hash successfully recalculated and freshly reopened a typed difference
+formula. The exact new Excel PID required recorded exact-image termination
+after graceful COM Quit and left zero residual Excel processes.
+
+The official non-elevated `All` runner, runner ownership self-test, workspace
+fmt, Clippy with warnings denied, full workspace tests, and release workspace
+build pass. Elevated product Completion passed with exact temporary WFP
+isolation, one XLSX file mutation, one installed Excel COM mutation, three
+fresh reopens, ten crash windows, deterministic replay, protected audit,
+signed certification, and every safety and residual counter at zero.
+
+The certified run kept the 160,000-cell workbook private and sent eight typed
+facts in 5,455 bytes to one pinned Qwen invocation. Exact report,
+certification, replay, and audit hashes remain in the sealed Completion
+artifacts so the tracked source tree does not self-reference its own evidence.
+OFFICE-300 is complete; the first active task is
+`D2I-OFFICE-400 - PowerPoint Presentation Work`, which has not started.

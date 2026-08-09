@@ -1,0 +1,91 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-semantic-diff-v1.schema.json",
+    "title":  "SpreadsheetSemanticDiffV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "before_snapshot_sha256",
+                     "after_snapshot_sha256",
+                     "changed_sheet_ids",
+                     "changed_table_ids",
+                     "changed_cell_ids",
+                     "formula_change_count",
+                     "unexpected_change_ids",
+                     "diff_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "before_snapshot_sha256":  {
+                                                      "type":  "string",
+                                                      "maxLength":  71,
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "after_snapshot_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "changed_sheet_ids":  {
+                                                 "type":  "array",
+                                                 "minItems":  0,
+                                                 "maxItems":  256,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           }
+                                             },
+                       "changed_table_ids":  {
+                                                 "type":  "array",
+                                                 "minItems":  0,
+                                                 "maxItems":  256,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           }
+                                             },
+                       "changed_cell_ids":  {
+                                                "type":  "array",
+                                                "minItems":  0,
+                                                "maxItems":  256,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "formula_change_count":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "unexpected_change_ids":  {
+                                                     "type":  "array",
+                                                     "minItems":  0,
+                                                     "maxItems":  256,
+                                                     "uniqueItems":  true,
+                                                     "items":  {
+                                                                   "type":  "string",
+                                                                   "minLength":  1,
+                                                                   "maxLength":  512,
+                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                               }
+                                                 },
+                       "diff_sha256":  {
+                                           "type":  "string",
+                                           "maxLength":  71,
+                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                       }
+                   }
+}

@@ -274,8 +274,24 @@ calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
-EDGE-100, OFFICE-100, and OFFICE-200 are also complete. The next active task is
-`D2I-OFFICE-300 - Excel / Spreadsheet Work`.
+EDGE-100 and OFFICE-100 through OFFICE-300 are also complete. The next active
+task is `D2I-OFFICE-400 - PowerPoint Presentation Work`.
+
+Run the OFFICE-300 deterministic spreadsheet contracts, package security,
+query/context slicing, worker, and predecessor regressions with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/run-spreadsheet-work-v1.ps1 `
+  -Mode All `
+  -OutputRoot target/d2i-office300-spreadsheet-work/all
+```
+
+The spreadsheet plane scans workbook data in a private typed index and sends
+only deterministic bounded typed facts to Qwen. Product `Completion` passed
+with pinned Qwen/llama.cpp, sealed OFFICE-200 evidence, installed desktop
+Excel, an exact temporary Excel WFP policy, signed certification, and zero
+owned residual state.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:

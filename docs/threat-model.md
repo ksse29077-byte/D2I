@@ -701,3 +701,29 @@ signing-key custody, visual fidelity not represented by semantic structure,
 and unsupported existing features. Password protection, digital signatures,
 tracked-change fidelity, legacy HWP without licensed Automation, and active
 content become explicit exceptions rather than broadened authority.
+
+## OFFICE-300 Spreadsheet Work Threats
+
+OFFICE-300 treats workbook packages, cells, formulas, relationships, query
+inputs, model output, backend metadata, and COM results as untrusted. Primary
+threats are whole-workbook context disclosure, hostile cell text becoming an
+instruction, credential leakage, unbounded scans, arbitrary SQL/formulas/COM,
+external-link or macro execution, ZIP/XML attacks, stale or wrong-cell writes,
+formula results accepted without recalculation, activation replay, original
+overwrite, broad process termination, and false completion.
+
+Mitigations are a private bounded typed index, closed deterministic query
+algebra, evidence-bound typed facts, three-dimensional context limits, secret
+screening, stable semantic IDs, strict XLSX package admission, tagged formula
+variants, exact backend approval, Policy and one-shot activation, immutable
+generations, and independent fresh reopen with semantic diff. Cell content is
+data and cannot grant authority.
+
+Live Excel is a hidden current-user COM child with fixed lowering, exact image
+pinning, macro/event/alert/update-link denial, full recalculation, finite
+deadline, application-scoped WFP loopback-only egress, and exact owned-PID
+cleanup. Pre-existing Excel processes are never terminated. Any forced cleanup
+of the new exact-image PID is recorded. Residual risks are installed Excel
+behavior, local signing-key custody, visual features outside the semantic
+model, and unsupported charts, pivots, Power Query, protected workbooks, and
+external data sources.

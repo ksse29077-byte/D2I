@@ -1,0 +1,22 @@
+[package]
+name = "d2i-spreadsheet-capability"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+d2i-office-capability = { path = "../d2i-office-capability" }
+d2i-situation-model = { path = "../d2i-situation-model" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-spreadsheet"
+path = "src/bin/d2i-spreadsheet.rs"

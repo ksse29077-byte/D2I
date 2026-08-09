@@ -1,0 +1,309 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-semantic-snapshot-v1.schema.json",
+    "title":  "SpreadsheetSemanticSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "workbook_id",
+                     "artifact_id",
+                     "artifact_generation",
+                     "format_id",
+                     "backend_id",
+                     "sheets",
+                     "tables",
+                     "total_populated_cells",
+                     "total_formula_cells",
+                     "unsupported_feature_ids",
+                     "source_content_sha256",
+                     "workbook_data_sha256",
+                     "semantic_state_sha256",
+                     "observed_at_unix_ms",
+                     "freshness_expires_at_unix_ms",
+                     "evidence_ids",
+                     "snapshot_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "workbook_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "artifact_generation":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "format_id":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "xlsx",
+                                                      "csv"
+                                                  ]
+                                     },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "sheets":  {
+                                      "type":  "array",
+                                      "minItems":  1,
+                                      "maxItems":  256,
+                                      "uniqueItems":  false,
+                                      "items":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "sheet_id",
+                                                                     "ordinal",
+                                                                     "sheet_name_sha256",
+                                                                     "used_row_count",
+                                                                     "used_column_count",
+                                                                     "populated_cell_count",
+                                                                     "formula_count",
+                                                                     "table_ids",
+                                                                     "sheet_state_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "sheet_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                    },
+                                                                       "ordinal":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                       "sheet_name_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "maxLength":  71,
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                             },
+                                                                       "used_row_count":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "used_column_count":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                       "populated_cell_count":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                       "formula_count":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                       "table_ids":  {
+                                                                                         "type":  "array",
+                                                                                         "minItems":  1,
+                                                                                         "maxItems":  1024,
+                                                                                         "uniqueItems":  true,
+                                                                                         "items":  {
+                                                                                                       "type":  "string",
+                                                                                                       "minLength":  1,
+                                                                                                       "maxLength":  512,
+                                                                                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                   }
+                                                                                     },
+                                                                       "sheet_state_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "maxLength":  71,
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                              }
+                                                                   }
+                                                }
+                                  },
+                       "tables":  {
+                                      "type":  "array",
+                                      "minItems":  0,
+                                      "maxItems":  1024,
+                                      "uniqueItems":  false,
+                                      "items":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "table_id",
+                                                                     "sheet_id",
+                                                                     "source_range_sha256",
+                                                                     "row_count",
+                                                                     "columns",
+                                                                     "table_state_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "table_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                    },
+                                                                       "sheet_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                    },
+                                                                       "source_range_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "maxLength":  71,
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                               },
+                                                                       "row_count":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                       "columns":  {
+                                                                                       "type":  "array",
+                                                                                       "minItems":  1,
+                                                                                       "maxItems":  16384,
+                                                                                       "uniqueItems":  false,
+                                                                                       "items":  {
+                                                                                                     "type":  "object",
+                                                                                                     "additionalProperties":  false,
+                                                                                                     "required":  [
+                                                                                                                      "column_id",
+                                                                                                                      "ordinal",
+                                                                                                                      "inferred_type",
+                                                                                                                      "header_sha256",
+                                                                                                                      "unit_id",
+                                                                                                                      "nullable"
+                                                                                                                  ],
+                                                                                                     "properties":  {
+                                                                                                                        "column_id":  {
+                                                                                                                                          "type":  "string",
+                                                                                                                                          "minLength":  1,
+                                                                                                                                          "maxLength":  512,
+                                                                                                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                      },
+                                                                                                                        "ordinal":  {
+                                                                                                                                        "type":  "integer",
+                                                                                                                                        "minimum":  0,
+                                                                                                                                        "maximum":  4294967295
+                                                                                                                                    },
+                                                                                                                        "inferred_type":  {
+                                                                                                                                              "type":  "string",
+                                                                                                                                              "enum":  [
+                                                                                                                                                           "blank",
+                                                                                                                                                           "text",
+                                                                                                                                                           "integer",
+                                                                                                                                                           "decimal",
+                                                                                                                                                           "boolean",
+                                                                                                                                                           "date",
+                                                                                                                                                           "error",
+                                                                                                                                                           "mixed"
+                                                                                                                                                       ]
+                                                                                                                                          },
+                                                                                                                        "header_sha256":  {
+                                                                                                                                              "type":  "string",
+                                                                                                                                              "maxLength":  71,
+                                                                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                          },
+                                                                                                                        "unit_id":  {
+                                                                                                                                        "oneOf":  [
+                                                                                                                                                      {
+                                                                                                                                                          "type":  "string",
+                                                                                                                                                          "minLength":  1,
+                                                                                                                                                          "maxLength":  512,
+                                                                                                                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                      },
+                                                                                                                                                      {
+                                                                                                                                                          "type":  "null"
+                                                                                                                                                      }
+                                                                                                                                                  ]
+                                                                                                                                    },
+                                                                                                                        "nullable":  {
+                                                                                                                                         "type":  "boolean"
+                                                                                                                                     }
+                                                                                                                    }
+                                                                                                 }
+                                                                                   },
+                                                                       "table_state_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "maxLength":  71,
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                              }
+                                                                   }
+                                                }
+                                  },
+                       "total_populated_cells":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0
+                                                 },
+                       "total_formula_cells":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "unsupported_feature_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  0,
+                                                       "maxItems":  256,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "workbook_data_sha256":  {
+                                                    "type":  "string",
+                                                    "maxLength":  71,
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "semantic_state_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "observed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "freshness_expires_at_unix_ms":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0
+                                                        },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "minItems":  1,
+                                            "maxItems":  256,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "snapshot_sha256":  {
+                                               "type":  "string",
+                                               "maxLength":  71,
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           }
+                   }
+}

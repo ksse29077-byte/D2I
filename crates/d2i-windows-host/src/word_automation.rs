@@ -84,7 +84,7 @@ impl Drop for Variant {
     fn drop(&mut self) {
         // SAFETY: this value is initialized as a valid VARIANT and is cleared once.
         unsafe {
-            let _ = VariantClear(self);
+            let _ = VariantClear((self as *mut Variant).cast());
         }
     }
 }
@@ -729,5 +729,5 @@ extern "system" {
 extern "system" {
     fn SysAllocStringLen(source: *const u16, length: u32) -> *mut u16;
     fn SysFreeString(value: *mut u16);
-    fn VariantClear(value: *mut Variant) -> i32;
+    fn VariantClear(value: *mut c_void) -> i32;
 }

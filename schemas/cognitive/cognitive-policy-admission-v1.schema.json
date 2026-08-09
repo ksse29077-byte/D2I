@@ -635,7 +635,14 @@
       }
     },
     "adapter_kind": {
-      "enum": ["uia", "web_driver", "enterprise_api"]
+      "enum": [
+        "uia",
+        "web_driver",
+        "enterprise_api",
+        "office_workspace",
+        "office_document",
+        "office_spreadsheet"
+      ]
     },
     "activation_eligibility": {
       "type": "object",

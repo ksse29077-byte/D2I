@@ -1199,7 +1199,7 @@ fn volume_identity(path: &Path) -> String {
     sha256_bytes(prefix.as_bytes())
 }
 
-fn canonical_text(path: &Path) -> String {
+pub(crate) fn canonical_text(path: &Path) -> String {
     let text = path.to_string_lossy();
     let normalized = if let Some(value) = text.strip_prefix(r"\\?\UNC\") {
         format!(r"\\{value}")

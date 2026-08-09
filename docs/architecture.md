@@ -694,3 +694,26 @@ loopback-only during Completion. It is not available from a service or through
 a generic COM API. Legacy HWP requires separate Hancom Automation license
 evidence and approval; absent that evidence it remains a typed human exception.
 See ADR 0039 and `docs/office/document-work-v1.md`.
+
+## Spreadsheet Query and Work
+
+OFFICE-300 keeps workbook values in a private typed semantic index. A closed
+`Lookup | Filter | Aggregate` query algebra produces evidence-bound typed
+facts, and a deterministic context slicer enforces fact, canonical-byte, and
+estimated-token limits before projecting `VerifiedObservation` Situation
+facts. XLSX bytes, worksheet XML, whole cell ranges, raw formulas, and COM
+state never enter model context.
+
+Mutation retains the Kernel sequence: semantic intent, `OfficeSpreadsheet`
+Policy admission, exact Role/Case/lease/Work Grant/workspace/backend binding,
+one-shot activation, pinned worker, new generation, independent fresh reopen,
+semantic diff, verification, and protected audit. The Rust XLSX worker handles
+bounded value and row changes. Typed formulas are lowered only inside a hidden
+interactive Excel COM worker whose binary is hash-pinned, macro-disabled, and
+WFP loopback-only during Completion. See ADR 0040 and
+`docs/office/spreadsheet-work-v1.md`.
+
+The OFFICE-300 Completion gate is certified: actual pinned Qwen receives only
+the deterministic typed-fact slice, installed Excel performs typed formula
+calculation under exact temporary WFP isolation, and independent fresh reopen,
+protected audit, replay, signed certification, and zero-residual cleanup pass.

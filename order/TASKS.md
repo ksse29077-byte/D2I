@@ -61,8 +61,8 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 
 - [x] `D2I-OFFICE-100` Office Capability Pack Foundation, Public Skill/MCP Intake, Workspace and File Lifecycle
 - [x] `D2I-OFFICE-200` HWP/HWPX and Word Document Work
-- [ ] `D2I-OFFICE-300` Excel / Spreadsheet Work - **first active task**
-- [ ] `D2I-OFFICE-400` PowerPoint Presentation Work
+- [x] `D2I-OFFICE-300` Excel / Spreadsheet Work
+- [ ] `D2I-OFFICE-400` PowerPoint Presentation Work - **first active task**
 - [ ] `D2I-OFFICE-500` PDF and Document Interchange
 - [ ] `D2I-OFFICE-600` Browser Research and Controlled Download
 - [ ] `D2I-OFFICE-700` Email / Messenger / Review and Feedback Loop

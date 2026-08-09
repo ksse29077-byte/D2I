@@ -1,0 +1,146 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-operation-receipt-v1.schema.json",
+    "title":  "SpreadsheetOperationReceiptV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "receipt_id",
+                     "binding_sha256",
+                     "operation",
+                     "result",
+                     "source_content_sha256",
+                     "destination_content_sha256",
+                     "fresh_snapshot_sha256",
+                     "query_result_sha256",
+                     "context_slice_sha256",
+                     "activation_consumed",
+                     "started_at_unix_ms",
+                     "completed_at_unix_ms",
+                     "audit_event_ids",
+                     "receipt_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "receipt_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "binding_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          },
+                       "operation":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "inspect",
+                                                      "query",
+                                                      "create_from_template",
+                                                      "set_cell_value",
+                                                      "set_cell_formula",
+                                                      "append_table_row",
+                                                      "apply_cell_style",
+                                                      "create_table",
+                                                      "save_version"
+                                                  ]
+                                     },
+                       "result":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "verified",
+                                                   "rejected",
+                                                   "stale",
+                                                   "unsupported",
+                                                   "unsafe",
+                                                   "recovery_required"
+                                               ]
+                                  },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "destination_content_sha256":  {
+                                                          "oneOf":  [
+                                                                        {
+                                                                            "type":  "string",
+                                                                            "maxLength":  71,
+                                                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                        },
+                                                                        {
+                                                                            "type":  "null"
+                                                                        }
+                                                                    ]
+                                                      },
+                       "fresh_snapshot_sha256":  {
+                                                     "oneOf":  [
+                                                                   {
+                                                                       "type":  "string",
+                                                                       "maxLength":  71,
+                                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                   },
+                                                                   {
+                                                                       "type":  "null"
+                                                                   }
+                                                               ]
+                                                 },
+                       "query_result_sha256":  {
+                                                   "oneOf":  [
+                                                                 {
+                                                                     "type":  "string",
+                                                                     "maxLength":  71,
+                                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                 },
+                                                                 {
+                                                                     "type":  "null"
+                                                                 }
+                                                             ]
+                                               },
+                       "context_slice_sha256":  {
+                                                    "oneOf":  [
+                                                                  {
+                                                                      "type":  "string",
+                                                                      "maxLength":  71,
+                                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                  },
+                                                                  {
+                                                                      "type":  "null"
+                                                                  }
+                                                              ]
+                                                },
+                       "activation_consumed":  {
+                                                   "type":  "boolean"
+                                               },
+                       "started_at_unix_ms":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0
+                                              },
+                       "completed_at_unix_ms":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0
+                                                },
+                       "audit_event_ids":  {
+                                               "type":  "array",
+                                               "minItems":  1,
+                                               "maxItems":  64,
+                                               "uniqueItems":  true,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  512,
+                                                             "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                         }
+                                           },
+                       "receipt_sha256":  {
+                                              "type":  "string",
+                                              "maxLength":  71,
+                                              "pattern":  "^sha256:[0-9a-f]{64}$"
+                                          }
+                   }
+}

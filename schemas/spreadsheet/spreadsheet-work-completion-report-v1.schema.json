@@ -1,0 +1,431 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/spreadsheet/spreadsheet-work-completion-report-v1.schema.json",
+    "title":  "SpreadsheetWorkCompletionReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "source_tree_sha256",
+                     "predecessor_finished_sha256",
+                     "capability_pack_sha256",
+                     "workbook_cases",
+                     "routine_cases",
+                     "exception_cases",
+                     "successful_operations",
+                     "verified_operations",
+                     "verified_closures",
+                     "xlsx_file_mutations",
+                     "excel_com_mutations",
+                     "fresh_reopens",
+                     "workbook_cells",
+                     "query_count",
+                     "context_slice_count",
+                     "actual_qwen_cases",
+                     "provider_invocations",
+                     "replan_count",
+                     "clarification_count",
+                     "crash_windows_verified",
+                     "replay_report_sha256",
+                     "protected_audit_terminal_sha256",
+                     "excel_executable_sha256",
+                     "model_artifact_sha256",
+                     "runtime_artifact_sha256",
+                     "performance",
+                     "safety",
+                     "residual",
+                     "complete",
+                     "finished_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "source_tree_sha256":  {
+                                                  "type":  "string",
+                                                  "maxLength":  71,
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                              },
+                       "predecessor_finished_sha256":  {
+                                                           "type":  "string",
+                                                           "maxLength":  71,
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                       },
+                       "capability_pack_sha256":  {
+                                                      "type":  "string",
+                                                      "maxLength":  71,
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "workbook_cases":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "routine_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "exception_cases":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "successful_operations":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "verified_operations":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "verified_closures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "xlsx_file_mutations":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "excel_com_mutations":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "fresh_reopens":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "workbook_cells":  {
+                                              "type":  "integer",
+                                              "minimum":  0
+                                          },
+                       "query_count":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "context_slice_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "actual_qwen_cases":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "provider_invocations":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "replan_count":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "clarification_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "crash_windows_verified":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "replay_report_sha256":  {
+                                                    "type":  "string",
+                                                    "maxLength":  71,
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "protected_audit_terminal_sha256":  {
+                                                               "type":  "string",
+                                                               "maxLength":  71,
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                           },
+                       "excel_executable_sha256":  {
+                                                       "type":  "string",
+                                                       "maxLength":  71,
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                   },
+                       "model_artifact_sha256":  {
+                                                     "type":  "string",
+                                                     "maxLength":  71,
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "runtime_artifact_sha256":  {
+                                                       "type":  "string",
+                                                       "maxLength":  71,
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                   },
+                       "performance":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "parse_microseconds",
+                                                            "index_microseconds",
+                                                            "query_microseconds",
+                                                            "context_slice_microseconds",
+                                                            "mutation_microseconds",
+                                                            "recalculate_microseconds",
+                                                            "save_microseconds",
+                                                            "verify_microseconds",
+                                                            "model_microseconds",
+                                                            "peak_worker_memory_bytes",
+                                                            "workbook_cells",
+                                                            "model_context_facts",
+                                                            "model_context_bytes"
+                                                        ],
+                                           "properties":  {
+                                                              "parse_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "index_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "query_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "context_slice_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                              "mutation_microseconds":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                              "recalculate_microseconds":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "save_microseconds":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0
+                                                                                    },
+                                                              "verify_microseconds":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                              "model_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "peak_worker_memory_bytes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "workbook_cells":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0
+                                                                                 },
+                                                              "model_context_facts":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                              "model_context_bytes":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      }
+                                                          }
+                                       },
+                       "safety":  {
+                                      "type":  "object",
+                                      "additionalProperties":  false,
+                                      "required":  [
+                                                       "raw_workbook_dump",
+                                                       "raw_formula_from_model",
+                                                       "arbitrary_com",
+                                                       "arbitrary_query",
+                                                       "external_link_fetch",
+                                                       "macro_execution",
+                                                       "wrong_workbook",
+                                                       "wrong_sheet",
+                                                       "wrong_cell",
+                                                       "stale_write",
+                                                       "duplicate_mutation",
+                                                       "original_overwrite",
+                                                       "unexpected_drift",
+                                                       "network_access",
+                                                       "credential_leak",
+                                                       "false_completion",
+                                                       "critical_error"
+                                                   ],
+                                      "properties":  {
+                                                         "raw_workbook_dump":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               },
+                                                         "raw_formula_from_model":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                         "arbitrary_com":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                         "arbitrary_query":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "external_link_fetch":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                         "macro_execution":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "wrong_workbook":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                         "wrong_sheet":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  4294967295
+                                                                         },
+                                                         "wrong_cell":  {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  4294967295
+                                                                        },
+                                                         "stale_write":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  4294967295
+                                                                         },
+                                                         "duplicate_mutation":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "original_overwrite":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "unexpected_drift":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "network_access":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                         "credential_leak":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "false_completion":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "critical_error":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            }
+                                                     }
+                                  },
+                       "residual":  {
+                                        "type":  "object",
+                                        "additionalProperties":  false,
+                                        "required":  [
+                                                         "activations",
+                                                         "excel_processes",
+                                                         "file_workers",
+                                                         "temporary_packages",
+                                                         "workspace_locks",
+                                                         "workbook_locks",
+                                                         "wfp_objects",
+                                                         "profiles",
+                                                         "credentials"
+                                                     ],
+                                        "properties":  {
+                                                           "activations":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "excel_processes":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               },
+                                                           "file_workers":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                           "temporary_packages":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                           "workspace_locks":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               },
+                                                           "workbook_locks":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                           "wfp_objects":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "profiles":  {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  4294967295
+                                                                        },
+                                                           "credentials":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           }
+                                                       }
+                                    },
+                       "complete":  {
+                                        "type":  "boolean"
+                                    },
+                       "finished_sha256":  {
+                                               "type":  "string",
+                                               "maxLength":  71,
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           }
+                   }
+}
