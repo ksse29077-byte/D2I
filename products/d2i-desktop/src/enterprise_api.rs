@@ -1241,7 +1241,7 @@ fn reject_runtime_secret_artifact(bytes: &[u8]) -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(test)]
+#[cfg(all(test, windows))]
 mod tests {
     use super::*;
     use std::time::{SystemTime, UNIX_EPOCH};

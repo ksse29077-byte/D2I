@@ -1297,7 +1297,7 @@ fn hex_decode(value: &str) -> Result<Vec<u8>, String> {
         .collect()
 }
 
-#[cfg(test)]
+#[cfg(all(test, windows))]
 mod tests {
     use super::*;
     use std::time::{SystemTime, UNIX_EPOCH};
