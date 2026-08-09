@@ -1648,6 +1648,7 @@ mod platform {
     use super::{
         WindowsAppContainerChild, WindowsAppContainerPathAccess, WindowsAppContainerProfile,
         WindowsHostError, WindowsHostIdentity, WindowsJob, WindowsJobLimits,
+        WindowsJobMemoryAccounting,
     };
     use std::path::{Path, PathBuf};
     use std::process::Child;
