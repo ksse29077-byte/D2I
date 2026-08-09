@@ -1,14 +1,21 @@
+#[cfg(windows)]
 use d2i_desktop::{create_pptx_template, inspect_pptx_presentation};
+#[cfg(windows)]
 use d2i_office_capability::{canonical_json_bytes, sha256_bytes};
+#[cfg(windows)]
 use d2i_presentation_capability::{default_presentation_resource_limits, ZERO_HASH};
+#[cfg(windows)]
 use d2i_windows_host::{
     execute_powerpoint_presentation_operation, installed_excel_process_ids,
     installed_powerpoint_process_ids, PowerPointAutomationOperationV1,
 };
+#[cfg(windows)]
 use serde::Serialize;
+#[cfg(windows)]
 use std::path::{Path, PathBuf};
 
 #[derive(Serialize)]
+#[cfg(windows)]
 struct PowerPointLiveReportV1 {
     schema_version: u32,
     powerpoint_executable_sha256: String,
@@ -33,6 +40,7 @@ struct PowerPointLiveReportV1 {
     report_sha256: String,
 }
 
+#[cfg(windows)]
 fn main() {
     if let Err(error) = run() {
         eprintln!("OFFICE-400 PowerPoint live E2E failed: {error}");
@@ -40,6 +48,7 @@ fn main() {
     }
 }
 
+#[cfg(windows)]
 fn run() -> Result<(), String> {
     let arguments = std::env::args().skip(1).collect::<Vec<_>>();
     if !(2..=3).contains(&arguments.len()) {
@@ -204,12 +213,14 @@ fn run() -> Result<(), String> {
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn file_hash(path: &Path) -> Result<String, String> {
     std::fs::read(path)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn report_hash(value: &PowerPointLiveReportV1) -> Result<String, String> {
     let mut object = serde_json::to_value(value)
         .map_err(|error| error.to_string())?
@@ -220,4 +231,10 @@ fn report_hash(value: &PowerPointLiveReportV1) -> Result<String, String> {
     canonical_json_bytes(&object)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
+}
+
+#[cfg(not(windows))]
+fn main() {
+    eprintln!("PowerPoint live E2E requires Windows desktop Office deployment");
+    std::process::exit(2);
 }

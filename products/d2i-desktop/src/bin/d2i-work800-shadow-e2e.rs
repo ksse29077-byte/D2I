@@ -2911,6 +2911,7 @@ fn wait_for_state(path: &Path, expected: &str, timeout: Duration) -> Result<(), 
     }
 }
 
+#[cfg(windows)]
 fn process_exists(process_id: u32) -> bool {
     Command::new("tasklist")
         .args(["/FI", &format!("PID eq {process_id}"), "/FO", "CSV", "/NH"])
@@ -2919,6 +2920,11 @@ fn process_exists(process_id: u32) -> bool {
         .ok()
         .and_then(|output| String::from_utf8(output.stdout).ok())
         .is_some_and(|output| output.contains(&format!("\"{process_id}\"")))
+}
+
+#[cfg(not(windows))]
+fn process_exists(_process_id: u32) -> bool {
+    false
 }
 
 fn powershell_path() -> Result<PathBuf, String> {

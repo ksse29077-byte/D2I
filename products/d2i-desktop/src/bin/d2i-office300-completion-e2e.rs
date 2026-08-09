@@ -1,12 +1,16 @@
+#[cfg(windows)]
 use d2i_desktop::{
     create_workspace_root_binding, create_xlsx_workbook, initialize_office_workspace_store,
     inspect_xlsx_workbook, ResolvedSpreadsheetOperationV1, SpreadsheetAuthorityContextV1,
     SpreadsheetDispatchV1, SpreadsheetKrnDispatcherConfigurationV1, SpreadsheetKrnDispatcherV1,
 };
+#[cfg(windows)]
 use d2i_office_capability::{
     canonical_json_bytes, sha256_bytes, OfficeWorkspaceProfileV1, WorkspaceOperationClassV1,
 };
+#[cfg(windows)]
 use d2i_policy_admission::{AdapterKindV1, AdmissionModeV1, CognitiveActivationAdmissionV1};
+#[cfg(windows)]
 use d2i_spreadsheet_capability::{
     default_spreadsheet_resource_limits as contract_limits, execute_spreadsheet_query,
     slice_spreadsheet_context, SpreadsheetBackendApprovalV1, SpreadsheetBackendDescriptorV1,
@@ -19,12 +23,18 @@ use d2i_spreadsheet_capability::{
     SpreadsheetSemanticSnapshotV1, SpreadsheetWorkCertificationV1,
     SpreadsheetWorkCompletionReportV1, SpreadsheetWorkReplayReportV1, ZERO_HASH,
 };
+#[cfg(windows)]
 use ed25519_dalek::SigningKey;
+#[cfg(windows)]
 use serde::{Deserialize, Serialize};
+#[cfg(windows)]
 use std::fs;
+#[cfg(windows)]
 use std::path::{Path, PathBuf};
+#[cfg(windows)]
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
+#[cfg(windows)]
 struct Arguments {
     output_root: PathBuf,
     file_worker: PathBuf,
@@ -35,6 +45,7 @@ struct Arguments {
     source_tree_sha256: String,
 }
 
+#[cfg(windows)]
 struct Backends {
     pack: SpreadsheetCapabilityPackV1,
     file: SpreadsheetBackendDescriptorV1,
@@ -46,6 +57,7 @@ struct Backends {
 
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
+#[cfg(windows)]
 struct ModelReport {
     schema_version: u32,
     model_artifact_sha256: String,
@@ -71,6 +83,7 @@ struct ModelReport {
     report_sha256: String,
 }
 
+#[cfg(windows)]
 fn main() {
     if let Err(error) = parse_arguments().and_then(run) {
         eprintln!("OFFICE-300 Completion E2E failed: {error}");
@@ -78,6 +91,7 @@ fn main() {
     }
 }
 
+#[cfg(windows)]
 fn parse_arguments() -> Result<Arguments, String> {
     let values = std::env::args().skip(1).collect::<Vec<_>>();
     if values.len() != 7 {
@@ -94,6 +108,7 @@ fn parse_arguments() -> Result<Arguments, String> {
     })
 }
 
+#[cfg(windows)]
 fn run(arguments: Arguments) -> Result<(), String> {
     validate_hash(&arguments.predecessor_finished_sha256)?;
     validate_hash(&arguments.source_tree_sha256)?;
@@ -459,6 +474,7 @@ fn run(arguments: Arguments) -> Result<(), String> {
 }
 
 #[allow(clippy::too_many_arguments)]
+#[cfg(windows)]
 fn dispatch_operation(
     dispatcher: &mut SpreadsheetKrnDispatcherV1,
     store: &mut d2i_desktop::OfficeWorkspaceStore,
@@ -590,6 +606,7 @@ fn dispatch_operation(
     Ok((destination_relative.to_owned(), outcome.fresh_snapshot))
 }
 
+#[cfg(windows)]
 fn backends(
     workspace_profile_sha256: &str,
     file_worker_sha256: &str,
@@ -671,6 +688,7 @@ fn backends(
     })
 }
 
+#[cfg(windows)]
 fn approval(
     backend: &SpreadsheetBackendDescriptorV1,
     pack: &SpreadsheetCapabilityPackV1,
@@ -701,6 +719,7 @@ fn approval(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn workspace_profile(
     root: &d2i_office_capability::WorkspaceRootBindingV1,
     now: u64,
@@ -737,6 +756,7 @@ fn workspace_profile(
     }
 }
 
+#[cfg(windows)]
 fn deterministic_replay() -> Result<SpreadsheetWorkReplayReportV1, String> {
     let mut query_mismatches = 0_u32;
     let mut context_mismatches = 0_u32;
@@ -799,6 +819,7 @@ fn deterministic_replay() -> Result<SpreadsheetWorkReplayReportV1, String> {
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn validate_model_report(path: &Path) -> Result<ModelReport, String> {
     let bytes = fs::read(path).map_err(|error| error.to_string())?;
     let report: ModelReport = serde_json::from_slice(&bytes).map_err(|error| error.to_string())?;
@@ -838,6 +859,7 @@ fn validate_model_report(path: &Path) -> Result<ModelReport, String> {
     Ok(report)
 }
 
+#[cfg(windows)]
 fn mutation_operation(mutation: &SpreadsheetMutationV1) -> SpreadsheetOperationV1 {
     match mutation {
         SpreadsheetMutationV1::SetCellValue { .. } => SpreadsheetOperationV1::SetCellValue,
@@ -848,6 +870,7 @@ fn mutation_operation(mutation: &SpreadsheetMutationV1) -> SpreadsheetOperationV
     }
 }
 
+#[cfg(windows)]
 fn semantic_target(mutation: &SpreadsheetMutationV1) -> String {
     match mutation {
         SpreadsheetMutationV1::SetCellValue { target_cell_id, .. }
@@ -858,6 +881,7 @@ fn semantic_target(mutation: &SpreadsheetMutationV1) -> String {
     }
 }
 
+#[cfg(windows)]
 fn capability_id(operation: SpreadsheetOperationV1) -> &'static str {
     match operation {
         SpreadsheetOperationV1::Inspect => "spreadsheet.inspect",
@@ -872,6 +896,7 @@ fn capability_id(operation: SpreadsheetOperationV1) -> &'static str {
     }
 }
 
+#[cfg(windows)]
 fn zero_safety() -> SpreadsheetSafetyMetricsV1 {
     SpreadsheetSafetyMetricsV1 {
         raw_workbook_dump: 0,
@@ -894,17 +919,20 @@ fn zero_safety() -> SpreadsheetSafetyMetricsV1 {
     }
 }
 
+#[cfg(windows)]
 fn validate_hash(value: &str) -> Result<(), String> {
     d2i_office_capability::validate_hash(value, "spreadsheet Completion hash")
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn file_sha256(path: &Path) -> Result<String, String> {
     fs::read(path)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn write_json<T: serde::Serialize>(path: &Path, value: &T) -> Result<(), String> {
     fs::write(
         path,
@@ -913,6 +941,7 @@ fn write_json<T: serde::Serialize>(path: &Path, value: &T) -> Result<(), String>
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn unix_milliseconds() -> Result<u64, String> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -920,6 +949,13 @@ fn unix_milliseconds() -> Result<u64, String> {
         .and_then(|duration| u64::try_from(duration.as_millis()).map_err(|error| error.to_string()))
 }
 
+#[cfg(windows)]
 fn micros(duration: std::time::Duration) -> u64 {
     u64::try_from(duration.as_micros()).unwrap_or(u64::MAX)
+}
+
+#[cfg(not(windows))]
+fn main() {
+    eprintln!("OFFICE-300 completion requires Windows desktop Office deployment");
+    std::process::exit(2);
 }

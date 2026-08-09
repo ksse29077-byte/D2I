@@ -1,3 +1,4 @@
+#[cfg(windows)]
 use d2i_desktop::{
     create_pptx_template, create_workspace_root_binding, initialize_office_workspace_store,
     inspect_pptx_presentation, presentation_capability_id, presentation_operation,
@@ -5,10 +6,13 @@ use d2i_desktop::{
     PresentationDispatchV1, PresentationKrnDispatcherConfigurationV1, PresentationKrnDispatcherV1,
     ResolvedPresentationOperationV1,
 };
+#[cfg(windows)]
 use d2i_office_capability::{
     canonical_json_bytes, sha256_bytes, OfficeWorkspaceProfileV1, WorkspaceOperationClassV1,
 };
+#[cfg(windows)]
 use d2i_policy_admission::{AdapterKindV1, AdmissionModeV1, CognitiveActivationAdmissionV1};
+#[cfg(windows)]
 use d2i_presentation_capability::{
     default_presentation_resource_limits, parse_presentation_json_strict,
     presentation_canonical_sha256, PresentationActivationLedgerV1, PresentationBackendApprovalV1,
@@ -26,6 +30,7 @@ use d2i_presentation_capability::{
     PresentationStructuralQualityV1, PresentationStyleRoleV1, PresentationTableSpecV1,
     PresentationWorkCertificationV1, PresentationWorkCompletionReportV1, ZERO_HASH,
 };
+#[cfg(windows)]
 use d2i_spreadsheet_capability::{
     default_spreadsheet_resource_limits, execute_spreadsheet_query, slice_spreadsheet_context,
     IndexedSpreadsheetRowV1, IndexedSpreadsheetTableV1, IndexedSpreadsheetWorkbookV1,
@@ -35,16 +40,25 @@ use d2i_spreadsheet_capability::{
     SpreadsheetQueryV1, SpreadsheetScalarV1, SpreadsheetSemanticSnapshotV1, SpreadsheetSheetV1,
     SpreadsheetTableV1,
 };
+#[cfg(windows)]
 use ed25519_dalek::SigningKey;
+#[cfg(windows)]
 use serde::{Deserialize, Serialize};
+#[cfg(windows)]
 use std::fs;
+#[cfg(windows)]
 use std::path::{Path, PathBuf};
+#[cfg(windows)]
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
+#[cfg(windows)]
 const WORKBOOK_ROWS: u32 = 20_000;
+#[cfg(windows)]
 const WORKBOOK_COLUMNS: u32 = 8;
+#[cfg(windows)]
 const SOURCE_TEMPLATE_SLIDES: u32 = 120;
 
+#[cfg(windows)]
 struct Arguments {
     output_root: PathBuf,
     file_worker: PathBuf,
@@ -55,6 +69,7 @@ struct Arguments {
     source_tree_sha256: String,
 }
 
+#[cfg(windows)]
 struct Backends {
     pack: PresentationCapabilityPackV1,
     file: PresentationBackendDescriptorV1,
@@ -66,6 +81,7 @@ struct Backends {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
+#[cfg(windows)]
 struct ModelReport {
     schema_version: u32,
     model_artifact_sha256: String,
@@ -95,6 +111,7 @@ struct ModelReport {
 }
 
 #[derive(Debug, Serialize)]
+#[cfg(windows)]
 struct DispatchAuditEvidenceV1<'a> {
     schema_version: u32,
     sequence: u32,
@@ -107,6 +124,7 @@ struct DispatchAuditEvidenceV1<'a> {
 }
 
 #[derive(Debug, Serialize)]
+#[cfg(windows)]
 struct NegativeSuiteEvidenceV1 {
     schema_version: u32,
     stale_query_rejected: bool,
@@ -120,6 +138,7 @@ struct NegativeSuiteEvidenceV1 {
     complete: bool,
 }
 
+#[cfg(windows)]
 fn main() {
     if let Err(error) = parse_arguments().and_then(run) {
         eprintln!("OFFICE-400 Completion E2E failed: {error}");
@@ -127,6 +146,7 @@ fn main() {
     }
 }
 
+#[cfg(windows)]
 fn parse_arguments() -> Result<Arguments, String> {
     let values = std::env::args().skip(1).collect::<Vec<_>>();
     if values.len() != 7 {
@@ -143,6 +163,7 @@ fn parse_arguments() -> Result<Arguments, String> {
     })
 }
 
+#[cfg(windows)]
 fn run(arguments: Arguments) -> Result<(), String> {
     validate_hash(&arguments.predecessor_finished_sha256)?;
     validate_hash(&arguments.source_tree_sha256)?;
@@ -608,6 +629,7 @@ fn run(arguments: Arguments) -> Result<(), String> {
 }
 
 #[allow(clippy::too_many_arguments)]
+#[cfg(windows)]
 fn dispatch_operation(
     dispatcher: &mut PresentationKrnDispatcherV1,
     profile: &OfficeWorkspaceProfileV1,
@@ -747,6 +769,7 @@ fn dispatch_operation(
     })
 }
 
+#[cfg(windows)]
 fn append_dispatch_audit(
     store: &mut d2i_desktop::OfficeWorkspaceStore,
     sequence: u32,
@@ -773,6 +796,7 @@ fn append_dispatch_audit(
         .map(|_| ())
 }
 
+#[cfg(windows)]
 fn spreadsheet_facts(
     now: u64,
 ) -> Result<
@@ -847,6 +871,7 @@ fn spreadsheet_facts(
     Ok((workbook, result, slice))
 }
 
+#[cfg(windows)]
 fn training_workbook(now: u64) -> Result<IndexedSpreadsheetWorkbookV1, String> {
     let columns = vec![
         spreadsheet_column("column.record", 1, SpreadsheetColumnTypeV1::Text)?,
@@ -970,6 +995,7 @@ fn training_workbook(now: u64) -> Result<IndexedSpreadsheetWorkbookV1, String> {
     })
 }
 
+#[cfg(windows)]
 fn spreadsheet_column(
     id: &str,
     ordinal: u32,
@@ -985,6 +1011,7 @@ fn spreadsheet_column(
     })
 }
 
+#[cfg(windows)]
 fn spreadsheet_value(column_id: &str, value: SpreadsheetScalarV1) -> SpreadsheetColumnValueV1 {
     SpreadsheetColumnValueV1 {
         column_id: column_id.to_owned(),
@@ -992,11 +1019,13 @@ fn spreadsheet_value(column_id: &str, value: SpreadsheetScalarV1) -> Spreadsheet
     }
 }
 
+#[cfg(windows)]
 fn spreadsheet_hash(value: &str) -> Result<String, String> {
     d2i_spreadsheet_capability::spreadsheet_canonical_sha256(&value)
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn presentation_fact_binding(
     workbook: &IndexedSpreadsheetWorkbookV1,
     result: &d2i_spreadsheet_capability::SpreadsheetQueryResultV1,
@@ -1019,6 +1048,7 @@ fn presentation_fact_binding(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn fact_ids_in_value_order(
     facts: &[d2i_spreadsheet_capability::SpreadsheetTypedFactV1],
 ) -> Result<Vec<String>, String> {
@@ -1036,6 +1066,7 @@ fn fact_ids_in_value_order(
         .collect()
 }
 
+#[cfg(windows)]
 fn template_query(
     snapshot: &PresentationSemanticSnapshotV1,
     now: u64,
@@ -1058,6 +1089,7 @@ fn template_query(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn template_query_result(
     snapshot: &PresentationSemanticSnapshotV1,
     query: &PresentationQueryV1,
@@ -1089,6 +1121,7 @@ fn template_query_result(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn presentation_context(
     snapshot: &PresentationSemanticSnapshotV1,
     query: &PresentationQueryResultV1,
@@ -1133,6 +1166,7 @@ fn presentation_context(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn presentation_brief(
     context: &PresentationContextSliceV1,
     facts: &PresentationFactBindingV1,
@@ -1159,6 +1193,7 @@ fn presentation_brief(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn presentation_plan(
     brief: &PresentationBriefV1,
     context: &PresentationContextSliceV1,
@@ -1260,6 +1295,7 @@ fn presentation_plan(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn file_mutations(plan: &PresentationSlidePlanV1) -> Vec<PresentationMutationV1> {
     let mut values = plan
         .slides
@@ -1302,6 +1338,7 @@ fn file_mutations(plan: &PresentationSlidePlanV1) -> Vec<PresentationMutationV1>
     values
 }
 
+#[cfg(windows)]
 fn com_mutations(
     plan: &PresentationSlidePlanV1,
     logo: PresentationImageSpecV1,
@@ -1336,6 +1373,7 @@ fn com_mutations(
     ]
 }
 
+#[cfg(windows)]
 fn semantic_target(mutation: &PresentationMutationV1) -> String {
     match mutation {
         PresentationMutationV1::AddSlide {
@@ -1355,6 +1393,7 @@ fn semantic_target(mutation: &PresentationMutationV1) -> String {
     }
 }
 
+#[cfg(windows)]
 fn backends(
     workspace_profile_sha256: &str,
     file_worker_sha256: &str,
@@ -1442,6 +1481,7 @@ fn backends(
     })
 }
 
+#[cfg(windows)]
 fn backend_approval(
     backend: &PresentationBackendDescriptorV1,
     pack: &PresentationCapabilityPackV1,
@@ -1473,6 +1513,7 @@ fn backend_approval(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn workspace_profile(
     root: &d2i_office_capability::WorkspaceRootBindingV1,
     now: u64,
@@ -1509,6 +1550,7 @@ fn workspace_profile(
     }
 }
 
+#[cfg(windows)]
 fn negative_suite(
     query: &PresentationQueryV1,
     facts: &PresentationFactBindingV1,
@@ -1577,6 +1619,7 @@ fn negative_suite(
     })
 }
 
+#[cfg(windows)]
 fn deterministic_replay() -> Result<PresentationReplayReportV1, String> {
     let mut query_mismatches = 0_u32;
     let mut context_mismatches = 0_u32;
@@ -1631,6 +1674,7 @@ fn deterministic_replay() -> Result<PresentationReplayReportV1, String> {
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn validate_model_report(path: &Path) -> Result<ModelReport, String> {
     let bytes = fs::read(path).map_err(|error| error.to_string())?;
     let report: ModelReport = serde_json::from_slice(&bytes).map_err(|error| error.to_string())?;
@@ -1680,6 +1724,7 @@ fn validate_model_report(path: &Path) -> Result<ModelReport, String> {
     Ok(report)
 }
 
+#[cfg(windows)]
 fn minimal_logo_png() -> Vec<u8> {
     const PNG: &[u8] = &[
         0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44,
@@ -1691,17 +1736,20 @@ fn minimal_logo_png() -> Vec<u8> {
     PNG.to_vec()
 }
 
+#[cfg(windows)]
 fn validate_hash(value: &str) -> Result<(), String> {
     d2i_office_capability::validate_hash(value, "presentation Completion hash")
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn file_sha256(path: &Path) -> Result<String, String> {
     fs::read(path)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
     fs::write(
         path,
@@ -1710,6 +1758,7 @@ fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<(), String> {
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn unix_milliseconds() -> Result<u64, String> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -1717,6 +1766,13 @@ fn unix_milliseconds() -> Result<u64, String> {
         .and_then(|duration| u64::try_from(duration.as_millis()).map_err(|error| error.to_string()))
 }
 
+#[cfg(windows)]
 fn micros(duration: std::time::Duration) -> u64 {
     u64::try_from(duration.as_micros()).unwrap_or(u64::MAX)
+}
+
+#[cfg(not(windows))]
+fn main() {
+    eprintln!("OFFICE-400 completion requires Windows desktop Office deployment");
+    std::process::exit(2);
 }

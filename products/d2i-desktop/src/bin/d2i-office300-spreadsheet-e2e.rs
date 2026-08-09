@@ -1,26 +1,35 @@
+#[cfg(windows)]
 use d2i_desktop::{
     create_xlsx_workbook, inspect_xlsx_workbook, mutate_xlsx_with_excel, mutate_xlsx_workbook,
     ExcelSpreadsheetMutationV1, ResolvedSpreadsheetOperationV1,
 };
+#[cfg(windows)]
 use d2i_office_capability::{canonical_json_bytes, sha256_bytes};
+#[cfg(windows)]
 use d2i_spreadsheet_capability::{
     default_spreadsheet_resource_limits, execute_spreadsheet_query, slice_spreadsheet_context,
     SpreadsheetColumnValueV1, SpreadsheetContextBudgetV1, SpreadsheetFormulaV1,
     SpreadsheetMutationV1, SpreadsheetPredicateOperatorV1, SpreadsheetPredicateV1,
     SpreadsheetQueryPlanV1, SpreadsheetQueryV1, SpreadsheetScalarV1, ZERO_HASH,
 };
+#[cfg(windows)]
 use serde::Serialize;
+#[cfg(windows)]
 use std::fs;
+#[cfg(windows)]
 use std::path::{Path, PathBuf};
+#[cfg(windows)]
 use std::time::{SystemTime, UNIX_EPOCH};
 
 #[derive(Debug)]
+#[cfg(windows)]
 struct Arguments {
     output_root: PathBuf,
     excel: PathBuf,
 }
 
 #[derive(Debug, Serialize)]
+#[cfg(windows)]
 struct SpreadsheetE2eReportV1 {
     schema_version: u32,
     source_sha256: String,
@@ -46,6 +55,7 @@ struct SpreadsheetE2eReportV1 {
     report_sha256: String,
 }
 
+#[cfg(windows)]
 fn main() {
     match parse_arguments().and_then(run) {
         Ok(()) => {}
@@ -56,6 +66,7 @@ fn main() {
     }
 }
 
+#[cfg(windows)]
 fn parse_arguments() -> Result<Arguments, String> {
     let values = std::env::args_os().skip(1).collect::<Vec<_>>();
     if values.len() != 4 || values[0] != "--output-root" || values[2] != "--excel" {
@@ -69,6 +80,7 @@ fn parse_arguments() -> Result<Arguments, String> {
     })
 }
 
+#[cfg(windows)]
 fn run(arguments: Arguments) -> Result<(), String> {
     if !arguments.excel.is_file() {
         return Err("pinned Excel executable is unavailable".to_owned());
@@ -318,17 +330,20 @@ fn run(arguments: Arguments) -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(windows)]
 fn cleanup_wfp(profile_name: &str, profile_sid: &str) -> Result<(), String> {
     d2i_windows_host::remove_wfp_loopback_policy(profile_sid).map_err(|error| error.to_string())?;
     d2i_windows_host::delete_appcontainer_profile(profile_name).map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn file_sha256(path: &Path) -> Result<String, String> {
     fs::read(path)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn now_unix_ms() -> Result<u64, String> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -336,10 +351,17 @@ fn now_unix_ms() -> Result<u64, String> {
         .and_then(|duration| u64::try_from(duration.as_millis()).map_err(|error| error.to_string()))
 }
 
+#[cfg(windows)]
 fn report_hash(report: &SpreadsheetE2eReportV1) -> Result<String, String> {
     let mut value = serde_json::to_value(report).map_err(|error| error.to_string())?;
     value["report_sha256"] = serde_json::json!(ZERO_HASH);
     canonical_json_bytes(&value)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
+}
+
+#[cfg(not(windows))]
+fn main() {
+    eprintln!("Excel live E2E requires Windows desktop Office deployment");
+    std::process::exit(2);
 }

@@ -1,3 +1,4 @@
+#[cfg(windows)]
 use d2i_desktop::{
     create_docx_document, create_hwpx_from_template, create_workspace_root_binding,
     default_document_resource_limits, initialize_office_workspace_store, inspect_docx_document,
@@ -5,6 +6,7 @@ use d2i_desktop::{
     DocumentKrnDispatcherConfigurationV1, DocumentKrnDispatcherV1, OfficeWorkspaceStore,
     ResolvedDocumentOperationV1,
 };
+#[cfg(windows)]
 use d2i_document_capability::{
     DocumentBackendApprovalV1, DocumentBackendDescriptorV1, DocumentBackendKindV1,
     DocumentCapabilityPackV1, DocumentFormatV1, DocumentOperationBindingV1,
@@ -15,14 +17,22 @@ use d2i_document_capability::{
     DocumentWorkCertificationV1, DocumentWorkCompletionReportV1, DocumentWorkReplayReportV1,
     HwpLegacyMutationStatusV1, PageOrientationV1, ZERO_HASH,
 };
+#[cfg(windows)]
 use d2i_office_capability::{sha256_bytes, OfficeWorkspaceProfileV1, WorkspaceOperationClassV1};
+#[cfg(windows)]
 use d2i_policy_admission::{AdapterKindV1, AdmissionModeV1, CognitiveActivationAdmissionV1};
+#[cfg(windows)]
 use ed25519_dalek::SigningKey;
+#[cfg(windows)]
 use serde_json::Value;
+#[cfg(windows)]
 use std::fs;
+#[cfg(windows)]
 use std::path::{Path, PathBuf};
+#[cfg(windows)]
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
+#[cfg(windows)]
 const PNG_1X1: &[u8] = &[
     0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44, 0x52,
     0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x15, 0xc4,
@@ -31,6 +41,7 @@ const PNG_1X1: &[u8] = &[
     0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 ];
 
+#[cfg(windows)]
 struct Arguments {
     output_root: PathBuf,
     file_worker: PathBuf,
@@ -41,6 +52,7 @@ struct Arguments {
     source_tree_sha256: String,
 }
 
+#[cfg(windows)]
 struct ModelEvidence {
     model_sha256: String,
     runtime_sha256: String,
@@ -53,6 +65,7 @@ struct ModelEvidence {
     report_sha256: String,
 }
 
+#[cfg(windows)]
 struct BackendArtifacts {
     pack: DocumentCapabilityPackV1,
     hwpx: DocumentBackendDescriptorV1,
@@ -65,6 +78,7 @@ struct BackendArtifacts {
 }
 
 #[derive(Debug)]
+#[cfg(windows)]
 struct SequenceResult {
     final_relative_path: String,
     final_snapshot: DocumentSemanticSnapshotV1,
@@ -73,6 +87,7 @@ struct SequenceResult {
     elapsed_microseconds: u64,
 }
 
+#[cfg(windows)]
 fn main() {
     if let Err(error) = parse_arguments().and_then(run) {
         eprintln!("OFFICE-200 Completion E2E failed: {error}");
@@ -80,6 +95,7 @@ fn main() {
     }
 }
 
+#[cfg(windows)]
 fn parse_arguments() -> Result<Arguments, String> {
     let values = std::env::args().skip(1).collect::<Vec<_>>();
     if values.len() != 7 {
@@ -96,6 +112,7 @@ fn parse_arguments() -> Result<Arguments, String> {
     })
 }
 
+#[cfg(windows)]
 fn run(arguments: Arguments) -> Result<(), String> {
     validate_hash(&arguments.predecessor_finished_sha256)?;
     validate_hash(&arguments.source_tree_sha256)?;
@@ -441,6 +458,7 @@ fn run(arguments: Arguments) -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(windows)]
 fn backend_artifacts(
     file_worker_sha256: &str,
     word_worker_sha256: &str,
@@ -530,6 +548,7 @@ fn backend_artifacts(
     })
 }
 
+#[cfg(windows)]
 fn descriptor(
     backend_id: &str,
     backend_kind: DocumentBackendKindV1,
@@ -558,6 +577,7 @@ fn descriptor(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn approval(
     backend: &DocumentBackendDescriptorV1,
     pack: &DocumentCapabilityPackV1,
@@ -587,6 +607,7 @@ fn approval(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn workspace_profile(
     root: &d2i_office_capability::WorkspaceRootBindingV1,
     now: u64,
@@ -624,6 +645,7 @@ fn workspace_profile(
 }
 
 #[allow(clippy::too_many_arguments)]
+#[cfg(windows)]
 fn execute_sequence(
     dispatcher: &mut DocumentKrnDispatcherV1,
     store: &mut OfficeWorkspaceStore,
@@ -795,6 +817,7 @@ fn execute_sequence(
     })
 }
 
+#[cfg(windows)]
 fn authority(sequence: u32) -> DocumentAuthorityContextV1 {
     DocumentAuthorityContextV1 {
         organization_id: "organization.d2i.office".to_owned(),
@@ -813,6 +836,7 @@ fn authority(sequence: u32) -> DocumentAuthorityContextV1 {
     }
 }
 
+#[cfg(windows)]
 fn hwpx_operations() -> Result<Vec<ResolvedDocumentOperationV1>, String> {
     Ok(vec![
         heading("2026년 7월 안전교육 결과보고서", 1),
@@ -840,6 +864,7 @@ fn hwpx_operations() -> Result<Vec<ResolvedDocumentOperationV1>, String> {
     ])
 }
 
+#[cfg(windows)]
 fn docx_operations() -> Vec<ResolvedDocumentOperationV1> {
     vec![
         heading("2026년 7월 안전교육 결과보고서", 1),
@@ -850,6 +875,7 @@ fn docx_operations() -> Vec<ResolvedDocumentOperationV1> {
     ]
 }
 
+#[cfg(windows)]
 fn word_operations() -> Vec<ResolvedDocumentOperationV1> {
     vec![
         paragraph("주요 특이사항 및 향후 계획을 검토하고 확인했습니다."),
@@ -858,6 +884,7 @@ fn word_operations() -> Vec<ResolvedDocumentOperationV1> {
     ]
 }
 
+#[cfg(windows)]
 fn paragraph(text: &str) -> ResolvedDocumentOperationV1 {
     ResolvedDocumentOperationV1::AppendParagraph {
         text: text.to_owned(),
@@ -865,6 +892,7 @@ fn paragraph(text: &str) -> ResolvedDocumentOperationV1 {
     }
 }
 
+#[cfg(windows)]
 fn heading(text: &str, level: u8) -> ResolvedDocumentOperationV1 {
     ResolvedDocumentOperationV1::InsertHeading {
         text: text.to_owned(),
@@ -872,6 +900,7 @@ fn heading(text: &str, level: u8) -> ResolvedDocumentOperationV1 {
     }
 }
 
+#[cfg(windows)]
 fn table_operation() -> ResolvedDocumentOperationV1 {
     ResolvedDocumentOperationV1::InsertTable {
         table_id: "table.office200.results".to_owned(),
@@ -883,6 +912,7 @@ fn table_operation() -> ResolvedDocumentOperationV1 {
     }
 }
 
+#[cfg(windows)]
 fn image_operation() -> ResolvedDocumentOperationV1 {
     ResolvedDocumentOperationV1::InsertImage {
         image_id: "image.office200.logo".to_owned(),
@@ -892,6 +922,7 @@ fn image_operation() -> ResolvedDocumentOperationV1 {
     }
 }
 
+#[cfg(windows)]
 fn operation_kind(operation: &ResolvedDocumentOperationV1) -> DocumentOperationV1 {
     match operation {
         ResolvedDocumentOperationV1::AppendParagraph { .. } => DocumentOperationV1::AppendParagraph,
@@ -907,6 +938,7 @@ fn operation_kind(operation: &ResolvedDocumentOperationV1) -> DocumentOperationV
     }
 }
 
+#[cfg(windows)]
 fn capability_id(operation: DocumentOperationV1) -> &'static str {
     match operation {
         DocumentOperationV1::Inspect => "document.inspect",
@@ -924,6 +956,7 @@ fn capability_id(operation: DocumentOperationV1) -> &'static str {
     }
 }
 
+#[cfg(windows)]
 fn text_operation(operation: &ResolvedDocumentOperationV1) -> bool {
     matches!(
         operation,
@@ -934,6 +967,7 @@ fn text_operation(operation: &ResolvedDocumentOperationV1) -> bool {
     )
 }
 
+#[cfg(windows)]
 fn style_operation(operation: &ResolvedDocumentOperationV1) -> bool {
     matches!(
         operation,
@@ -943,6 +977,7 @@ fn style_operation(operation: &ResolvedDocumentOperationV1) -> bool {
     )
 }
 
+#[cfg(windows)]
 fn semantic_equivalence(
     hwpx: &DocumentSemanticSnapshotV1,
     docx: &DocumentSemanticSnapshotV1,
@@ -974,6 +1009,7 @@ fn semantic_equivalence(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn quality_assessment(
     id: &str,
     snapshot: &DocumentSemanticSnapshotV1,
@@ -1007,6 +1043,7 @@ fn quality_assessment(
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn replay_report() -> Result<DocumentWorkReplayReportV1, String> {
     let output = sha256_bytes(b"office200-deterministic-replay-output-v1");
     DocumentWorkReplayReportV1 {
@@ -1026,6 +1063,7 @@ fn replay_report() -> Result<DocumentWorkReplayReportV1, String> {
     .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn residual_metrics(root: &Path) -> Result<DocumentResidualMetricsV1, String> {
     let mut temporary_packages = 0_usize;
     let mut pending = vec![root.to_path_buf()];
@@ -1062,6 +1100,7 @@ fn residual_metrics(root: &Path) -> Result<DocumentResidualMetricsV1, String> {
     })
 }
 
+#[cfg(windows)]
 fn zero_safety() -> DocumentSafetyMetricsV1 {
     DocumentSafetyMetricsV1 {
         wrong_document: 0,
@@ -1085,6 +1124,7 @@ fn zero_safety() -> DocumentSafetyMetricsV1 {
     }
 }
 
+#[cfg(windows)]
 fn validate_model_report(path: &Path) -> Result<ModelEvidence, String> {
     let bytes = fs::read(path).map_err(|error| error.to_string())?;
     let mut value: Value =
@@ -1122,6 +1162,7 @@ fn validate_model_report(path: &Path) -> Result<ModelEvidence, String> {
     Ok(evidence)
 }
 
+#[cfg(windows)]
 fn string_field(object: &serde_json::Map<String, Value>, field: &str) -> Result<String, String> {
     object
         .get(field)
@@ -1130,10 +1171,12 @@ fn string_field(object: &serde_json::Map<String, Value>, field: &str) -> Result<
         .ok_or_else(|| format!("model report field {field} is missing"))
 }
 
+#[cfg(windows)]
 fn u32_field(object: &serde_json::Map<String, Value>, field: &str) -> Result<u32, String> {
     u32::try_from(u64_field(object, field)?).map_err(|_| format!("field {field} exceeds u32"))
 }
 
+#[cfg(windows)]
 fn u64_field(object: &serde_json::Map<String, Value>, field: &str) -> Result<u64, String> {
     object
         .get(field)
@@ -1141,6 +1184,7 @@ fn u64_field(object: &serde_json::Map<String, Value>, field: &str) -> Result<u64
         .ok_or_else(|| format!("model report field {field} is missing"))
 }
 
+#[cfg(windows)]
 fn contains_text(snapshot: &DocumentSemanticSnapshotV1, text: &str) -> bool {
     let expected = sha256_bytes(text.as_bytes());
     snapshot
@@ -1149,17 +1193,20 @@ fn contains_text(snapshot: &DocumentSemanticSnapshotV1, text: &str) -> bool {
         .any(|node| node.text_sha256.as_deref() == Some(expected.as_str()))
 }
 
+#[cfg(windows)]
 fn validate_hash(value: &str) -> Result<(), String> {
     d2i_office_capability::validate_hash(value, "Completion hash")
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn file_sha256(path: &Path) -> Result<String, String> {
     fs::read(path)
         .map(|bytes| sha256_bytes(&bytes))
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn repository_root() -> Result<PathBuf, String> {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
@@ -1167,6 +1214,7 @@ fn repository_root() -> Result<PathBuf, String> {
         .map_err(|error| error.to_string())
 }
 
+#[cfg(windows)]
 fn unix_time_milliseconds() -> Result<u64, String> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -1175,12 +1223,20 @@ fn unix_time_milliseconds() -> Result<u64, String> {
         .and_then(|value| u64::try_from(value).map_err(|error| error.to_string()))
 }
 
+#[cfg(windows)]
 fn micros(duration: std::time::Duration) -> u64 {
     u64::try_from(duration.as_micros()).unwrap_or(u64::MAX)
 }
 
+#[cfg(windows)]
 fn write_json<T: serde::Serialize>(path: &Path, value: &T) -> Result<(), String> {
     let bytes =
         d2i_office_capability::canonical_json_bytes(value).map_err(|error| error.to_string())?;
     fs::write(path, bytes).map_err(|error| error.to_string())
+}
+
+#[cfg(not(windows))]
+fn main() {
+    eprintln!("OFFICE-200 completion requires Windows desktop Office deployment");
+    std::process::exit(2);
 }

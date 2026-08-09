@@ -1,8 +1,9 @@
 use crate::{
     inspect_docx_document, inspect_hwpx_document, spawn_document_file_worker,
-    spawn_word_document_worker, DocumentFileWorkerRequestV1, OfficeWorkspaceStore,
-    ResolvedDocumentOperationV1, WordDocumentWorkerRequestV1,
+    DocumentFileWorkerRequestV1, OfficeWorkspaceStore, ResolvedDocumentOperationV1,
 };
+#[cfg(windows)]
+use crate::{spawn_word_document_worker, WordDocumentWorkerRequestV1};
 use d2i_document_capability::{
     DocumentActivationLedgerV1, DocumentBackendApprovalV1, DocumentBackendDescriptorV1,
     DocumentBackendKindV1, DocumentCapabilityPackV1, DocumentFormatV1, DocumentNodeKindV1,
@@ -222,42 +223,47 @@ impl DocumentKrnDispatcherV1 {
                     (response.snapshot, response.bytes_written, Vec::new())
                 }
                 DocumentBackendKindV1::WordCom => {
-                    let response = spawn_word_document_worker(
-                        worker,
-                        worker_sha256,
-                        &self.word_executable,
-                        &WordDocumentWorkerRequestV1 {
-                            schema_version: 1,
-                            request_id: dispatch.binding.one_time_use_id.clone(),
-                            source_path: source.to_string_lossy().to_string(),
-                            destination_path: destination.to_string_lossy().to_string(),
-                            expected_source_sha256: source_sha256.clone(),
-                            document_id: dispatch.source_snapshot.document_id.clone(),
-                            artifact_id: dispatch.source_snapshot.artifact_id.clone(),
-                            generation: dispatch.binding.expected_output_generation,
-                            backend_id: dispatch.backend.backend_id.clone(),
-                            observed_at_unix_ms: dispatch.now_unix_ms.saturating_add(1),
-                            operation: dispatch.resolved_operation.clone(),
-                            limits: dispatch.capability_pack.resource_limits.clone(),
-                        },
-                        Duration::from_millis(
-                            dispatch
-                                .capability_pack
-                                .resource_limits
-                                .maximum_application_session_milliseconds,
-                        ),
-                    )?;
-                    let bytes_written = fs::metadata(&destination)
-                        .map_err(|error| error.to_string())?
-                        .len();
-                    (
-                        response.snapshot,
-                        bytes_written,
-                        vec![format!(
-                            "word-process-{}",
-                            response.mutation_receipt.word_process_id
-                        )],
-                    )
+                    #[cfg(not(windows))]
+                    return Err("Word COM backend is unavailable on this platform".to_owned());
+                    #[cfg(windows)]
+                    {
+                        let response = spawn_word_document_worker(
+                            worker,
+                            worker_sha256,
+                            &self.word_executable,
+                            &WordDocumentWorkerRequestV1 {
+                                schema_version: 1,
+                                request_id: dispatch.binding.one_time_use_id.clone(),
+                                source_path: source.to_string_lossy().to_string(),
+                                destination_path: destination.to_string_lossy().to_string(),
+                                expected_source_sha256: source_sha256.clone(),
+                                document_id: dispatch.source_snapshot.document_id.clone(),
+                                artifact_id: dispatch.source_snapshot.artifact_id.clone(),
+                                generation: dispatch.binding.expected_output_generation,
+                                backend_id: dispatch.backend.backend_id.clone(),
+                                observed_at_unix_ms: dispatch.now_unix_ms.saturating_add(1),
+                                operation: dispatch.resolved_operation.clone(),
+                                limits: dispatch.capability_pack.resource_limits.clone(),
+                            },
+                            Duration::from_millis(
+                                dispatch
+                                    .capability_pack
+                                    .resource_limits
+                                    .maximum_application_session_milliseconds,
+                            ),
+                        )?;
+                        let bytes_written = fs::metadata(&destination)
+                            .map_err(|error| error.to_string())?
+                            .len();
+                        (
+                            response.snapshot,
+                            bytes_written,
+                            vec![format!(
+                                "word-process-{}",
+                                response.mutation_receipt.word_process_id
+                            )],
+                        )
+                    }
                 }
                 DocumentBackendKindV1::HancomAutomation => {
                     return Err("unreachable Hancom backend dispatch".to_owned())
