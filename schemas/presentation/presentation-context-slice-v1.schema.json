@@ -1,0 +1,177 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-context-slice-v1.schema.json",
+    "title":  "PresentationContextSliceV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "slice_id",
+                     "case_id",
+                     "presentation_snapshot_sha256",
+                     "query_result_sha256",
+                     "fact_binding_sha256",
+                     "selected_slides",
+                     "selected_fact_ids",
+                     "text_excerpt_sha256s",
+                     "omitted_slide_count",
+                     "serialized_bytes",
+                     "estimated_tokens",
+                     "evidence_ids",
+                     "slice_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "slice_id":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  512,
+                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                    },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "presentation_snapshot_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                        },
+                       "query_result_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "fact_binding_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "selected_slides":  {
+                                               "type":  "array",
+                                               "minItems":  1,
+                                               "maxItems":  8,
+                                               "uniqueItems":  false,
+                                               "items":  {
+                                                             "type":  "object",
+                                                             "additionalProperties":  false,
+                                                             "required":  [
+                                                                              "slide_id",
+                                                                              "purpose_id",
+                                                                              "layout_id",
+                                                                              "title_sha256",
+                                                                              "shape_kind_ids",
+                                                                              "evidence_ids"
+                                                                          ],
+                                                             "properties":  {
+                                                                                "slide_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                             },
+                                                                                "purpose_id":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  1,
+                                                                                                   "maxLength":  512,
+                                                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                               },
+                                                                                "layout_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                              },
+                                                                                "title_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                 },
+                                                                                "shape_kind_ids":  {
+                                                                                                       "type":  "array",
+                                                                                                       "minItems":  0,
+                                                                                                       "maxItems":  16,
+                                                                                                       "uniqueItems":  true,
+                                                                                                       "items":  {
+                                                                                                                     "type":  "string",
+                                                                                                                     "enum":  [
+                                                                                                                                  "title",
+                                                                                                                                  "text_box",
+                                                                                                                                  "image",
+                                                                                                                                  "table",
+                                                                                                                                  "chart",
+                                                                                                                                  "simple_shape",
+                                                                                                                                  "placeholder"
+                                                                                                                              ]
+                                                                                                                 }
+                                                                                                   },
+                                                                                "evidence_ids":  {
+                                                                                                     "type":  "array",
+                                                                                                     "minItems":  1,
+                                                                                                     "maxItems":  128,
+                                                                                                     "uniqueItems":  true,
+                                                                                                     "items":  {
+                                                                                                                   "type":  "string",
+                                                                                                                   "minLength":  1,
+                                                                                                                   "maxLength":  512,
+                                                                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                               }
+                                                                                                 }
+                                                                            }
+                                                         }
+                                           },
+                       "selected_fact_ids":  {
+                                                 "type":  "array",
+                                                 "minItems":  1,
+                                                 "maxItems":  16,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           }
+                                             },
+                       "text_excerpt_sha256s":  {
+                                                    "type":  "array",
+                                                    "minItems":  0,
+                                                    "maxItems":  16,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                              }
+                                                },
+                       "omitted_slide_count":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "serialized_bytes":  {
+                                                "type":  "integer",
+                                                "minimum":  1,
+                                                "maximum":  32768
+                                            },
+                       "estimated_tokens":  {
+                                                "type":  "integer",
+                                                "minimum":  1,
+                                                "maximum":  8192
+                                            },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "minItems":  1,
+                                            "maxItems":  128,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "slice_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                        }
+                   }
+}

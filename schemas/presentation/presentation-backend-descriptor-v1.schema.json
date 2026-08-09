@@ -1,0 +1,92 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-backend-descriptor-v1.schema.json",
+    "title":  "PresentationBackendDescriptorV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "backend_id",
+                     "backend_kind",
+                     "supported_operations",
+                     "requires_application",
+                     "application_sha256",
+                     "worker_sha256",
+                     "network_denied",
+                     "macro_disabled",
+                     "descriptor_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "backend_kind":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "pptx_file",
+                                                         "powerpoint_com"
+                                                     ]
+                                        },
+                       "supported_operations":  {
+                                                    "type":  "array",
+                                                    "minItems":  1,
+                                                    "maxItems":  16,
+                                                    "uniqueItems":  true,
+                                                    "items":  {
+                                                                  "type":  "string",
+                                                                  "enum":  [
+                                                                               "inspect",
+                                                                               "query",
+                                                                               "create_from_template",
+                                                                               "add_slide",
+                                                                               "set_title",
+                                                                               "set_text",
+                                                                               "insert_image",
+                                                                               "insert_table",
+                                                                               "set_table_cell",
+                                                                               "insert_chart",
+                                                                               "apply_layout",
+                                                                               "apply_style_role",
+                                                                               "move_resize_shape",
+                                                                               "save_version",
+                                                                               "remove_generated_slide",
+                                                                               "remove_generated_shape"
+                                                                           ]
+                                                              }
+                                                },
+                       "requires_application":  {
+                                                    "type":  "boolean"
+                                                },
+                       "application_sha256":  {
+                                                  "oneOf":  [
+                                                                {
+                                                                    "type":  "string",
+                                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                },
+                                                                {
+                                                                    "type":  "null"
+                                                                }
+                                                            ]
+                                              },
+                       "worker_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         },
+                       "network_denied":  {
+                                              "type":  "boolean"
+                                          },
+                       "macro_disabled":  {
+                                              "type":  "boolean"
+                                          },
+                       "descriptor_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                             }
+                   }
+}

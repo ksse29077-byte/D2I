@@ -1,0 +1,84 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-brief-v1.schema.json",
+    "title":  "PresentationBriefV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "brief_id",
+                     "case_id",
+                     "objective",
+                     "audience_id",
+                     "required_topic_ids",
+                     "required_fact_ids",
+                     "maximum_slides",
+                     "context_slice_sha256",
+                     "brief_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "brief_id":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  512,
+                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                    },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "objective":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  2048
+                                     },
+                       "audience_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "required_topic_ids":  {
+                                                  "type":  "array",
+                                                  "minItems":  1,
+                                                  "maxItems":  32,
+                                                  "uniqueItems":  true,
+                                                  "items":  {
+                                                                "type":  "string",
+                                                                "minLength":  1,
+                                                                "maxLength":  512,
+                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                            }
+                                              },
+                       "required_fact_ids":  {
+                                                 "type":  "array",
+                                                 "minItems":  1,
+                                                 "maxItems":  16,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           }
+                                             },
+                       "maximum_slides":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  32
+                                          },
+                       "context_slice_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "brief_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                        }
+                   }
+}

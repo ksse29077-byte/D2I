@@ -88,6 +88,9 @@ impl OperationFixture {
             AdapterKindV1::OfficeSpreadsheet => {
                 panic!("desktop trusted-execution fixture cannot use office spreadsheet")
             }
+            AdapterKindV1::OfficePresentation => {
+                panic!("desktop trusted-execution fixture cannot use office presentation")
+            }
         }
     }
 
@@ -832,6 +835,9 @@ fn native_grounded_action_arguments_are_bound_without_weakening_fixture_compatib
             }
             AdapterKindV1::OfficeSpreadsheet => {
                 panic!("desktop trusted-execution fixture cannot use office spreadsheet")
+            }
+            AdapterKindV1::OfficePresentation => {
+                panic!("desktop trusted-execution fixture cannot use office presentation")
             }
         };
         let mut target = GroundedTargetBindingV1 {

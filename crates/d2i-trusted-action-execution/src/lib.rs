@@ -1337,7 +1337,7 @@ pub fn sha256_bytes(bytes: &[u8]) -> String {
 
 enum ActionArgumentsV1 {
     Fixture(Box<CandidateActionArguments>),
-    Grounded(GroundedActionArgumentsV1),
+    Grounded(Box<GroundedActionArgumentsV1>),
 }
 
 impl ActionArgumentsV1 {
@@ -1390,7 +1390,7 @@ fn action_arguments(
         {
             return integrity("grounded arguments differ from policy-ready bindings");
         }
-        return Ok(ActionArgumentsV1::Grounded(arguments));
+        return Ok(ActionArgumentsV1::Grounded(Box::new(arguments)));
     }
 
     let arguments: CandidateActionArguments =

@@ -48,9 +48,10 @@ runtime, verifier, or hot-path package code.
 
 Phase 6 adds `libloading` 0.8.9. Its small platform-specific dependency surface
 is confined to `d2i-ffi`; loading still executes a platform loader and may
-resolve transitive native dependencies. Version 0.8.9 is pinned because the
-workspace uses Rust 1.86 while libloading 0.9 requires Rust 1.88. All other
-Phase 6 dependencies are existing internal workspace or locked crates.
+resolve transitive native dependencies. Version 0.8.9 remains pinned as the
+validated loader contract. The workspace uses Rust 1.88 so the locked
+`time` 0.3.47 dependency includes the RUSTSEC-2026-0009 fix. All other Phase 6
+dependencies are existing internal workspace or locked crates.
 
 Phase 7 adds no Cargo dependency. `d2i-kernel` reuses locked `serde`,
 `serde_json`, and optional `d2i-ffi`. The optional external build tool is Mojo

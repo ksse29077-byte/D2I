@@ -674,7 +674,7 @@ impl ShadowStoreV1 {
             return Ok(hash);
         };
         let result =
-            self.commit_store_transaction(artifact, metadata, ledger, index, recorded_at_unix_ms);
+            self.commit_store_transaction(artifact, metadata, ledger, *index, recorded_at_unix_ms);
         if result.is_err() {
             self.poisoned = true;
             let _ = write_poison(&self.root);
@@ -717,7 +717,7 @@ impl ShadowStoreV1 {
         Ok(StorePreflight::Pending {
             metadata,
             ledger,
-            index,
+            index: Box::new(index),
         })
     }
 
@@ -778,7 +778,7 @@ enum StorePreflight {
     Pending {
         metadata: ArtifactMetadata,
         ledger: ShadowStoreLedgerV1,
-        index: ShadowStoreIndexV1,
+        index: Box<ShadowStoreIndexV1>,
     },
 }
 

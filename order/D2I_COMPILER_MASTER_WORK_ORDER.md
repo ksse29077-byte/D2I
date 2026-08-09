@@ -18,9 +18,9 @@ Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
 Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-300 are
+runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-400 are
 complete. Track O has priority over the remaining physical execution planes.
-The active next task is `D2I-OFFICE-400 - PowerPoint Presentation Work`.
+The active next task is `D2I-OFFICE-500 - PDF and Document Interchange`.
 
 WORK-700 is governed by ADR 0034 and
 `docs/workforce/role-reporting-sla-escalation-v1.md`. It preserves immutable
@@ -67,6 +67,17 @@ mutation still requires Policy, exact binding, one-shot activation, a pinned
 worker, a new immutable generation, and fresh semantic verification.
 Its actual Qwen, installed Excel, exact temporary WFP, signed certification,
 protected audit, replay, and zero-residual Completion gates are complete.
+
+OFFICE-400 is governed by ADR 0041 and
+`docs/office/presentation-work-v1.md`. It changes no Compiler IR, package
+format, or runtime ABI. A bounded semantic template query and OFFICE-300 typed
+fact binding feed a slide plan; models never receive PPTX/XML/workbook bytes,
+raw geometry, paths, formulas, or COM. Separate signed PPTX and PowerPoint
+backends retain Policy, exact authority, one-shot activation, immutable
+generations, fresh reopen, semantic diff, structural verification, protected
+audit, and signed certification. Its actual Qwen, private-desktop PowerPoint,
+chart Excel, exact temporary WFP, rendering, replay, and zero-residual
+Completion gates are complete.
 
 ## Product Context
 

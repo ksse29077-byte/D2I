@@ -1,0 +1,72 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-chart-spec-v1.schema.json",
+    "title":  "PresentationChartSpecV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "chart_id",
+                     "chart_kind",
+                     "slot",
+                     "category_labels",
+                     "series_label",
+                     "fact_ids"
+                 ],
+    "properties":  {
+                       "chart_id":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  512,
+                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                    },
+                       "chart_kind":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "clustered_column",
+                                                       "bar",
+                                                       "line"
+                                                   ]
+                                      },
+                       "slot":  {
+                                    "type":  "string",
+                                    "enum":  [
+                                                 "title",
+                                                 "body",
+                                                 "body_left",
+                                                 "body_right",
+                                                 "hero",
+                                                 "table_main",
+                                                 "chart_main",
+                                                 "footer"
+                                             ]
+                                },
+                       "category_labels":  {
+                                               "type":  "array",
+                                               "minItems":  1,
+                                               "maxItems":  32,
+                                               "uniqueItems":  false,
+                                               "items":  {
+                                                             "type":  "string",
+                                                             "minLength":  1,
+                                                             "maxLength":  128
+                                                         }
+                                           },
+                       "series_label":  {
+                                            "type":  "string",
+                                            "minLength":  1,
+                                            "maxLength":  128
+                                        },
+                       "fact_ids":  {
+                                        "type":  "array",
+                                        "minItems":  1,
+                                        "maxItems":  32,
+                                        "uniqueItems":  false,
+                                        "items":  {
+                                                      "type":  "string",
+                                                      "minLength":  1,
+                                                      "maxLength":  512,
+                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                  }
+                                    }
+                   }
+}

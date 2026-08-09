@@ -1,0 +1,89 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-structural-quality-v1.schema.json",
+    "title":  "PresentationStructuralQualityV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "required_slides_missing",
+                     "required_titles_missing",
+                     "required_facts_missing",
+                     "empty_generated_shapes",
+                     "placeholder_generated_shapes",
+                     "off_slide_shapes",
+                     "forbidden_overlaps",
+                     "text_overflows",
+                     "below_minimum_font_shapes",
+                     "table_overflows",
+                     "incomplete_charts",
+                     "distorted_images",
+                     "hidden_generated_objects"
+                 ],
+    "properties":  {
+                       "required_slides_missing":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "required_titles_missing":  {
+                                                       "type":  "integer",
+                                                       "minimum":  0,
+                                                       "maximum":  4294967295
+                                                   },
+                       "required_facts_missing":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "empty_generated_shapes":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "placeholder_generated_shapes":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "off_slide_shapes":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "forbidden_overlaps":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "text_overflows":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "below_minimum_font_shapes":  {
+                                                         "type":  "integer",
+                                                         "minimum":  0,
+                                                         "maximum":  4294967295
+                                                     },
+                       "table_overflows":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "incomplete_charts":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "distorted_images":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "hidden_generated_objects":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    }
+                   }
+}

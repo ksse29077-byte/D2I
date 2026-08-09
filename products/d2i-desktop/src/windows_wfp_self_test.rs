@@ -1737,12 +1737,8 @@ fn remove_profile_directory(parent: &Path, profile: &Path) -> Result<(), std::io
         }
         thread::sleep(Duration::from_millis(100));
     }
-    Err(last_error.unwrap_or_else(|| {
-        std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "temporary Edge profile removal failed",
-        )
-    }))
+    Err(last_error
+        .unwrap_or_else(|| std::io::Error::other("temporary Edge profile removal failed")))
 }
 
 fn bounded_wait(deadline: Instant, requested: Duration) -> Result<Duration, DesktopError> {

@@ -1277,7 +1277,7 @@ fn string_field(value: &Value, field: &str) -> Result<String, String> {
 }
 
 fn fixed_hash(seed: u8) -> String {
-    format!("sha256:{:064x}", seed)
+    format!("sha256:{seed:064x}")
 }
 fn hash_bytes(bytes: &[u8]) -> String {
     format!("sha256:{:x}", Sha256::digest(bytes))

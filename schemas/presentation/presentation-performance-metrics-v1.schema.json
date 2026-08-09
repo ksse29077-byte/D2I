@@ -1,0 +1,90 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-performance-metrics-v1.schema.json",
+    "title":  "PresentationPerformanceMetricsV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "parse_microseconds",
+                     "query_microseconds",
+                     "context_slice_microseconds",
+                     "planning_microseconds",
+                     "mutation_microseconds",
+                     "save_microseconds",
+                     "reopen_microseconds",
+                     "verify_microseconds",
+                     "render_microseconds",
+                     "model_microseconds",
+                     "peak_worker_memory_bytes",
+                     "source_slides",
+                     "context_slides",
+                     "context_facts",
+                     "context_bytes"
+                 ],
+    "properties":  {
+                       "parse_microseconds":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0
+                                              },
+                       "query_microseconds":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0
+                                              },
+                       "context_slice_microseconds":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0
+                                                      },
+                       "planning_microseconds":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0
+                                                 },
+                       "mutation_microseconds":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0
+                                                 },
+                       "save_microseconds":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0
+                                             },
+                       "reopen_microseconds":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "verify_microseconds":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "render_microseconds":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "model_microseconds":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0
+                                              },
+                       "peak_worker_memory_bytes":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0
+                                                    },
+                       "source_slides":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "context_slides":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "context_facts":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "context_bytes":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         }
+                   }
+}

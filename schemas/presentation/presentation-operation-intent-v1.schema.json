@@ -1,0 +1,736 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-operation-intent-v1.schema.json",
+    "title":  "PresentationOperationIntentV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "intent_id",
+                     "case_id",
+                     "presentation_id",
+                     "artifact_id",
+                     "source_generation",
+                     "source_content_sha256",
+                     "source_snapshot_sha256",
+                     "operation",
+                     "mutation",
+                     "context_slice_sha256",
+                     "slide_plan_sha256",
+                     "fact_binding_sha256",
+                     "expected_postcondition_ids",
+                     "risk_class",
+                     "intent_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "intent_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "case_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "presentation_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "source_generation":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0
+                                             },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "source_snapshot_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "operation":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "inspect",
+                                                      "query",
+                                                      "create_from_template",
+                                                      "add_slide",
+                                                      "set_title",
+                                                      "set_text",
+                                                      "insert_image",
+                                                      "insert_table",
+                                                      "set_table_cell",
+                                                      "insert_chart",
+                                                      "apply_layout",
+                                                      "apply_style_role",
+                                                      "move_resize_shape",
+                                                      "save_version",
+                                                      "remove_generated_slide",
+                                                      "remove_generated_shape"
+                                                  ]
+                                     },
+                       "mutation":  {
+                                        "oneOf":  [
+                                                      {
+                                                          "oneOf":  [
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "planned_slide_id",
+                                                                                             "purpose_id",
+                                                                                             "layout_id"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "add_slide"
+                                                                                                                 },
+                                                                                               "planned_slide_id":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  512,
+                                                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                    },
+                                                                                               "purpose_id":  {
+                                                                                                                  "type":  "string",
+                                                                                                                  "minLength":  1,
+                                                                                                                  "maxLength":  512,
+                                                                                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                              },
+                                                                                               "layout_id":  {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  512,
+                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                             }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "title"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "set_title"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "title":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  1,
+                                                                                                             "maxLength":  256
+                                                                                                         }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "text"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "set_text"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "text":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  1,
+                                                                                                            "maxLength":  2048
+                                                                                                        }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "image"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "insert_image"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "image":  {
+                                                                                                             "type":  "object",
+                                                                                                             "additionalProperties":  false,
+                                                                                                             "required":  [
+                                                                                                                              "image_id",
+                                                                                                                              "image_sha256",
+                                                                                                                              "workspace_relative_path",
+                                                                                                                              "slot",
+                                                                                                                              "fit"
+                                                                                                                          ],
+                                                                                                             "properties":  {
+                                                                                                                                "image_id":  {
+                                                                                                                                                 "type":  "string",
+                                                                                                                                                 "minLength":  1,
+                                                                                                                                                 "maxLength":  512,
+                                                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                             },
+                                                                                                                                "image_sha256":  {
+                                                                                                                                                     "type":  "string",
+                                                                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                                 },
+                                                                                                                                "workspace_relative_path":  {
+                                                                                                                                                                "type":  "string",
+                                                                                                                                                                "minLength":  1,
+                                                                                                                                                                "maxLength":  512,
+                                                                                                                                                                "pattern":  "^(?![A-Za-z]:)(?![/\\\\])(?!.+[\\\\/]\\.\\.?([\\\\/]|$)).+$"
+                                                                                                                                                            },
+                                                                                                                                "slot":  {
+                                                                                                                                             "type":  "string",
+                                                                                                                                             "enum":  [
+                                                                                                                                                          "title",
+                                                                                                                                                          "body",
+                                                                                                                                                          "body_left",
+                                                                                                                                                          "body_right",
+                                                                                                                                                          "hero",
+                                                                                                                                                          "table_main",
+                                                                                                                                                          "chart_main",
+                                                                                                                                                          "footer"
+                                                                                                                                                      ]
+                                                                                                                                         },
+                                                                                                                                "fit":  {
+                                                                                                                                            "type":  "string",
+                                                                                                                                            "enum":  [
+                                                                                                                                                         "contain",
+                                                                                                                                                         "cover"
+                                                                                                                                                     ]
+                                                                                                                                        }
+                                                                                                                            }
+                                                                                                         }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "table"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "insert_table"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "table":  {
+                                                                                                             "type":  "object",
+                                                                                                             "additionalProperties":  false,
+                                                                                                             "required":  [
+                                                                                                                              "table_id",
+                                                                                                                              "slot",
+                                                                                                                              "column_labels",
+                                                                                                                              "row_labels",
+                                                                                                                              "fact_ids"
+                                                                                                                          ],
+                                                                                                             "properties":  {
+                                                                                                                                "table_id":  {
+                                                                                                                                                 "type":  "string",
+                                                                                                                                                 "minLength":  1,
+                                                                                                                                                 "maxLength":  512,
+                                                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                             },
+                                                                                                                                "slot":  {
+                                                                                                                                             "type":  "string",
+                                                                                                                                             "enum":  [
+                                                                                                                                                          "title",
+                                                                                                                                                          "body",
+                                                                                                                                                          "body_left",
+                                                                                                                                                          "body_right",
+                                                                                                                                                          "hero",
+                                                                                                                                                          "table_main",
+                                                                                                                                                          "chart_main",
+                                                                                                                                                          "footer"
+                                                                                                                                                      ]
+                                                                                                                                         },
+                                                                                                                                "column_labels":  {
+                                                                                                                                                      "type":  "array",
+                                                                                                                                                      "minItems":  1,
+                                                                                                                                                      "maxItems":  32,
+                                                                                                                                                      "uniqueItems":  false,
+                                                                                                                                                      "items":  {
+                                                                                                                                                                    "type":  "string",
+                                                                                                                                                                    "minLength":  1,
+                                                                                                                                                                    "maxLength":  128
+                                                                                                                                                                }
+                                                                                                                                                  },
+                                                                                                                                "row_labels":  {
+                                                                                                                                                   "type":  "array",
+                                                                                                                                                   "minItems":  1,
+                                                                                                                                                   "maxItems":  128,
+                                                                                                                                                   "uniqueItems":  false,
+                                                                                                                                                   "items":  {
+                                                                                                                                                                 "type":  "string",
+                                                                                                                                                                 "minLength":  1,
+                                                                                                                                                                 "maxLength":  128
+                                                                                                                                                             }
+                                                                                                                                               },
+                                                                                                                                "fact_ids":  {
+                                                                                                                                                 "type":  "array",
+                                                                                                                                                 "minItems":  1,
+                                                                                                                                                 "maxItems":  256,
+                                                                                                                                                 "uniqueItems":  false,
+                                                                                                                                                 "items":  {
+                                                                                                                                                               "type":  "string",
+                                                                                                                                                               "minLength":  1,
+                                                                                                                                                               "maxLength":  512,
+                                                                                                                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                           }
+                                                                                                                                             }
+                                                                                                                            }
+                                                                                                         }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "row",
+                                                                                             "column",
+                                                                                             "text",
+                                                                                             "fact_id"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "set_table_cell"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "row":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  256
+                                                                                                       },
+                                                                                               "column":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  64
+                                                                                                          },
+                                                                                               "text":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  1,
+                                                                                                            "maxLength":  512
+                                                                                                        },
+                                                                                               "fact_id":  {
+                                                                                                               "oneOf":  [
+                                                                                                                             {
+                                                                                                                                 "type":  "string",
+                                                                                                                                 "minLength":  1,
+                                                                                                                                 "maxLength":  512,
+                                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                             },
+                                                                                                                             {
+                                                                                                                                 "type":  "null"
+                                                                                                                             }
+                                                                                                                         ]
+                                                                                                           }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "chart"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "insert_chart"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "chart":  {
+                                                                                                             "type":  "object",
+                                                                                                             "additionalProperties":  false,
+                                                                                                             "required":  [
+                                                                                                                              "chart_id",
+                                                                                                                              "chart_kind",
+                                                                                                                              "slot",
+                                                                                                                              "category_labels",
+                                                                                                                              "series_label",
+                                                                                                                              "fact_ids"
+                                                                                                                          ],
+                                                                                                             "properties":  {
+                                                                                                                                "chart_id":  {
+                                                                                                                                                 "type":  "string",
+                                                                                                                                                 "minLength":  1,
+                                                                                                                                                 "maxLength":  512,
+                                                                                                                                                 "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                             },
+                                                                                                                                "chart_kind":  {
+                                                                                                                                                   "type":  "string",
+                                                                                                                                                   "enum":  [
+                                                                                                                                                                "clustered_column",
+                                                                                                                                                                "bar",
+                                                                                                                                                                "line"
+                                                                                                                                                            ]
+                                                                                                                                               },
+                                                                                                                                "slot":  {
+                                                                                                                                             "type":  "string",
+                                                                                                                                             "enum":  [
+                                                                                                                                                          "title",
+                                                                                                                                                          "body",
+                                                                                                                                                          "body_left",
+                                                                                                                                                          "body_right",
+                                                                                                                                                          "hero",
+                                                                                                                                                          "table_main",
+                                                                                                                                                          "chart_main",
+                                                                                                                                                          "footer"
+                                                                                                                                                      ]
+                                                                                                                                         },
+                                                                                                                                "category_labels":  {
+                                                                                                                                                        "type":  "array",
+                                                                                                                                                        "minItems":  1,
+                                                                                                                                                        "maxItems":  32,
+                                                                                                                                                        "uniqueItems":  false,
+                                                                                                                                                        "items":  {
+                                                                                                                                                                      "type":  "string",
+                                                                                                                                                                      "minLength":  1,
+                                                                                                                                                                      "maxLength":  128
+                                                                                                                                                                  }
+                                                                                                                                                    },
+                                                                                                                                "series_label":  {
+                                                                                                                                                     "type":  "string",
+                                                                                                                                                     "minLength":  1,
+                                                                                                                                                     "maxLength":  128
+                                                                                                                                                 },
+                                                                                                                                "fact_ids":  {
+                                                                                                                                                 "type":  "array",
+                                                                                                                                                 "minItems":  1,
+                                                                                                                                                 "maxItems":  32,
+                                                                                                                                                 "uniqueItems":  false,
+                                                                                                                                                 "items":  {
+                                                                                                                                                               "type":  "string",
+                                                                                                                                                               "minLength":  1,
+                                                                                                                                                               "maxLength":  512,
+                                                                                                                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                           }
+                                                                                                                                             }
+                                                                                                                            }
+                                                                                                         }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "layout"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "apply_layout"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "layout":  {
+                                                                                                              "type":  "object",
+                                                                                                              "additionalProperties":  false,
+                                                                                                              "required":  [
+                                                                                                                               "layout_id",
+                                                                                                                               "required_slots",
+                                                                                                                               "minimum_font_points"
+                                                                                                                           ],
+                                                                                                              "properties":  {
+                                                                                                                                 "layout_id":  {
+                                                                                                                                                   "type":  "string",
+                                                                                                                                                   "minLength":  1,
+                                                                                                                                                   "maxLength":  512,
+                                                                                                                                                   "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                               },
+                                                                                                                                 "required_slots":  {
+                                                                                                                                                        "type":  "array",
+                                                                                                                                                        "minItems":  1,
+                                                                                                                                                        "maxItems":  8,
+                                                                                                                                                        "uniqueItems":  true,
+                                                                                                                                                        "items":  {
+                                                                                                                                                                      "type":  "string",
+                                                                                                                                                                      "enum":  [
+                                                                                                                                                                                   "title",
+                                                                                                                                                                                   "body",
+                                                                                                                                                                                   "body_left",
+                                                                                                                                                                                   "body_right",
+                                                                                                                                                                                   "hero",
+                                                                                                                                                                                   "table_main",
+                                                                                                                                                                                   "chart_main",
+                                                                                                                                                                                   "footer"
+                                                                                                                                                                               ]
+                                                                                                                                                                  }
+                                                                                                                                                    },
+                                                                                                                                 "minimum_font_points":  {
+                                                                                                                                                             "type":  "integer",
+                                                                                                                                                             "minimum":  8,
+                                                                                                                                                             "maximum":  96
+                                                                                                                                                         }
+                                                                                                                             }
+                                                                                                          }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "style_role"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "apply_style_role"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "style_role":  {
+                                                                                                                  "type":  "string",
+                                                                                                                  "enum":  [
+                                                                                                                               "deck_title",
+                                                                                                                               "slide_title",
+                                                                                                                               "body",
+                                                                                                                               "emphasis",
+                                                                                                                               "metric",
+                                                                                                                               "caption",
+                                                                                                                               "table_header",
+                                                                                                                               "table_body",
+                                                                                                                               "chart",
+                                                                                                                               "footer"
+                                                                                                                           ]
+                                                                                                              }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id",
+                                                                                             "slot"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "move_resize_shape"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "slot":  {
+                                                                                                            "type":  "string",
+                                                                                                            "enum":  [
+                                                                                                                         "title",
+                                                                                                                         "body",
+                                                                                                                         "body_left",
+                                                                                                                         "body_right",
+                                                                                                                         "hero",
+                                                                                                                         "table_main",
+                                                                                                                         "chart_main",
+                                                                                                                         "footer"
+                                                                                                                     ]
+                                                                                                        }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "remove_generated_slide"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            }
+                                                                                           }
+                                                                        },
+                                                                        {
+                                                                            "type":  "object",
+                                                                            "additionalProperties":  false,
+                                                                            "required":  [
+                                                                                             "mutation_kind",
+                                                                                             "slide_id",
+                                                                                             "shape_id"
+                                                                                         ],
+                                                                            "properties":  {
+                                                                                               "mutation_kind":  {
+                                                                                                                     "const":  "remove_generated_shape"
+                                                                                                                 },
+                                                                                               "slide_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            },
+                                                                                               "shape_id":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                            }
+                                                                                           }
+                                                                        }
+                                                                    ]
+                                                      },
+                                                      {
+                                                          "type":  "null"
+                                                      }
+                                                  ]
+                                    },
+                       "context_slice_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "slide_plan_sha256":  {
+                                                 "type":  "string",
+                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                             },
+                       "fact_binding_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "expected_postcondition_ids":  {
+                                                          "type":  "array",
+                                                          "minItems":  1,
+                                                          "maxItems":  32,
+                                                          "uniqueItems":  true,
+                                                          "items":  {
+                                                                        "type":  "string",
+                                                                        "minLength":  1,
+                                                                        "maxLength":  512,
+                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                    }
+                                                      },
+                       "risk_class":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "read_only",
+                                                       "reversible",
+                                                       "business_state_change",
+                                                       "high"
+                                                   ]
+                                      },
+                       "intent_sha256":  {
+                                             "type":  "string",
+                                             "pattern":  "^sha256:[0-9a-f]{64}$"
+                                         }
+                   }
+}

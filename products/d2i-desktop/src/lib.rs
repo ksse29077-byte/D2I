@@ -26,6 +26,13 @@ mod limited_autonomy;
 mod local_model_provider;
 mod office_workspace;
 mod policy;
+#[cfg(windows)]
+mod powerpoint_presentation;
+mod pptx_presentation;
+mod presentation_dispatch;
+mod presentation_file_worker;
+mod presentation_package;
+mod presentation_work;
 mod role_instance;
 mod role_operations;
 mod shadow_mode;
@@ -215,6 +222,28 @@ pub use office_workspace::{
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,
     PolicyDecisionStatus,
+};
+#[cfg(windows)]
+pub use powerpoint_presentation::{
+    powerpoint_presentation_worker_main, spawn_powerpoint_presentation_worker,
+    PowerPointPresentationMutationReceiptV1, PowerPointPresentationWorkerRequestV1,
+    PowerPointPresentationWorkerResponseV1,
+};
+pub use pptx_presentation::{
+    create_pptx_template, inspect_pptx_presentation, mutate_pptx_presentation,
+    PptxPresentationMutationV1,
+};
+pub use presentation_dispatch::{
+    PresentationAuthorityContextV1, PresentationDispatchOutcomeV1, PresentationDispatchV1,
+    PresentationKrnDispatcherConfigurationV1, PresentationKrnDispatcherV1,
+};
+pub use presentation_file_worker::{
+    presentation_file_worker_main, spawn_presentation_file_worker, PresentationFileWorkerRequestV1,
+    PresentationFileWorkerResponseV1,
+};
+pub use presentation_work::{
+    presentation_capability_id, presentation_operation, validate_resolved_presentation_operation,
+    ResolvedPresentationOperationV1,
 };
 pub use role_instance::{
     initialize_role_instance_ledger, verify_role_instance_ledger, RoleInstanceLedgerEventKindV1,

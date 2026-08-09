@@ -2,6 +2,8 @@
 
 #[cfg(windows)]
 mod excel_automation;
+#[cfg(windows)]
+mod powerpoint_automation;
 mod verifier_broker;
 mod wfp;
 #[cfg(windows)]
@@ -11,6 +13,11 @@ mod word_automation;
 pub use excel_automation::{
     execute_excel_spreadsheet_operation, installed_excel_process_ids, ExcelAutomationFormulaV1,
     ExcelAutomationOperationV1, ExcelAutomationReceiptV1, ExcelAutomationScalarV1,
+};
+#[cfg(windows)]
+pub use powerpoint_automation::{
+    execute_powerpoint_presentation_operation, installed_powerpoint_process_ids,
+    PowerPointAutomationOperationV1, PowerPointAutomationReceiptV1,
 };
 pub use verifier_broker::{
     accept_verifier_pipe, connect_verifier_pipe, current_process_has_sid,

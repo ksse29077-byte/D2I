@@ -717,3 +717,28 @@ The OFFICE-300 Completion gate is certified: actual pinned Qwen receives only
 the deterministic typed-fact slice, installed Excel performs typed formula
 calculation under exact temporary WFP isolation, and independent fresh reopen,
 protected audit, replay, signed certification, and zero-residual cleanup pass.
+
+## Presentation Context and Work
+
+OFFICE-400 compiles a large presentation into a bounded semantic context
+rather than sending PPTX/XML to a model. A closed template query scans the
+semantic snapshot, selects at most eight slides, and joins at most sixteen
+OFFICE-300 typed facts. The model returns only a brief and five-slide semantic
+plan. Summary, table, and chart all retain the same fact IDs and workbook query
+lineage.
+
+The `pptx_file` worker owns bounded package mutation. The `powerpoint_com`
+worker owns fixed live text, embedded image, table, chart, save-copy, and PNG
+rendering. PowerPoint runs with its required window on a private Windows
+desktop, never the interactive input desktop. Macro security is force-disabled
+before open; PowerPoint and chart Excel are exact-image/WFP bound; only
+post-snapshot owned PIDs may be cleaned up. Embedded chart `.xlsx` content is
+recursively admitted and external links, macros, OLE, ActiveX, connections,
+scripts, and executable content remain forbidden. See ADR 0041 and
+`docs/office/presentation-work-v1.md`.
+
+The OFFICE-400 Completion gate uses a 120-slide template, a 160,000-cell
+OFFICE-300-compatible query, four actual Qwen calls, 13 PPTX mutations, four
+PowerPoint COM mutations including an actual chart, five rendered slides,
+fresh reopen after every operation, protected audit, replay, signed
+certification, and zero residual PowerPoint, Excel, WFP, and profile state.

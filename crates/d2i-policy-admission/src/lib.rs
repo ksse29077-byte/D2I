@@ -1132,6 +1132,7 @@ pub enum AdapterKindV1 {
     OfficeWorkspace,
     OfficeDocument,
     OfficeSpreadsheet,
+    OfficePresentation,
 }
 
 /// Read-only projection of an existing activation binding and ledger state.
@@ -1690,6 +1691,7 @@ fn adapter_matches_capability(kind: AdapterKindV1, capability_id: &str) -> bool 
         AdapterKindV1::OfficeWorkspace => capability_id.starts_with("workspace."),
         AdapterKindV1::OfficeDocument => capability_id.starts_with("document."),
         AdapterKindV1::OfficeSpreadsheet => capability_id.starts_with("spreadsheet."),
+        AdapterKindV1::OfficePresentation => capability_id.starts_with("presentation."),
     }
 }
 

@@ -1,0 +1,60 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-content-spec-v1.schema.json",
+    "title":  "PresentationContentSpecV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "slot",
+                     "style_role",
+                     "text",
+                     "authoritative_fact_ids"
+                 ],
+    "properties":  {
+                       "slot":  {
+                                    "type":  "string",
+                                    "enum":  [
+                                                 "title",
+                                                 "body",
+                                                 "body_left",
+                                                 "body_right",
+                                                 "hero",
+                                                 "table_main",
+                                                 "chart_main",
+                                                 "footer"
+                                             ]
+                                },
+                       "style_role":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "deck_title",
+                                                       "slide_title",
+                                                       "body",
+                                                       "emphasis",
+                                                       "metric",
+                                                       "caption",
+                                                       "table_header",
+                                                       "table_body",
+                                                       "chart",
+                                                       "footer"
+                                                   ]
+                                      },
+                       "text":  {
+                                    "type":  "string",
+                                    "minLength":  1,
+                                    "maxLength":  2048
+                                },
+                       "authoritative_fact_ids":  {
+                                                      "type":  "array",
+                                                      "minItems":  0,
+                                                      "maxItems":  16,
+                                                      "uniqueItems":  true,
+                                                      "items":  {
+                                                                    "type":  "string",
+                                                                    "minLength":  1,
+                                                                    "maxLength":  512,
+                                                                    "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                }
+                                                  }
+                   }
+}

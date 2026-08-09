@@ -5,7 +5,7 @@ use d2i_episodic_memory::{
 };
 
 fn hash(seed: u8) -> String {
-    format!("sha256:{:064x}", seed)
+    format!("sha256:{seed:064x}")
 }
 
 fn namespace(learning: bool) -> EpisodeMemoryNamespaceV1 {

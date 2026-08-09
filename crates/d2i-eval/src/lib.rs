@@ -798,10 +798,7 @@ fn add_small_first_cascades(
         actions.push(action(
             "small_first_cascade",
             vec![node_id.to_string(), fallback_id.to_string()],
-            format!(
-                "try '{}' before selected fallback '{}'",
-                small_id, selected_id
-            ),
+            format!("try '{small_id}' before selected fallback '{selected_id}'"),
         ));
     }
     deduplicate_edges(&mut graph.edges);

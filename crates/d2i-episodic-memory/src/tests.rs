@@ -4,7 +4,7 @@ use serde_json::Value;
 use std::collections::{BTreeMap, BTreeSet};
 
 fn hash(seed: u8) -> String {
-    format!("sha256:{:064x}", seed)
+    format!("sha256:{seed:064x}")
 }
 
 fn key() -> SigningKey {

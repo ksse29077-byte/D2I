@@ -462,8 +462,10 @@ mod tests {
     use super::*;
     use crate::abi::{D2I_BUFFER_READ_ONLY, D2I_MEMORY_HOST};
     use std::sync::atomic::{AtomicUsize, Ordering};
+    use std::sync::Mutex;
 
     static DESTROY_COUNT: AtomicUsize = AtomicUsize::new(0);
+    static DESTROY_COUNT_TEST_LOCK: Mutex<()> = Mutex::new(());
     static MODULE_ID: &[u8] = b"static-test";
     static MODULE_VERSION: &[u8] = b"1.0.0";
 
@@ -579,6 +581,9 @@ mod tests {
 
     #[test]
     fn host_owned_views_record_zero_boundary_copies_and_destroy_once() {
+        let _guard = DESTROY_COUNT_TEST_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
         DESTROY_COUNT.store(0, Ordering::SeqCst);
         let mut module = match NativeModule::from_table_for_test(table(run), metadata(), 64) {
             Ok(module) => module,
@@ -606,6 +611,9 @@ mod tests {
 
     #[test]
     fn module_cannot_replace_host_owned_output_pointer() {
+        let _guard = DESTROY_COUNT_TEST_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
         DESTROY_COUNT.store(0, Ordering::SeqCst);
         let mut module =
             match NativeModule::from_table_for_test(table(mutate_pointer), metadata(), 64) {
@@ -637,6 +645,9 @@ mod tests {
 
     #[test]
     fn cooperative_timeout_still_destroys_the_live_handle_once() {
+        let _guard = DESTROY_COUNT_TEST_LOCK
+            .lock()
+            .unwrap_or_else(|poisoned| poisoned.into_inner());
         DESTROY_COUNT.store(0, Ordering::SeqCst);
         let mut module = match NativeModule::from_table_for_test(table(timeout), metadata(), 64) {
             Ok(module) => module,

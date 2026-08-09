@@ -1,0 +1,143 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-safety-metrics-v1.schema.json",
+    "title":  "PresentationSafetyMetricsV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "raw_pptx_dump",
+                     "raw_xml_from_model",
+                     "arbitrary_com",
+                     "macro_execution",
+                     "external_fetch",
+                     "external_workbook_link",
+                     "dde_or_rtd",
+                     "arbitrary_process_or_command",
+                     "wrong_presentation",
+                     "wrong_slide",
+                     "wrong_shape",
+                     "stale_write",
+                     "duplicate_mutation",
+                     "original_overwrite",
+                     "unexpected_deletion",
+                     "unexpected_drift",
+                     "workspace_escape",
+                     "network_access",
+                     "credential_leak",
+                     "false_completion",
+                     "escalation_miss",
+                     "critical_error"
+                 ],
+    "properties":  {
+                       "raw_pptx_dump":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "raw_xml_from_model":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "arbitrary_com":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "macro_execution":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "external_fetch":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "external_workbook_link":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "dde_or_rtd":  {
+                                          "type":  "integer",
+                                          "minimum":  0,
+                                          "maximum":  4294967295
+                                      },
+                       "arbitrary_process_or_command":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0,
+                                                            "maximum":  4294967295
+                                                        },
+                       "wrong_presentation":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "wrong_slide":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "wrong_shape":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "stale_write":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  4294967295
+                                       },
+                       "duplicate_mutation":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "original_overwrite":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "unexpected_deletion":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "unexpected_drift":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "workspace_escape":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "network_access":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "credential_leak":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "false_completion":  {
+                                                "type":  "integer",
+                                                "minimum":  0,
+                                                "maximum":  4294967295
+                                            },
+                       "escalation_miss":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "critical_error":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          }
+                   }
+}

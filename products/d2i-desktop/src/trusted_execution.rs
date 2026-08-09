@@ -1259,6 +1259,9 @@ fn bind_adapter(
         AdapterKindV1::OfficeSpreadsheet => Err(DesktopError::Precondition(
             "office spreadsheet activation cannot bind a Windows desktop adapter".to_owned(),
         )),
+        AdapterKindV1::OfficePresentation => Err(DesktopError::Precondition(
+            "office presentation activation cannot bind a Windows desktop adapter".to_owned(),
+        )),
     }
 }
 

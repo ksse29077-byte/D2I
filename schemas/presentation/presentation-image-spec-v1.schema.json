@@ -1,0 +1,52 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-image-spec-v1.schema.json",
+    "title":  "PresentationImageSpecV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "image_id",
+                     "image_sha256",
+                     "workspace_relative_path",
+                     "slot",
+                     "fit"
+                 ],
+    "properties":  {
+                       "image_id":  {
+                                        "type":  "string",
+                                        "minLength":  1,
+                                        "maxLength":  512,
+                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                    },
+                       "image_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                        },
+                       "workspace_relative_path":  {
+                                                       "type":  "string",
+                                                       "minLength":  1,
+                                                       "maxLength":  512,
+                                                       "pattern":  "^(?![A-Za-z]:)(?![/\\\\])(?!.+[\\\\/]\\.\\.?([\\\\/]|$)).+$"
+                                                   },
+                       "slot":  {
+                                    "type":  "string",
+                                    "enum":  [
+                                                 "title",
+                                                 "body",
+                                                 "body_left",
+                                                 "body_right",
+                                                 "hero",
+                                                 "table_main",
+                                                 "chart_main",
+                                                 "footer"
+                                             ]
+                                },
+                       "fit":  {
+                                   "type":  "string",
+                                   "enum":  [
+                                                "contain",
+                                                "cover"
+                                            ]
+                               }
+                   }
+}

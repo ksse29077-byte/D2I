@@ -66,15 +66,16 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-300 are complete.
-The next active task is `D2I-OFFICE-400 - PowerPoint Presentation Work`.
+`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-400 are complete.
+The next active task is `D2I-OFFICE-500 - PDF and Document Interchange`.
 
 ## Track O - General Office Capability Expansion
 
 - `D2I-OFFICE-100` capability intake and artifact workspace - **complete**
 - `D2I-OFFICE-200` HWP/HWPX and Word document work - **complete**
 - `D2I-OFFICE-300` Excel / spreadsheet work - **complete**
-- `D2I-OFFICE-400` PowerPoint presentation work - **active**
+- `D2I-OFFICE-400` PowerPoint presentation work - **complete**
+- `D2I-OFFICE-500` PDF and document interchange - **active**
 - `D2I-OFFICE-500` through `D2I-OFFICE-900` complete the general office loop
 
 Run OFFICE-100 deterministic gates with
@@ -107,6 +108,18 @@ are prohibited.
 OFFICE-300 Completion is certified with actual pinned Qwen3-4B/llama.cpp,
 installed hash-pinned Excel, exact temporary WFP policy, fresh reopen,
 protected audit, signed certification, and zero owned residual state.
+
+Run OFFICE-400 deterministic gates with
+`scripts/office/run-presentation-work-v1.ps1 -Mode All`. The model receives no
+PPTX, XML, workbook, raw geometry, path, formula, or COM. Actual Completion
+requires pinned Qwen3-4B/llama.cpp, sealed OFFICE-300 evidence, installed
+desktop PowerPoint and chart Excel, `-ReuseVerifiedPredecessorEvidence`, and
+one elevated deployment session for their exact temporary WFP policy. The
+PowerPoint worker uses a private Windows desktop so chart creation cannot
+steal foreground focus. Completion requires at least 120 source slides,
+100,000 source workbook cells, four Qwen calls, 13 PPTX mutations, four COM
+mutations, one actual chart, five rendered slides, 128 x 100 replay, signed
+certification, and zero owned residual state.
 
 ## Track X - Execution Plane Expansion
 

@@ -1448,7 +1448,7 @@ mod tests {
                 &mut out,
                 &mut err,
             );
-            assert_eq!(exit, EXIT_SUCCESS, "compile stderr: {:?}", err);
+            assert_eq!(exit, EXIT_SUCCESS, "compile stderr: {err:?}");
             let value: Value = match serde_json::from_slice(&out) {
                 Ok(value) => value,
                 Err(error) => panic!("compile did not emit JSON: {error}"),

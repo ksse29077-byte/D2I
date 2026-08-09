@@ -202,8 +202,8 @@ state.
 - `D2I-OFFICE-100`: Capability source intake and artifact workspace. **Complete**
 - `D2I-OFFICE-200`: HWP/HWPX and Word document work. **Complete**
 - `D2I-OFFICE-300`: Excel / spreadsheet work. **Complete**
-- `D2I-OFFICE-400`: PowerPoint presentation work. **First active**
-- `D2I-OFFICE-500`: PDF and document interchange.
+- `D2I-OFFICE-400`: PowerPoint presentation work. **Complete**
+- `D2I-OFFICE-500`: PDF and document interchange. **First active**
 - `D2I-OFFICE-600`: Browser research and controlled download.
 - `D2I-OFFICE-700`: Email, messenger, review, and feedback loop.
 - `D2I-OFFICE-800`: Long-horizon multi-application project work.
@@ -335,4 +335,13 @@ remains a separate Policy-, binding-, activation-, worker-, and fresh
 verification-bound path. The elevated WFP Completion gate is now certified
 with actual pinned Qwen, installed Excel, exact temporary WFP isolation,
 signed certification, protected audit, deterministic replay, and zero
-residual state. OFFICE-400 is the first active task.
+residual state.
+
+OFFICE-400 applies the same context discipline to presentations. A closed
+template query selects no more than eight semantic slide references from a
+120-slide deck, and only OFFICE-300 typed facts enter the five-slide plan.
+PPTX file work and installed PowerPoint are separately approved backends.
+PowerPoint and chart Excel run under exact WFP denial on a private Windows
+desktop, then a fresh reopen, semantic diff, structural verification, PNG
+render, protected audit, deterministic replay, signed certification, and
+zero-residual cleanup close the artifact. OFFICE-500 is the first active task.

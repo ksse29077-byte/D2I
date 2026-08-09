@@ -135,7 +135,7 @@ fn episode(
         provenance: vec![EpisodeProvenance {
             source: "manual-001".to_owned(),
             span: "section-2".to_owned(),
-            content_hash: format!("sha256:{:064x}", index),
+            content_hash: format!("sha256:{index:064x}"),
         }],
         trust,
     }

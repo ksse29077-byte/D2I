@@ -1,0 +1,616 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-work-completion-report-v1.schema.json",
+    "title":  "PresentationWorkCompletionReportV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "report_id",
+                     "source_tree_sha256",
+                     "predecessor_finished_sha256",
+                     "capability_pack_sha256",
+                     "presentation_cases",
+                     "routine_cases",
+                     "exception_cases",
+                     "successful_operations",
+                     "verified_operations",
+                     "verified_closures",
+                     "pptx_file_mutations",
+                     "powerpoint_com_mutations",
+                     "powerpoint_chart_mutations",
+                     "fresh_reopens",
+                     "rendered_slides",
+                     "source_slides",
+                     "context_slides",
+                     "source_workbook_cells",
+                     "context_facts",
+                     "actual_qwen_cases",
+                     "provider_invocations",
+                     "replan_count",
+                     "crash_windows_verified",
+                     "replay_report_sha256",
+                     "protected_audit_terminal_sha256",
+                     "powerpoint_executable_sha256",
+                     "model_artifact_sha256",
+                     "runtime_artifact_sha256",
+                     "fact_binding_sha256",
+                     "performance",
+                     "safety",
+                     "structural_quality",
+                     "residual",
+                     "presentation_semantic_capability_evidence",
+                     "context_slice_evidence",
+                     "fact_binding_evidence",
+                     "pptx_file_work_evidence",
+                     "powerpoint_live_work_evidence",
+                     "chart_evidence",
+                     "render_evidence",
+                     "office300_lineage_evidence",
+                     "track_o_office400_evidence",
+                     "complete",
+                     "finished_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "report_id":  {
+                                         "type":  "string",
+                                         "minLength":  1,
+                                         "maxLength":  512,
+                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                     },
+                       "source_tree_sha256":  {
+                                                  "type":  "string",
+                                                  "pattern":  "^sha256:[0-9a-f]{64}$"
+                                              },
+                       "predecessor_finished_sha256":  {
+                                                           "type":  "string",
+                                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                       },
+                       "capability_pack_sha256":  {
+                                                      "type":  "string",
+                                                      "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                  },
+                       "presentation_cases":  {
+                                                  "type":  "integer",
+                                                  "minimum":  0,
+                                                  "maximum":  4294967295
+                                              },
+                       "routine_cases":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "exception_cases":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "successful_operations":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0,
+                                                     "maximum":  4294967295
+                                                 },
+                       "verified_operations":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "verified_closures":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "pptx_file_mutations":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0,
+                                                   "maximum":  4294967295
+                                               },
+                       "powerpoint_com_mutations":  {
+                                                        "type":  "integer",
+                                                        "minimum":  0,
+                                                        "maximum":  4294967295
+                                                    },
+                       "powerpoint_chart_mutations":  {
+                                                          "type":  "integer",
+                                                          "minimum":  0,
+                                                          "maximum":  4294967295
+                                                      },
+                       "fresh_reopens":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "rendered_slides":  {
+                                               "type":  "integer",
+                                               "minimum":  0,
+                                               "maximum":  4294967295
+                                           },
+                       "source_slides":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "context_slides":  {
+                                              "type":  "integer",
+                                              "minimum":  0,
+                                              "maximum":  4294967295
+                                          },
+                       "source_workbook_cells":  {
+                                                     "type":  "integer",
+                                                     "minimum":  0
+                                                 },
+                       "context_facts":  {
+                                             "type":  "integer",
+                                             "minimum":  0,
+                                             "maximum":  4294967295
+                                         },
+                       "actual_qwen_cases":  {
+                                                 "type":  "integer",
+                                                 "minimum":  0,
+                                                 "maximum":  4294967295
+                                             },
+                       "provider_invocations":  {
+                                                    "type":  "integer",
+                                                    "minimum":  0,
+                                                    "maximum":  4294967295
+                                                },
+                       "replan_count":  {
+                                            "type":  "integer",
+                                            "minimum":  0,
+                                            "maximum":  4294967295
+                                        },
+                       "crash_windows_verified":  {
+                                                      "type":  "integer",
+                                                      "minimum":  0,
+                                                      "maximum":  4294967295
+                                                  },
+                       "replay_report_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "protected_audit_terminal_sha256":  {
+                                                               "type":  "string",
+                                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                           },
+                       "powerpoint_executable_sha256":  {
+                                                            "type":  "string",
+                                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                        },
+                       "model_artifact_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "runtime_artifact_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                   },
+                       "fact_binding_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "performance":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "parse_microseconds",
+                                                            "query_microseconds",
+                                                            "context_slice_microseconds",
+                                                            "planning_microseconds",
+                                                            "mutation_microseconds",
+                                                            "save_microseconds",
+                                                            "reopen_microseconds",
+                                                            "verify_microseconds",
+                                                            "render_microseconds",
+                                                            "model_microseconds",
+                                                            "peak_worker_memory_bytes",
+                                                            "source_slides",
+                                                            "context_slides",
+                                                            "context_facts",
+                                                            "context_bytes"
+                                                        ],
+                                           "properties":  {
+                                                              "parse_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "query_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "context_slice_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                              "planning_microseconds":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                              "mutation_microseconds":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                              "save_microseconds":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0
+                                                                                    },
+                                                              "reopen_microseconds":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                              "verify_microseconds":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                              "render_microseconds":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                              "model_microseconds":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                              "peak_worker_memory_bytes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                              "source_slides":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                              "context_slides":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                              "context_facts":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                              "context_bytes":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                }
+                                                          }
+                                       },
+                       "safety":  {
+                                      "type":  "object",
+                                      "additionalProperties":  false,
+                                      "required":  [
+                                                       "raw_pptx_dump",
+                                                       "raw_xml_from_model",
+                                                       "arbitrary_com",
+                                                       "macro_execution",
+                                                       "external_fetch",
+                                                       "external_workbook_link",
+                                                       "dde_or_rtd",
+                                                       "arbitrary_process_or_command",
+                                                       "wrong_presentation",
+                                                       "wrong_slide",
+                                                       "wrong_shape",
+                                                       "stale_write",
+                                                       "duplicate_mutation",
+                                                       "original_overwrite",
+                                                       "unexpected_deletion",
+                                                       "unexpected_drift",
+                                                       "workspace_escape",
+                                                       "network_access",
+                                                       "credential_leak",
+                                                       "false_completion",
+                                                       "escalation_miss",
+                                                       "critical_error"
+                                                   ],
+                                      "properties":  {
+                                                         "raw_pptx_dump":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                         "raw_xml_from_model":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "arbitrary_com":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                         "macro_execution":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "external_fetch":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                         "external_workbook_link":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                         "dde_or_rtd":  {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  4294967295
+                                                                        },
+                                                         "arbitrary_process_or_command":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                         "wrong_presentation":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "wrong_slide":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  4294967295
+                                                                         },
+                                                         "wrong_shape":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  4294967295
+                                                                         },
+                                                         "stale_write":  {
+                                                                             "type":  "integer",
+                                                                             "minimum":  0,
+                                                                             "maximum":  4294967295
+                                                                         },
+                                                         "duplicate_mutation":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "original_overwrite":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                         "unexpected_deletion":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                         "unexpected_drift":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "workspace_escape":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "network_access":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                         "credential_leak":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "false_completion":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                         "escalation_miss":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  4294967295
+                                                                             },
+                                                         "critical_error":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            }
+                                                     }
+                                  },
+                       "structural_quality":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "required_slides_missing",
+                                                                   "required_titles_missing",
+                                                                   "required_facts_missing",
+                                                                   "empty_generated_shapes",
+                                                                   "placeholder_generated_shapes",
+                                                                   "off_slide_shapes",
+                                                                   "forbidden_overlaps",
+                                                                   "text_overflows",
+                                                                   "below_minimum_font_shapes",
+                                                                   "table_overflows",
+                                                                   "incomplete_charts",
+                                                                   "distorted_images",
+                                                                   "hidden_generated_objects"
+                                                               ],
+                                                  "properties":  {
+                                                                     "required_slides_missing":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                     "required_titles_missing":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                     "required_facts_missing":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                     "empty_generated_shapes":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                     "placeholder_generated_shapes":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                     "off_slide_shapes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "forbidden_overlaps":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                     "text_overflows":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "below_minimum_font_shapes":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                     "table_overflows":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                     "incomplete_charts":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "distorted_images":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "hidden_generated_objects":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  }
+                                                                 }
+                                              },
+                       "residual":  {
+                                        "type":  "object",
+                                        "additionalProperties":  false,
+                                        "required":  [
+                                                         "activations",
+                                                         "powerpoint_processes",
+                                                         "chart_excel_processes",
+                                                         "workers",
+                                                         "temporary_packages",
+                                                         "render_files",
+                                                         "workspace_locks",
+                                                         "presentation_locks",
+                                                         "wfp_objects",
+                                                         "profiles",
+                                                         "credentials"
+                                                     ],
+                                        "properties":  {
+                                                           "activations":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "powerpoint_processes":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                           "chart_excel_processes":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                           "workers":  {
+                                                                           "type":  "integer",
+                                                                           "minimum":  0,
+                                                                           "maximum":  4294967295
+                                                                       },
+                                                           "temporary_packages":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                           "render_files":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  0,
+                                                                                "maximum":  4294967295
+                                                                            },
+                                                           "workspace_locks":  {
+                                                                                   "type":  "integer",
+                                                                                   "minimum":  0,
+                                                                                   "maximum":  4294967295
+                                                                               },
+                                                           "presentation_locks":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                           "wfp_objects":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           },
+                                                           "profiles":  {
+                                                                            "type":  "integer",
+                                                                            "minimum":  0,
+                                                                            "maximum":  4294967295
+                                                                        },
+                                                           "credentials":  {
+                                                                               "type":  "integer",
+                                                                               "minimum":  0,
+                                                                               "maximum":  4294967295
+                                                                           }
+                                                       }
+                                    },
+                       "presentation_semantic_capability_evidence":  {
+                                                                         "type":  "boolean"
+                                                                     },
+                       "context_slice_evidence":  {
+                                                      "type":  "boolean"
+                                                  },
+                       "fact_binding_evidence":  {
+                                                     "type":  "boolean"
+                                                 },
+                       "pptx_file_work_evidence":  {
+                                                       "type":  "boolean"
+                                                   },
+                       "powerpoint_live_work_evidence":  {
+                                                             "type":  "boolean"
+                                                         },
+                       "chart_evidence":  {
+                                              "type":  "boolean"
+                                          },
+                       "render_evidence":  {
+                                               "type":  "boolean"
+                                           },
+                       "office300_lineage_evidence":  {
+                                                          "type":  "boolean"
+                                                      },
+                       "track_o_office400_evidence":  {
+                                                          "type":  "boolean"
+                                                      },
+                       "complete":  {
+                                        "type":  "boolean"
+                                    },
+                       "finished_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           }
+                   }
+}

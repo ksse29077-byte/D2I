@@ -674,5 +674,51 @@ The certified run kept the 160,000-cell workbook private and sent eight typed
 facts in 5,455 bytes to one pinned Qwen invocation. Exact report,
 certification, replay, and audit hashes remain in the sealed Completion
 artifacts so the tracked source tree does not self-reference its own evidence.
-OFFICE-300 is complete; the first active task is
-`D2I-OFFICE-400 - PowerPoint Presentation Work`, which has not started.
+OFFICE-300 is complete.
+
+## OFFICE-400 PowerPoint Presentation Work (Complete)
+
+The implementation adds the platform-neutral `d2i-presentation-capability`
+crate, 27 strict Draft 2020-12 schemas, semantic presentation snapshots,
+closed template queries, bounded context slices, OFFICE-300 typed-fact
+bindings, briefs, five-slide plans, signed backend approvals, exact operation
+bindings, one-shot activation, receipts, semantic diffs, structural
+verification, provenance, replay, Completion, certification, and an
+inspection-only verifier CLI.
+
+Desktop adds bounded PPTX ZIP/XML inspection and mutation, a dedicated
+presentation KRN dispatcher, separate pinned file and PowerPoint workers, and
+a private-desktop PowerPoint COM host. The package reader rejects traversal,
+duplicate/shadow entries, encryption, ZIP64/expansion excess, DTD/entities,
+external relationships, macros, scripts, OLE, ActiveX, and executable content.
+It admits only internal `.xlsx` chart data after recursively applying the same
+package, relationship, active-content, and resource checks.
+
+The representative General Office E2E scans a 20,000-row by eight-column
+synthetic workbook, deterministically derives the authoritative participant
+facts 55, 120, and 18, and selects eight semantic slides from a 120-slide
+template. Model context remains below 16 KiB and contains neither workbook nor
+PPTX material. Four pinned Qwen calls produce semantic intent/plan evidence;
+the runtime performs 13 PPTX mutations and four actual PowerPoint COM
+mutations, including embedded image, table, and chart creation. The five-slide
+result is saved to immutable generations, freshly reopened after every
+mutation, and rendered to five 1280x720 PNGs.
+
+PowerPoint runs with its required window on a non-interactive D2I private
+Windows desktop, so no foreground window interrupts the user. Installed
+PowerPoint 16.0.20228.20158 is exact-hash pinned, macro force-disabled, and
+temporarily WFP-isolated together with chart Excel. Office may retain dedicated
+`/automation -Embedding` Excel servers after COM Quit; the worker records this
+and uses only bounded post-snapshot, exact-image termination. Baseline user
+Office processes are never selected by name.
+
+The official runner separates non-elevated deterministic gates from one
+elevated Completion. Completion verifies sealed OFFICE-300 lineage, actual
+Qwen, exact WFP state before and after live operations, 20 cases (12 routine,
+8 exception), crash windows A-L, deterministic 128 x 100 replay, protected
+audit, signed certification, structural quality, rendering, and zero residual
+PowerPoint, Excel, worker, WFP, profile, lock, temporary package, activation,
+or credential state.
+
+OFFICE-400 is complete; the first active task is
+`D2I-OFFICE-500 - PDF and Document Interchange`, which has not started.

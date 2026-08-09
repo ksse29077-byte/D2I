@@ -1,0 +1,413 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-semantic-snapshot-v1.schema.json",
+    "title":  "PresentationSemanticSnapshotV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "presentation_id",
+                     "artifact_id",
+                     "artifact_generation",
+                     "format_id",
+                     "backend_id",
+                     "slides",
+                     "slide_count",
+                     "unsupported_feature_ids",
+                     "source_content_sha256",
+                     "semantic_state_sha256",
+                     "observed_at_unix_ms",
+                     "freshness_expires_at_unix_ms",
+                     "evidence_ids",
+                     "snapshot_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "presentation_id":  {
+                                               "type":  "string",
+                                               "minLength":  1,
+                                               "maxLength":  512,
+                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                           },
+                       "artifact_id":  {
+                                           "type":  "string",
+                                           "minLength":  1,
+                                           "maxLength":  512,
+                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                       },
+                       "artifact_generation":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "format_id":  {
+                                         "type":  "string",
+                                         "enum":  [
+                                                      "pptx"
+                                                  ]
+                                     },
+                       "backend_id":  {
+                                          "type":  "string",
+                                          "minLength":  1,
+                                          "maxLength":  512,
+                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                      },
+                       "slides":  {
+                                      "type":  "array",
+                                      "minItems":  1,
+                                      "maxItems":  500,
+                                      "uniqueItems":  false,
+                                      "items":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "slide_id",
+                                                                     "ordinal",
+                                                                     "purpose_id",
+                                                                     "layout_id",
+                                                                     "title_sha256",
+                                                                     "shapes",
+                                                                     "notes_present",
+                                                                     "generated",
+                                                                     "state_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "slide_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                    },
+                                                                       "ordinal":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  500
+                                                                                   },
+                                                                       "purpose_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                      },
+                                                                       "layout_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                     },
+                                                                       "title_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                        },
+                                                                       "shapes":  {
+                                                                                      "type":  "array",
+                                                                                      "minItems":  0,
+                                                                                      "maxItems":  256,
+                                                                                      "uniqueItems":  false,
+                                                                                      "items":  {
+                                                                                                    "type":  "object",
+                                                                                                    "additionalProperties":  false,
+                                                                                                    "required":  [
+                                                                                                                     "shape_id",
+                                                                                                                     "shape_kind",
+                                                                                                                     "layout_slot",
+                                                                                                                     "bounds",
+                                                                                                                     "content",
+                                                                                                                     "generated",
+                                                                                                                     "hidden",
+                                                                                                                     "state_sha256"
+                                                                                                                 ],
+                                                                                                    "properties":  {
+                                                                                                                       "shape_id":  {
+                                                                                                                                        "type":  "string",
+                                                                                                                                        "minLength":  1,
+                                                                                                                                        "maxLength":  512,
+                                                                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                    },
+                                                                                                                       "shape_kind":  {
+                                                                                                                                          "type":  "string",
+                                                                                                                                          "enum":  [
+                                                                                                                                                       "title",
+                                                                                                                                                       "text_box",
+                                                                                                                                                       "image",
+                                                                                                                                                       "table",
+                                                                                                                                                       "chart",
+                                                                                                                                                       "simple_shape",
+                                                                                                                                                       "placeholder"
+                                                                                                                                                   ]
+                                                                                                                                      },
+                                                                                                                       "layout_slot":  {
+                                                                                                                                           "type":  "string",
+                                                                                                                                           "enum":  [
+                                                                                                                                                        "title",
+                                                                                                                                                        "body",
+                                                                                                                                                        "body_left",
+                                                                                                                                                        "body_right",
+                                                                                                                                                        "hero",
+                                                                                                                                                        "table_main",
+                                                                                                                                                        "chart_main",
+                                                                                                                                                        "footer"
+                                                                                                                                                    ]
+                                                                                                                                       },
+                                                                                                                       "bounds":  {
+                                                                                                                                      "type":  "object",
+                                                                                                                                      "additionalProperties":  false,
+                                                                                                                                      "required":  [
+                                                                                                                                                       "left_millionths",
+                                                                                                                                                       "top_millionths",
+                                                                                                                                                       "width_millionths",
+                                                                                                                                                       "height_millionths"
+                                                                                                                                                   ],
+                                                                                                                                      "properties":  {
+                                                                                                                                                         "left_millionths":  {
+                                                                                                                                                                                 "type":  "integer",
+                                                                                                                                                                                 "minimum":  0,
+                                                                                                                                                                                 "maximum":  1000000
+                                                                                                                                                                             },
+                                                                                                                                                         "top_millionths":  {
+                                                                                                                                                                                "type":  "integer",
+                                                                                                                                                                                "minimum":  0,
+                                                                                                                                                                                "maximum":  1000000
+                                                                                                                                                                            },
+                                                                                                                                                         "width_millionths":  {
+                                                                                                                                                                                  "type":  "integer",
+                                                                                                                                                                                  "minimum":  0,
+                                                                                                                                                                                  "maximum":  1000000
+                                                                                                                                                                              },
+                                                                                                                                                         "height_millionths":  {
+                                                                                                                                                                                   "type":  "integer",
+                                                                                                                                                                                   "minimum":  0,
+                                                                                                                                                                                   "maximum":  1000000
+                                                                                                                                                                               }
+                                                                                                                                                     }
+                                                                                                                                  },
+                                                                                                                       "content":  {
+                                                                                                                                       "oneOf":  [
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "text_sha256"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "title"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "text_sha256":  {
+                                                                                                                                                                                                "type":  "string",
+                                                                                                                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                     },
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "text_sha256"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "text_box"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "text_sha256":  {
+                                                                                                                                                                                                "type":  "string",
+                                                                                                                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                     },
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "image_sha256",
+                                                                                                                                                                          "embedded"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "image"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "image_sha256":  {
+                                                                                                                                                                                                 "type":  "string",
+                                                                                                                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "embedded":  {
+                                                                                                                                                                                             "type":  "boolean"
+                                                                                                                                                                                         }
+                                                                                                                                                                        }
+                                                                                                                                                     },
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "rows",
+                                                                                                                                                                          "columns",
+                                                                                                                                                                          "table_sha256"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "table"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "rows":  {
+                                                                                                                                                                                         "type":  "integer",
+                                                                                                                                                                                         "minimum":  0,
+                                                                                                                                                                                         "maximum":  256
+                                                                                                                                                                                     },
+                                                                                                                                                                            "columns":  {
+                                                                                                                                                                                            "type":  "integer",
+                                                                                                                                                                                            "minimum":  0,
+                                                                                                                                                                                            "maximum":  64
+                                                                                                                                                                                        },
+                                                                                                                                                                            "table_sha256":  {
+                                                                                                                                                                                                 "type":  "string",
+                                                                                                                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                                                                             }
+                                                                                                                                                                        }
+                                                                                                                                                     },
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "chart_kind",
+                                                                                                                                                                          "fact_binding_sha256"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "chart"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "chart_kind":  {
+                                                                                                                                                                                               "type":  "string",
+                                                                                                                                                                                               "enum":  [
+                                                                                                                                                                                                            "clustered_column",
+                                                                                                                                                                                                            "bar",
+                                                                                                                                                                                                            "line"
+                                                                                                                                                                                                        ]
+                                                                                                                                                                                           },
+                                                                                                                                                                            "fact_binding_sha256":  {
+                                                                                                                                                                                                        "type":  "string",
+                                                                                                                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                                                                                    }
+                                                                                                                                                                        }
+                                                                                                                                                     },
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "shape_role_id"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "simple_shape"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "shape_role_id":  {
+                                                                                                                                                                                                  "type":  "string",
+                                                                                                                                                                                                  "minLength":  1,
+                                                                                                                                                                                                  "maxLength":  512,
+                                                                                                                                                                                                  "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                                              }
+                                                                                                                                                                        }
+                                                                                                                                                     },
+                                                                                                                                                     {
+                                                                                                                                                         "type":  "object",
+                                                                                                                                                         "additionalProperties":  false,
+                                                                                                                                                         "required":  [
+                                                                                                                                                                          "content_kind",
+                                                                                                                                                                          "placeholder_role_id"
+                                                                                                                                                                      ],
+                                                                                                                                                         "properties":  {
+                                                                                                                                                                            "content_kind":  {
+                                                                                                                                                                                                 "const":  "placeholder"
+                                                                                                                                                                                             },
+                                                                                                                                                                            "placeholder_role_id":  {
+                                                                                                                                                                                                        "type":  "string",
+                                                                                                                                                                                                        "minLength":  1,
+                                                                                                                                                                                                        "maxLength":  512,
+                                                                                                                                                                                                        "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                                                    }
+                                                                                                                                                                        }
+                                                                                                                                                     }
+                                                                                                                                                 ]
+                                                                                                                                   },
+                                                                                                                       "generated":  {
+                                                                                                                                         "type":  "boolean"
+                                                                                                                                     },
+                                                                                                                       "hidden":  {
+                                                                                                                                      "type":  "boolean"
+                                                                                                                                  },
+                                                                                                                       "state_sha256":  {
+                                                                                                                                            "type":  "string",
+                                                                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                        }
+                                                                                                                   }
+                                                                                                }
+                                                                                  },
+                                                                       "notes_present":  {
+                                                                                             "type":  "boolean"
+                                                                                         },
+                                                                       "generated":  {
+                                                                                         "type":  "boolean"
+                                                                                     },
+                                                                       "state_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                        }
+                                                                   }
+                                                }
+                                  },
+                       "slide_count":  {
+                                           "type":  "integer",
+                                           "minimum":  0,
+                                           "maximum":  500
+                                       },
+                       "unsupported_feature_ids":  {
+                                                       "type":  "array",
+                                                       "minItems":  0,
+                                                       "maxItems":  256,
+                                                       "uniqueItems":  true,
+                                                       "items":  {
+                                                                     "type":  "string",
+                                                                     "minLength":  1,
+                                                                     "maxLength":  512,
+                                                                     "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                 }
+                                                   },
+                       "source_content_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "semantic_state_sha256":  {
+                                                     "type":  "string",
+                                                     "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                 },
+                       "observed_at_unix_ms":  {
+                                                   "type":  "integer",
+                                                   "minimum":  0
+                                               },
+                       "freshness_expires_at_unix_ms":  {
+                                                            "type":  "integer",
+                                                            "minimum":  0
+                                                        },
+                       "evidence_ids":  {
+                                            "type":  "array",
+                                            "minItems":  1,
+                                            "maxItems":  256,
+                                            "uniqueItems":  true,
+                                            "items":  {
+                                                          "type":  "string",
+                                                          "minLength":  1,
+                                                          "maxLength":  512,
+                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                      }
+                                        },
+                       "snapshot_sha256":  {
+                                               "type":  "string",
+                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                           }
+                   }
+}

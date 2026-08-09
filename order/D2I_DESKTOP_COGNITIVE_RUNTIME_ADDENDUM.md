@@ -30,9 +30,9 @@ resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
 one-step limited autonomy, signed control and human-exception handling, and a
 bounded General Office duty cycle while preserving Policy, activation, and
 KRN as the only action path. Track W, EDGE-100, and OFFICE-100 through
-OFFICE-300 are complete. Track O has priority over remaining physical
+OFFICE-400 are complete. Track O has priority over remaining physical
 execution-plane expansion. The active next task is
-`D2I-OFFICE-400 - PowerPoint Presentation Work`.
+`D2I-OFFICE-500 - PDF and Document Interchange`.
 
 WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
 current-user/SYSTEM DACL-protected content-addressed store. It consumes only
@@ -66,6 +66,16 @@ not workbook bytes, XML, ranges, formula text, paths, or COM. Excel mutation is
 interactive-current-user only and requires exact WFP isolation in Completion.
 The actual pinned Qwen/llama.cpp, installed Excel, temporary exact WFP,
 certification, replay, audit, and zero-residual Completion gates passed.
+
+OFFICE-400 adds a Desktop-owned presentation dispatcher, bounded PPTX package
+worker, template query/context-slice boundary, OFFICE-300 typed-fact binding,
+and a pinned PowerPoint COM worker for fixed text, image, table, chart,
+save-copy, and rendering. The required PowerPoint window exists only on a D2I
+private Windows desktop. Models receive semantic slide references and typed
+facts, never PPTX/XML/workbook bytes, raw geometry, paths, chart formulas, or
+COM. The actual pinned Qwen/llama.cpp, installed PowerPoint/chart Excel,
+temporary exact WFP, certification, replay, audit, and zero-residual Completion
+gates passed.
 
 OFFICE-200 adds a Desktop-owned trusted document dispatcher, separate bounded
 HWPX and DOCX package workers, and a hidden interactive-current-user Word COM

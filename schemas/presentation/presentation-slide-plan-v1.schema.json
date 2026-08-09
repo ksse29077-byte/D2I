@@ -1,0 +1,435 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://d2i.local/schemas/presentation/presentation-slide-plan-v1.schema.json",
+    "title":  "PresentationSlidePlanV1",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "schema_version",
+                     "plan_id",
+                     "brief_sha256",
+                     "context_slice_sha256",
+                     "fact_binding_sha256",
+                     "slides",
+                     "covered_topic_ids",
+                     "covered_fact_ids",
+                     "model_invocation_sha256",
+                     "plan_sha256"
+                 ],
+    "properties":  {
+                       "schema_version":  {
+                                              "const":  1
+                                          },
+                       "plan_id":  {
+                                       "type":  "string",
+                                       "minLength":  1,
+                                       "maxLength":  512,
+                                       "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                   },
+                       "brief_sha256":  {
+                                            "type":  "string",
+                                            "pattern":  "^sha256:[0-9a-f]{64}$"
+                                        },
+                       "context_slice_sha256":  {
+                                                    "type":  "string",
+                                                    "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                },
+                       "fact_binding_sha256":  {
+                                                   "type":  "string",
+                                                   "pattern":  "^sha256:[0-9a-f]{64}$"
+                                               },
+                       "slides":  {
+                                      "type":  "array",
+                                      "minItems":  1,
+                                      "maxItems":  32,
+                                      "uniqueItems":  false,
+                                      "items":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "planned_slide_id",
+                                                                     "purpose_id",
+                                                                     "title",
+                                                                     "layout",
+                                                                     "contents",
+                                                                     "image",
+                                                                     "table",
+                                                                     "chart",
+                                                                     "required_fact_ids"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "planned_slide_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                            },
+                                                                       "purpose_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                      },
+                                                                       "title":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  256
+                                                                                 },
+                                                                       "layout":  {
+                                                                                      "type":  "object",
+                                                                                      "additionalProperties":  false,
+                                                                                      "required":  [
+                                                                                                       "layout_id",
+                                                                                                       "required_slots",
+                                                                                                       "minimum_font_points"
+                                                                                                   ],
+                                                                                      "properties":  {
+                                                                                                         "layout_id":  {
+                                                                                                                           "type":  "string",
+                                                                                                                           "minLength":  1,
+                                                                                                                           "maxLength":  512,
+                                                                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                       },
+                                                                                                         "required_slots":  {
+                                                                                                                                "type":  "array",
+                                                                                                                                "minItems":  1,
+                                                                                                                                "maxItems":  8,
+                                                                                                                                "uniqueItems":  true,
+                                                                                                                                "items":  {
+                                                                                                                                              "type":  "string",
+                                                                                                                                              "enum":  [
+                                                                                                                                                           "title",
+                                                                                                                                                           "body",
+                                                                                                                                                           "body_left",
+                                                                                                                                                           "body_right",
+                                                                                                                                                           "hero",
+                                                                                                                                                           "table_main",
+                                                                                                                                                           "chart_main",
+                                                                                                                                                           "footer"
+                                                                                                                                                       ]
+                                                                                                                                          }
+                                                                                                                            },
+                                                                                                         "minimum_font_points":  {
+                                                                                                                                     "type":  "integer",
+                                                                                                                                     "minimum":  8,
+                                                                                                                                     "maximum":  96
+                                                                                                                                 }
+                                                                                                     }
+                                                                                  },
+                                                                       "contents":  {
+                                                                                        "type":  "array",
+                                                                                        "minItems":  0,
+                                                                                        "maxItems":  16,
+                                                                                        "uniqueItems":  false,
+                                                                                        "items":  {
+                                                                                                      "type":  "object",
+                                                                                                      "additionalProperties":  false,
+                                                                                                      "required":  [
+                                                                                                                       "slot",
+                                                                                                                       "style_role",
+                                                                                                                       "text",
+                                                                                                                       "authoritative_fact_ids"
+                                                                                                                   ],
+                                                                                                      "properties":  {
+                                                                                                                         "slot":  {
+                                                                                                                                      "type":  "string",
+                                                                                                                                      "enum":  [
+                                                                                                                                                   "title",
+                                                                                                                                                   "body",
+                                                                                                                                                   "body_left",
+                                                                                                                                                   "body_right",
+                                                                                                                                                   "hero",
+                                                                                                                                                   "table_main",
+                                                                                                                                                   "chart_main",
+                                                                                                                                                   "footer"
+                                                                                                                                               ]
+                                                                                                                                  },
+                                                                                                                         "style_role":  {
+                                                                                                                                            "type":  "string",
+                                                                                                                                            "enum":  [
+                                                                                                                                                         "deck_title",
+                                                                                                                                                         "slide_title",
+                                                                                                                                                         "body",
+                                                                                                                                                         "emphasis",
+                                                                                                                                                         "metric",
+                                                                                                                                                         "caption",
+                                                                                                                                                         "table_header",
+                                                                                                                                                         "table_body",
+                                                                                                                                                         "chart",
+                                                                                                                                                         "footer"
+                                                                                                                                                     ]
+                                                                                                                                        },
+                                                                                                                         "text":  {
+                                                                                                                                      "type":  "string",
+                                                                                                                                      "minLength":  1,
+                                                                                                                                      "maxLength":  2048
+                                                                                                                                  },
+                                                                                                                         "authoritative_fact_ids":  {
+                                                                                                                                                        "type":  "array",
+                                                                                                                                                        "minItems":  0,
+                                                                                                                                                        "maxItems":  16,
+                                                                                                                                                        "uniqueItems":  true,
+                                                                                                                                                        "items":  {
+                                                                                                                                                                      "type":  "string",
+                                                                                                                                                                      "minLength":  1,
+                                                                                                                                                                      "maxLength":  512,
+                                                                                                                                                                      "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                                  }
+                                                                                                                                                    }
+                                                                                                                     }
+                                                                                                  }
+                                                                                    },
+                                                                       "image":  {
+                                                                                     "oneOf":  [
+                                                                                                   {
+                                                                                                       "type":  "object",
+                                                                                                       "additionalProperties":  false,
+                                                                                                       "required":  [
+                                                                                                                        "image_id",
+                                                                                                                        "image_sha256",
+                                                                                                                        "workspace_relative_path",
+                                                                                                                        "slot",
+                                                                                                                        "fit"
+                                                                                                                    ],
+                                                                                                       "properties":  {
+                                                                                                                          "image_id":  {
+                                                                                                                                           "type":  "string",
+                                                                                                                                           "minLength":  1,
+                                                                                                                                           "maxLength":  512,
+                                                                                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                       },
+                                                                                                                          "image_sha256":  {
+                                                                                                                                               "type":  "string",
+                                                                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                                                                                                           },
+                                                                                                                          "workspace_relative_path":  {
+                                                                                                                                                          "type":  "string",
+                                                                                                                                                          "minLength":  1,
+                                                                                                                                                          "maxLength":  512,
+                                                                                                                                                          "pattern":  "^(?![A-Za-z]:)(?![/\\\\])(?!.+[\\\\/]\\.\\.?([\\\\/]|$)).+$"
+                                                                                                                                                      },
+                                                                                                                          "slot":  {
+                                                                                                                                       "type":  "string",
+                                                                                                                                       "enum":  [
+                                                                                                                                                    "title",
+                                                                                                                                                    "body",
+                                                                                                                                                    "body_left",
+                                                                                                                                                    "body_right",
+                                                                                                                                                    "hero",
+                                                                                                                                                    "table_main",
+                                                                                                                                                    "chart_main",
+                                                                                                                                                    "footer"
+                                                                                                                                                ]
+                                                                                                                                   },
+                                                                                                                          "fit":  {
+                                                                                                                                      "type":  "string",
+                                                                                                                                      "enum":  [
+                                                                                                                                                   "contain",
+                                                                                                                                                   "cover"
+                                                                                                                                               ]
+                                                                                                                                  }
+                                                                                                                      }
+                                                                                                   },
+                                                                                                   {
+                                                                                                       "type":  "null"
+                                                                                                   }
+                                                                                               ]
+                                                                                 },
+                                                                       "table":  {
+                                                                                     "oneOf":  [
+                                                                                                   {
+                                                                                                       "type":  "object",
+                                                                                                       "additionalProperties":  false,
+                                                                                                       "required":  [
+                                                                                                                        "table_id",
+                                                                                                                        "slot",
+                                                                                                                        "column_labels",
+                                                                                                                        "row_labels",
+                                                                                                                        "fact_ids"
+                                                                                                                    ],
+                                                                                                       "properties":  {
+                                                                                                                          "table_id":  {
+                                                                                                                                           "type":  "string",
+                                                                                                                                           "minLength":  1,
+                                                                                                                                           "maxLength":  512,
+                                                                                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                       },
+                                                                                                                          "slot":  {
+                                                                                                                                       "type":  "string",
+                                                                                                                                       "enum":  [
+                                                                                                                                                    "title",
+                                                                                                                                                    "body",
+                                                                                                                                                    "body_left",
+                                                                                                                                                    "body_right",
+                                                                                                                                                    "hero",
+                                                                                                                                                    "table_main",
+                                                                                                                                                    "chart_main",
+                                                                                                                                                    "footer"
+                                                                                                                                                ]
+                                                                                                                                   },
+                                                                                                                          "column_labels":  {
+                                                                                                                                                "type":  "array",
+                                                                                                                                                "minItems":  1,
+                                                                                                                                                "maxItems":  32,
+                                                                                                                                                "uniqueItems":  false,
+                                                                                                                                                "items":  {
+                                                                                                                                                              "type":  "string",
+                                                                                                                                                              "minLength":  1,
+                                                                                                                                                              "maxLength":  128
+                                                                                                                                                          }
+                                                                                                                                            },
+                                                                                                                          "row_labels":  {
+                                                                                                                                             "type":  "array",
+                                                                                                                                             "minItems":  1,
+                                                                                                                                             "maxItems":  128,
+                                                                                                                                             "uniqueItems":  false,
+                                                                                                                                             "items":  {
+                                                                                                                                                           "type":  "string",
+                                                                                                                                                           "minLength":  1,
+                                                                                                                                                           "maxLength":  128
+                                                                                                                                                       }
+                                                                                                                                         },
+                                                                                                                          "fact_ids":  {
+                                                                                                                                           "type":  "array",
+                                                                                                                                           "minItems":  1,
+                                                                                                                                           "maxItems":  256,
+                                                                                                                                           "uniqueItems":  false,
+                                                                                                                                           "items":  {
+                                                                                                                                                         "type":  "string",
+                                                                                                                                                         "minLength":  1,
+                                                                                                                                                         "maxLength":  512,
+                                                                                                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                     }
+                                                                                                                                       }
+                                                                                                                      }
+                                                                                                   },
+                                                                                                   {
+                                                                                                       "type":  "null"
+                                                                                                   }
+                                                                                               ]
+                                                                                 },
+                                                                       "chart":  {
+                                                                                     "oneOf":  [
+                                                                                                   {
+                                                                                                       "type":  "object",
+                                                                                                       "additionalProperties":  false,
+                                                                                                       "required":  [
+                                                                                                                        "chart_id",
+                                                                                                                        "chart_kind",
+                                                                                                                        "slot",
+                                                                                                                        "category_labels",
+                                                                                                                        "series_label",
+                                                                                                                        "fact_ids"
+                                                                                                                    ],
+                                                                                                       "properties":  {
+                                                                                                                          "chart_id":  {
+                                                                                                                                           "type":  "string",
+                                                                                                                                           "minLength":  1,
+                                                                                                                                           "maxLength":  512,
+                                                                                                                                           "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                       },
+                                                                                                                          "chart_kind":  {
+                                                                                                                                             "type":  "string",
+                                                                                                                                             "enum":  [
+                                                                                                                                                          "clustered_column",
+                                                                                                                                                          "bar",
+                                                                                                                                                          "line"
+                                                                                                                                                      ]
+                                                                                                                                         },
+                                                                                                                          "slot":  {
+                                                                                                                                       "type":  "string",
+                                                                                                                                       "enum":  [
+                                                                                                                                                    "title",
+                                                                                                                                                    "body",
+                                                                                                                                                    "body_left",
+                                                                                                                                                    "body_right",
+                                                                                                                                                    "hero",
+                                                                                                                                                    "table_main",
+                                                                                                                                                    "chart_main",
+                                                                                                                                                    "footer"
+                                                                                                                                                ]
+                                                                                                                                   },
+                                                                                                                          "category_labels":  {
+                                                                                                                                                  "type":  "array",
+                                                                                                                                                  "minItems":  1,
+                                                                                                                                                  "maxItems":  32,
+                                                                                                                                                  "uniqueItems":  false,
+                                                                                                                                                  "items":  {
+                                                                                                                                                                "type":  "string",
+                                                                                                                                                                "minLength":  1,
+                                                                                                                                                                "maxLength":  128
+                                                                                                                                                            }
+                                                                                                                                              },
+                                                                                                                          "series_label":  {
+                                                                                                                                               "type":  "string",
+                                                                                                                                               "minLength":  1,
+                                                                                                                                               "maxLength":  128
+                                                                                                                                           },
+                                                                                                                          "fact_ids":  {
+                                                                                                                                           "type":  "array",
+                                                                                                                                           "minItems":  1,
+                                                                                                                                           "maxItems":  32,
+                                                                                                                                           "uniqueItems":  false,
+                                                                                                                                           "items":  {
+                                                                                                                                                         "type":  "string",
+                                                                                                                                                         "minLength":  1,
+                                                                                                                                                         "maxLength":  512,
+                                                                                                                                                         "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                                                                     }
+                                                                                                                                       }
+                                                                                                                      }
+                                                                                                   },
+                                                                                                   {
+                                                                                                       "type":  "null"
+                                                                                                   }
+                                                                                               ]
+                                                                                 },
+                                                                       "required_fact_ids":  {
+                                                                                                 "type":  "array",
+                                                                                                 "minItems":  0,
+                                                                                                 "maxItems":  16,
+                                                                                                 "uniqueItems":  true,
+                                                                                                 "items":  {
+                                                                                                               "type":  "string",
+                                                                                                               "minLength":  1,
+                                                                                                               "maxLength":  512,
+                                                                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                                                                           }
+                                                                                             }
+                                                                   }
+                                                }
+                                  },
+                       "covered_topic_ids":  {
+                                                 "type":  "array",
+                                                 "minItems":  1,
+                                                 "maxItems":  32,
+                                                 "uniqueItems":  true,
+                                                 "items":  {
+                                                               "type":  "string",
+                                                               "minLength":  1,
+                                                               "maxLength":  512,
+                                                               "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                           }
+                                             },
+                       "covered_fact_ids":  {
+                                                "type":  "array",
+                                                "minItems":  1,
+                                                "maxItems":  16,
+                                                "uniqueItems":  true,
+                                                "items":  {
+                                                              "type":  "string",
+                                                              "minLength":  1,
+                                                              "maxLength":  512,
+                                                              "pattern":  "^[A-Za-z0-9._:/{}-]+$"
+                                                          }
+                                            },
+                       "model_invocation_sha256":  {
+                                                       "type":  "string",
+                                                       "pattern":  "^sha256:[0-9a-f]{64}$"
+                                                   },
+                       "plan_sha256":  {
+                                           "type":  "string",
+                                           "pattern":  "^sha256:[0-9a-f]{64}$"
+                                       }
+                   }
+}
