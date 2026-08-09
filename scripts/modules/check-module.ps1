@@ -74,6 +74,8 @@ function Invoke-CargoStep(
         -RedirectStandardError $stderrPath `
         -NoNewWindow `
         -PassThru
+    # Windows PowerShell 5 can lose ExitCode unless the process handle is materialized before wait.
+    $null = $process.Handle
     if (-not $process.WaitForExit($StepTimeoutSeconds * 1000)) {
         & taskkill.exe /PID $process.Id /T /F 2>$null | Out-Null
         Add-Check $Name 'timeout' "cargo step exceeded ${StepTimeoutSeconds}s" 124 $stdoutPath $stderrPath

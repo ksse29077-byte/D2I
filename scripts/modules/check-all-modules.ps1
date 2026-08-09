@@ -63,7 +63,18 @@ foreach ($module in $modules) {
         )
     }
     $argumentLine = (@($arguments | ForEach-Object { Quote-ProcessArgument $_ }) -join ' ')
-    $process = Start-Process -FilePath $engine -ArgumentList $argumentLine -Wait -PassThru -NoNewWindow
+    $process = Start-Process -FilePath $engine -ArgumentList $argumentLine -PassThru -NoNewWindow
+    # Avoid Start-Process -Wait hanging on inherited handles and preserve the real child exit code.
+    $null = $process.Handle
+    $moduleTimeoutMilliseconds = [Math]::Min(
+        ([int64]$StepTimeoutSeconds * 5 + 300) * 1000,
+        [int]::MaxValue
+    )
+    if (-not $process.WaitForExit([int]$moduleTimeoutMilliseconds)) {
+        & taskkill.exe /PID $process.Id /T /F 2>$null | Out-Null
+        throw "module checker timed out for $($module.Name)"
+    }
+    $process.WaitForExit()
     $process.Refresh()
     if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) {
         throw "module checker did not produce $resultPath"
