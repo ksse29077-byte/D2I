@@ -17,6 +17,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 const ROWS: u32 = 20_000;
 const COLUMNS: u32 = 8;
+const MODEL_FACTS_PER_REQUEST: usize = 3;
 
 #[derive(Serialize)]
 struct PresentationModelE2eReportV1 {
@@ -147,7 +148,12 @@ fn run() -> Result<(), String> {
                 case_id: "case.office400.model-context".to_owned(),
                 context_sha256: projection.projection_sha256.clone(),
                 generation: u64::try_from(index).unwrap_or_default().saturating_add(1),
-                trusted_base_facts: projection.facts.clone(),
+                trusted_base_facts: projection
+                    .facts
+                    .iter()
+                    .take(MODEL_FACTS_PER_REQUEST)
+                    .cloned()
+                    .collect(),
                 unresolved_requirement_ids: vec![format!("requirement.presentation.{label}")],
                 allowed_semantic_target_ids: vec![(*target).to_owned()],
                 allowed_capability_ids: vec![(*capability).to_owned()],

@@ -287,7 +287,7 @@ impl LocalModelProcessProvider {
         let input_value = serde_json::to_value(input)
             .map_err(|error| IntelligenceProviderError::Invalid(error.to_string()))?;
         let (raw, metrics) = self.invoke_appcontainer_worker(operation, input_value)?;
-        let parsed = parse_strict_provider_json(&raw)?;
+        let parsed = parse_model_output(&raw)?;
         *self.metrics.lock().map_err(|_| {
             IntelligenceProviderError::Unavailable("provider metrics lock is poisoned".to_owned())
         })? = Some(metrics);
@@ -462,6 +462,17 @@ impl LocalModelProcessProvider {
         drop(cleanup);
         Ok((output, metrics))
     }
+}
+
+fn parse_model_output<T: serde::de::DeserializeOwned>(
+    bytes: &[u8],
+) -> Result<T, IntelligenceProviderError> {
+    parse_strict_provider_json(bytes).map_err(|error| match error {
+        IntelligenceProviderError::Invalid(message) => {
+            IntelligenceProviderError::OutputInvalid(message)
+        }
+        other => other,
+    })
 }
 
 fn extract_llama_cli_json(
@@ -1435,5 +1446,14 @@ mod tests {
     #[test]
     fn worker_cli_rejects_unknown_shape() {
         assert_eq!(WORKER_EXIT_INVALID, 2);
+    }
+
+    #[test]
+    fn truncated_model_json_is_classified_as_output_invalid() {
+        let error = match parse_model_output::<Value>(br#"{"schema_version":1"#) {
+            Ok(_) => panic!("truncated model JSON was accepted"),
+            Err(error) => error,
+        };
+        assert!(matches!(error, IntelligenceProviderError::OutputInvalid(_)));
     }
 }
