@@ -1,0 +1,119 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-export-backend-approval-v1.schema.json",
+    "title":  "PdfExportBackendApprovalV1",
+    "$ref":  "#/$defs/PdfExportBackendApprovalV1",
+    "$defs":  {
+                  "PdfInterchangeProfileV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "submission_static",
+                                                               "internal_review",
+                                                               "archive_pdfa_requested"
+                                                           ]
+                                              },
+                  "PdfSourceFormatV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "docx",
+                                                         "xlsx",
+                                                         "pptx",
+                                                         "hwpx",
+                                                         "external_pdf"
+                                                     ]
+                                        },
+                  "PdfExportBackendApprovalV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "approval_id",
+                                                                      "organization_id",
+                                                                      "environment_id",
+                                                                      "backend_descriptor_sha256",
+                                                                      "allowed_source_formats",
+                                                                      "approved_profile_ids",
+                                                                      "issued_at_unix_ms",
+                                                                      "expires_at_unix_ms",
+                                                                      "signer_id",
+                                                                      "signing_key_id",
+                                                                      "signature_hex",
+                                                                      "approval_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "approval_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "environment_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                        "backend_descriptor_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                        "allowed_source_formats":  {
+                                                                                                       "type":  "array",
+                                                                                                       "maxItems":  4096,
+                                                                                                       "items":  {
+                                                                                                                     "$ref":  "#/$defs/PdfSourceFormatV1"
+                                                                                                                 }
+                                                                                                   },
+                                                                        "approved_profile_ids":  {
+                                                                                                     "type":  "array",
+                                                                                                     "maxItems":  4096,
+                                                                                                     "items":  {
+                                                                                                                   "$ref":  "#/$defs/PdfInterchangeProfileV1"
+                                                                                                               }
+                                                                                                 },
+                                                                        "issued_at_unix_ms":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0
+                                                                                              },
+                                                                        "expires_at_unix_ms":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                        "signer_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                        "signing_key_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                        "signature_hex":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^[0-9a-f]{128}$",
+                                                                                              "maxLength":  128
+                                                                                          },
+                                                                        "approval_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            }
+                                                                    }
+                                                 }
+              }
+}

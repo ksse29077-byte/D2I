@@ -776,3 +776,27 @@ HWPX quality uses the existing Rust-native structural reopen. Both retain
 exact WFP, protected audit, immutable generations, replay, and zero-residual
 cleanup from prior Office tracks. See ADR 0042 and
 `docs/office/design-intelligence-v1.md`.
+
+## Native PDF Finalization and Interchange
+
+OFFICE-500 keeps the verified editable DOCX/XLSX/PPTX generation and its typed
+facts as truth. PDF is a fixed projection. A platform-neutral contract binds
+organization, Case, Role, lease, Work Grant, workspace, source generation,
+profile, signed backend approval, policy, one-shot activation, exact Office and
+worker images, and output artifact before any export.
+
+Three closed Windows workers call only Word, Excel, or PowerPoint
+`ExportAsFixedFormat` on a private desktop. They disable macro execution,
+updates, links, alerts, events, and viewer auto-open and run under temporary
+exact WFP loopback-only policy. No print driver, browser, default viewer,
+external converter, arbitrary COM, or model receives output-path authority.
+
+A different zero-capability AppContainer worker uses Windows.Data.Pdf to load
+each fresh output and render bounded PNG pages. A one-process Job, memory and
+time budgets, path ACLs, and a second exact WFP policy confine it. Geometry,
+blankness, visual fingerprints, and PPT source-render fidelity are deterministic
+evidence. A signed immutable source/PDF pair, finalization seal, and submission
+manifest are produced only after all gates pass; any source change supersedes
+the pair. External PDFs remain render-only untrusted input. HWPX-to-PDF remains
+`requires_licensed_hancom_render_backend`. See ADR 0043 and
+`docs/office/pdf-interchange-v1.md`.

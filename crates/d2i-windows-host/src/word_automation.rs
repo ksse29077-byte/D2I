@@ -1,4 +1,5 @@
 use super::WindowsHostError;
+use crate::office_private_desktop::{office_export_output_path, OfficePrivateDesktop};
 use std::ffi::c_void;
 use std::mem::size_of;
 use std::path::{Path, PathBuf};
@@ -313,6 +314,21 @@ impl Dispatch {
         Ok(())
     }
 
+    fn method_i32(
+        &self,
+        name: &'static str,
+        arguments: Vec<ComArgument<'_>>,
+    ) -> Result<i32, WindowsHostError> {
+        let result = self.invoke(name, DISPATCH_METHOD, arguments)?;
+        if result.variant_type != VT_I4 {
+            return Err(WindowsHostError::new(format!(
+                "Word method {name} returned an unexpected type"
+            )));
+        }
+        // SAFETY: the active VARIANT arm is selected by VT_I4.
+        Ok(unsafe { result.data.int_value })
+    }
+
     fn method_dispatch(
         &self,
         name: &'static str,
@@ -399,6 +415,147 @@ pub struct WordAutomationReceiptV1 {
     pub display_alerts: i32,
     pub automation_security: i32,
     pub operation_count: u32,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct WordPdfExportReceiptV1 {
+    pub word_process_id: u32,
+    pub page_count: u32,
+    pub private_desktop: bool,
+    pub visible: bool,
+    pub display_alerts: i32,
+    pub automation_security: i32,
+    pub pdfa_requested: bool,
+    pub output_fresh_and_stable: bool,
+}
+
+pub fn export_word_document_pdf(
+    source_path: &Path,
+    destination_path: &Path,
+    pdfa_requested: bool,
+) -> Result<WordPdfExportReceiptV1, WindowsHostError> {
+    validate_pdf_paths(source_path, destination_path, "docx")?;
+    let source_path = office_compatible_path(&source_path.canonicalize().map_err(|error| {
+        WindowsHostError::new(format!("Word source canonicalization failed: {error}"))
+    })?);
+    let destination_path = office_export_output_path(destination_path)?;
+    let before_word_pids = installed_word_process_ids()?;
+    let private_desktop = OfficePrivateDesktop::enter("word")?;
+    let apartment = ComApartment::initialize()?;
+    let application = create_word_application()?;
+    let process_id = resolve_new_word_process_id(&before_word_pids)?;
+    let original_security = application.property_i32("AutomationSecurity")?;
+    let original_alerts = application.property_i32("DisplayAlerts")?;
+    application.put_bool("Visible", false)?;
+    application.put_i32("DisplayAlerts", 0)?;
+    application.put_i32("AutomationSecurity", 3)?;
+    let result = (|| {
+        let documents = application.property_dispatch("Documents")?;
+        let source = source_path.to_string_lossy();
+        documents.method("Open", vec![ComArgument::Text(&source)])?;
+        let document = application.property_dispatch("ActiveDocument")?;
+        let page_count = document.method_i32(
+            "ComputeStatistics",
+            vec![ComArgument::Integer(2), ComArgument::Boolean(true)],
+        )?;
+        if page_count <= 0 || page_count > 500 {
+            return Err(WindowsHostError::new("Word page count exceeds bounds"));
+        }
+        let destination = destination_path.to_string_lossy();
+        let export = document.method(
+            "ExportAsFixedFormat",
+            vec![
+                ComArgument::Text(&destination),
+                ComArgument::Integer(17),
+                ComArgument::Boolean(false),
+                ComArgument::Integer(0),
+                ComArgument::Integer(0),
+                ComArgument::Integer(1),
+                ComArgument::Integer(1),
+                ComArgument::Integer(0),
+                ComArgument::Boolean(false),
+                ComArgument::Boolean(true),
+                ComArgument::Integer(0),
+                ComArgument::Boolean(true),
+                ComArgument::Boolean(false),
+                ComArgument::Boolean(pdfa_requested),
+            ],
+        );
+        let close = document.method("Close", vec![ComArgument::Boolean(false)]);
+        export?;
+        close?;
+        u32::try_from(page_count)
+            .map_err(|_| WindowsHostError::new("Word page count conversion failed"))
+    })();
+    let _ = application.put_i32("AutomationSecurity", original_security);
+    let _ = application.put_i32("DisplayAlerts", original_alerts);
+    let _ = application.method("Quit", vec![ComArgument::Boolean(false)]);
+    drop(application);
+    drop(apartment);
+    wait_for_owned_word_exit(process_id)?;
+    private_desktop.leave()?;
+    let page_count = result?;
+    wait_for_stable_pdf(&destination_path)?;
+    Ok(WordPdfExportReceiptV1 {
+        word_process_id: process_id,
+        page_count,
+        private_desktop: true,
+        visible: false,
+        display_alerts: 0,
+        automation_security: 3,
+        pdfa_requested,
+        output_fresh_and_stable: true,
+    })
+}
+
+fn validate_pdf_paths(
+    source_path: &Path,
+    destination_path: &Path,
+    source_extension: &str,
+) -> Result<(), WindowsHostError> {
+    if !source_path.is_file()
+        || destination_path.exists()
+        || source_path == destination_path
+        || !source_path
+            .extension()
+            .is_some_and(|value| value.eq_ignore_ascii_case(source_extension))
+        || !destination_path
+            .extension()
+            .is_some_and(|value| value.eq_ignore_ascii_case("pdf"))
+        || !destination_path.parent().is_some_and(Path::is_dir)
+    {
+        return Err(WindowsHostError::new("Word PDF export paths are invalid"));
+    }
+    Ok(())
+}
+
+fn wait_for_stable_pdf(path: &Path) -> Result<(), WindowsHostError> {
+    let mut previous = 0_u64;
+    let mut stable = 0_u32;
+    for _ in 0..100 {
+        let size = std::fs::metadata(path)
+            .map(|value| value.len())
+            .unwrap_or_default();
+        if size > 8 && size == previous {
+            stable = stable.saturating_add(1);
+            if stable >= 3 {
+                let header = std::fs::read(path).map_err(|error| {
+                    WindowsHostError::new(format!("Word PDF read failed: {error}"))
+                })?;
+                if header.starts_with(b"%PDF-") {
+                    return Ok(());
+                }
+                return Err(WindowsHostError::new("Word output is not a PDF"));
+            }
+        } else {
+            stable = 0;
+        }
+        previous = size;
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    }
+    Err(WindowsHostError::new(
+        "Word PDF output did not become stable",
+    ))
 }
 
 pub fn execute_word_document_operation(

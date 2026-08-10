@@ -1,0 +1,83 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-visual-fidelity-report-v1.schema.json",
+    "title":  "PdfVisualFidelityReportV1",
+    "$ref":  "#/$defs/PdfVisualFidelityReportV1",
+    "$defs":  {
+                  "PdfVisualFidelityReportV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "schema_version",
+                                                                     "report_id",
+                                                                     "source_render_sha256s",
+                                                                     "pdf_render_sha256s",
+                                                                     "compared_page_count",
+                                                                     "maximum_distance_millionths",
+                                                                     "catastrophic_drift_count",
+                                                                     "threshold_profile_sha256",
+                                                                     "verified",
+                                                                     "report_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "schema_version":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "report_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                       "source_render_sha256s":  {
+                                                                                                     "type":  "array",
+                                                                                                     "maxItems":  4096,
+                                                                                                     "items":  {
+                                                                                                                   "type":  "string",
+                                                                                                                   "minLength":  1,
+                                                                                                                   "maxLength":  2048
+                                                                                                               }
+                                                                                                 },
+                                                                       "pdf_render_sha256s":  {
+                                                                                                  "type":  "array",
+                                                                                                  "maxItems":  4096,
+                                                                                                  "items":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  2048
+                                                                                                            }
+                                                                                              },
+                                                                       "compared_page_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                       "maximum_distance_millionths":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                       "catastrophic_drift_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                       "threshold_profile_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                       "verified":  {
+                                                                                        "type":  "boolean"
+                                                                                    },
+                                                                       "report_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         }
+                                                                   }
+                                                }
+              }
+}

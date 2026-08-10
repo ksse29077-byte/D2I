@@ -1,0 +1,21 @@
+[package]
+name = "d2i-pdf-interchange"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+jsonschema.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "d2i-pdf-interchange"
+path = "src/bin/d2i-pdf-interchange.rs"

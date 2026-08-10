@@ -1,4 +1,5 @@
 use super::WindowsHostError;
+use crate::office_private_desktop::{office_export_output_path, OfficePrivateDesktop};
 use std::ffi::c_void;
 use std::mem::size_of;
 use std::path::{Path, PathBuf};
@@ -19,9 +20,11 @@ const VT_EMPTY: u16 = 0;
 const VT_I4: u16 = 3;
 const VT_R8: u16 = 5;
 const VT_BSTR: u16 = 8;
+const VT_ERROR: u16 = 10;
 const VT_DISPATCH: u16 = 9;
 const VT_BOOL: u16 = 11;
 const VARIANT_TRUE: i16 = -1;
+const DISP_E_PARAMNOTFOUND: i32 = 0x8002_0004_u32 as i32;
 const RPC_E_CALL_REJECTED: i32 = 0x8001_0001_u32 as i32;
 const RPC_E_SERVERCALL_RETRYLATER: i32 = 0x8001_010a_u32 as i32;
 const MAX_EXCEL_BUSY_RETRIES: u32 = 20;
@@ -345,6 +348,7 @@ impl Dispatch {
 }
 
 enum ComArgument<'a> {
+    Missing,
     Integer(i32),
     Double(f64),
     Boolean(bool),
@@ -355,6 +359,10 @@ impl ComArgument<'_> {
     fn into_variant(self) -> Result<Variant, WindowsHostError> {
         let mut value = Variant::empty();
         match self {
+            Self::Missing => {
+                value.variant_type = VT_ERROR;
+                value.data.int_value = DISP_E_PARAMNOTFOUND;
+            }
             Self::Integer(integer) => {
                 value.variant_type = VT_I4;
                 value.data.int_value = integer;
@@ -463,6 +471,180 @@ pub struct ExcelAutomationReceiptV1 {
     pub operation_count: u32,
     pub full_recalculation: bool,
     pub forced_process_termination: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ExcelPdfExportReceiptV1 {
+    pub excel_process_id: u32,
+    pub visible_sheet_count: u32,
+    pub hidden_sheet_count: u32,
+    pub private_desktop: bool,
+    pub visible: bool,
+    pub display_alerts: bool,
+    pub automation_security: i32,
+    pub enable_events: bool,
+    pub ask_to_update_links: bool,
+    pub pdfa_requested: bool,
+    pub output_fresh_and_stable: bool,
+    pub forced_process_termination: bool,
+}
+
+pub fn export_excel_workbook_pdf(
+    source_path: &Path,
+    destination_path: &Path,
+    expected_excel_executable: &Path,
+    pdfa_requested: bool,
+) -> Result<ExcelPdfExportReceiptV1, WindowsHostError> {
+    validate_pdf_paths(source_path, destination_path)?;
+    let source_path = office_compatible_path(&source_path.canonicalize().map_err(|error| {
+        WindowsHostError::new(format!("Excel source canonicalization failed: {error}"))
+    })?);
+    let destination_path = office_export_output_path(destination_path)?;
+    let before_excel_pids = installed_excel_process_ids()?;
+    let private_desktop = OfficePrivateDesktop::enter("excel")?;
+    let apartment = ComApartment::initialize()?;
+    let application = create_excel_application()?;
+    let process_id = resolve_new_excel_process_id(&before_excel_pids)?;
+    let actual_executable = super::process_image_path(process_id)?;
+    if !actual_executable
+        .to_string_lossy()
+        .eq_ignore_ascii_case(&expected_excel_executable.to_string_lossy())
+    {
+        let _ = application.method("Quit", Vec::new());
+        return Err(WindowsHostError::new(
+            "dedicated Excel PDF exporter differs from its binding",
+        ));
+    }
+    let original_security = application.property_i32("AutomationSecurity")?;
+    let original_alerts = application.property_i32("DisplayAlerts")? != 0;
+    let original_events = application.property_i32("EnableEvents")? != 0;
+    let original_update_links = application.property_i32("AskToUpdateLinks")? != 0;
+    application.put_bool("Visible", false)?;
+    application.put_bool("DisplayAlerts", false)?;
+    application.put_bool("EnableEvents", false)?;
+    application.put_bool("AskToUpdateLinks", false)?;
+    application.put_i32("AutomationSecurity", 3)?;
+    let result = (|| {
+        let workbooks = application.property_dispatch("Workbooks")?;
+        let source = source_path.to_string_lossy();
+        let workbook = workbooks.method_dispatch(
+            "Open",
+            vec![
+                ComArgument::Text(&source),
+                ComArgument::Integer(0),
+                ComArgument::Boolean(true),
+            ],
+        )?;
+        let worksheets = workbook.property_dispatch("Worksheets")?;
+        let count = worksheets.property_i32("Count")?;
+        if count <= 0 || count > 256 {
+            return Err(WindowsHostError::new("Excel sheet count exceeds bounds"));
+        }
+        let mut visible = 0_u32;
+        let mut hidden = 0_u32;
+        for index in 1..=count {
+            let sheet =
+                worksheets.indexed_property_dispatch("Item", vec![ComArgument::Integer(index)])?;
+            if sheet.property_i32("Visible")? == -1 {
+                visible = visible.saturating_add(1);
+            } else {
+                hidden = hidden.saturating_add(1);
+            }
+        }
+        if visible == 0 {
+            return Err(WindowsHostError::new("Excel workbook has no visible sheet"));
+        }
+        let destination = destination_path.to_string_lossy();
+        let export = workbook.method(
+            "ExportAsFixedFormat",
+            vec![
+                ComArgument::Integer(0),
+                ComArgument::Text(&destination),
+                ComArgument::Integer(0),
+                ComArgument::Boolean(true),
+                ComArgument::Boolean(false),
+                ComArgument::Missing,
+                ComArgument::Missing,
+                ComArgument::Boolean(false),
+            ],
+        );
+        let close = workbook.method("Close", vec![ComArgument::Boolean(false)]);
+        export?;
+        close?;
+        Ok((visible, hidden))
+    })();
+    let _ = application.put_i32("AutomationSecurity", original_security);
+    let _ = application.put_bool("DisplayAlerts", original_alerts);
+    let _ = application.put_bool("EnableEvents", original_events);
+    let _ = application.put_bool("AskToUpdateLinks", original_update_links);
+    let _ = application.method("Quit", Vec::new());
+    drop(application);
+    drop(apartment);
+    let forced_process_termination =
+        wait_for_owned_excel_exit(process_id, expected_excel_executable)?;
+    private_desktop.leave()?;
+    let (visible_sheet_count, hidden_sheet_count) = result?;
+    wait_for_stable_pdf(&destination_path)?;
+    Ok(ExcelPdfExportReceiptV1 {
+        excel_process_id: process_id,
+        visible_sheet_count,
+        hidden_sheet_count,
+        private_desktop: true,
+        visible: false,
+        display_alerts: false,
+        automation_security: 3,
+        enable_events: false,
+        ask_to_update_links: false,
+        pdfa_requested,
+        output_fresh_and_stable: true,
+        forced_process_termination,
+    })
+}
+
+fn validate_pdf_paths(source_path: &Path, destination_path: &Path) -> Result<(), WindowsHostError> {
+    if !source_path.is_file()
+        || destination_path.exists()
+        || source_path == destination_path
+        || !source_path
+            .extension()
+            .is_some_and(|value| value.eq_ignore_ascii_case("xlsx"))
+        || !destination_path
+            .extension()
+            .is_some_and(|value| value.eq_ignore_ascii_case("pdf"))
+        || !destination_path.parent().is_some_and(Path::is_dir)
+    {
+        return Err(WindowsHostError::new("Excel PDF export paths are invalid"));
+    }
+    Ok(())
+}
+
+fn wait_for_stable_pdf(path: &Path) -> Result<(), WindowsHostError> {
+    let mut previous = 0_u64;
+    let mut stable = 0_u32;
+    for _ in 0..100 {
+        let size = std::fs::metadata(path)
+            .map(|value| value.len())
+            .unwrap_or_default();
+        if size > 8 && size == previous {
+            stable = stable.saturating_add(1);
+            if stable >= 3 {
+                let header = std::fs::read(path).map_err(|error| {
+                    WindowsHostError::new(format!("Excel PDF read failed: {error}"))
+                })?;
+                if header.starts_with(b"%PDF-") {
+                    return Ok(());
+                }
+                return Err(WindowsHostError::new("Excel output is not a PDF"));
+            }
+        } else {
+            stable = 0;
+        }
+        previous = size;
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    }
+    Err(WindowsHostError::new(
+        "Excel PDF output did not become stable",
+    ))
 }
 
 pub fn execute_excel_spreadsheet_operation(

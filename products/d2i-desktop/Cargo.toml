@@ -29,6 +29,7 @@ d2i-document-capability = { path = "../../crates/d2i-document-capability" }
 d2i-spreadsheet-capability = { path = "../../crates/d2i-spreadsheet-capability" }
 d2i-presentation-capability = { path = "../../crates/d2i-presentation-capability" }
 d2i-design-intelligence = { path = "../../crates/d2i-design-intelligence" }
+d2i-pdf-interchange = { path = "../../crates/d2i-pdf-interchange" }
 d2i-case-learning = { path = "../../crates/d2i-case-learning" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }
@@ -52,6 +53,30 @@ workspace = true
 [[bin]]
 name = "d2i-desktop"
 path = "src/bin/d2i-desktop.rs"
+
+[[bin]]
+name = "d2i-office500-word-pdf-worker"
+path = "src/bin/d2i-office500-word-pdf-worker.rs"
+
+[[bin]]
+name = "d2i-office500-excel-pdf-worker"
+path = "src/bin/d2i-office500-excel-pdf-worker.rs"
+
+[[bin]]
+name = "d2i-office500-powerpoint-pdf-worker"
+path = "src/bin/d2i-office500-powerpoint-pdf-worker.rs"
+
+[[bin]]
+name = "d2i-office500-pdf-render-worker"
+path = "src/bin/d2i-office500-pdf-render-worker.rs"
+
+[[bin]]
+name = "d2i-office500-model-e2e"
+path = "src/bin/d2i-office500-model-e2e.rs"
+
+[[bin]]
+name = "d2i-office500-completion-e2e"
+path = "src/bin/d2i-office500-completion-e2e.rs"
 
 [[bin]]
 name = "d2i-wfp-verifier-broker"

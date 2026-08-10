@@ -1,0 +1,82 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-page-snapshot-v1.schema.json",
+    "title":  "PdfPageSnapshotV1",
+    "$ref":  "#/$defs/PdfPageSnapshotV1",
+    "$defs":  {
+                  "PdfPageSnapshotV1":  {
+                                            "type":  "object",
+                                            "additionalProperties":  false,
+                                            "required":  [
+                                                             "page_index",
+                                                             "width_millipoints",
+                                                             "height_millipoints",
+                                                             "rotation_degrees",
+                                                             "rendered_width_pixels",
+                                                             "rendered_height_pixels",
+                                                             "rendered_png_sha256",
+                                                             "visual_fingerprint_sha256",
+                                                             "non_white_pixel_millionths",
+                                                             "blankness_millionths",
+                                                             "page_sha256"
+                                                         ],
+                                            "properties":  {
+                                                               "page_index":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                               "width_millipoints":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                               "height_millipoints":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                               "rotation_degrees":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  65535
+                                                                                    },
+                                                               "rendered_width_pixels":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                               "rendered_height_pixels":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                               "rendered_png_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                               "visual_fingerprint_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                               "non_white_pixel_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                               "blankness_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                               "page_sha256":  {
+                                                                                   "type":  "string",
+                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                   "maxLength":  71
+                                                                               }
+                                                           }
+                                        }
+              }
+}

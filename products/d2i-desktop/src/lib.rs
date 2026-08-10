@@ -26,6 +26,8 @@ mod hwpx_document;
 mod limited_autonomy;
 mod local_model_provider;
 mod office_workspace;
+#[cfg(windows)]
+mod pdf_work;
 mod policy;
 #[cfg(windows)]
 mod powerpoint_presentation;
@@ -224,6 +226,11 @@ pub use office_workspace::{
     OfficeWorkspaceStoreVerificationV1, WorkspaceRecoveryDispositionV1, WorkspaceRecoveryProbeV1,
     OFFICE_WORKSPACE_STORE_SCHEMA_VERSION,
 };
+#[cfg(windows)]
+pub use pdf_work::{
+    excel_pdf_export_worker_main, pdf_render_worker_main, powerpoint_pdf_export_worker_main,
+    word_pdf_export_worker_main, NativePdfExportWorkerEvidenceV1, PdfRenderWorkerEvidenceV1,
+};
 pub use policy::{
     evaluate_policy, AllowedExecutable, DesktopActor, DesktopPolicy, PolicyDecision,
     PolicyDecisionStatus,
@@ -235,8 +242,8 @@ pub use powerpoint_presentation::{
     PowerPointPresentationWorkerResponseV1,
 };
 pub use pptx_presentation::{
-    create_pptx_template, inspect_pptx_presentation, mutate_pptx_presentation,
-    PptxPresentationMutationV1,
+    create_pptx_template, inspect_pptx_canvas_millipoints, inspect_pptx_presentation,
+    mutate_pptx_presentation, PptxPresentationMutationV1,
 };
 pub use presentation_dispatch::{
     PresentationAuthorityContextV1, PresentationDispatchOutcomeV1, PresentationDispatchV1,

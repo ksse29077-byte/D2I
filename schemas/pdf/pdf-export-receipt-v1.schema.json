@@ -1,0 +1,152 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-export-receipt-v1.schema.json",
+    "title":  "PdfExportReceiptV1",
+    "$ref":  "#/$defs/PdfExportReceiptV1",
+    "$defs":  {
+                  "PdfFailureCodeV1":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "none",
+                                                        "stale_finalization",
+                                                        "source_verification_failed",
+                                                        "source_quality_failed",
+                                                        "unsupported_source",
+                                                        "licensed_backend_required",
+                                                        "export_failed",
+                                                        "output_not_fresh",
+                                                        "pdf_load_failed",
+                                                        "password_protected",
+                                                        "page_limit_exceeded",
+                                                        "pixel_budget_exceeded",
+                                                        "render_timeout",
+                                                        "geometry_mismatch",
+                                                        "visual_fidelity_failed",
+                                                        "lineage_mismatch",
+                                                        "external_pdf_render_only",
+                                                        "external_conformance_unverified",
+                                                        "audit_failure"
+                                                    ]
+                                       },
+                  "PdfExportReceiptV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "schema_version",
+                                                              "receipt_id",
+                                                              "request_sha256",
+                                                              "binding_sha256",
+                                                              "backend_descriptor_sha256",
+                                                              "source_artifact_sha256",
+                                                              "exporter_application_sha256",
+                                                              "worker_executable_sha256",
+                                                              "output_pdf_sha256",
+                                                              "output_pdf_bytes",
+                                                              "export_started_at_unix_ms",
+                                                              "export_completed_at_unix_ms",
+                                                              "native_export_succeeded",
+                                                              "output_fresh_and_stable",
+                                                              "pdfa_requested",
+                                                              "exporter_pdfa_flag",
+                                                              "external_pdfa_conformance_verified",
+                                                              "page_count_reported_by_source",
+                                                              "hidden_unit_count",
+                                                              "failure_code",
+                                                              "receipt_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "schema_version":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "receipt_id":  {
+                                                                                   "type":  "string",
+                                                                                   "minLength":  1,
+                                                                                   "maxLength":  512,
+                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                               },
+                                                                "request_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   },
+                                                                "binding_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   },
+                                                                "backend_descriptor_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                "source_artifact_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "exporter_application_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                "worker_executable_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                "output_pdf_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      },
+                                                                "output_pdf_bytes":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                                "export_started_at_unix_ms":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0
+                                                                                              },
+                                                                "export_completed_at_unix_ms":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                "native_export_succeeded":  {
+                                                                                                "type":  "boolean"
+                                                                                            },
+                                                                "output_fresh_and_stable":  {
+                                                                                                "type":  "boolean"
+                                                                                            },
+                                                                "pdfa_requested":  {
+                                                                                       "type":  "boolean"
+                                                                                   },
+                                                                "exporter_pdfa_flag":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                                "external_pdfa_conformance_verified":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                "page_count_reported_by_source":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                "hidden_unit_count":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                "failure_code":  {
+                                                                                     "$ref":  "#/$defs/PdfFailureCodeV1"
+                                                                                 },
+                                                                "receipt_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   }
+                                                            }
+                                         }
+              }
+}

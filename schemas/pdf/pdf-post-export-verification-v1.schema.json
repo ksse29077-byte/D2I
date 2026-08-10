@@ -1,0 +1,113 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-post-export-verification-v1.schema.json",
+    "title":  "PdfPostExportVerificationV1",
+    "$ref":  "#/$defs/PdfPostExportVerificationV1",
+    "$defs":  {
+                  "PdfFailureCodeV1":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "none",
+                                                        "stale_finalization",
+                                                        "source_verification_failed",
+                                                        "source_quality_failed",
+                                                        "unsupported_source",
+                                                        "licensed_backend_required",
+                                                        "export_failed",
+                                                        "output_not_fresh",
+                                                        "pdf_load_failed",
+                                                        "password_protected",
+                                                        "page_limit_exceeded",
+                                                        "pixel_budget_exceeded",
+                                                        "render_timeout",
+                                                        "geometry_mismatch",
+                                                        "visual_fidelity_failed",
+                                                        "lineage_mismatch",
+                                                        "external_pdf_render_only",
+                                                        "external_conformance_unverified",
+                                                        "audit_failure"
+                                                    ]
+                                       },
+                  "PdfPostExportVerificationV1":  {
+                                                      "type":  "object",
+                                                      "additionalProperties":  false,
+                                                      "required":  [
+                                                                       "schema_version",
+                                                                       "verification_id",
+                                                                       "export_receipt_sha256",
+                                                                       "document_snapshot_sha256",
+                                                                       "geometry_verification_sha256",
+                                                                       "source_lineage_verified",
+                                                                       "security_verified",
+                                                                       "independent_load_verified",
+                                                                       "independent_render_verified",
+                                                                       "verified",
+                                                                       "failure_code",
+                                                                       "verification_sha256"
+                                                                   ],
+                                                      "properties":  {
+                                                                         "schema_version":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "verification_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                         "export_receipt_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                         "document_snapshot_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                         "geometry_verification_sha256":  {
+                                                                                                              "type":  "string",
+                                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                              "maxLength":  71
+                                                                                                          },
+                                                                         "visual_fidelity_report_sha256":  {
+                                                                                                               "oneOf":  [
+                                                                                                                             {
+                                                                                                                                 "type":  "string",
+                                                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                                 "maxLength":  71
+                                                                                                                             },
+                                                                                                                             {
+                                                                                                                                 "type":  "null"
+                                                                                                                             }
+                                                                                                                         ]
+                                                                                                           },
+                                                                         "source_lineage_verified":  {
+                                                                                                         "type":  "boolean"
+                                                                                                     },
+                                                                         "security_verified":  {
+                                                                                                   "type":  "boolean"
+                                                                                               },
+                                                                         "independent_load_verified":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                         "independent_render_verified":  {
+                                                                                                             "type":  "boolean"
+                                                                                                         },
+                                                                         "verified":  {
+                                                                                          "type":  "boolean"
+                                                                                      },
+                                                                         "failure_code":  {
+                                                                                              "$ref":  "#/$defs/PdfFailureCodeV1"
+                                                                                          },
+                                                                         "verification_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 }
+                                                                     }
+                                                  }
+              }
+}

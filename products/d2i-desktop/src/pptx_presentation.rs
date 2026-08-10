@@ -133,6 +133,51 @@ pub fn inspect_pptx_presentation(
     .map_err(|error| error.to_string())
 }
 
+pub fn inspect_pptx_canvas_millipoints(
+    path: &Path,
+    limits: &PresentationResourceLimitsV1,
+) -> Result<(u32, u32), String> {
+    let package = BoundedPresentationPackage::open(path, limits)?;
+    let mut reader = Reader::from_reader(package.entry("ppt/presentation.xml")?);
+    reader.config_mut().trim_text(true);
+    loop {
+        let event = reader
+            .read_event()
+            .map_err(|error| format!("PPTX presentation XML: {error}"))?;
+        match event {
+            Event::Start(element) | Event::Empty(element)
+                if element.local_name().as_ref() == b"sldSz" =>
+            {
+                let width = attribute_value(&element, b"cx", reader.decoder())?
+                    .ok_or_else(|| "PPTX slide canvas width is missing".to_owned())?
+                    .parse::<u64>()
+                    .map_err(|error| format!("PPTX slide canvas width: {error}"))?;
+                let height = attribute_value(&element, b"cy", reader.decoder())?
+                    .ok_or_else(|| "PPTX slide canvas height is missing".to_owned())?
+                    .parse::<u64>()
+                    .map_err(|error| format!("PPTX slide canvas height: {error}"))?;
+                return Ok((emu_to_millipoints(width)?, emu_to_millipoints(height)?));
+            }
+            Event::Eof => {
+                return Err("PPTX slide canvas declaration is missing".to_owned());
+            }
+            _ => {}
+        }
+    }
+}
+
+fn emu_to_millipoints(value: u64) -> Result<u32, String> {
+    if value == 0 {
+        return Err("PPTX slide canvas dimension is zero".to_owned());
+    }
+    let scaled = value
+        .checked_mul(10)
+        .and_then(|value| value.checked_add(63))
+        .ok_or_else(|| "PPTX slide canvas dimension overflow".to_owned())?
+        / 127;
+    u32::try_from(scaled).map_err(|error| format!("PPTX slide canvas dimension: {error}"))
+}
+
 pub(crate) fn verify_pptx_chart_facts(
     path: &Path,
     expected_categories: &[String],
@@ -1021,6 +1066,10 @@ mod tests {
         let snapshot = create_pptx_template(&source, "presentation.test", 120, &limits)
             .unwrap_or_else(|error| panic!("create: {error}"));
         assert_eq!(snapshot.slide_count, 120);
+        assert_eq!(
+            inspect_pptx_canvas_millipoints(&source, &limits).ok(),
+            Some((720_000, 540_000))
+        );
         let next_snapshot = mutate_pptx_presentation(PptxPresentationMutationV1 {
             source: &source,
             destination: &next,

@@ -66,8 +66,8 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-450 are complete.
-The first active task is `D2I-OFFICE-500 - PDF and Document Interchange`.
+`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-500 are complete.
+The first active task is `D2I-OFFICE-600 - Browser Research and Controlled Download`.
 
 ## Track O - General Office Capability Expansion
 
@@ -76,7 +76,8 @@ The first active task is `D2I-OFFICE-500 - PDF and Document Interchange`.
 - `D2I-OFFICE-300` Excel / spreadsheet work - **complete**
 - `D2I-OFFICE-400` PowerPoint presentation work - **complete**
 - `D2I-OFFICE-450` organizational design intelligence - **complete**
-- `D2I-OFFICE-500` PDF and document interchange - **first active task**
+- `D2I-OFFICE-500` PDF and document interchange - **complete**
+- `D2I-OFFICE-600` Browser research and controlled download - **first active task**
 - `D2I-OFFICE-500` through `D2I-OFFICE-900` complete the general office loop
 
 Run OFFICE-100 deterministic gates with
@@ -131,6 +132,17 @@ PPTX/HWPX/DOCX structure into organization-scoped immutable signed Design
 Packs, keeps raw corpus/XML out of model context, and requires actual PNG
 render, HWPX structural conformance, 128 x 100 replay, protected audit, and
 zero residual state.
+
+Run OFFICE-500 deterministic PDF finalization gates with
+`scripts/office/run-pdf-interchange-v1.ps1 -Mode All`. Product Completion
+requires the pinned Qwen3-4B/llama.cpp, sealed OFFICE-450 evidence, installed
+signed Word/Excel/PowerPoint, `-ReuseVerifiedPredecessorEvidence`, and one
+elevated session for temporary exact WFP policy. Native Office export runs on a
+private desktop; independent Windows.Data.Pdf rendering runs in a
+zero-capability AppContainer. Completion requires two exports from each Office
+application, at least 15 rendered pages, five PPT comparisons, immutable
+source/PDF pairs, signed manifests/certification, 128 x 100 replay, and zero
+owned residual state.
 
 ## Track X - Execution Plane Expansion
 

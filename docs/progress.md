@@ -720,8 +720,7 @@ audit, signed certification, structural quality, rendering, and zero residual
 PowerPoint, Excel, worker, WFP, profile, lock, temporary package, activation,
 or credential state.
 
-OFFICE-400 and OFFICE-450 are complete. `D2I-OFFICE-500 - PDF and Document
-Interchange` is the first active task and has not started.
+OFFICE-400 and OFFICE-450 are complete.
 
 ## OFFICE-450 Organizational Design Intelligence (Complete)
 
@@ -763,3 +762,34 @@ and protected-audit terminal hash
 The final post-roadmap source tree is sealed by a separate Completion run;
 its terminal hashes are reported with the release commit rather than embedded
 back into the hashed source tree.
+
+## OFFICE-500 PDF Finalization and Document Interchange (Complete)
+
+The current implementation adds the platform-neutral `d2i-pdf-interchange`
+crate, 25 generated strict Draft 2020-12 schemas, three closed native Office
+fixed-format exporters, a zero-capability AppContainer Windows.Data.Pdf
+renderer, source/PDF immutable pairs, signed backend approvals, exact one-shot
+bindings, finalization seals, interchange/submission manifests, protected
+audit, crash windows A-M, and 128 x 100 deterministic replay.
+
+The certified reference flow creates and exports two DOCX, two XLSX, and two
+five-slide PPTX sources. Every PDF is freshly loaded and independently rendered
+without a default viewer; the combined result exceeds 15 rendered pages and
+includes at least five PPT source-to-PDF visual comparisons. Word, Excel, and
+PowerPoint run on a private desktop with exact temporary WFP isolation. The
+renderer runs under a one-process Job, 768 MiB memory bound, 120-second
+deadline, write-confined sandbox, and exact temporary WFP policy. Existing
+Office and viewer PID baselines are preserved and all owned process, WFP,
+AppContainer, lock, activation, PDF, PNG, and sandbox state is removed.
+
+One actual pinned Qwen3-4B/llama.cpp call is confined to semantic export-profile
+selection. Its raw PDF, page image, extracted PDF fact, and execution-authority
+counters remain zero. External PDF intake is render-only, PDF/A request and
+exporter flag remain distinct from external conformance, and HWPX-to-PDF reports
+`requires_licensed_hancom_render_backend`.
+
+OFFICE-100 through OFFICE-500 are complete. `D2I-OFFICE-600 - Browser Research
+and Controlled Download` is the first active task and is not implemented by
+this change. The final source tree, completion report, replay, certification,
+and protected audit hashes are retained in sealed terminal evidence and
+reported with the release commit rather than embedded into the hashed tree.

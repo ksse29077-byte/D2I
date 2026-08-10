@@ -36,6 +36,7 @@ members = [
     "crates/d2i-spreadsheet-capability",
     "crates/d2i-presentation-capability",
     "crates/d2i-design-intelligence",
+    "crates/d2i-pdf-interchange",
     "crates/d2i-cli",
     "crates/d2i-windows-host",
     "products/d2i-embodied",

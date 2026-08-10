@@ -1,0 +1,188 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-export-request-v1.schema.json",
+    "title":  "PdfExportRequestV1",
+    "$ref":  "#/$defs/PdfExportRequestV1",
+    "$defs":  {
+                  "PdfPageSelectionPolicyV1":  {
+                                                   "type":  "string",
+                                                   "enum":  [
+                                                                "all_approved",
+                                                                "approved_range"
+                                                            ]
+                                               },
+                  "PdfSourceFormatV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "docx",
+                                                         "xlsx",
+                                                         "pptx",
+                                                         "hwpx",
+                                                         "external_pdf"
+                                                     ]
+                                        },
+                  "PdfExportRequestV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "schema_version",
+                                                              "request_id",
+                                                              "organization_id",
+                                                              "case_id",
+                                                              "role_id",
+                                                              "workspace_id",
+                                                              "source_artifact_id",
+                                                              "source_format",
+                                                              "source_generation",
+                                                              "expected_source_sha256",
+                                                              "expected_source_snapshot_sha256",
+                                                              "expected_source_verification_sha256",
+                                                              "expected_source_quality_sha256",
+                                                              "expected_application_state_sha256",
+                                                              "finalization_intent_sha256",
+                                                              "export_profile_sha256",
+                                                              "backend_approval_sha256",
+                                                              "page_selection_policy",
+                                                              "approved_sheet_ids",
+                                                              "output_artifact_id",
+                                                              "issued_at_unix_ms",
+                                                              "deadline_unix_ms",
+                                                              "request_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "schema_version":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "request_id":  {
+                                                                                   "type":  "string",
+                                                                                   "minLength":  1,
+                                                                                   "maxLength":  512,
+                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                               },
+                                                                "organization_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                "case_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                                "role_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                                "workspace_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                                "source_artifact_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                "source_format":  {
+                                                                                      "$ref":  "#/$defs/PdfSourceFormatV1"
+                                                                                  },
+                                                                "source_generation":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                "expected_source_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "expected_source_snapshot_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                "expected_source_verification_sha256":  {
+                                                                                                            "type":  "string",
+                                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                            "maxLength":  71
+                                                                                                        },
+                                                                "expected_source_quality_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                "expected_application_state_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                "finalization_intent_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                "export_profile_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                "backend_approval_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                "page_selection_policy":  {
+                                                                                              "$ref":  "#/$defs/PdfPageSelectionPolicyV1"
+                                                                                          },
+                                                                "approved_sheet_ids":  {
+                                                                                           "type":  "array",
+                                                                                           "maxItems":  4096,
+                                                                                           "items":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  1,
+                                                                                                         "maxLength":  2048
+                                                                                                     }
+                                                                                       },
+                                                                "expected_design_quality_ref":  {
+                                                                                                    "oneOf":  [
+                                                                                                                  {
+                                                                                                                      "type":  "string",
+                                                                                                                      "minLength":  1,
+                                                                                                                      "maxLength":  512,
+                                                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "type":  "null"
+                                                                                                                  }
+                                                                                                              ]
+                                                                                                },
+                                                                "output_artifact_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                "issued_at_unix_ms":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                "deadline_unix_ms":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                                "request_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   }
+                                                            }
+                                         }
+              }
+}

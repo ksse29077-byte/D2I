@@ -1,0 +1,95 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-geometry-verification-v1.schema.json",
+    "title":  "PdfGeometryVerificationV1",
+    "$ref":  "#/$defs/PdfGeometryVerificationV1",
+    "$defs":  {
+                  "PdfSourceFormatV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "docx",
+                                                         "xlsx",
+                                                         "pptx",
+                                                         "hwpx",
+                                                         "external_pdf"
+                                                     ]
+                                        },
+                  "PdfGeometryVerificationV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "schema_version",
+                                                                     "verification_id",
+                                                                     "source_format",
+                                                                     "expected_page_count",
+                                                                     "actual_page_count",
+                                                                     "dimension_mismatch_count",
+                                                                     "aspect_ratio_mismatch_count",
+                                                                     "rotation_mismatch_count",
+                                                                     "hidden_unit_leak_count",
+                                                                     "blank_page_count",
+                                                                     "verified",
+                                                                     "verification_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "schema_version":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "verification_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                       "source_format":  {
+                                                                                             "$ref":  "#/$defs/PdfSourceFormatV1"
+                                                                                         },
+                                                                       "expected_page_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                       "actual_page_count":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                       "dimension_mismatch_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                       "aspect_ratio_mismatch_count":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                       "rotation_mismatch_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                       "hidden_unit_leak_count":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                       "blank_page_count":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                       "verified":  {
+                                                                                        "type":  "boolean"
+                                                                                    },
+                                                                       "verification_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               }
+                                                                   }
+                                                }
+              }
+}

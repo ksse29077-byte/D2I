@@ -759,3 +759,31 @@ operator font installation and license custody, local signing-key custody,
 PowerPoint renderer behavior, and absent licensed Hancom rendering. Neural
 preference ranking, online learning, external assets, image generation, and PDF
 interchange remain outside v1.
+
+## OFFICE-500 PDF Finalization Threats
+
+OFFICE-500 treats source artifacts, export profiles, Office outputs, external
+PDFs, page renders, model output, and manifests as untrusted until exact
+contract validation. Primary threats are wrong or stale source generation,
+output overwrite, duplicate export after an ambiguous response, arbitrary COM
+or exporter injection, print/browser/viewer detours, macro/link/data refresh,
+external network access, PDF active content, password collection, oversized or
+pathological rendering, visual/page loss, cross-organization lineage, false
+PDF/A/PDF-UA claims, and false submission readiness from file creation alone.
+
+Mitigations are a signed backend allowlist, closed profiles, exact source and
+output binding, one-shot activation, private-desktop signed Office processes,
+macro and refresh denial, temporary exact WFP, fresh stable output observation,
+and an independent zero-capability AppContainer Windows.Data.Pdf renderer. The
+renderer has stricter external-PDF limits, a one-process Job, memory and time
+budgets, write-confined directories, no viewer launch, and no fact-promotion or
+mutation authority. Geometry, blankness, source/PDF visual fidelity, immutable
+pair state, source-change supersession, protected audit, signed finalization,
+replay, and zero residual state gate closure.
+
+Residual risks are installed Office and Windows.Data.Pdf behavior, malicious
+PDF parser defects inside the sandbox, local signing-key custody, deterministic
+visual metrics that do not prove subjective perfection, and absent licensed
+Hancom and external PDF/A/accessibility validators. V1 makes no PDF editing,
+password handling, OCR, reconstruction, digital-signing, PDF/A certification,
+or PDF/UA claim.

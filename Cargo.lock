@@ -399,6 +399,7 @@ dependencies = [
  "d2i-limited-autonomy",
  "d2i-module-sdk",
  "d2i-office-capability",
+ "d2i-pdf-interchange",
  "d2i-policy-admission",
  "d2i-presentation-capability",
  "d2i-role-contract",
@@ -549,6 +550,17 @@ dependencies = [
 
 [[package]]
 name = "d2i-office-capability"
+version = "0.9.0"
+dependencies = [
+ "ed25519-dalek",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
+name = "d2i-pdf-interchange"
 version = "0.9.0"
 dependencies = [
  "ed25519-dalek",
@@ -710,6 +722,7 @@ dependencies = [
 name = "d2i-windows-host"
 version = "0.9.0"
 dependencies = [
+ "sha2",
  "windows",
 ]
 

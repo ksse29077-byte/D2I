@@ -1,0 +1,152 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/final-artifact-pair-v1.schema.json",
+    "title":  "FinalArtifactPairV1",
+    "$ref":  "#/$defs/FinalArtifactPairV1",
+    "$defs":  {
+                  "FinalArtifactPairStateV1":  {
+                                                   "type":  "string",
+                                                   "enum":  [
+                                                                "finalized",
+                                                                "superseded",
+                                                                "revoked"
+                                                            ]
+                                               },
+                  "FinalArtifactPairV1":  {
+                                              "type":  "object",
+                                              "additionalProperties":  false,
+                                              "required":  [
+                                                               "schema_version",
+                                                               "pair_id",
+                                                               "organization_id",
+                                                               "source_artifact_id",
+                                                               "source_generation",
+                                                               "source_artifact_sha256",
+                                                               "source_snapshot_sha256",
+                                                               "pdf_artifact_id",
+                                                               "pdf_generation",
+                                                               "pdf_artifact_sha256",
+                                                               "export_profile_sha256",
+                                                               "export_backend_sha256",
+                                                               "export_receipt_sha256",
+                                                               "post_export_verification_sha256",
+                                                               "fact_lineage_refs",
+                                                               "created_at_unix_ms",
+                                                               "state",
+                                                               "ready_for_submission",
+                                                               "pair_sha256"
+                                                           ],
+                                              "properties":  {
+                                                                 "schema_version":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                 "pair_id":  {
+                                                                                 "type":  "string",
+                                                                                 "minLength":  1,
+                                                                                 "maxLength":  512,
+                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                             },
+                                                                 "organization_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                 "source_artifact_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                 "source_generation":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0
+                                                                                       },
+                                                                 "source_artifact_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                 "source_snapshot_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                 "pdf_artifact_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                 "pdf_generation":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0
+                                                                                    },
+                                                                 "pdf_artifact_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                 "export_profile_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                 "export_backend_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                 "export_receipt_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                 "post_export_verification_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                 "design_quality_ref":  {
+                                                                                            "oneOf":  [
+                                                                                                          {
+                                                                                                              "type":  "string",
+                                                                                                              "minLength":  1,
+                                                                                                              "maxLength":  512,
+                                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                          },
+                                                                                                          {
+                                                                                                              "type":  "null"
+                                                                                                          }
+                                                                                                      ]
+                                                                                        },
+                                                                 "fact_lineage_refs":  {
+                                                                                           "type":  "array",
+                                                                                           "maxItems":  4096,
+                                                                                           "items":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  1,
+                                                                                                         "maxLength":  2048
+                                                                                                     }
+                                                                                       },
+                                                                 "created_at_unix_ms":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                                 "state":  {
+                                                                               "$ref":  "#/$defs/FinalArtifactPairStateV1"
+                                                                           },
+                                                                 "ready_for_submission":  {
+                                                                                              "type":  "boolean"
+                                                                                          },
+                                                                 "pair_sha256":  {
+                                                                                     "type":  "string",
+                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                     "maxLength":  71
+                                                                                 }
+                                                             }
+                                          }
+              }
+}

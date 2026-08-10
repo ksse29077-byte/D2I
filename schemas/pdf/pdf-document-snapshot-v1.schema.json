@@ -1,0 +1,197 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-document-snapshot-v1.schema.json",
+    "title":  "PdfDocumentSnapshotV1",
+    "$ref":  "#/$defs/PdfDocumentSnapshotV1",
+    "$defs":  {
+                  "PdfOriginClassV1":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "d2i_generated",
+                                                        "external_untrusted"
+                                                    ]
+                                       },
+                  "PdfPageSnapshotV1":  {
+                                            "type":  "object",
+                                            "additionalProperties":  false,
+                                            "required":  [
+                                                             "page_index",
+                                                             "width_millipoints",
+                                                             "height_millipoints",
+                                                             "rotation_degrees",
+                                                             "rendered_width_pixels",
+                                                             "rendered_height_pixels",
+                                                             "rendered_png_sha256",
+                                                             "visual_fingerprint_sha256",
+                                                             "non_white_pixel_millionths",
+                                                             "blankness_millionths",
+                                                             "page_sha256"
+                                                         ],
+                                            "properties":  {
+                                                               "page_index":  {
+                                                                                  "type":  "integer",
+                                                                                  "minimum":  0,
+                                                                                  "maximum":  4294967295
+                                                                              },
+                                                               "width_millipoints":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                               "height_millipoints":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                               "rotation_degrees":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  65535
+                                                                                    },
+                                                               "rendered_width_pixels":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                               "rendered_height_pixels":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                               "rendered_png_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                               "visual_fingerprint_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                               "non_white_pixel_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                               "blankness_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                               "page_sha256":  {
+                                                                                   "type":  "string",
+                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                   "maxLength":  71
+                                                                               }
+                                                           }
+                                        },
+                  "PdfDocumentSnapshotV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "schema_version",
+                                                                 "snapshot_id",
+                                                                 "pdf_artifact_id",
+                                                                 "pdf_generation",
+                                                                 "origin_class",
+                                                                 "pdf_sha256",
+                                                                 "pdf_file_bytes",
+                                                                 "page_count",
+                                                                 "password_protected",
+                                                                 "pages",
+                                                                 "renderer_build_id",
+                                                                 "renderer_executable_sha256",
+                                                                 "observed_at_unix_ms",
+                                                                 "freshness_expires_at_unix_ms",
+                                                                 "snapshot_sha256"
+                                                             ],
+                                                "properties":  {
+                                                                   "schema_version":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                   "snapshot_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                   "pdf_artifact_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                   "pdf_generation":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                   "origin_class":  {
+                                                                                        "$ref":  "#/$defs/PdfOriginClassV1"
+                                                                                    },
+                                                                   "pdf_sha256":  {
+                                                                                      "type":  "string",
+                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                      "maxLength":  71
+                                                                                  },
+                                                                   "pdf_file_bytes":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                   "page_count":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                   "password_protected":  {
+                                                                                              "type":  "boolean"
+                                                                                          },
+                                                                   "pages":  {
+                                                                                 "type":  "array",
+                                                                                 "maxItems":  4096,
+                                                                                 "items":  {
+                                                                                               "$ref":  "#/$defs/PdfPageSnapshotV1"
+                                                                                           }
+                                                                             },
+                                                                   "export_pair_ref":  {
+                                                                                           "oneOf":  [
+                                                                                                         {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  1,
+                                                                                                             "maxLength":  512,
+                                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                         },
+                                                                                                         {
+                                                                                                             "type":  "null"
+                                                                                                         }
+                                                                                                     ]
+                                                                                       },
+                                                                   "renderer_build_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                   "renderer_executable_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                   "observed_at_unix_ms":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                   "freshness_expires_at_unix_ms":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                   "snapshot_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       }
+                                                               }
+                                            }
+              }
+}

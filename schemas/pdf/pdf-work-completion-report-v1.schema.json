@@ -1,0 +1,691 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-work-completion-report-v1.schema.json",
+    "title":  "PdfWorkCompletionReportV1",
+    "$ref":  "#/$defs/PdfWorkCompletionReportV1",
+    "$defs":  {
+                  "PdfVerificationStatusV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "passed",
+                                                               "failed",
+                                                               "render_only",
+                                                               "requires_licensed_hancom_render_backend",
+                                                               "external_conformance_unverified"
+                                                           ]
+                                              },
+                  "PdfSecurityMetricsV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "wrong_source_artifact",
+                                                                "wrong_source_generation",
+                                                                "wrong_export_profile",
+                                                                "wrong_output_artifact",
+                                                                "original_overwrite",
+                                                                "stale_export",
+                                                                "duplicate_export",
+                                                                "source_pdf_lineage_mismatch",
+                                                                "wrong_org_pack",
+                                                                "unverified_source_export",
+                                                                "raw_path_from_model",
+                                                                "shell_print",
+                                                                "send_keys",
+                                                                "pdf_printer",
+                                                                "browser_pdf",
+                                                                "external_converter",
+                                                                "arbitrary_com",
+                                                                "custom_external_exporter",
+                                                                "arbitrary_command",
+                                                                "raw_pdf_to_model",
+                                                                "raw_office_document_to_model",
+                                                                "page_image_to_model",
+                                                                "external_pdf_fact_promotion",
+                                                                "arbitrary_pdf_edit",
+                                                                "network_access",
+                                                                "arbitrary_process",
+                                                                "workspace_escape",
+                                                                "credential_leak",
+                                                                "viewer_launch",
+                                                                "password_collection",
+                                                                "macro_execution",
+                                                                "external_data_refresh",
+                                                                "hidden_content_leak",
+                                                                "false_submission_ready",
+                                                                "false_completion",
+                                                                "critical_error",
+                                                                "unloadable_pdf",
+                                                                "unexpected_page_count",
+                                                                "unexpected_page_geometry",
+                                                                "required_blank_page",
+                                                                "render_failure",
+                                                                "render_timeout",
+                                                                "visual_catastrophic_drift",
+                                                                "missing_pdf_pair",
+                                                                "stale_pdf_pair",
+                                                                "invalid_finalization_seal",
+                                                                "source_hard_design_violation"
+                                                            ],
+                                               "properties":  {
+                                                                  "wrong_source_artifact":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "wrong_source_generation":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                  "wrong_export_profile":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                  "wrong_output_artifact":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "original_overwrite":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "stale_export":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                  "duplicate_export":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                  "source_pdf_lineage_mismatch":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                  "wrong_org_pack":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "unverified_source_export":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                  "raw_path_from_model":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "shell_print":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                  "send_keys":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                                  "pdf_printer":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                  "browser_pdf":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                  "external_converter":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "arbitrary_com":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "custom_external_exporter":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                  "arbitrary_command":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "raw_pdf_to_model":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                  "raw_office_document_to_model":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                  "page_image_to_model":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "external_pdf_fact_promotion":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                  "arbitrary_pdf_edit":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "network_access":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "arbitrary_process":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "workspace_escape":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                  "credential_leak":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                  "viewer_launch":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "password_collection":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "macro_execution":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                  "external_data_refresh":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "hidden_content_leak":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "false_submission_ready":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "false_completion":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                  "critical_error":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "unloadable_pdf":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "unexpected_page_count":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "unexpected_page_geometry":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                  "required_blank_page":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "render_failure":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "render_timeout":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "visual_catastrophic_drift":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                  "missing_pdf_pair":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                  "stale_pdf_pair":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "invalid_finalization_seal":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                  "source_hard_design_violation":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   }
+                                                              }
+                                           },
+                  "PdfResidualMetricsV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "word_processes",
+                                                                "excel_processes",
+                                                                "powerpoint_processes",
+                                                                "export_workers",
+                                                                "render_workers",
+                                                                "model_workers",
+                                                                "wfp_objects",
+                                                                "appcontainer_profiles",
+                                                                "temporary_render_files",
+                                                                "temporary_pdf_files",
+                                                                "temporary_png_files",
+                                                                "file_locks",
+                                                                "office_file_locks",
+                                                                "activations",
+                                                                "credentials",
+                                                                "workspace_locks",
+                                                                "viewer_processes"
+                                                            ],
+                                               "properties":  {
+                                                                  "word_processes":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "excel_processes":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                  "powerpoint_processes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                  "export_workers":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "render_workers":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "model_workers":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "wfp_objects":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                  "appcontainer_profiles":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "temporary_render_files":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                  "temporary_pdf_files":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "temporary_png_files":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                  "file_locks":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                                  "office_file_locks":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "activations":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                  "credentials":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                  "workspace_locks":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                  "viewer_processes":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       }
+                                                              }
+                                           },
+                  "PdfPerformanceMetricsV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "source_preflight_microseconds",
+                                                                   "export_microseconds",
+                                                                   "pdf_load_microseconds",
+                                                                   "render_microseconds",
+                                                                   "fidelity_microseconds",
+                                                                   "finalization_microseconds",
+                                                                   "model_microseconds",
+                                                                   "peak_export_worker_memory_bytes",
+                                                                   "peak_render_worker_memory_bytes",
+                                                                   "peak_model_worker_memory_bytes"
+                                                               ],
+                                                  "properties":  {
+                                                                     "source_preflight_microseconds":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0
+                                                                                                       },
+                                                                     "export_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                     "pdf_load_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                     "render_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                     "fidelity_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                     "finalization_microseconds":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                     "model_microseconds":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                     "peak_export_worker_memory_bytes":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                     "peak_render_worker_memory_bytes":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                     "peak_model_worker_memory_bytes":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0
+                                                                                                        }
+                                                                 }
+                                              },
+                  "PdfWorkCompletionReportV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "schema_version",
+                                                                     "report_id",
+                                                                     "source_tree_sha256",
+                                                                     "predecessor_finished_sha256",
+                                                                     "word_pdf_exports",
+                                                                     "excel_pdf_exports",
+                                                                     "powerpoint_pdf_exports",
+                                                                     "pdf_load_count",
+                                                                     "rendered_page_count",
+                                                                     "powerpoint_fidelity_comparisons",
+                                                                     "external_pdf_render_only_cases",
+                                                                     "actual_qwen_invocation_count",
+                                                                     "final_artifact_pair_count",
+                                                                     "submission_manifest_count",
+                                                                     "stale_pair_count",
+                                                                     "superseded_pair_count",
+                                                                     "pdfa_requested_cases",
+                                                                     "pdfa_exporter_requested_cases",
+                                                                     "pdfa_external_conformance_verified_cases",
+                                                                     "hwpx_pdf_export_status",
+                                                                     "crash_windows_verified",
+                                                                     "replay_report_sha256",
+                                                                     "protected_audit_terminal_sha256",
+                                                                     "security",
+                                                                     "residual",
+                                                                     "performance",
+                                                                     "pdf_interchange_evidence",
+                                                                     "word_pdf_export_evidence",
+                                                                     "excel_pdf_export_evidence",
+                                                                     "powerpoint_pdf_export_evidence",
+                                                                     "independent_pdf_render_evidence",
+                                                                     "powerpoint_visual_fidelity_evidence",
+                                                                     "source_pdf_lineage_evidence",
+                                                                     "submission_manifest_evidence",
+                                                                     "external_pdf_render_only_evidence",
+                                                                     "office450_lineage_evidence",
+                                                                     "track_o_office500_evidence",
+                                                                     "routine_human_touch_zero",
+                                                                     "complete",
+                                                                     "finished_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "schema_version":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "report_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                       "source_tree_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                       "predecessor_finished_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                       "word_pdf_exports":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                       "excel_pdf_exports":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                       "powerpoint_pdf_exports":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                       "pdf_load_count":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "rendered_page_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                       "powerpoint_fidelity_comparisons":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0,
+                                                                                                               "maximum":  4294967295
+                                                                                                           },
+                                                                       "external_pdf_render_only_cases":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                       "actual_qwen_invocation_count":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        },
+                                                                       "final_artifact_pair_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                       "submission_manifest_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                       "stale_pair_count":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                       "superseded_pair_count":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                       "pdfa_requested_cases":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                       "pdfa_exporter_requested_cases":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0,
+                                                                                                             "maximum":  4294967295
+                                                                                                         },
+                                                                       "pdfa_external_conformance_verified_cases":  {
+                                                                                                                        "type":  "integer",
+                                                                                                                        "minimum":  0,
+                                                                                                                        "maximum":  4294967295
+                                                                                                                    },
+                                                                       "hwpx_pdf_export_status":  {
+                                                                                                      "$ref":  "#/$defs/PdfVerificationStatusV1"
+                                                                                                  },
+                                                                       "crash_windows_verified":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                       "replay_report_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                       "protected_audit_terminal_sha256":  {
+                                                                                                               "type":  "string",
+                                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                               "maxLength":  71
+                                                                                                           },
+                                                                       "security":  {
+                                                                                        "$ref":  "#/$defs/PdfSecurityMetricsV1"
+                                                                                    },
+                                                                       "residual":  {
+                                                                                        "$ref":  "#/$defs/PdfResidualMetricsV1"
+                                                                                    },
+                                                                       "performance":  {
+                                                                                           "$ref":  "#/$defs/PdfPerformanceMetricsV1"
+                                                                                       },
+                                                                       "pdf_interchange_evidence":  {
+                                                                                                        "type":  "boolean"
+                                                                                                    },
+                                                                       "word_pdf_export_evidence":  {
+                                                                                                        "type":  "boolean"
+                                                                                                    },
+                                                                       "excel_pdf_export_evidence":  {
+                                                                                                         "type":  "boolean"
+                                                                                                     },
+                                                                       "powerpoint_pdf_export_evidence":  {
+                                                                                                              "type":  "boolean"
+                                                                                                          },
+                                                                       "independent_pdf_render_evidence":  {
+                                                                                                               "type":  "boolean"
+                                                                                                           },
+                                                                       "powerpoint_visual_fidelity_evidence":  {
+                                                                                                                   "type":  "boolean"
+                                                                                                               },
+                                                                       "source_pdf_lineage_evidence":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                       "submission_manifest_evidence":  {
+                                                                                                            "type":  "boolean"
+                                                                                                        },
+                                                                       "external_pdf_render_only_evidence":  {
+                                                                                                                 "type":  "boolean"
+                                                                                                             },
+                                                                       "office450_lineage_evidence":  {
+                                                                                                          "type":  "boolean"
+                                                                                                      },
+                                                                       "track_o_office500_evidence":  {
+                                                                                                          "type":  "boolean"
+                                                                                                      },
+                                                                       "routine_human_touch_zero":  {
+                                                                                                        "type":  "boolean"
+                                                                                                    },
+                                                                       "complete":  {
+                                                                                        "type":  "boolean"
+                                                                                    },
+                                                                       "finished_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           }
+                                                                   }
+                                                }
+              }
+}

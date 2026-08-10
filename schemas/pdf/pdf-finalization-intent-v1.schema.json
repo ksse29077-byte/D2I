@@ -1,0 +1,62 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-finalization-intent-v1.schema.json",
+    "title":  "PdfFinalizationIntentV1",
+    "$ref":  "#/$defs/PdfFinalizationIntentV1",
+    "$defs":  {
+                  "PdfInterchangeProfileV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "submission_static",
+                                                               "internal_review",
+                                                               "archive_pdfa_requested"
+                                                           ]
+                                              },
+                  "PdfFinalizationIntentV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "schema_version",
+                                                                   "intent_id",
+                                                                   "organization_id",
+                                                                   "profile",
+                                                                   "requested_pdfa",
+                                                                   "ready_for_submission_requested",
+                                                                   "intent_sha256"
+                                                               ],
+                                                  "properties":  {
+                                                                     "schema_version":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "intent_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                     "organization_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                     "profile":  {
+                                                                                     "$ref":  "#/$defs/PdfInterchangeProfileV1"
+                                                                                 },
+                                                                     "requested_pdfa":  {
+                                                                                            "type":  "boolean"
+                                                                                        },
+                                                                     "ready_for_submission_requested":  {
+                                                                                                            "type":  "boolean"
+                                                                                                        },
+                                                                     "intent_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       }
+                                                                 }
+                                              }
+              }
+}

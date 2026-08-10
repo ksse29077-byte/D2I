@@ -30,9 +30,9 @@ resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
 one-step limited autonomy, signed control and human-exception handling, and a
 bounded General Office duty cycle while preserving Policy, activation, and
 KRN as the only action path. Track W, EDGE-100, and OFFICE-100 through
-OFFICE-450 are complete. Track O has priority over remaining physical
+OFFICE-500 are complete. Track O has priority over remaining physical
 execution-plane expansion. The active next task is
-`D2I-OFFICE-500 - PDF and Document Interchange`.
+`D2I-OFFICE-600 - Browser Research and Controlled Download`.
 
 WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
 current-user/SYSTEM DACL-protected content-addressed store. It consumes only
@@ -84,6 +84,15 @@ organization-scoped, approval-signed, immutable, and non-executable. Qwen may
 render language or choose among bounded semantic options only. Existing
 private-desktop PowerPoint, exact temporary WFP, fresh reopen, protected Office
 store, and structural verification remain the only live evidence path.
+
+OFFICE-500 adds closed native Word/Excel/PowerPoint fixed-format workers and a
+separate Windows.Data.Pdf renderer. Office workers remain private-desktop,
+exact-image, WFP-isolated one-shot activations. The renderer is a
+zero-capability AppContainer with a one-process Job, memory/time limits,
+write-confined output, exact temporary WFP, and no default PDF viewer. It emits
+page geometry and deterministic visual fingerprints, never facts or mutation
+authority. Final readiness binds source generation, profile, backend, receipt,
+independent render, provenance, signed seal, and submission manifest.
 
 OFFICE-200 adds a Desktop-owned trusted document dispatcher, separate bounded
 HWPX and DOCX package workers, and a hidden interactive-current-user Word COM

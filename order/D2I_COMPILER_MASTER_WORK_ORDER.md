@@ -18,9 +18,9 @@ Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
 Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-450 are
+runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-500 are
 complete. Track O has priority over the remaining physical execution planes.
-The active next task is `D2I-OFFICE-500 - PDF and Document Interchange`.
+The active next task is `D2I-OFFICE-600 - Browser Research and Controlled Download`.
 
 WORK-700 is governed by ADR 0034 and
 `docs/workforce/role-reporting-sla-escalation-v1.md`. It preserves immutable
@@ -85,6 +85,16 @@ format, or runtime ABI. Approved organization artifacts compile offline into
 organization- and artifact-class-bound immutable Design Packs. Models have no
 raw geometry, color, font, font-size, XML, COM, or artifact-mutation authority;
 deterministic solvers and render/structure critics retain that authority.
+
+OFFICE-500 is governed by ADR 0043 and
+`docs/office/pdf-interchange-v1.md`. It changes no Compiler IR, package format,
+or runtime ABI. Installed signed Word, Excel, and PowerPoint use only native
+fixed-format export on a private desktop under temporary exact WFP policy. A
+separate zero-capability AppContainer uses Windows.Data.Pdf for independent
+bounded load/render evidence. PDF is an immutable fixed projection paired to
+one verified editable source generation; it is not typed-fact authority.
+External PDFs remain render-only, HWPX-to-PDF remains licensed-backend-gated,
+and PDF/A request remains distinct from conformance certification.
 
 ## Product Context
 

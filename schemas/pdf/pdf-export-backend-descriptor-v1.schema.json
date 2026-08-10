@@ -1,0 +1,94 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-export-backend-descriptor-v1.schema.json",
+    "title":  "PdfExportBackendDescriptorV1",
+    "$ref":  "#/$defs/PdfExportBackendDescriptorV1",
+    "$defs":  {
+                  "PdfExportBackendKindV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "word_fixed_pdf",
+                                                              "excel_fixed_pdf",
+                                                              "powerpoint_fixed_pdf"
+                                                          ]
+                                             },
+                  "PdfExportBackendDescriptorV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "schema_version",
+                                                                        "backend_id",
+                                                                        "backend_kind",
+                                                                        "executable_sha256",
+                                                                        "executable_version",
+                                                                        "authenticode_valid",
+                                                                        "worker_executable_sha256",
+                                                                        "official_method_id",
+                                                                        "network_denied",
+                                                                        "private_desktop",
+                                                                        "mutable_operations",
+                                                                        "descriptor_sha256"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "schema_version":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "backend_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                          "backend_kind":  {
+                                                                                               "$ref":  "#/$defs/PdfExportBackendKindV1"
+                                                                                           },
+                                                                          "executable_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                          "executable_version":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  2048
+                                                                                                 },
+                                                                          "authenticode_valid":  {
+                                                                                                     "type":  "boolean"
+                                                                                                 },
+                                                                          "worker_executable_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                          "official_method_id":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  512,
+                                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                 },
+                                                                          "network_denied":  {
+                                                                                                 "type":  "boolean"
+                                                                                             },
+                                                                          "private_desktop":  {
+                                                                                                  "type":  "boolean"
+                                                                                              },
+                                                                          "mutable_operations":  {
+                                                                                                     "type":  "array",
+                                                                                                     "maxItems":  4096,
+                                                                                                     "items":  {
+                                                                                                                   "type":  "string",
+                                                                                                                   "minLength":  1,
+                                                                                                                   "maxLength":  2048
+                                                                                                               }
+                                                                                                 },
+                                                                          "descriptor_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                }
+                                                                      }
+                                                   }
+              }
+}

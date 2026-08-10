@@ -1,0 +1,123 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-work-certification-v1.schema.json",
+    "title":  "PdfWorkCertificationV1",
+    "$ref":  "#/$defs/PdfWorkCertificationV1",
+    "$defs":  {
+                  "PdfWorkCertificationV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "certification_id",
+                                                                  "completion_report_sha256",
+                                                                  "predecessor_finished_sha256",
+                                                                  "model_artifact_sha256",
+                                                                  "runtime_artifact_sha256",
+                                                                  "word_executable_sha256",
+                                                                  "excel_executable_sha256",
+                                                                  "powerpoint_executable_sha256",
+                                                                  "pdf_render_worker_sha256",
+                                                                  "evidence_ids",
+                                                                  "issued_at_unix_ms",
+                                                                  "expires_at_unix_ms",
+                                                                  "signer_id",
+                                                                  "signing_key_id",
+                                                                  "signature_hex",
+                                                                  "certification_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "certification_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                    "completion_report_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                    "predecessor_finished_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                    "model_artifact_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                    "runtime_artifact_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                    "word_executable_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                    "excel_executable_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                    "powerpoint_executable_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                    "pdf_render_worker_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                    "evidence_ids":  {
+                                                                                         "type":  "array",
+                                                                                         "maxItems":  4096,
+                                                                                         "items":  {
+                                                                                                       "type":  "string",
+                                                                                                       "minLength":  1,
+                                                                                                       "maxLength":  2048
+                                                                                                   }
+                                                                                     },
+                                                                    "issued_at_unix_ms":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                    "expires_at_unix_ms":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                    "signer_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                    "signing_key_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                    "signature_hex":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^[0-9a-f]{128}$",
+                                                                                          "maxLength":  128
+                                                                                      },
+                                                                    "certification_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             }
+                                                                }
+                                             }
+              }
+}

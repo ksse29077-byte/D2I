@@ -1,0 +1,106 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-render-result-v1.schema.json",
+    "title":  "PdfRenderResultV1",
+    "$ref":  "#/$defs/PdfRenderResultV1",
+    "$defs":  {
+                  "PdfVerificationStatusV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "passed",
+                                                               "failed",
+                                                               "render_only",
+                                                               "requires_licensed_hancom_render_backend",
+                                                               "external_conformance_unverified"
+                                                           ]
+                                              },
+                  "PdfFailureCodeV1":  {
+                                           "type":  "string",
+                                           "enum":  [
+                                                        "none",
+                                                        "stale_finalization",
+                                                        "source_verification_failed",
+                                                        "source_quality_failed",
+                                                        "unsupported_source",
+                                                        "licensed_backend_required",
+                                                        "export_failed",
+                                                        "output_not_fresh",
+                                                        "pdf_load_failed",
+                                                        "password_protected",
+                                                        "page_limit_exceeded",
+                                                        "pixel_budget_exceeded",
+                                                        "render_timeout",
+                                                        "geometry_mismatch",
+                                                        "visual_fidelity_failed",
+                                                        "lineage_mismatch",
+                                                        "external_pdf_render_only",
+                                                        "external_conformance_unverified",
+                                                        "audit_failure"
+                                                    ]
+                                       },
+                  "PdfRenderResultV1":  {
+                                            "type":  "object",
+                                            "additionalProperties":  false,
+                                            "required":  [
+                                                             "schema_version",
+                                                             "result_id",
+                                                             "request_sha256",
+                                                             "pdf_sha256",
+                                                             "document_snapshot_sha256",
+                                                             "rendered_page_count",
+                                                             "rendered_total_pixels",
+                                                             "status",
+                                                             "failure_code",
+                                                             "result_sha256"
+                                                         ],
+                                            "properties":  {
+                                                               "schema_version":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                               "result_id":  {
+                                                                                 "type":  "string",
+                                                                                 "minLength":  1,
+                                                                                 "maxLength":  512,
+                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                             },
+                                                               "request_sha256":  {
+                                                                                      "type":  "string",
+                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                      "maxLength":  71
+                                                                                  },
+                                                               "pdf_sha256":  {
+                                                                                  "type":  "string",
+                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                  "maxLength":  71
+                                                                              },
+                                                               "document_snapshot_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                               "rendered_page_count":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                               "rendered_total_pixels":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                               "status":  {
+                                                                              "$ref":  "#/$defs/PdfVerificationStatusV1"
+                                                                          },
+                                                               "failure_code":  {
+                                                                                    "$ref":  "#/$defs/PdfFailureCodeV1"
+                                                                                },
+                                                               "result_sha256":  {
+                                                                                     "type":  "string",
+                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                     "maxLength":  71
+                                                                                 }
+                                                           }
+                                        }
+              }
+}

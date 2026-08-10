@@ -1,0 +1,111 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-export-profile-v1.schema.json",
+    "title":  "PdfExportProfileV1",
+    "$ref":  "#/$defs/PdfExportProfileV1",
+    "$defs":  {
+                  "PdfInterchangeProfileV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "submission_static",
+                                                               "internal_review",
+                                                               "archive_pdfa_requested"
+                                                           ]
+                                              },
+                  "PdfPageSelectionPolicyV1":  {
+                                                   "type":  "string",
+                                                   "enum":  [
+                                                                "all_approved",
+                                                                "approved_range"
+                                                            ]
+                                               },
+                  "PdfExportProfileV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "schema_version",
+                                                              "profile",
+                                                              "quality_id",
+                                                              "optimization_id",
+                                                              "metadata_policy_id",
+                                                              "structure_tag_policy_id",
+                                                              "bookmark_policy_id",
+                                                              "hidden_content_policy_id",
+                                                              "pdfa_requested",
+                                                              "page_selection_policy",
+                                                              "external_link_policy_id",
+                                                              "font_policy_id",
+                                                              "profile_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "schema_version":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "profile":  {
+                                                                                "$ref":  "#/$defs/PdfInterchangeProfileV1"
+                                                                            },
+                                                                "quality_id":  {
+                                                                                   "type":  "string",
+                                                                                   "minLength":  1,
+                                                                                   "maxLength":  512,
+                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                               },
+                                                                "optimization_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                "metadata_policy_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                "structure_tag_policy_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                "bookmark_policy_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                "hidden_content_policy_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                "pdfa_requested":  {
+                                                                                       "type":  "boolean"
+                                                                                   },
+                                                                "page_selection_policy":  {
+                                                                                              "$ref":  "#/$defs/PdfPageSelectionPolicyV1"
+                                                                                          },
+                                                                "external_link_policy_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                "font_policy_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                "profile_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   }
+                                                            }
+                                         }
+              }
+}

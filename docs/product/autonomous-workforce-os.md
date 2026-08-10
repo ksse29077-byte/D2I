@@ -204,8 +204,8 @@ state.
 - `D2I-OFFICE-300`: Excel / spreadsheet work. **Complete**
 - `D2I-OFFICE-400`: PowerPoint presentation work. **Complete**
 - `D2I-OFFICE-450`: Organizational design intelligence and brand-consistent artifact generation. **Complete**
-- `D2I-OFFICE-500`: PDF and document interchange. **First active**
-- `D2I-OFFICE-600`: Browser research and controlled download.
+- `D2I-OFFICE-500`: PDF and document interchange. **Complete**
+- `D2I-OFFICE-600`: Browser research and controlled download. **First active**
 - `D2I-OFFICE-700`: Email, messenger, review, and feedback loop.
 - `D2I-OFFICE-800`: Long-horizon multi-application project work.
 - `D2I-OFFICE-900`: General Office Digital Employee E2E.
@@ -345,8 +345,7 @@ PPTX file work and installed PowerPoint are separately approved backends.
 PowerPoint and chart Excel run under exact WFP denial on a private Windows
 desktop, then a fresh reopen, semantic diff, structural verification, PNG
 render, protected audit, deterministic replay, signed certification, and
-zero-residual cleanup close the artifact. OFFICE-450 is complete and
-OFFICE-500 is the first active task.
+zero-residual cleanup close the artifact. OFFICE-450 is complete.
 
 OFFICE-450 compiles approved organization artifacts into organization- and
 artifact-class-scoped Design Packs. Gold exemplars outweigh ordinary approved
@@ -356,3 +355,13 @@ language limits, tone, and bounded semantic options. They never select raw
 coordinates, colors, font families, font sizes, XML, COM, or mutation steps.
 Production packs are immutable and separately signed; feedback remains a
 quarantined candidate until offline evaluation and approval.
+
+OFFICE-500 finalizes verified DOCX, XLSX, and PPTX generations through closed
+native Office fixed-format exporters. A separate zero-capability AppContainer
+uses Windows.Data.Pdf to load and render every result without opening a default
+viewer. Page geometry, PPT source-to-PDF visual fidelity, source generation,
+typed-fact provenance, signed backend approval, one-shot activation, protected
+audit, finalization seal, and submission manifest jointly gate readiness. PDF
+is a fixed projection rather than truth; source mutation supersedes the pair.
+External PDFs remain bounded render-only untrusted input, HWPX-to-PDF remains
+licensed-backend-gated, and PDF/A request is not a conformance claim.

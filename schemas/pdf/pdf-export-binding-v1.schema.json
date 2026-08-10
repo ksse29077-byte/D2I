@@ -1,0 +1,193 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-export-binding-v1.schema.json",
+    "title":  "PdfExportBindingV1",
+    "$ref":  "#/$defs/PdfExportBindingV1",
+    "$defs":  {
+                  "PdfExportBindingV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "schema_version",
+                                                              "binding_id",
+                                                              "organization_id",
+                                                              "case_id",
+                                                              "role_id",
+                                                              "lease_sha256",
+                                                              "case_work_grant_sha256",
+                                                              "workspace_profile_sha256",
+                                                              "root_binding_sha256",
+                                                              "request_sha256",
+                                                              "source_artifact_id",
+                                                              "source_artifact_sha256",
+                                                              "source_snapshot_sha256",
+                                                              "source_verification_sha256",
+                                                              "source_generation",
+                                                              "export_profile_sha256",
+                                                              "backend_descriptor_sha256",
+                                                              "backend_approval_sha256",
+                                                              "policy_decision_sha256",
+                                                              "activation_id",
+                                                              "activation_sha256",
+                                                              "worker_executable_sha256",
+                                                              "application_executable_sha256",
+                                                              "expected_output_artifact_id",
+                                                              "one_shot_sequence",
+                                                              "consumed",
+                                                              "binding_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "schema_version":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "binding_id":  {
+                                                                                   "type":  "string",
+                                                                                   "minLength":  1,
+                                                                                   "maxLength":  512,
+                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                               },
+                                                                "organization_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                "case_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                                "role_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                                "lease_sha256":  {
+                                                                                     "type":  "string",
+                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                     "maxLength":  71
+                                                                                 },
+                                                                "case_work_grant_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "workspace_profile_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                "root_binding_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                "request_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   },
+                                                                "source_artifact_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                "source_artifact_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "source_snapshot_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "source_verification_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                "design_quality_sha256":  {
+                                                                                              "oneOf":  [
+                                                                                                            {
+                                                                                                                "type":  "string",
+                                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                "maxLength":  71
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "type":  "null"
+                                                                                                            }
+                                                                                                        ]
+                                                                                          },
+                                                                "source_generation":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                "export_profile_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                "backend_descriptor_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                "backend_approval_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                "policy_decision_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "activation_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                "activation_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      },
+                                                                "worker_executable_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                "application_executable_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                "expected_output_artifact_id":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  1,
+                                                                                                    "maxLength":  512,
+                                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                },
+                                                                "one_shot_sequence":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                "consumed":  {
+                                                                                 "type":  "boolean"
+                                                                             },
+                                                                "binding_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   }
+                                                            }
+                                         }
+              }
+}

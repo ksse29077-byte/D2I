@@ -3,6 +3,10 @@
 #[cfg(windows)]
 mod excel_automation;
 #[cfg(windows)]
+mod office_private_desktop;
+#[cfg(windows)]
+mod pdf_render;
+#[cfg(windows)]
 mod powerpoint_automation;
 mod verifier_broker;
 mod wfp;
@@ -11,13 +15,20 @@ mod word_automation;
 
 #[cfg(windows)]
 pub use excel_automation::{
-    execute_excel_spreadsheet_operation, installed_excel_process_ids, ExcelAutomationFormulaV1,
-    ExcelAutomationOperationV1, ExcelAutomationReceiptV1, ExcelAutomationScalarV1,
+    execute_excel_spreadsheet_operation, export_excel_workbook_pdf, installed_excel_process_ids,
+    ExcelAutomationFormulaV1, ExcelAutomationOperationV1, ExcelAutomationReceiptV1,
+    ExcelAutomationScalarV1, ExcelPdfExportReceiptV1,
+};
+#[cfg(windows)]
+pub use pdf_render::{
+    fingerprint_png_with_windows_imaging, render_pdf_with_windows_data_pdf,
+    WindowsImageFingerprintV1, WindowsPdfPageRenderReceiptV1, WindowsPdfRenderReceiptV1,
 };
 #[cfg(windows)]
 pub use powerpoint_automation::{
-    execute_powerpoint_presentation_operation, installed_powerpoint_process_ids,
-    PowerPointAutomationOperationV1, PowerPointAutomationReceiptV1,
+    execute_powerpoint_presentation_operation, export_powerpoint_presentation_pdf,
+    installed_powerpoint_process_ids, PowerPointAutomationOperationV1,
+    PowerPointAutomationReceiptV1, PowerPointPdfExportReceiptV1,
 };
 pub use verifier_broker::{
     accept_verifier_pipe, connect_verifier_pipe, current_process_has_sid,
@@ -35,8 +46,8 @@ pub use wfp::{
 };
 #[cfg(windows)]
 pub use word_automation::{
-    execute_word_document_operation, installed_word_process_ids, WordAutomationOperationV1,
-    WordAutomationReceiptV1,
+    execute_word_document_operation, export_word_document_pdf, installed_word_process_ids,
+    WordAutomationOperationV1, WordAutomationReceiptV1, WordPdfExportReceiptV1,
 };
 
 use std::fmt::{self, Display, Formatter};
@@ -193,6 +204,29 @@ impl WindowsAppContainerChild {
 /// Collects exact Windows version, architecture, and current session identity.
 pub fn host_identity() -> Result<WindowsHostIdentity, WindowsHostError> {
     platform::host_identity()
+}
+
+/// Returns process identifiers whose executable names exactly match one of the
+/// supplied names. This read-only snapshot never terminates a process.
+pub fn installed_process_ids_by_name(
+    executable_names: &[&str],
+) -> Result<Vec<u32>, WindowsHostError> {
+    if executable_names.is_empty() || executable_names.len() > 32 {
+        return Err(WindowsHostError::new(
+            "executable name query must contain 1..=32 names",
+        ));
+    }
+    if executable_names.iter().any(|name| {
+        name.is_empty()
+            || name.len() > 128
+            || name.contains(['\\', '/'])
+            || !name.to_ascii_lowercase().ends_with(".exe")
+    }) {
+        return Err(WindowsHostError::new(
+            "executable name query contains an invalid exact image name",
+        ));
+    }
+    platform::installed_process_ids_by_name(executable_names)
 }
 
 /// Creates or resolves a per-user AppContainer profile with no capabilities.
@@ -406,6 +440,10 @@ mod platform {
         FILE_GENERIC_WRITE, INVALID_FILE_ATTRIBUTES, MOVEFILE_REPLACE_EXISTING,
         MOVEFILE_WRITE_THROUGH, VS_FIXEDFILEINFO,
     };
+    use windows::Win32::System::Diagnostics::ToolHelp::{
+        CreateToolhelp32Snapshot, Process32FirstW, Process32NextW, PROCESSENTRY32W,
+        TH32CS_SNAPPROCESS,
+    };
     use windows::Win32::System::JobObjects::{
         AssignProcessToJobObject, CreateJobObjectW, JobObjectExtendedLimitInformation,
         QueryInformationJobObject, SetInformationJobObject, TerminateJobObject,
@@ -533,6 +571,53 @@ mod platform {
             elevation_type,
             is_appcontainer,
         })
+    }
+
+    pub(super) fn installed_process_ids_by_name(
+        executable_names: &[&str],
+    ) -> Result<Vec<u32>, WindowsHostError> {
+        // SAFETY: this requests a read-only system process snapshot.
+        let snapshot = unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) }
+            .map_err(|error| WindowsHostError::new(format!("process snapshot failed: {error}")))?;
+        struct Snapshot(windows::Win32::Foundation::HANDLE);
+        impl Drop for Snapshot {
+            fn drop(&mut self) {
+                // SAFETY: the snapshot handle is uniquely owned and closed once.
+                let _ = unsafe { CloseHandle(self.0) };
+            }
+        }
+        let snapshot = Snapshot(snapshot);
+        let mut entry = PROCESSENTRY32W {
+            dwSize: u32::try_from(size_of::<PROCESSENTRY32W>())
+                .map_err(|_| WindowsHostError::new("process entry size overflow"))?,
+            ..Default::default()
+        };
+        // SAFETY: the snapshot is live and the structure carries its exact size.
+        if unsafe { Process32FirstW(snapshot.0, &raw mut entry) }.is_err() {
+            return Ok(Vec::new());
+        }
+        let mut process_ids = Vec::new();
+        loop {
+            let length = entry
+                .szExeFile
+                .iter()
+                .position(|character| *character == 0)
+                .unwrap_or(entry.szExeFile.len());
+            let executable = String::from_utf16_lossy(&entry.szExeFile[..length]);
+            if executable_names
+                .iter()
+                .any(|name| executable.eq_ignore_ascii_case(name))
+            {
+                process_ids.push(entry.th32ProcessID);
+            }
+            // SAFETY: snapshot and entry remain valid for this read-only iteration.
+            if unsafe { Process32NextW(snapshot.0, &raw mut entry) }.is_err() {
+                break;
+            }
+        }
+        process_ids.sort_unstable();
+        process_ids.dedup();
+        Ok(process_ids)
     }
 
     pub(super) fn provision_appcontainer_profile(
@@ -1677,6 +1762,12 @@ mod platform {
     }
 
     pub(super) fn host_identity() -> Result<WindowsHostIdentity, WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn installed_process_ids_by_name(
+        _executable_names: &[&str],
+    ) -> Result<Vec<u32>, WindowsHostError> {
         Err(unavailable())
     }
 

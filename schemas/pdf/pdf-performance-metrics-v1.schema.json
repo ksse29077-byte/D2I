@@ -1,0 +1,66 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-performance-metrics-v1.schema.json",
+    "title":  "PdfPerformanceMetricsV1",
+    "$ref":  "#/$defs/PdfPerformanceMetricsV1",
+    "$defs":  {
+                  "PdfPerformanceMetricsV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "source_preflight_microseconds",
+                                                                   "export_microseconds",
+                                                                   "pdf_load_microseconds",
+                                                                   "render_microseconds",
+                                                                   "fidelity_microseconds",
+                                                                   "finalization_microseconds",
+                                                                   "model_microseconds",
+                                                                   "peak_export_worker_memory_bytes",
+                                                                   "peak_render_worker_memory_bytes",
+                                                                   "peak_model_worker_memory_bytes"
+                                                               ],
+                                                  "properties":  {
+                                                                     "source_preflight_microseconds":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0
+                                                                                                       },
+                                                                     "export_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                     "pdf_load_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                     "render_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                     "fidelity_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                     "finalization_microseconds":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                     "model_microseconds":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                     "peak_export_worker_memory_bytes":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                     "peak_render_worker_memory_bytes":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                     "peak_model_worker_memory_bytes":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0
+                                                                                                        }
+                                                                 }
+                                              }
+              }
+}

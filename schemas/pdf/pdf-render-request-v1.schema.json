@@ -1,0 +1,109 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/pdf-render-request-v1.schema.json",
+    "title":  "PdfRenderRequestV1",
+    "$ref":  "#/$defs/PdfRenderRequestV1",
+    "$defs":  {
+                  "PdfRenderRequestV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "schema_version",
+                                                              "request_id",
+                                                              "expected_pdf_sha256",
+                                                              "external_untrusted",
+                                                              "maximum_pages",
+                                                              "maximum_pdf_bytes",
+                                                              "maximum_total_pixels",
+                                                              "maximum_page_width_millipoints",
+                                                              "maximum_page_height_millipoints",
+                                                              "maximum_output_png_bytes",
+                                                              "maximum_worker_memory_bytes",
+                                                              "maximum_page_render_milliseconds",
+                                                              "maximum_total_render_milliseconds",
+                                                              "destination_width_pixels",
+                                                              "issued_at_unix_ms",
+                                                              "deadline_unix_ms",
+                                                              "request_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "schema_version":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "request_id":  {
+                                                                                   "type":  "string",
+                                                                                   "minLength":  1,
+                                                                                   "maxLength":  512,
+                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                               },
+                                                                "expected_pdf_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                "external_untrusted":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                                "maximum_pages":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                "maximum_pdf_bytes":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                "maximum_total_pixels":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                                "maximum_page_width_millipoints":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                "maximum_page_height_millipoints":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                "maximum_output_png_bytes":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                "maximum_worker_memory_bytes":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                "maximum_page_render_milliseconds":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                "maximum_total_render_milliseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                "destination_width_pixels":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                "issued_at_unix_ms":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0
+                                                                                      },
+                                                                "deadline_unix_ms":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0
+                                                                                     },
+                                                                "request_sha256":  {
+                                                                                       "type":  "string",
+                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                       "maxLength":  71
+                                                                                   }
+                                                            }
+                                         }
+              }
+}

@@ -4,8 +4,17 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 
+[dependencies]
+sha2.workspace = true
+
 [target.'cfg(windows)'.dependencies]
 windows = { workspace = true, features = [
+    "Data_Pdf",
+    "Foundation",
+    "Graphics_Imaging",
+    "Storage",
+    "Storage_Streams",
+    "UI",
     "Wdk_System_SystemServices",
     "Win32_Foundation",
     "Win32_Graphics_Gdi",

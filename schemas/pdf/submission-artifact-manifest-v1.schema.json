@@ -1,0 +1,114 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/pdf/submission-artifact-manifest-v1.schema.json",
+    "title":  "SubmissionArtifactManifestV1",
+    "$ref":  "#/$defs/SubmissionArtifactManifestV1",
+    "$defs":  {
+                  "SubmissionArtifactManifestV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "schema_version",
+                                                                        "manifest_id",
+                                                                        "organization_id",
+                                                                        "interchange_manifest_sha256",
+                                                                        "final_artifact_pair_sha256",
+                                                                        "finalization_seal_sha256",
+                                                                        "submission_filename",
+                                                                        "mime_type",
+                                                                        "artifact_sha256",
+                                                                        "fact_provenance_sha256s",
+                                                                        "ready_for_submission",
+                                                                        "external_pdfa_conformance_verified",
+                                                                        "created_at_unix_ms",
+                                                                        "manifest_sha256"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "schema_version":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "manifest_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                          "organization_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                          "interchange_manifest_sha256":  {
+                                                                                                              "type":  "string",
+                                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                              "maxLength":  71
+                                                                                                          },
+                                                                          "final_artifact_pair_sha256":  {
+                                                                                                             "type":  "string",
+                                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                             "maxLength":  71
+                                                                                                         },
+                                                                          "finalization_seal_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                          "submission_filename":  {
+                                                                                                      "type":  "string",
+                                                                                                      "minLength":  1,
+                                                                                                      "maxLength":  2048
+                                                                                                  },
+                                                                          "mime_type":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  2048
+                                                                                        },
+                                                                          "artifact_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                          "fact_provenance_sha256s":  {
+                                                                                                          "type":  "array",
+                                                                                                          "maxItems":  4096,
+                                                                                                          "items":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  2048
+                                                                                                                    }
+                                                                                                      },
+                                                                          "design_quality_ref":  {
+                                                                                                     "oneOf":  [
+                                                                                                                   {
+                                                                                                                       "type":  "string",
+                                                                                                                       "minLength":  1,
+                                                                                                                       "maxLength":  512,
+                                                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                                   },
+                                                                                                                   {
+                                                                                                                       "type":  "null"
+                                                                                                                   }
+                                                                                                               ]
+                                                                                                 },
+                                                                          "ready_for_submission":  {
+                                                                                                       "type":  "boolean"
+                                                                                                   },
+                                                                          "external_pdfa_conformance_verified":  {
+                                                                                                                     "type":  "boolean"
+                                                                                                                 },
+                                                                          "created_at_unix_ms":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                          "manifest_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              }
+                                                                      }
+                                                   }
+              }
+}

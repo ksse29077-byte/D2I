@@ -274,8 +274,8 @@ calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
-EDGE-100 and OFFICE-100 through OFFICE-450 are also complete. The first active
-task is `D2I-OFFICE-500 - PDF and Document Interchange`; it has not started.
+EDGE-100 and OFFICE-100 through OFFICE-500 are also complete. The first active
+task is `D2I-OFFICE-600 - Browser Research and Controlled Download`.
 
 Run the OFFICE-300 deterministic spreadsheet contracts, package security,
 query/context slicing, worker, and predecessor regressions with:
@@ -326,6 +326,22 @@ Qwen3-4B/llama.cpp, installed signed PowerPoint/chart Excel, and one elevated
 session for temporary exact WFP isolation. Qwen receives only bounded verified
 facts and language/semantic options; typography, geometry, color, layout,
 rendering, and final quality remain deterministic D2I authority.
+
+Run the OFFICE-500 native PDF finalization contracts, strict schema drift,
+independent Windows PDF rendering, lineage, replay, and regressions with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/run-pdf-interchange-v1.ps1 `
+  -Mode All
+```
+
+Product `Completion` additionally requires sealed OFFICE-450 evidence, pinned
+Qwen3-4B/llama.cpp, installed signed Word/Excel/PowerPoint, and one elevated
+session for temporary exact WFP policy. Office runs on a private desktop; a
+separate zero-capability AppContainer uses `Windows.Data.Pdf` for bounded PNG
+rendering. PDF remains a fixed projection of the verified editable source and
+cannot replace typed facts or source lineage.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:

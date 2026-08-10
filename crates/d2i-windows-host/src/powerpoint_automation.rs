@@ -1,4 +1,5 @@
 use super::WindowsHostError;
+use crate::office_private_desktop::office_export_output_path;
 use std::ffi::c_void;
 use std::mem::size_of;
 use std::path::{Path, PathBuf};
@@ -26,11 +27,13 @@ const VT_I4: u16 = 3;
 const VT_R4: u16 = 4;
 const VT_R8: u16 = 5;
 const VT_BSTR: u16 = 8;
+const VT_ERROR: u16 = 10;
 const VT_DISPATCH: u16 = 9;
 const VT_BOOL: u16 = 11;
 const VT_VARIANT: u16 = 12;
 const VT_ARRAY: u16 = 0x2000;
 const VARIANT_TRUE: i16 = -1;
+const DISP_E_PARAMNOTFOUND: i32 = 0x8002_0004_u32 as i32;
 
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -160,6 +163,16 @@ impl ExceptionInfo {
         self.description = null_mut();
         self.help_file = null_mut();
     }
+
+    fn description(&self) -> String {
+        if self.description.is_null() {
+            return String::new();
+        }
+        // SAFETY: description is a live BSTR until clear releases it.
+        let length = unsafe { SysStringLen(self.description) } as usize;
+        // SAFETY: a BSTR points to at least SysStringLen UTF-16 code units.
+        String::from_utf16_lossy(unsafe { std::slice::from_raw_parts(self.description, length) })
+    }
 }
 
 #[repr(C)]
@@ -275,8 +288,16 @@ impl Dispatch {
                 &raw mut argument_error,
             )
         };
+        let exception_description = exception.description();
         exception.clear();
-        check_status(status, name)?;
+        let diagnostic = if status == S_OK {
+            name.to_owned()
+        } else {
+            format!(
+                "{name} (reversed COM argument index {argument_error}, exception {exception_description})"
+            )
+        };
+        check_status(status, &diagnostic)?;
         Ok(result)
     }
 
@@ -363,6 +384,8 @@ impl Dispatch {
 }
 
 enum ComArgument<'a> {
+    Missing,
+    NullDispatch,
     Integer(i32),
     Boolean(bool),
     Text(&'a str),
@@ -374,6 +397,14 @@ impl ComArgument<'_> {
     fn into_variant(self) -> Result<Variant, WindowsHostError> {
         let mut value = Variant::empty();
         match self {
+            Self::Missing => {
+                value.variant_type = VT_ERROR;
+                value.data.int_value = DISP_E_PARAMNOTFOUND;
+            }
+            Self::NullDispatch => {
+                value.variant_type = VT_DISPATCH;
+                value.data.dispatch_value = null_mut();
+            }
             Self::Integer(integer) => {
                 value.variant_type = VT_I4;
                 value.data.int_value = integer;
@@ -600,6 +631,178 @@ pub struct PowerPointAutomationReceiptV1 {
     pub operation_count: u32,
     pub rendered_slide_count: u32,
     pub text_overflow_count: u32,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PowerPointPdfExportReceiptV1 {
+    pub powerpoint_process_id: u32,
+    pub powerpoint_image_path: PathBuf,
+    pub visible_slide_count: u32,
+    pub hidden_slide_count: u32,
+    pub private_desktop: bool,
+    pub application_visible_on_private_desktop: bool,
+    pub display_alerts: i32,
+    pub automation_security: i32,
+    pub pdfa_requested: bool,
+    pub output_fresh_and_stable: bool,
+}
+
+pub fn export_powerpoint_presentation_pdf(
+    source_path: &Path,
+    destination_path: &Path,
+    pdfa_requested: bool,
+) -> Result<PowerPointPdfExportReceiptV1, WindowsHostError> {
+    validate_pdf_paths(source_path, destination_path)?;
+    let source_path = office_compatible_path(&source_path.canonicalize().map_err(|error| {
+        WindowsHostError::new(format!(
+            "PowerPoint source canonicalization failed: {error}"
+        ))
+    })?);
+    let destination_path = office_export_output_path(destination_path)?;
+    let before_powerpoint_pids = installed_powerpoint_process_ids()?;
+    let private_desktop = PrivateDesktop::enter()?;
+    let apartment = ComApartment::initialize()?;
+    let application = create_powerpoint_application()?;
+    let process_id = resolve_new_powerpoint_process_id(&before_powerpoint_pids)?;
+    let image_path = crate::process_image_path(process_id)?;
+    let original_security = application.property_i32("AutomationSecurity")?;
+    let original_alerts = application.property_i32("DisplayAlerts")?;
+    application.put_i32("DisplayAlerts", 1)?;
+    application.put_i32("AutomationSecurity", 3)?;
+    application.put_i32("Visible", -1)?;
+    let result = (|| {
+        let presentations = application.property_dispatch("Presentations")?;
+        let source = source_path.to_string_lossy();
+        let presentation = presentations.method_dispatch(
+            "Open",
+            vec![
+                ComArgument::Text(&source),
+                ComArgument::Boolean(true),
+                ComArgument::Boolean(false),
+                ComArgument::Boolean(true),
+            ],
+        )?;
+        let slides = presentation.property_dispatch("Slides")?;
+        let count = slides.property_i32("Count")?;
+        if count <= 0 || count > 500 {
+            return Err(WindowsHostError::new(
+                "PowerPoint slide count exceeds bounds",
+            ));
+        }
+        let mut visible = 0_u32;
+        let mut hidden = 0_u32;
+        for index in 1..=count {
+            let slide = slides.method_dispatch("Item", vec![ComArgument::Integer(index)])?;
+            let transition = slide.property_dispatch("SlideShowTransition")?;
+            if transition.property_i32("Hidden")? == 0 {
+                visible = visible.saturating_add(1);
+            } else {
+                hidden = hidden.saturating_add(1);
+            }
+        }
+        if visible == 0 {
+            return Err(WindowsHostError::new(
+                "PowerPoint presentation has no visible slide",
+            ));
+        }
+        let destination = destination_path.to_string_lossy();
+        // This Office 16 IDispatch implementation requires all typelib slots.
+        // The values below are the bounded external-submission profile.
+        let export = presentation.method(
+            "ExportAsFixedFormat",
+            vec![
+                ComArgument::Text(&destination),
+                ComArgument::Integer(2),
+                ComArgument::Integer(2),
+                ComArgument::Integer(0),
+                ComArgument::Integer(1),
+                ComArgument::Integer(1),
+                ComArgument::Integer(0),
+                ComArgument::NullDispatch,
+                ComArgument::Integer(1),
+                ComArgument::Text(""),
+                ComArgument::Boolean(false),
+                ComArgument::Boolean(true),
+                ComArgument::Boolean(true),
+                ComArgument::Boolean(false),
+                ComArgument::Boolean(pdfa_requested),
+                ComArgument::Missing,
+            ],
+        );
+        let close = presentation.method("Close", Vec::new());
+        export?;
+        close?;
+        Ok((visible, hidden))
+    })();
+    let _ = application.put_i32("AutomationSecurity", original_security);
+    let _ = application.put_i32("DisplayAlerts", original_alerts);
+    let _ = application.method("Quit", Vec::new());
+    drop(application);
+    drop(apartment);
+    wait_for_owned_powerpoint_exit(process_id)?;
+    private_desktop.leave()?;
+    let (visible_slide_count, hidden_slide_count) = result?;
+    wait_for_stable_pdf(&destination_path)?;
+    Ok(PowerPointPdfExportReceiptV1 {
+        powerpoint_process_id: process_id,
+        powerpoint_image_path: image_path,
+        visible_slide_count,
+        hidden_slide_count,
+        private_desktop: true,
+        application_visible_on_private_desktop: true,
+        display_alerts: 1,
+        automation_security: 3,
+        pdfa_requested,
+        output_fresh_and_stable: true,
+    })
+}
+
+fn validate_pdf_paths(source_path: &Path, destination_path: &Path) -> Result<(), WindowsHostError> {
+    if !source_path.is_file()
+        || destination_path.exists()
+        || source_path == destination_path
+        || !source_path
+            .extension()
+            .is_some_and(|value| value.eq_ignore_ascii_case("pptx"))
+        || !destination_path
+            .extension()
+            .is_some_and(|value| value.eq_ignore_ascii_case("pdf"))
+        || !destination_path.parent().is_some_and(Path::is_dir)
+    {
+        return Err(WindowsHostError::new(
+            "PowerPoint PDF export paths are invalid",
+        ));
+    }
+    Ok(())
+}
+
+fn wait_for_stable_pdf(path: &Path) -> Result<(), WindowsHostError> {
+    let mut previous = 0_u64;
+    let mut stable = 0_u32;
+    for _ in 0..100 {
+        let size = std::fs::metadata(path)
+            .map(|value| value.len())
+            .unwrap_or_default();
+        if size > 8 && size == previous {
+            stable = stable.saturating_add(1);
+            if stable >= 3 {
+                let header = std::fs::read(path).map_err(|error| {
+                    WindowsHostError::new(format!("PowerPoint PDF read failed: {error}"))
+                })?;
+                if header.starts_with(b"%PDF-") {
+                    return Ok(());
+                }
+                return Err(WindowsHostError::new("PowerPoint output is not a PDF"));
+            }
+        } else {
+            stable = 0;
+        }
+        previous = size;
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    }
+    Err(WindowsHostError::new(
+        "PowerPoint PDF output did not become stable",
+    ))
 }
 
 pub fn execute_powerpoint_presentation_operation(
@@ -1390,6 +1593,7 @@ extern "system" {
 #[link(name = "oleaut32")]
 extern "system" {
     fn SysAllocStringLen(source: *const u16, length: u32) -> *mut u16;
+    fn SysStringLen(value: *const u16) -> u32;
     fn SysFreeString(value: *mut u16);
     fn VariantClear(value: *mut c_void) -> i32;
     fn SafeArrayCreateVector(variant_type: u16, lower_bound: i32, count: u32) -> *mut SafeArray;
