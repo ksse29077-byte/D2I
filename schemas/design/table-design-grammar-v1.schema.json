@@ -1,0 +1,162 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/table-design-grammar-v1.schema.json",
+    "title":  "TableDesignGrammarV1",
+    "$ref":  "#/$defs/TableDesignGrammarV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignDistributionV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "minimum_millionths",
+                                                                "q1_millionths",
+                                                                "median_millionths",
+                                                                "q3_millionths",
+                                                                "maximum_millionths"
+                                                            ],
+                                               "properties":  {
+                                                                  "minimum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "q1_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "median_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "q3_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         }
+                                                              }
+                                           },
+                  "TableDesignGrammarV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "schema_version",
+                                                                "grammar_id",
+                                                                "organization_id",
+                                                                "header_font_role",
+                                                                "header_color_role",
+                                                                "body_font_role",
+                                                                "horizontal_alignment_id",
+                                                                "vertical_alignment_id",
+                                                                "border_policy_id",
+                                                                "row_height",
+                                                                "cell_padding",
+                                                                "zebra_enabled",
+                                                                "total_row_policy_id",
+                                                                "number_emphasis_role",
+                                                                "grammar_sha256"
+                                                            ],
+                                               "properties":  {
+                                                                  "schema_version":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "grammar_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                                  "organization_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                  "header_font_role":  {
+                                                                                           "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                       },
+                                                                  "header_color_role":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  2048
+                                                                                        },
+                                                                  "body_font_role":  {
+                                                                                         "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                     },
+                                                                  "horizontal_alignment_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                  "vertical_alignment_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                  "border_policy_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                  "row_height":  {
+                                                                                     "$ref":  "#/$defs/DesignDistributionV1"
+                                                                                 },
+                                                                  "cell_padding":  {
+                                                                                       "$ref":  "#/$defs/DesignDistributionV1"
+                                                                                   },
+                                                                  "zebra_enabled":  {
+                                                                                        "type":  "boolean"
+                                                                                    },
+                                                                  "total_row_policy_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                  "number_emphasis_role":  {
+                                                                                               "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                           },
+                                                                  "grammar_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     }
+                                                              }
+                                           }
+              }
+}

@@ -1,0 +1,97 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/organization-logo-policy-v1.schema.json",
+    "title":  "OrganizationLogoPolicyV1",
+    "$ref":  "#/$defs/OrganizationLogoPolicyV1",
+    "$defs":  {
+                  "OrganizationLogoPolicyV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "organization_id",
+                                                                    "approved_logo_artifact_refs",
+                                                                    "safe_area_millionths",
+                                                                    "minimum_width_millionths",
+                                                                    "minimum_height_millionths",
+                                                                    "allowed_position_ids",
+                                                                    "allowed_background_class_ids",
+                                                                    "variant_ids",
+                                                                    "distortion_forbidden",
+                                                                    "logo_policy_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "organization_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                      "approved_logo_artifact_refs":  {
+                                                                                                          "type":  "array",
+                                                                                                          "maxItems":  4096,
+                                                                                                          "items":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  2048
+                                                                                                                    }
+                                                                                                      },
+                                                                      "safe_area_millionths":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                      "minimum_width_millionths":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                      "minimum_height_millionths":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                      "allowed_position_ids":  {
+                                                                                                   "type":  "array",
+                                                                                                   "maxItems":  4096,
+                                                                                                   "items":  {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  2048
+                                                                                                             }
+                                                                                               },
+                                                                      "allowed_background_class_ids":  {
+                                                                                                           "type":  "array",
+                                                                                                           "maxItems":  4096,
+                                                                                                           "items":  {
+                                                                                                                         "type":  "string",
+                                                                                                                         "minLength":  1,
+                                                                                                                         "maxLength":  2048
+                                                                                                                     }
+                                                                                                       },
+                                                                      "variant_ids":  {
+                                                                                          "type":  "array",
+                                                                                          "maxItems":  4096,
+                                                                                          "items":  {
+                                                                                                        "type":  "string",
+                                                                                                        "minLength":  1,
+                                                                                                        "maxLength":  2048
+                                                                                                    }
+                                                                                      },
+                                                                      "distortion_forbidden":  {
+                                                                                                   "type":  "boolean"
+                                                                                               },
+                                                                      "logo_policy_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             }
+                                                                  }
+                                               }
+              }
+}

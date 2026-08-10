@@ -66,8 +66,8 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-400 are complete.
-The next active task is `D2I-OFFICE-500 - PDF and Document Interchange`.
+`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-450 are complete.
+The first active task is `D2I-OFFICE-500 - PDF and Document Interchange`.
 
 ## Track O - General Office Capability Expansion
 
@@ -75,7 +75,8 @@ The next active task is `D2I-OFFICE-500 - PDF and Document Interchange`.
 - `D2I-OFFICE-200` HWP/HWPX and Word document work - **complete**
 - `D2I-OFFICE-300` Excel / spreadsheet work - **complete**
 - `D2I-OFFICE-400` PowerPoint presentation work - **complete**
-- `D2I-OFFICE-500` PDF and document interchange - **active**
+- `D2I-OFFICE-450` organizational design intelligence - **complete**
+- `D2I-OFFICE-500` PDF and document interchange - **first active task**
 - `D2I-OFFICE-500` through `D2I-OFFICE-900` complete the general office loop
 
 Run OFFICE-100 deterministic gates with
@@ -120,6 +121,16 @@ steal foreground focus. Completion requires at least 120 source slides,
 100,000 source workbook cells, four Qwen calls, 13 PPTX mutations, four COM
 mutations, one actual chart, five rendered slides, 128 x 100 replay, signed
 certification, and zero owned residual state.
+
+Run OFFICE-450 deterministic design gates with
+`scripts/office/run-design-intelligence-v1.ps1 -Mode All`. Product Completion
+requires the pinned Qwen3-4B/llama.cpp, sealed OFFICE-400 evidence, installed
+signed PowerPoint/chart Excel, `-ReuseVerifiedPredecessorEvidence`, and one
+elevated session for the temporary exact WFP policy. It compiles approved
+PPTX/HWPX/DOCX structure into organization-scoped immutable signed Design
+Packs, keeps raw corpus/XML out of model context, and requires actual PNG
+render, HWPX structural conformance, 128 x 100 replay, protected audit, and
+zero residual state.
 
 ## Track X - Execution Plane Expansion
 

@@ -1,0 +1,46 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-distribution-v1.schema.json",
+    "title":  "DesignDistributionV1",
+    "$ref":  "#/$defs/DesignDistributionV1",
+    "$defs":  {
+                  "DesignDistributionV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "minimum_millionths",
+                                                                "q1_millionths",
+                                                                "median_millionths",
+                                                                "q3_millionths",
+                                                                "maximum_millionths"
+                                                            ],
+                                               "properties":  {
+                                                                  "minimum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "q1_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "median_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "q3_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         }
+                                                              }
+                                           }
+              }
+}

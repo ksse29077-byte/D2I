@@ -1,0 +1,75 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-refinement-receipt-v1.schema.json",
+    "title":  "DesignRefinementReceiptV1",
+    "$ref":  "#/$defs/DesignRefinementReceiptV1",
+    "$defs":  {
+                  "DesignRefinementReceiptV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "schema_version",
+                                                                     "receipt_id",
+                                                                     "plan_sha256",
+                                                                     "source_artifact_sha256",
+                                                                     "result_artifact_sha256",
+                                                                     "applied_step_count",
+                                                                     "bounded_round_count",
+                                                                     "final_quality_report_sha256",
+                                                                     "verified",
+                                                                     "receipt_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "schema_version":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "receipt_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                       "plan_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                                       "source_artifact_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                       "result_artifact_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                       "applied_step_count":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                       "bounded_round_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                       "final_quality_report_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                       "verified":  {
+                                                                                        "type":  "boolean"
+                                                                                    },
+                                                                       "receipt_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          }
+                                                                   }
+                                                }
+              }
+}

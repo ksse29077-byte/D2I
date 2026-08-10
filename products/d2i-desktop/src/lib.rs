@@ -11,6 +11,7 @@ mod cognitive_recovery;
 mod cognitive_reobserve_verify;
 mod cognitive_verification_v2;
 mod contract;
+mod design_work;
 mod document_dispatch;
 mod document_file_worker;
 mod document_package;
@@ -169,6 +170,10 @@ pub use d2i_trusted_action_execution::{
     TrustedExecutionBindingRequestV1, TrustedExecutionError, TrustedExecutionSessionV1,
     TrustedExecutionStatusV1, TrustedPlatformActivationV1, TrustedTargetSourceKindV1,
     TRUSTED_ACTION_EXECUTION_BINDING_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+};
+pub use design_work::{
+    extract_document_design_feature, extract_presentation_design_features,
+    verify_design_feature_isolation,
 };
 pub use document_dispatch::{
     DocumentAuthorityContextV1, DocumentDispatchOutcomeV1, DocumentDispatchV1,

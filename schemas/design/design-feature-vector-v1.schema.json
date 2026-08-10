@@ -1,0 +1,108 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-feature-vector-v1.schema.json",
+    "title":  "DesignFeatureVectorV1",
+    "$ref":  "#/$defs/DesignFeatureVectorV1",
+    "$defs":  {
+                  "DesignFeatureVectorV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "layout_ratios",
+                                                                 "font_role_ratios",
+                                                                 "color_role_distribution",
+                                                                 "spacing_distribution",
+                                                                 "white_space_millionths",
+                                                                 "shape_density_millionths",
+                                                                 "text_density_millionths",
+                                                                 "image_ratio_millionths",
+                                                                 "table_density_millionths",
+                                                                 "chart_density_millionths",
+                                                                 "alignment_features",
+                                                                 "vector_sha256"
+                                                             ],
+                                                "properties":  {
+                                                                   "layout_ratios":  {
+                                                                                         "type":  "array",
+                                                                                         "maxItems":  4096,
+                                                                                         "items":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   }
+                                                                                     },
+                                                                   "font_role_ratios":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      }
+                                                                                        },
+                                                                   "color_role_distribution":  {
+                                                                                                   "type":  "array",
+                                                                                                   "maxItems":  4096,
+                                                                                                   "items":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0,
+                                                                                                                 "maximum":  4294967295
+                                                                                                             }
+                                                                                               },
+                                                                   "spacing_distribution":  {
+                                                                                                "type":  "array",
+                                                                                                "maxItems":  4096,
+                                                                                                "items":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          }
+                                                                                            },
+                                                                   "white_space_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                   "shape_density_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                   "text_density_millionths":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                   "image_ratio_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                   "table_density_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                   "chart_density_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                   "alignment_features":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        }
+                                                                                          },
+                                                                   "vector_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     }
+                                                               }
+                                            }
+              }
+}

@@ -18,7 +18,7 @@ Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
 Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-400 are
+runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-450 are
 complete. Track O has priority over the remaining physical execution planes.
 The active next task is `D2I-OFFICE-500 - PDF and Document Interchange`.
 
@@ -78,6 +78,13 @@ generations, fresh reopen, semantic diff, structural verification, protected
 audit, and signed certification. Its actual Qwen, private-desktop PowerPoint,
 chart Excel, exact temporary WFP, rendering, replay, and zero-residual
 Completion gates are complete.
+
+OFFICE-450 is governed by ADR 0042 and
+`docs/office/design-intelligence-v1.md`. It changes no Compiler IR, package
+format, or runtime ABI. Approved organization artifacts compile offline into
+organization- and artifact-class-bound immutable Design Packs. Models have no
+raw geometry, color, font, font-size, XML, COM, or artifact-mutation authority;
+deterministic solvers and render/structure critics retain that authority.
 
 ## Product Context
 

@@ -1,0 +1,93 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/content-fit-report-v1.schema.json",
+    "title":  "ContentFitReportV1",
+    "$ref":  "#/$defs/ContentFitReportV1",
+    "$defs":  {
+                  "DesignFitStatusV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "fit",
+                                                         "needs_alternative_layout",
+                                                         "needs_split",
+                                                         "needs_language_compression",
+                                                         "font_missing",
+                                                         "human_exception"
+                                                     ]
+                                        },
+                  "ContentFitReportV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "schema_version",
+                                                              "report_id",
+                                                              "organization_id",
+                                                              "design_pack_sha256",
+                                                              "layout_decision_sha256",
+                                                              "overflow_count",
+                                                              "below_minimum_font_count",
+                                                              "split_required_count",
+                                                              "compression_required_count",
+                                                              "fit_status",
+                                                              "report_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "schema_version":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "report_id":  {
+                                                                                  "type":  "string",
+                                                                                  "minLength":  1,
+                                                                                  "maxLength":  512,
+                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                              },
+                                                                "organization_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                "design_pack_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                                "layout_decision_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                "overflow_count":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                "below_minimum_font_count":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                "split_required_count":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                "compression_required_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                "fit_status":  {
+                                                                                   "$ref":  "#/$defs/DesignFitStatusV1"
+                                                                               },
+                                                                "report_sha256":  {
+                                                                                      "type":  "string",
+                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                      "maxLength":  71
+                                                                                  }
+                                                            }
+                                         }
+              }
+}

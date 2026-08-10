@@ -1,0 +1,88 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-residual-metrics-v1.schema.json",
+    "title":  "DesignResidualMetricsV1",
+    "$ref":  "#/$defs/DesignResidualMetricsV1",
+    "$defs":  {
+                  "DesignResidualMetricsV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "powerpoint_processes",
+                                                                   "excel_processes",
+                                                                   "word_processes",
+                                                                   "design_workers",
+                                                                   "model_workers",
+                                                                   "wfp_objects",
+                                                                   "profiles",
+                                                                   "activations",
+                                                                   "temporary_renders",
+                                                                   "temporary_design_packs",
+                                                                   "file_locks",
+                                                                   "workspace_locks"
+                                                               ],
+                                                  "properties":  {
+                                                                     "powerpoint_processes":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                     "excel_processes":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                     "word_processes":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "design_workers":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "model_workers":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                     "wfp_objects":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                     "profiles":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                     "activations":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                     "temporary_renders":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "temporary_design_packs":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                     "file_locks":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                     "workspace_locks":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         }
+                                                                 }
+                                              }
+              }
+}

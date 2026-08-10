@@ -1,0 +1,159 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/organization-font-policy-v1.schema.json",
+    "title":  "OrganizationFontPolicyV1",
+    "$ref":  "#/$defs/OrganizationFontPolicyV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignFontRolePolicyV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "role",
+                                                                  "preferred_font_family",
+                                                                  "approved_fallback_families",
+                                                                  "weight_min",
+                                                                  "weight_max",
+                                                                  "font_size_min_millipoints",
+                                                                  "font_size_preferred_millipoints",
+                                                                  "font_size_max_millipoints",
+                                                                  "line_spacing_min_millionths",
+                                                                  "line_spacing_max_millionths",
+                                                                  "letter_spacing_min_millipoints",
+                                                                  "letter_spacing_max_millipoints",
+                                                                  "script_coverage_ids"
+                                                              ],
+                                                 "properties":  {
+                                                                    "role":  {
+                                                                                 "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                             },
+                                                                    "preferred_font_family":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  2048
+                                                                                              },
+                                                                    "approved_fallback_families":  {
+                                                                                                       "type":  "array",
+                                                                                                       "maxItems":  4096,
+                                                                                                       "items":  {
+                                                                                                                     "type":  "string",
+                                                                                                                     "minLength":  1,
+                                                                                                                     "maxLength":  2048
+                                                                                                                 }
+                                                                                                   },
+                                                                    "weight_min":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  65535
+                                                                                   },
+                                                                    "weight_max":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  65535
+                                                                                   },
+                                                                    "font_size_min_millipoints":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "font_size_preferred_millipoints":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        },
+                                                                    "font_size_max_millipoints":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "line_spacing_min_millionths":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                    "line_spacing_max_millionths":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                    "letter_spacing_min_millipoints":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  -2147483648,
+                                                                                                           "maximum":  2147483647
+                                                                                                       },
+                                                                    "letter_spacing_max_millipoints":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  -2147483648,
+                                                                                                           "maximum":  2147483647
+                                                                                                       },
+                                                                    "script_coverage_ids":  {
+                                                                                                "type":  "array",
+                                                                                                "maxItems":  4096,
+                                                                                                "items":  {
+                                                                                                              "type":  "string",
+                                                                                                              "minLength":  1,
+                                                                                                              "maxLength":  2048
+                                                                                                          }
+                                                                                            }
+                                                                }
+                                             },
+                  "OrganizationFontPolicyV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "organization_id",
+                                                                    "roles",
+                                                                    "font_policy_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "organization_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                      "roles":  {
+                                                                                    "type":  "array",
+                                                                                    "maxItems":  4096,
+                                                                                    "items":  {
+                                                                                                  "$ref":  "#/$defs/DesignFontRolePolicyV1"
+                                                                                              }
+                                                                                },
+                                                                      "font_policy_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             }
+                                                                  }
+                                               }
+              }
+}

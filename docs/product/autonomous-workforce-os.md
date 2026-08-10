@@ -203,6 +203,7 @@ state.
 - `D2I-OFFICE-200`: HWP/HWPX and Word document work. **Complete**
 - `D2I-OFFICE-300`: Excel / spreadsheet work. **Complete**
 - `D2I-OFFICE-400`: PowerPoint presentation work. **Complete**
+- `D2I-OFFICE-450`: Organizational design intelligence and brand-consistent artifact generation. **Complete**
 - `D2I-OFFICE-500`: PDF and document interchange. **First active**
 - `D2I-OFFICE-600`: Browser research and controlled download.
 - `D2I-OFFICE-700`: Email, messenger, review, and feedback loop.
@@ -344,4 +345,14 @@ PPTX file work and installed PowerPoint are separately approved backends.
 PowerPoint and chart Excel run under exact WFP denial on a private Windows
 desktop, then a fresh reopen, semantic diff, structural verification, PNG
 render, protected audit, deterministic replay, signed certification, and
-zero-residual cleanup close the artifact. OFFICE-500 is the first active task.
+zero-residual cleanup close the artifact. OFFICE-450 is complete and
+OFFICE-500 is the first active task.
+
+OFFICE-450 compiles approved organization artifacts into organization- and
+artifact-class-scoped Design Packs. Gold exemplars outweigh ordinary approved
+material; deterministic typography, spacing, layout, table, chart, image, and
+logo policies remain D2I authority. Models receive only verified claims,
+language limits, tone, and bounded semantic options. They never select raw
+coordinates, colors, font families, font sizes, XML, COM, or mutation steps.
+Production packs are immutable and separately signed; feedback remains a
+quarantined candidate until offline evaluation and approval.

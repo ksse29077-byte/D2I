@@ -1,0 +1,125 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/typography-decision-v1.schema.json",
+    "title":  "TypographyDecisionV1",
+    "$ref":  "#/$defs/TypographyDecisionV1",
+    "$defs":  {
+                  "DesignFitStatusV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "fit",
+                                                         "needs_alternative_layout",
+                                                         "needs_split",
+                                                         "needs_language_compression",
+                                                         "font_missing",
+                                                         "human_exception"
+                                                     ]
+                                        },
+                  "TypographyDecisionV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "schema_version",
+                                                                "decision_id",
+                                                                "request_sha256",
+                                                                "design_pack_sha256",
+                                                                "used_fallback",
+                                                                "font_size_millipoints",
+                                                                "weight",
+                                                                "line_spacing_millionths",
+                                                                "paragraph_spacing_millionths",
+                                                                "alignment_id",
+                                                                "estimated_line_count",
+                                                                "fit_status",
+                                                                "evidence_ids",
+                                                                "decision_sha256"
+                                                            ],
+                                               "properties":  {
+                                                                  "schema_version":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "decision_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                  "request_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     },
+                                                                  "design_pack_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                  "selected_font_family":  {
+                                                                                               "oneOf":  [
+                                                                                                             {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  1,
+                                                                                                                 "maxLength":  2048
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "type":  "null"
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                  "used_fallback":  {
+                                                                                        "type":  "boolean"
+                                                                                    },
+                                                                  "font_size_millipoints":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                  "weight":  {
+                                                                                 "type":  "integer",
+                                                                                 "minimum":  0,
+                                                                                 "maximum":  65535
+                                                                             },
+                                                                  "line_spacing_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                  "paragraph_spacing_millionths":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                  "alignment_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                  "estimated_line_count":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                  "fit_status":  {
+                                                                                     "$ref":  "#/$defs/DesignFitStatusV1"
+                                                                                 },
+                                                                  "evidence_ids":  {
+                                                                                       "type":  "array",
+                                                                                       "maxItems":  4096,
+                                                                                       "items":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  2048
+                                                                                                 }
+                                                                                   },
+                                                                  "decision_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      }
+                                                              }
+                                           }
+              }
+}

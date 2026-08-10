@@ -1,0 +1,95 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/organization-design-pack-approval-v1.schema.json",
+    "title":  "OrganizationDesignPackApprovalV1",
+    "$ref":  "#/$defs/OrganizationDesignPackApprovalV1",
+    "$defs":  {
+                  "OrganizationDesignPackApprovalV1":  {
+                                                           "type":  "object",
+                                                           "additionalProperties":  false,
+                                                           "required":  [
+                                                                            "schema_version",
+                                                                            "approval_id",
+                                                                            "organization_id",
+                                                                            "design_pack_sha256",
+                                                                            "allowed_artifact_classes",
+                                                                            "environment_id",
+                                                                            "issued_at_unix_ms",
+                                                                            "expires_at_unix_ms",
+                                                                            "approver_id",
+                                                                            "signing_key_id",
+                                                                            "signature_hex",
+                                                                            "approval_sha256"
+                                                                        ],
+                                                           "properties":  {
+                                                                              "schema_version":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                              "approval_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                              "organization_id":  {
+                                                                                                      "type":  "string",
+                                                                                                      "minLength":  1,
+                                                                                                      "maxLength":  512,
+                                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                  },
+                                                                              "design_pack_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                              "allowed_artifact_classes":  {
+                                                                                                               "type":  "array",
+                                                                                                               "maxItems":  4096,
+                                                                                                               "items":  {
+                                                                                                                             "type":  "string",
+                                                                                                                             "minLength":  1,
+                                                                                                                             "maxLength":  2048
+                                                                                                                         }
+                                                                                                           },
+                                                                              "environment_id":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  512,
+                                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                 },
+                                                                              "issued_at_unix_ms":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                              "expires_at_unix_ms":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                              "approver_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                              "signing_key_id":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  512,
+                                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                 },
+                                                                              "signature_hex":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^[0-9a-f]{128}$",
+                                                                                                    "maxLength":  128
+                                                                                                },
+                                                                              "approval_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  }
+                                                                          }
+                                                       }
+              }
+}

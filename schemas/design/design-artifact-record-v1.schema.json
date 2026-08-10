@@ -1,0 +1,161 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-artifact-record-v1.schema.json",
+    "title":  "DesignArtifactRecordV1",
+    "$ref":  "#/$defs/DesignArtifactRecordV1",
+    "$defs":  {
+                  "DesignArtifactFormatV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "pptx",
+                                                              "hwpx",
+                                                              "docx"
+                                                          ]
+                                             },
+                  "DesignQualityLabelV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "gold",
+                                                            "approved",
+                                                            "legacy_approved",
+                                                            "deprecated",
+                                                            "rejected"
+                                                        ]
+                                           },
+                  "DesignApprovalStateV1":  {
+                                                "type":  "string",
+                                                "enum":  [
+                                                             "approved",
+                                                             "unapproved",
+                                                             "revoked"
+                                                         ]
+                                            },
+                  "DesignUnitRatingV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "unit_id",
+                                                              "quality_label",
+                                                              "evidence_ids"
+                                                          ],
+                                             "properties":  {
+                                                                "unit_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                                "quality_label":  {
+                                                                                      "$ref":  "#/$defs/DesignQualityLabelV1"
+                                                                                  },
+                                                                "evidence_ids":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  1,
+                                                                                                   "maxLength":  2048
+                                                                                               }
+                                                                                 }
+                                                            }
+                                         },
+                  "DesignArtifactRecordV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "artifact_id",
+                                                                  "artifact_sha256",
+                                                                  "format",
+                                                                  "artifact_class",
+                                                                  "quality_label",
+                                                                  "approval_state",
+                                                                  "unit_ratings",
+                                                                  "template_status_id",
+                                                                  "data_classification_id",
+                                                                  "provenance_ids",
+                                                                  "holdout"
+                                                              ],
+                                                 "properties":  {
+                                                                    "artifact_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                    "artifact_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                    "format":  {
+                                                                                   "$ref":  "#/$defs/DesignArtifactFormatV1"
+                                                                               },
+                                                                    "artifact_class":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  2048
+                                                                                       },
+                                                                    "template_family_hint":  {
+                                                                                                 "oneOf":  [
+                                                                                                               {
+                                                                                                                   "type":  "string",
+                                                                                                                   "minLength":  1,
+                                                                                                                   "maxLength":  2048
+                                                                                                               },
+                                                                                                               {
+                                                                                                                   "type":  "null"
+                                                                                                               }
+                                                                                                           ]
+                                                                                             },
+                                                                    "quality_label":  {
+                                                                                          "$ref":  "#/$defs/DesignQualityLabelV1"
+                                                                                      },
+                                                                    "approval_state":  {
+                                                                                           "$ref":  "#/$defs/DesignApprovalStateV1"
+                                                                                       },
+                                                                    "approved_at_unix_ms":  {
+                                                                                                "oneOf":  [
+                                                                                                              {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0
+                                                                                                              },
+                                                                                                              {
+                                                                                                                  "type":  "null"
+                                                                                                              }
+                                                                                                          ]
+                                                                                            },
+                                                                    "unit_ratings":  {
+                                                                                         "type":  "array",
+                                                                                         "maxItems":  4096,
+                                                                                         "items":  {
+                                                                                                       "$ref":  "#/$defs/DesignUnitRatingV1"
+                                                                                                   }
+                                                                                     },
+                                                                    "template_status_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                    "data_classification_id":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  1,
+                                                                                                   "maxLength":  512,
+                                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                               },
+                                                                    "provenance_ids":  {
+                                                                                           "type":  "array",
+                                                                                           "maxItems":  4096,
+                                                                                           "items":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  1,
+                                                                                                         "maxLength":  2048
+                                                                                                     }
+                                                                                       },
+                                                                    "holdout":  {
+                                                                                    "type":  "boolean"
+                                                                                }
+                                                                }
+                                             }
+              }
+}

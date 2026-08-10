@@ -1,0 +1,172 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/image-design-grammar-v1.schema.json",
+    "title":  "ImageDesignGrammarV1",
+    "$ref":  "#/$defs/ImageDesignGrammarV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignDistributionV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "minimum_millionths",
+                                                                "q1_millionths",
+                                                                "median_millionths",
+                                                                "q3_millionths",
+                                                                "maximum_millionths"
+                                                            ],
+                                               "properties":  {
+                                                                  "minimum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "q1_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "median_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "q3_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         }
+                                                              }
+                                           },
+                  "ImageDesignGrammarV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "schema_version",
+                                                                "grammar_id",
+                                                                "organization_id",
+                                                                "preferred_aspect_ratio_millionths",
+                                                                "placement_role_ids",
+                                                                "allowed_fit_ids",
+                                                                "crop_allowed",
+                                                                "border_role_id",
+                                                                "corner_policy_id",
+                                                                "caption_role",
+                                                                "minimum_resolution_pixels",
+                                                                "maximum_enlargement_millionths",
+                                                                "text_image_balance",
+                                                                "grammar_sha256"
+                                                            ],
+                                               "properties":  {
+                                                                  "schema_version":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "grammar_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                                  "organization_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                  "preferred_aspect_ratio_millionths":  {
+                                                                                                            "type":  "array",
+                                                                                                            "maxItems":  4096,
+                                                                                                            "items":  {
+                                                                                                                          "type":  "integer",
+                                                                                                                          "minimum":  0,
+                                                                                                                          "maximum":  4294967295
+                                                                                                                      }
+                                                                                                        },
+                                                                  "placement_role_ids":  {
+                                                                                             "type":  "array",
+                                                                                             "maxItems":  4096,
+                                                                                             "items":  {
+                                                                                                           "type":  "string",
+                                                                                                           "minLength":  1,
+                                                                                                           "maxLength":  2048
+                                                                                                       }
+                                                                                         },
+                                                                  "allowed_fit_ids":  {
+                                                                                          "type":  "array",
+                                                                                          "maxItems":  4096,
+                                                                                          "items":  {
+                                                                                                        "type":  "string",
+                                                                                                        "minLength":  1,
+                                                                                                        "maxLength":  2048
+                                                                                                    }
+                                                                                      },
+                                                                  "crop_allowed":  {
+                                                                                       "type":  "boolean"
+                                                                                   },
+                                                                  "border_role_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                  "corner_policy_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                  "caption_role":  {
+                                                                                       "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                   },
+                                                                  "minimum_resolution_pixels":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                  "maximum_enlargement_millionths":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                  "text_image_balance":  {
+                                                                                             "$ref":  "#/$defs/DesignDistributionV1"
+                                                                                         },
+                                                                  "grammar_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     }
+                                                              }
+                                           }
+              }
+}

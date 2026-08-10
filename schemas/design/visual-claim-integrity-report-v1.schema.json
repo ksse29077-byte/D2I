@@ -1,0 +1,103 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/visual-claim-integrity-report-v1.schema.json",
+    "title":  "VisualClaimIntegrityReportV1",
+    "$ref":  "#/$defs/VisualClaimIntegrityReportV1",
+    "$defs":  {
+                  "VisualClaimIntegrityReportV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "schema_version",
+                                                                        "report_id",
+                                                                        "artifact_sha256",
+                                                                        "authoritative_fact_ids",
+                                                                        "displayed_kpi_fact_ids",
+                                                                        "chart_fact_ids",
+                                                                        "table_total_fact_ids",
+                                                                        "unverified_kpi_count",
+                                                                        "fact_mismatch_count",
+                                                                        "model_created_fact_count",
+                                                                        "verified",
+                                                                        "report_sha256"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "schema_version":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "report_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                          "artifact_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                          "authoritative_fact_ids":  {
+                                                                                                         "type":  "array",
+                                                                                                         "maxItems":  4096,
+                                                                                                         "items":  {
+                                                                                                                       "type":  "string",
+                                                                                                                       "minLength":  1,
+                                                                                                                       "maxLength":  2048
+                                                                                                                   }
+                                                                                                     },
+                                                                          "displayed_kpi_fact_ids":  {
+                                                                                                         "type":  "array",
+                                                                                                         "maxItems":  4096,
+                                                                                                         "items":  {
+                                                                                                                       "type":  "string",
+                                                                                                                       "minLength":  1,
+                                                                                                                       "maxLength":  2048
+                                                                                                                   }
+                                                                                                     },
+                                                                          "chart_fact_ids":  {
+                                                                                                 "type":  "array",
+                                                                                                 "maxItems":  4096,
+                                                                                                 "items":  {
+                                                                                                               "type":  "string",
+                                                                                                               "minLength":  1,
+                                                                                                               "maxLength":  2048
+                                                                                                           }
+                                                                                             },
+                                                                          "table_total_fact_ids":  {
+                                                                                                       "type":  "array",
+                                                                                                       "maxItems":  4096,
+                                                                                                       "items":  {
+                                                                                                                     "type":  "string",
+                                                                                                                     "minLength":  1,
+                                                                                                                     "maxLength":  2048
+                                                                                                                 }
+                                                                                                   },
+                                                                          "unverified_kpi_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                          "fact_mismatch_count":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "model_created_fact_count":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                          "verified":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                                          "report_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            }
+                                                                      }
+                                                   }
+              }
+}

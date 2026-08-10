@@ -1,0 +1,88 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-work-replay-report-v1.schema.json",
+    "title":  "DesignWorkReplayReportV1",
+    "$ref":  "#/$defs/DesignWorkReplayReportV1",
+    "$defs":  {
+                  "DesignWorkReplayReportV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "scenario_count",
+                                                                    "runs_per_scenario",
+                                                                    "family_selection_mismatch_count",
+                                                                    "exemplar_retrieval_mismatch_count",
+                                                                    "layout_selection_mismatch_count",
+                                                                    "typography_mismatch_count",
+                                                                    "spacing_mismatch_count",
+                                                                    "critic_mismatch_count",
+                                                                    "repair_selection_mismatch_count",
+                                                                    "blind_replay_count",
+                                                                    "report_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "scenario_count":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "runs_per_scenario":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                      "family_selection_mismatch_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                      "exemplar_retrieval_mismatch_count":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0,
+                                                                                                                "maximum":  4294967295
+                                                                                                            },
+                                                                      "layout_selection_mismatch_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                      "typography_mismatch_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                      "spacing_mismatch_count":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                      "critic_mismatch_count":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                      "repair_selection_mismatch_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                      "blind_replay_count":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                      "report_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                  }
+                                               }
+              }
+}

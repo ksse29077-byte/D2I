@@ -1,0 +1,132 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/chart-design-grammar-v1.schema.json",
+    "title":  "ChartDesignGrammarV1",
+    "$ref":  "#/$defs/ChartDesignGrammarV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "ChartDesignGrammarV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "schema_version",
+                                                                "grammar_id",
+                                                                "organization_id",
+                                                                "allowed_chart_type_ids",
+                                                                "series_color_role_order",
+                                                                "title_role",
+                                                                "legend_position_id",
+                                                                "data_label_policy_id",
+                                                                "axis_policy_id",
+                                                                "gridline_policy_id",
+                                                                "number_format_id",
+                                                                "emphasis_series_policy_id",
+                                                                "grammar_sha256"
+                                                            ],
+                                               "properties":  {
+                                                                  "schema_version":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "grammar_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                                  "organization_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                  "allowed_chart_type_ids":  {
+                                                                                                 "type":  "array",
+                                                                                                 "maxItems":  4096,
+                                                                                                 "items":  {
+                                                                                                               "type":  "string",
+                                                                                                               "minLength":  1,
+                                                                                                               "maxLength":  2048
+                                                                                                           }
+                                                                                             },
+                                                                  "series_color_role_order":  {
+                                                                                                  "type":  "array",
+                                                                                                  "maxItems":  4096,
+                                                                                                  "items":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  2048
+                                                                                                            }
+                                                                                              },
+                                                                  "title_role":  {
+                                                                                     "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                 },
+                                                                  "legend_position_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                  "data_label_policy_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                  "axis_policy_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                  "gridline_policy_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                  "number_format_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                  "emphasis_series_policy_id":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  1,
+                                                                                                    "maxLength":  512,
+                                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                },
+                                                                  "grammar_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     }
+                                                              }
+                                           }
+              }
+}

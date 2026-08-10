@@ -1,0 +1,125 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/artifact-layout-request-v1.schema.json",
+    "title":  "ArtifactLayoutRequestV1",
+    "$ref":  "#/$defs/ArtifactLayoutRequestV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignDensityClassV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "low",
+                                                            "medium",
+                                                            "high"
+                                                        ]
+                                           },
+                  "ArtifactLayoutRequestV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "schema_version",
+                                                                   "request_id",
+                                                                   "organization_id",
+                                                                   "design_pack_sha256",
+                                                                   "artifact_class",
+                                                                   "content_role_ids",
+                                                                   "required_fact_ids",
+                                                                   "required_image_ids",
+                                                                   "density_class",
+                                                                   "aspect_or_page_class_id",
+                                                                   "request_sha256"
+                                                               ],
+                                                  "properties":  {
+                                                                     "schema_version":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "request_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                     "organization_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                     "design_pack_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                     "artifact_class":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  2048
+                                                                                        },
+                                                                     "content_role_ids":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                                        }
+                                                                                          },
+                                                                     "required_fact_ids":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  1,
+                                                                                                             "maxLength":  2048
+                                                                                                         }
+                                                                                           },
+                                                                     "required_image_ids":  {
+                                                                                                "type":  "array",
+                                                                                                "maxItems":  4096,
+                                                                                                "items":  {
+                                                                                                              "type":  "string",
+                                                                                                              "minLength":  1,
+                                                                                                              "maxLength":  2048
+                                                                                                          }
+                                                                                            },
+                                                                     "density_class":  {
+                                                                                           "$ref":  "#/$defs/DesignDensityClassV1"
+                                                                                       },
+                                                                     "aspect_or_page_class_id":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  512,
+                                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                 },
+                                                                     "request_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                 }
+                                              }
+              }
+}

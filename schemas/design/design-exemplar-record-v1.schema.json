@@ -1,0 +1,128 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-exemplar-record-v1.schema.json",
+    "title":  "DesignExemplarRecordV1",
+    "$ref":  "#/$defs/DesignExemplarRecordV1",
+    "$defs":  {
+                  "DesignDensityClassV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "low",
+                                                            "medium",
+                                                            "high"
+                                                        ]
+                                           },
+                  "DesignExemplarRecordV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "exemplar_id",
+                                                                  "organization_id",
+                                                                  "artifact_class",
+                                                                  "unit_role_id",
+                                                                  "template_family_id",
+                                                                  "layout_vector_sha256",
+                                                                  "typography_vector_sha256",
+                                                                  "color_vector_sha256",
+                                                                  "spacing_vector_sha256",
+                                                                  "content_density_class",
+                                                                  "source_artifact_sha256",
+                                                                  "quality_weight_millionths",
+                                                                  "text_length",
+                                                                  "line_count",
+                                                                  "text_sha256",
+                                                                  "exemplar_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "exemplar_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                    "organization_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                    "artifact_class":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  2048
+                                                                                       },
+                                                                    "unit_role_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                    "template_family_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                    "layout_vector_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                    "typography_vector_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                    "color_vector_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                    "spacing_vector_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                    "content_density_class":  {
+                                                                                                  "$ref":  "#/$defs/DesignDensityClassV1"
+                                                                                              },
+                                                                    "source_artifact_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                    "quality_weight_millionths":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                    "text_length":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                    "line_count":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  4294967295
+                                                                                   },
+                                                                    "text_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    },
+                                                                    "exemplar_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                }
+                                             }
+              }
+}

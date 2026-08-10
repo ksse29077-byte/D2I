@@ -1,0 +1,40 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/normalized-design-rect-v1.schema.json",
+    "title":  "NormalizedDesignRectV1",
+    "$ref":  "#/$defs/NormalizedDesignRectV1",
+    "$defs":  {
+                  "NormalizedDesignRectV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "left_millionths",
+                                                                  "top_millionths",
+                                                                  "width_millionths",
+                                                                  "height_millionths"
+                                                              ],
+                                                 "properties":  {
+                                                                    "left_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                    "top_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "width_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                    "height_millionths":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          }
+                                                                }
+                                             }
+              }
+}

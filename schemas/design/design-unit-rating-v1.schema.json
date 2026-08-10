@@ -1,0 +1,47 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-unit-rating-v1.schema.json",
+    "title":  "DesignUnitRatingV1",
+    "$ref":  "#/$defs/DesignUnitRatingV1",
+    "$defs":  {
+                  "DesignQualityLabelV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "gold",
+                                                            "approved",
+                                                            "legacy_approved",
+                                                            "deprecated",
+                                                            "rejected"
+                                                        ]
+                                           },
+                  "DesignUnitRatingV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "unit_id",
+                                                              "quality_label",
+                                                              "evidence_ids"
+                                                          ],
+                                             "properties":  {
+                                                                "unit_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                                "quality_label":  {
+                                                                                      "$ref":  "#/$defs/DesignQualityLabelV1"
+                                                                                  },
+                                                                "evidence_ids":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  1,
+                                                                                                   "maxLength":  2048
+                                                                                               }
+                                                                                 }
+                                                            }
+                                         }
+              }
+}

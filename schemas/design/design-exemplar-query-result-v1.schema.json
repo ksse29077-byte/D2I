@@ -1,0 +1,93 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-exemplar-query-result-v1.schema.json",
+    "title":  "DesignExemplarQueryResultV1",
+    "$ref":  "#/$defs/DesignExemplarQueryResultV1",
+    "$defs":  {
+                  "DesignExemplarMatchV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "exemplar_id",
+                                                                 "template_family_id",
+                                                                 "distance_millionths",
+                                                                 "evidence_ids"
+                                                             ],
+                                                "properties":  {
+                                                                   "exemplar_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                   "template_family_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                   "distance_millionths":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                   "evidence_ids":  {
+                                                                                        "type":  "array",
+                                                                                        "maxItems":  4096,
+                                                                                        "items":  {
+                                                                                                      "type":  "string",
+                                                                                                      "minLength":  1,
+                                                                                                      "maxLength":  2048
+                                                                                                  }
+                                                                                    }
+                                                               }
+                                            },
+                  "DesignExemplarQueryResultV1":  {
+                                                      "type":  "object",
+                                                      "additionalProperties":  false,
+                                                      "required":  [
+                                                                       "schema_version",
+                                                                       "query_id",
+                                                                       "query_sha256",
+                                                                       "index_sha256",
+                                                                       "matches",
+                                                                       "result_sha256"
+                                                                   ],
+                                                      "properties":  {
+                                                                         "schema_version":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "query_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                         "query_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                         "index_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                         "matches":  {
+                                                                                         "type":  "array",
+                                                                                         "maxItems":  4096,
+                                                                                         "items":  {
+                                                                                                       "$ref":  "#/$defs/DesignExemplarMatchV1"
+                                                                                                   }
+                                                                                     },
+                                                                         "result_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           }
+                                                                     }
+                                                  }
+              }
+}

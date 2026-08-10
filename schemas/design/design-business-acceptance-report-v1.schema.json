@@ -1,0 +1,75 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-business-acceptance-report-v1.schema.json",
+    "title":  "DesignBusinessAcceptanceReportV1",
+    "$ref":  "#/$defs/DesignBusinessAcceptanceReportV1",
+    "$defs":  {
+                  "DesignBusinessAcceptanceReportV1":  {
+                                                           "type":  "object",
+                                                           "additionalProperties":  false,
+                                                           "required":  [
+                                                                            "schema_version",
+                                                                            "report_id",
+                                                                            "generated_artifact_count",
+                                                                            "artifacts_requiring_manual_design_editing",
+                                                                            "routine_human_design_edits",
+                                                                            "hard_pass_count",
+                                                                            "soft_envelope_pass_count",
+                                                                            "blind_review_artifact_count",
+                                                                            "accepted",
+                                                                            "report_sha256"
+                                                                        ],
+                                                           "properties":  {
+                                                                              "schema_version":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                              "report_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                              "generated_artifact_count":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0,
+                                                                                                               "maximum":  4294967295
+                                                                                                           },
+                                                                              "artifacts_requiring_manual_design_editing":  {
+                                                                                                                                "type":  "integer",
+                                                                                                                                "minimum":  0,
+                                                                                                                                "maximum":  4294967295
+                                                                                                                            },
+                                                                              "routine_human_design_edits":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0,
+                                                                                                                 "maximum":  4294967295
+                                                                                                             },
+                                                                              "hard_pass_count":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                              "soft_envelope_pass_count":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0,
+                                                                                                               "maximum":  4294967295
+                                                                                                           },
+                                                                              "blind_review_artifact_count":  {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0,
+                                                                                                                  "maximum":  4294967295
+                                                                                                              },
+                                                                              "accepted":  {
+                                                                                               "type":  "boolean"
+                                                                                           },
+                                                                              "report_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                }
+                                                                          }
+                                                       }
+              }
+}

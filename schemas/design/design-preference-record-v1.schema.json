@@ -1,0 +1,100 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-preference-record-v1.schema.json",
+    "title":  "DesignPreferenceRecordV1",
+    "$ref":  "#/$defs/DesignPreferenceRecordV1",
+    "$defs":  {
+                  "DesignPreferenceRecordV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "record_id",
+                                                                    "organization_id",
+                                                                    "artifact_class",
+                                                                    "design_pack_sha256",
+                                                                    "candidate_a_sha256",
+                                                                    "candidate_b_sha256",
+                                                                    "preferred_candidate_id",
+                                                                    "review_context_sha256",
+                                                                    "reviewer_id",
+                                                                    "evidence_ids",
+                                                                    "quarantined",
+                                                                    "record_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "record_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                      "organization_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                      "artifact_class":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  2048
+                                                                                         },
+                                                                      "design_pack_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                      "candidate_a_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                      "candidate_b_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                      "preferred_candidate_id":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  1,
+                                                                                                     "maxLength":  512,
+                                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                 },
+                                                                      "review_context_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                      "reviewer_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                      "evidence_ids":  {
+                                                                                           "type":  "array",
+                                                                                           "maxItems":  4096,
+                                                                                           "items":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  1,
+                                                                                                         "maxLength":  2048
+                                                                                                     }
+                                                                                       },
+                                                                      "quarantined":  {
+                                                                                          "type":  "boolean"
+                                                                                      },
+                                                                      "record_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                  }
+                                               }
+              }
+}

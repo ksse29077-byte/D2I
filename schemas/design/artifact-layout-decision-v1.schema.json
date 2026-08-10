@@ -1,0 +1,193 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/artifact-layout-decision-v1.schema.json",
+    "title":  "ArtifactLayoutDecisionV1",
+    "$ref":  "#/$defs/ArtifactLayoutDecisionV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignFitStatusV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "fit",
+                                                         "needs_alternative_layout",
+                                                         "needs_split",
+                                                         "needs_language_compression",
+                                                         "font_missing",
+                                                         "human_exception"
+                                                     ]
+                                        },
+                  "NormalizedDesignRectV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "left_millionths",
+                                                                  "top_millionths",
+                                                                  "width_millionths",
+                                                                  "height_millionths"
+                                                              ],
+                                                 "properties":  {
+                                                                    "left_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                    "top_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "width_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                    "height_millionths":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          }
+                                                                }
+                                             },
+                  "LayoutSlotRuleV1":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "slot_id",
+                                                            "semantic_role",
+                                                            "allowed_region",
+                                                            "required"
+                                                        ],
+                                           "properties":  {
+                                                              "slot_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                              "semantic_role":  {
+                                                                                    "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                },
+                                                              "allowed_region":  {
+                                                                                     "$ref":  "#/$defs/NormalizedDesignRectV1"
+                                                                                 },
+                                                              "required":  {
+                                                                               "type":  "boolean"
+                                                                           }
+                                                          }
+                                       },
+                  "ArtifactLayoutDecisionV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "decision_id",
+                                                                    "request_sha256",
+                                                                    "design_pack_sha256",
+                                                                    "template_family_id",
+                                                                    "layout_family_id",
+                                                                    "slot_assignments",
+                                                                    "typography_decision_sha256s",
+                                                                    "fit_status",
+                                                                    "design_distance_millionths",
+                                                                    "evidence_ids",
+                                                                    "decision_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "decision_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                      "request_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                      "design_pack_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                      "template_family_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                      "layout_family_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                      "slot_assignments":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "$ref":  "#/$defs/LayoutSlotRuleV1"
+                                                                                                         }
+                                                                                           },
+                                                                      "typography_decision_sha256s":  {
+                                                                                                          "type":  "array",
+                                                                                                          "maxItems":  4096,
+                                                                                                          "items":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  2048
+                                                                                                                    }
+                                                                                                      },
+                                                                      "fit_status":  {
+                                                                                         "$ref":  "#/$defs/DesignFitStatusV1"
+                                                                                     },
+                                                                      "design_distance_millionths":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                      "evidence_ids":  {
+                                                                                           "type":  "array",
+                                                                                           "maxItems":  4096,
+                                                                                           "items":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  1,
+                                                                                                         "maxLength":  2048
+                                                                                                     }
+                                                                                       },
+                                                                      "decision_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          }
+                                                                  }
+                                               }
+              }
+}

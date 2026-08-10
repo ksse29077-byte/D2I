@@ -1,0 +1,114 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/soft-design-critique-v1.schema.json",
+    "title":  "SoftDesignCritiqueV1",
+    "$ref":  "#/$defs/SoftDesignCritiqueV1",
+    "$defs":  {
+                  "DesignCritiqueStatusV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "passed",
+                                                              "failed"
+                                                          ]
+                                             },
+                  "SoftDesignCritiqueV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "schema_version",
+                                                                "critique_id",
+                                                                "organization_id",
+                                                                "artifact_sha256",
+                                                                "design_pack_sha256",
+                                                                "template_family_id",
+                                                                "geometry_distance_millionths",
+                                                                "hierarchy_distance_millionths",
+                                                                "spacing_distance_millionths",
+                                                                "color_distance_millionths",
+                                                                "density_distance_millionths",
+                                                                "aggregate_distance_millionths",
+                                                                "acceptance_envelope_max_millionths",
+                                                                "status",
+                                                                "critique_sha256"
+                                                            ],
+                                               "properties":  {
+                                                                  "schema_version":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "critique_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                  "organization_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                  "artifact_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      },
+                                                                  "design_pack_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                  "template_family_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                  "geometry_distance_millionths":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                  "hierarchy_distance_millionths":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                  "spacing_distance_millionths":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                  "color_distance_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                  "density_distance_millionths":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                  "aggregate_distance_millionths":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                  "acceptance_envelope_max_millionths":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0,
+                                                                                                             "maximum":  4294967295
+                                                                                                         },
+                                                                  "status":  {
+                                                                                 "$ref":  "#/$defs/DesignCritiqueStatusV1"
+                                                                             },
+                                                                  "critique_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      }
+                                                              }
+                                           }
+              }
+}

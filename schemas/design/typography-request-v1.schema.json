@@ -1,0 +1,107 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/typography-request-v1.schema.json",
+    "title":  "TypographyRequestV1",
+    "$ref":  "#/$defs/TypographyRequestV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "TypographyRequestV1":  {
+                                              "type":  "object",
+                                              "additionalProperties":  false,
+                                              "required":  [
+                                                               "schema_version",
+                                                               "request_id",
+                                                               "organization_id",
+                                                               "design_pack_sha256",
+                                                               "semantic_role",
+                                                               "text_sha256",
+                                                               "character_count",
+                                                               "language_script_id",
+                                                               "available_width_millionths",
+                                                               "available_height_millionths",
+                                                               "request_sha256"
+                                                           ],
+                                              "properties":  {
+                                                                 "schema_version":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                 "request_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                 "organization_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                 "design_pack_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                 "semantic_role":  {
+                                                                                       "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                   },
+                                                                 "text_sha256":  {
+                                                                                     "type":  "string",
+                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                     "maxLength":  71
+                                                                                 },
+                                                                 "character_count":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                 "language_script_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                 "available_width_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                 "available_height_millionths":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                 "request_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    }
+                                                             }
+                                          }
+              }
+}

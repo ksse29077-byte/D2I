@@ -1,0 +1,124 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-exemplar-query-v1.schema.json",
+    "title":  "DesignExemplarQueryV1",
+    "$ref":  "#/$defs/DesignExemplarQueryV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignDensityClassV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "low",
+                                                            "medium",
+                                                            "high"
+                                                        ]
+                                           },
+                  "DesignExemplarQueryV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "schema_version",
+                                                                 "query_id",
+                                                                 "organization_id",
+                                                                 "artifact_class",
+                                                                 "unit_role_id",
+                                                                 "required_content_role_ids",
+                                                                 "table_required",
+                                                                 "chart_required",
+                                                                 "image_required",
+                                                                 "density_class",
+                                                                 "aspect_or_page_class_id",
+                                                                 "maximum_results",
+                                                                 "query_sha256"
+                                                             ],
+                                                "properties":  {
+                                                                   "schema_version":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                   "query_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                   "organization_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                   "artifact_class":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  2048
+                                                                                      },
+                                                                   "unit_role_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                   "required_content_role_ids":  {
+                                                                                                     "type":  "array",
+                                                                                                     "maxItems":  4096,
+                                                                                                     "items":  {
+                                                                                                                   "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                                               }
+                                                                                                 },
+                                                                   "table_required":  {
+                                                                                          "type":  "boolean"
+                                                                                      },
+                                                                   "chart_required":  {
+                                                                                          "type":  "boolean"
+                                                                                      },
+                                                                   "image_required":  {
+                                                                                          "type":  "boolean"
+                                                                                      },
+                                                                   "density_class":  {
+                                                                                         "$ref":  "#/$defs/DesignDensityClassV1"
+                                                                                     },
+                                                                   "aspect_or_page_class_id":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  1,
+                                                                                                   "maxLength":  512,
+                                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                               },
+                                                                   "maximum_results":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                   "query_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    }
+                                                               }
+                                            }
+              }
+}

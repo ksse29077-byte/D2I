@@ -1,0 +1,213 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/hard-design-critique-v1.schema.json",
+    "title":  "HardDesignCritiqueV1",
+    "$ref":  "#/$defs/HardDesignCritiqueV1",
+    "$defs":  {
+                  "DesignCritiqueStatusV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "passed",
+                                                              "failed"
+                                                          ]
+                                             },
+                  "HardDesignViolationMetricsV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "font_family_violation",
+                                                                        "font_size_violation",
+                                                                        "text_overflow",
+                                                                        "off_canvas_or_page",
+                                                                        "forbidden_overlap",
+                                                                        "alignment_violation",
+                                                                        "spacing_violation",
+                                                                        "margin_violation",
+                                                                        "color_role_violation",
+                                                                        "logo_violation",
+                                                                        "table_violation",
+                                                                        "image_distortion",
+                                                                        "chart_policy_violation",
+                                                                        "placeholder_leakage",
+                                                                        "missing_title",
+                                                                        "missing_required_section",
+                                                                        "unverified_kpi",
+                                                                        "fact_mismatch",
+                                                                        "chart_fact_mismatch",
+                                                                        "wrong_organization_pack",
+                                                                        "wrong_template_family"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "font_family_violation":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                          "font_size_violation":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "text_overflow":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                          "off_canvas_or_page":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                          "forbidden_overlap":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                          "alignment_violation":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "spacing_violation":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                          "margin_violation":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                          "color_role_violation":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                          "logo_violation":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "table_violation":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                          "image_distortion":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                          "chart_policy_violation":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                          "placeholder_leakage":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "missing_title":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                          "missing_required_section":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                          "unverified_kpi":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "fact_mismatch":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                          "chart_fact_mismatch":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "wrong_organization_pack":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                          "wrong_template_family":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    }
+                                                                      }
+                                                   },
+                  "HardDesignCritiqueV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "schema_version",
+                                                                "critique_id",
+                                                                "organization_id",
+                                                                "artifact_sha256",
+                                                                "design_pack_sha256",
+                                                                "metrics",
+                                                                "status",
+                                                                "issue_ids",
+                                                                "critique_sha256"
+                                                            ],
+                                               "properties":  {
+                                                                  "schema_version":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                  "critique_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                  "organization_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                  "artifact_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      },
+                                                                  "design_pack_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                  "metrics":  {
+                                                                                  "$ref":  "#/$defs/HardDesignViolationMetricsV1"
+                                                                              },
+                                                                  "status":  {
+                                                                                 "$ref":  "#/$defs/DesignCritiqueStatusV1"
+                                                                             },
+                                                                  "issue_ids":  {
+                                                                                    "type":  "array",
+                                                                                    "maxItems":  4096,
+                                                                                    "items":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  2048
+                                                                                              }
+                                                                                },
+                                                                  "critique_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      }
+                                                              }
+                                           }
+              }
+}

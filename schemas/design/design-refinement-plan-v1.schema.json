@@ -1,0 +1,118 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-refinement-plan-v1.schema.json",
+    "title":  "DesignRefinementPlanV1",
+    "$ref":  "#/$defs/DesignRefinementPlanV1",
+    "$defs":  {
+                  "DesignRepairOperationV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "switch_layout",
+                                                               "split_slide",
+                                                               "resize_within_allowed_range",
+                                                               "adjust_spacing_within_grammar",
+                                                               "reflow_table",
+                                                               "change_image_fit",
+                                                               "shorten_language",
+                                                               "move_to_allowed_slot"
+                                                           ]
+                                              },
+                  "DesignRefinementStepV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "sequence",
+                                                                  "operation",
+                                                                  "target_id",
+                                                                  "reason_code"
+                                                              ],
+                                                 "properties":  {
+                                                                    "sequence":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                                    "operation":  {
+                                                                                      "$ref":  "#/$defs/DesignRepairOperationV1"
+                                                                                  },
+                                                                    "target_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                    "reason_code":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  2048
+                                                                                    }
+                                                                }
+                                             },
+                  "DesignRefinementPlanV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "plan_id",
+                                                                  "organization_id",
+                                                                  "artifact_sha256",
+                                                                  "design_pack_sha256",
+                                                                  "hard_critique_sha256",
+                                                                  "maximum_rounds",
+                                                                  "steps",
+                                                                  "plan_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "plan_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                    "organization_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                    "artifact_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                    "design_pack_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                    "hard_critique_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                    "maximum_rounds":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "steps":  {
+                                                                                  "type":  "array",
+                                                                                  "maxItems":  4096,
+                                                                                  "items":  {
+                                                                                                "$ref":  "#/$defs/DesignRefinementStepV1"
+                                                                                            }
+                                                                              },
+                                                                    "plan_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    }
+                                                                }
+                                             }
+              }
+}

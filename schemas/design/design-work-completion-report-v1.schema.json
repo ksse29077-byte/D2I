@@ -1,0 +1,615 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-work-completion-report-v1.schema.json",
+    "title":  "DesignWorkCompletionReportV1",
+    "$ref":  "#/$defs/DesignWorkCompletionReportV1",
+    "$defs":  {
+                  "DesignSecurityMetricsV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "cross_org_leak",
+                                                                   "raw_corpus_to_model",
+                                                                   "raw_xml_to_model",
+                                                                   "font_binary_export",
+                                                                   "unapproved_external_asset",
+                                                                   "network_access",
+                                                                   "arbitrary_process",
+                                                                   "arbitrary_command",
+                                                                   "workspace_escape",
+                                                                   "credential_leak",
+                                                                   "prompt_injection_rule_promotion",
+                                                                   "rejected_artifact_rule_promotion",
+                                                                   "online_self_mutation",
+                                                                   "false_completion",
+                                                                   "critical_error",
+                                                                   "model_raw_coordinate_count",
+                                                                   "model_raw_color_count",
+                                                                   "model_raw_font_count",
+                                                                   "model_raw_font_size_count",
+                                                                   "model_layout_execution_authority"
+                                                               ],
+                                                  "properties":  {
+                                                                     "cross_org_leak":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "raw_corpus_to_model":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                     "raw_xml_to_model":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "font_binary_export":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                     "unapproved_external_asset":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                     "network_access":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "arbitrary_process":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "arbitrary_command":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "workspace_escape":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "credential_leak":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                     "prompt_injection_rule_promotion":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0,
+                                                                                                             "maximum":  4294967295
+                                                                                                         },
+                                                                     "rejected_artifact_rule_promotion":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                     "online_self_mutation":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                     "false_completion":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "critical_error":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "model_raw_coordinate_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                     "model_raw_color_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                     "model_raw_font_count":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                     "model_raw_font_size_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                     "model_layout_execution_authority":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          }
+                                                                 }
+                                              },
+                  "DesignResidualMetricsV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "powerpoint_processes",
+                                                                   "excel_processes",
+                                                                   "word_processes",
+                                                                   "design_workers",
+                                                                   "model_workers",
+                                                                   "wfp_objects",
+                                                                   "profiles",
+                                                                   "activations",
+                                                                   "temporary_renders",
+                                                                   "temporary_design_packs",
+                                                                   "file_locks",
+                                                                   "workspace_locks"
+                                                               ],
+                                                  "properties":  {
+                                                                     "powerpoint_processes":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                     "excel_processes":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                     "word_processes":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "design_workers":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "model_workers":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                     "wfp_objects":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                     "profiles":  {
+                                                                                      "type":  "integer",
+                                                                                      "minimum":  0,
+                                                                                      "maximum":  4294967295
+                                                                                  },
+                                                                     "activations":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  4294967295
+                                                                                     },
+                                                                     "temporary_renders":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "temporary_design_packs":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                     "file_locks":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                     "workspace_locks":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         }
+                                                                 }
+                                              },
+                  "DesignPerformanceMetricsV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "corpus_parse_microseconds",
+                                                                      "feature_extraction_microseconds",
+                                                                      "grammar_compile_microseconds",
+                                                                      "exemplar_retrieval_microseconds",
+                                                                      "solver_microseconds",
+                                                                      "render_microseconds",
+                                                                      "critic_microseconds",
+                                                                      "refinement_microseconds",
+                                                                      "model_microseconds",
+                                                                      "peak_worker_memory_bytes"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "corpus_parse_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                        "feature_extraction_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                        "grammar_compile_microseconds":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                        "exemplar_retrieval_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                        "solver_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "render_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "critic_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "refinement_microseconds":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                        "model_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                        "peak_worker_memory_bytes":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     }
+                                                                    }
+                                                 },
+                  "DesignWorkCompletionReportV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "schema_version",
+                                                                        "report_id",
+                                                                        "source_tree_sha256",
+                                                                        "predecessor_finished_sha256",
+                                                                        "organizations",
+                                                                        "artifact_classes",
+                                                                        "training_artifacts",
+                                                                        "holdout_artifacts",
+                                                                        "holdout_pptx_unit_count",
+                                                                        "holdout_hwpx_artifact_count",
+                                                                        "pptx_corpus_count",
+                                                                        "hwpx_corpus_count",
+                                                                        "docx_corpus_count",
+                                                                        "gold_unit_count",
+                                                                        "approved_artifact_count",
+                                                                        "extracted_feature_count",
+                                                                        "template_family_count",
+                                                                        "compiled_design_rule_count",
+                                                                        "design_pack_sha256s",
+                                                                        "design_approval_sha256s",
+                                                                        "font_role_count",
+                                                                        "color_role_count",
+                                                                        "spacing_rule_count",
+                                                                        "exemplar_index_size",
+                                                                        "artifact_class_accuracy_millionths",
+                                                                        "template_family_accuracy_millionths",
+                                                                        "layout_accuracy_millionths",
+                                                                        "generated_pptx_count",
+                                                                        "generated_slide_count",
+                                                                        "powerpoint_render_count",
+                                                                        "refinement_round_count",
+                                                                        "generated_hwpx_count",
+                                                                        "hwpx_conformance_check_count",
+                                                                        "font_fallback_count",
+                                                                        "missing_font_count",
+                                                                        "authoritative_fact_count",
+                                                                        "model_invocation_count",
+                                                                        "model_language_only_count",
+                                                                        "hard_design_violation_count",
+                                                                        "soft_design_distance_millionths",
+                                                                        "critic_false_positive_count",
+                                                                        "critic_false_negative_count",
+                                                                        "cross_org_leak_count",
+                                                                        "crash_windows_verified",
+                                                                        "replay_report_sha256",
+                                                                        "protected_audit_terminal_sha256",
+                                                                        "business_acceptance_sha256",
+                                                                        "security",
+                                                                        "residual",
+                                                                        "performance",
+                                                                        "actual_qwen_evidence",
+                                                                        "actual_powerpoint_render_evidence",
+                                                                        "hwpx_structural_evidence",
+                                                                        "multi_tenant_isolation_evidence",
+                                                                        "human_design_editing_zero",
+                                                                        "complete",
+                                                                        "finished_sha256"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "schema_version":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "report_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                          "source_tree_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                          "predecessor_finished_sha256":  {
+                                                                                                              "type":  "string",
+                                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                              "maxLength":  71
+                                                                                                          },
+                                                                          "organizations":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                          "artifact_classes":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                          "training_artifacts":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                          "holdout_artifacts":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                          "holdout_pptx_unit_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                          "holdout_hwpx_artifact_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                          "pptx_corpus_count":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                          "hwpx_corpus_count":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                          "docx_corpus_count":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                          "gold_unit_count":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                          "approved_artifact_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                          "extracted_feature_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                          "template_family_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                          "compiled_design_rule_count":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0,
+                                                                                                             "maximum":  4294967295
+                                                                                                         },
+                                                                          "design_pack_sha256s":  {
+                                                                                                      "type":  "array",
+                                                                                                      "maxItems":  4096,
+                                                                                                      "items":  {
+                                                                                                                    "type":  "string",
+                                                                                                                    "minLength":  1,
+                                                                                                                    "maxLength":  2048
+                                                                                                                }
+                                                                                                  },
+                                                                          "design_approval_sha256s":  {
+                                                                                                          "type":  "array",
+                                                                                                          "maxItems":  4096,
+                                                                                                          "items":  {
+                                                                                                                        "type":  "string",
+                                                                                                                        "minLength":  1,
+                                                                                                                        "maxLength":  2048
+                                                                                                                    }
+                                                                                                      },
+                                                                          "font_role_count":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                          "color_role_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                          "spacing_rule_count":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                          "exemplar_index_size":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "artifact_class_accuracy_millionths":  {
+                                                                                                                     "type":  "integer",
+                                                                                                                     "minimum":  0,
+                                                                                                                     "maximum":  4294967295
+                                                                                                                 },
+                                                                          "template_family_accuracy_millionths":  {
+                                                                                                                      "type":  "integer",
+                                                                                                                      "minimum":  0,
+                                                                                                                      "maximum":  4294967295
+                                                                                                                  },
+                                                                          "layout_accuracy_millionths":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0,
+                                                                                                             "maximum":  4294967295
+                                                                                                         },
+                                                                          "generated_pptx_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                          "generated_slide_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                          "powerpoint_render_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                          "refinement_round_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                          "generated_hwpx_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                          "hwpx_conformance_check_count":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0,
+                                                                                                               "maximum":  4294967295
+                                                                                                           },
+                                                                          "font_fallback_count":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                          "missing_font_count":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0,
+                                                                                                     "maximum":  4294967295
+                                                                                                 },
+                                                                          "authoritative_fact_count":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                          "model_invocation_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                          "model_language_only_count":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        },
+                                                                          "hard_design_violation_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                          "soft_design_distance_millionths":  {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0,
+                                                                                                                  "maximum":  4294967295
+                                                                                                              },
+                                                                          "critic_false_positive_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                          "critic_false_negative_count":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                          "cross_org_leak_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                          "crash_windows_verified":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                          "replay_report_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                          "protected_audit_terminal_sha256":  {
+                                                                                                                  "type":  "string",
+                                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                  "maxLength":  71
+                                                                                                              },
+                                                                          "business_acceptance_sha256":  {
+                                                                                                             "type":  "string",
+                                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                             "maxLength":  71
+                                                                                                         },
+                                                                          "security":  {
+                                                                                           "$ref":  "#/$defs/DesignSecurityMetricsV1"
+                                                                                       },
+                                                                          "residual":  {
+                                                                                           "$ref":  "#/$defs/DesignResidualMetricsV1"
+                                                                                       },
+                                                                          "performance":  {
+                                                                                              "$ref":  "#/$defs/DesignPerformanceMetricsV1"
+                                                                                          },
+                                                                          "actual_qwen_evidence":  {
+                                                                                                       "type":  "boolean"
+                                                                                                   },
+                                                                          "actual_powerpoint_render_evidence":  {
+                                                                                                                    "type":  "boolean"
+                                                                                                                },
+                                                                          "hwpx_structural_evidence":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                          "multi_tenant_isolation_evidence":  {
+                                                                                                                  "type":  "boolean"
+                                                                                                              },
+                                                                          "human_design_editing_zero":  {
+                                                                                                            "type":  "boolean"
+                                                                                                        },
+                                                                          "complete":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                                          "finished_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              }
+                                                                      }
+                                                   }
+              }
+}

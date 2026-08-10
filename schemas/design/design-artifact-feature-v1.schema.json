@@ -1,0 +1,345 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-artifact-feature-v1.schema.json",
+    "title":  "DesignArtifactFeatureV1",
+    "$ref":  "#/$defs/DesignArtifactFeatureV1",
+    "$defs":  {
+                  "DesignArtifactFormatV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "pptx",
+                                                              "hwpx",
+                                                              "docx"
+                                                          ]
+                                             },
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignDensityClassV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "low",
+                                                            "medium",
+                                                            "high"
+                                                        ]
+                                           },
+                  "NormalizedDesignRectV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "left_millionths",
+                                                                  "top_millionths",
+                                                                  "width_millionths",
+                                                                  "height_millionths"
+                                                              ],
+                                                 "properties":  {
+                                                                    "left_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                    "top_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "width_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                    "height_millionths":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          }
+                                                                }
+                                             },
+                  "DesignFeatureVectorV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "layout_ratios",
+                                                                 "font_role_ratios",
+                                                                 "color_role_distribution",
+                                                                 "spacing_distribution",
+                                                                 "white_space_millionths",
+                                                                 "shape_density_millionths",
+                                                                 "text_density_millionths",
+                                                                 "image_ratio_millionths",
+                                                                 "table_density_millionths",
+                                                                 "chart_density_millionths",
+                                                                 "alignment_features",
+                                                                 "vector_sha256"
+                                                             ],
+                                                "properties":  {
+                                                                   "layout_ratios":  {
+                                                                                         "type":  "array",
+                                                                                         "maxItems":  4096,
+                                                                                         "items":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   }
+                                                                                     },
+                                                                   "font_role_ratios":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      }
+                                                                                        },
+                                                                   "color_role_distribution":  {
+                                                                                                   "type":  "array",
+                                                                                                   "maxItems":  4096,
+                                                                                                   "items":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0,
+                                                                                                                 "maximum":  4294967295
+                                                                                                             }
+                                                                                               },
+                                                                   "spacing_distribution":  {
+                                                                                                "type":  "array",
+                                                                                                "maxItems":  4096,
+                                                                                                "items":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          }
+                                                                                            },
+                                                                   "white_space_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                   "shape_density_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                   "text_density_millionths":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                   "image_ratio_millionths":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                   "table_density_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                   "chart_density_millionths":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                   "alignment_features":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        }
+                                                                                          },
+                                                                   "vector_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     }
+                                                               }
+                                            },
+                  "DesignArtifactFeatureV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "schema_version",
+                                                                   "feature_id",
+                                                                   "organization_id",
+                                                                   "artifact_id",
+                                                                   "artifact_sha256",
+                                                                   "artifact_class",
+                                                                   "format",
+                                                                   "template_family_id",
+                                                                   "unit_role_id",
+                                                                   "layout_id",
+                                                                   "normalized_slots",
+                                                                   "typography_role_ids",
+                                                                   "color_role_ids",
+                                                                   "spacing_ids",
+                                                                   "table_feature_ids",
+                                                                   "chart_feature_ids",
+                                                                   "image_feature_ids",
+                                                                   "density_class",
+                                                                   "source_exemplar_ref",
+                                                                   "quality_weight_millionths",
+                                                                   "vector",
+                                                                   "feature_sha256"
+                                                               ],
+                                                  "properties":  {
+                                                                     "schema_version":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "feature_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                     "organization_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                     "artifact_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                     "artifact_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                     "artifact_class":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  2048
+                                                                                        },
+                                                                     "format":  {
+                                                                                    "$ref":  "#/$defs/DesignArtifactFormatV1"
+                                                                                },
+                                                                     "template_family_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                     "unit_role_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                     "layout_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                     "normalized_slots":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "$ref":  "#/$defs/NormalizedDesignRectV1"
+                                                                                                        }
+                                                                                          },
+                                                                     "typography_role_ids":  {
+                                                                                                 "type":  "array",
+                                                                                                 "maxItems":  4096,
+                                                                                                 "items":  {
+                                                                                                               "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                                           }
+                                                                                             },
+                                                                     "color_role_ids":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "string",
+                                                                                                          "minLength":  1,
+                                                                                                          "maxLength":  2048
+                                                                                                      }
+                                                                                        },
+                                                                     "spacing_ids":  {
+                                                                                         "type":  "array",
+                                                                                         "maxItems":  4096,
+                                                                                         "items":  {
+                                                                                                       "type":  "string",
+                                                                                                       "minLength":  1,
+                                                                                                       "maxLength":  2048
+                                                                                                   }
+                                                                                     },
+                                                                     "table_feature_ids":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  1,
+                                                                                                             "maxLength":  2048
+                                                                                                         }
+                                                                                           },
+                                                                     "chart_feature_ids":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  1,
+                                                                                                             "maxLength":  2048
+                                                                                                         }
+                                                                                           },
+                                                                     "image_feature_ids":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  1,
+                                                                                                             "maxLength":  2048
+                                                                                                         }
+                                                                                           },
+                                                                     "density_class":  {
+                                                                                           "$ref":  "#/$defs/DesignDensityClassV1"
+                                                                                       },
+                                                                     "source_exemplar_ref":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                     "quality_weight_millionths":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                     "vector":  {
+                                                                                    "$ref":  "#/$defs/DesignFeatureVectorV1"
+                                                                                },
+                                                                     "feature_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                 }
+                                              }
+              }
+}

@@ -1,0 +1,91 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/layout-slot-rule-v1.schema.json",
+    "title":  "LayoutSlotRuleV1",
+    "$ref":  "#/$defs/LayoutSlotRuleV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "NormalizedDesignRectV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "left_millionths",
+                                                                  "top_millionths",
+                                                                  "width_millionths",
+                                                                  "height_millionths"
+                                                              ],
+                                                 "properties":  {
+                                                                    "left_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                    "top_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "width_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                    "height_millionths":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          }
+                                                                }
+                                             },
+                  "LayoutSlotRuleV1":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "slot_id",
+                                                            "semantic_role",
+                                                            "allowed_region",
+                                                            "required"
+                                                        ],
+                                           "properties":  {
+                                                              "slot_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                              "semantic_role":  {
+                                                                                    "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                },
+                                                              "allowed_region":  {
+                                                                                     "$ref":  "#/$defs/NormalizedDesignRectV1"
+                                                                                 },
+                                                              "required":  {
+                                                                               "type":  "boolean"
+                                                                           }
+                                                          }
+                                       }
+              }
+}

@@ -727,3 +727,35 @@ of the new exact-image PID is recorded. Residual risks are installed Excel
 behavior, local signing-key custody, visual features outside the semantic
 model, and unsupported charts, pivots, Power Query, protected workbooks, and
 external data sources.
+
+## OFFICE-450 Design Intelligence Threats
+
+OFFICE-450 treats organization artifacts, templates, styles, annotations,
+quality labels, pack candidates, feedback, model output, and renders as
+untrusted until exact contract validation. Primary threats are cross-tenant
+style leakage, source-prose disclosure through exemplars, prompt injection
+becoming a production rule, rejected material receiving positive weight,
+online pack mutation, malicious XML or active content, unlicensed font export,
+model-selected geometry/color/font/COM, visually emphasized invented facts,
+wrong-family selection, overflow or off-canvas output, and false completion
+from file creation without render or structural verification.
+
+Mitigations are exact organization and artifact-class binding, approved
+manifest admission before scan, content-minimized normalized features,
+Gold/approved closed weighting, deterministic family discovery, holdout
+separation, quarantined candidates, separate signed immutable approval,
+approved font metadata without binaries, closed deterministic solvers, and a
+model context containing only verified claim references and bounded language
+or semantic choices. OFFICE-300 facts remain the sole numeric truth authority.
+Hard truth/design checks and calibrated soft family-distance checks both gate
+closure; refinement is closed and capped at five rounds.
+
+PPTX visual evidence reuses the macro-disabled exact-image private-desktop
+PowerPoint path under temporary WFP isolation. HWPX uses bounded Rust-native
+structural reopen. Existing user Office processes are baseline-preserved; only
+owned processes and temporary policy/profile state may be cleaned. Residual
+risks are subjective visual preference beyond deterministic proxy metrics,
+operator font installation and license custody, local signing-key custody,
+PowerPoint renderer behavior, and absent licensed Hancom rendering. Neural
+preference ranking, online learning, external assets, image generation, and PDF
+interchange remain outside v1.

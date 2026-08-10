@@ -1,0 +1,136 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-security-metrics-v1.schema.json",
+    "title":  "DesignSecurityMetricsV1",
+    "$ref":  "#/$defs/DesignSecurityMetricsV1",
+    "$defs":  {
+                  "DesignSecurityMetricsV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "cross_org_leak",
+                                                                   "raw_corpus_to_model",
+                                                                   "raw_xml_to_model",
+                                                                   "font_binary_export",
+                                                                   "unapproved_external_asset",
+                                                                   "network_access",
+                                                                   "arbitrary_process",
+                                                                   "arbitrary_command",
+                                                                   "workspace_escape",
+                                                                   "credential_leak",
+                                                                   "prompt_injection_rule_promotion",
+                                                                   "rejected_artifact_rule_promotion",
+                                                                   "online_self_mutation",
+                                                                   "false_completion",
+                                                                   "critical_error",
+                                                                   "model_raw_coordinate_count",
+                                                                   "model_raw_color_count",
+                                                                   "model_raw_font_count",
+                                                                   "model_raw_font_size_count",
+                                                                   "model_layout_execution_authority"
+                                                               ],
+                                                  "properties":  {
+                                                                     "cross_org_leak":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "raw_corpus_to_model":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                     "raw_xml_to_model":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "font_binary_export":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                     "unapproved_external_asset":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                     "network_access":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "arbitrary_process":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "arbitrary_command":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                     "workspace_escape":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "credential_leak":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                     "prompt_injection_rule_promotion":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0,
+                                                                                                             "maximum":  4294967295
+                                                                                                         },
+                                                                     "rejected_artifact_rule_promotion":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                     "online_self_mutation":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                     "false_completion":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                     "critical_error":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "model_raw_coordinate_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                     "model_raw_color_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                     "model_raw_font_count":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                     "model_raw_font_size_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                     "model_layout_execution_authority":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          }
+                                                                 }
+                                              }
+              }
+}

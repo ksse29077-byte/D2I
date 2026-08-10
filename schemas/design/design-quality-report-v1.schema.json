@@ -1,0 +1,89 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-quality-report-v1.schema.json",
+    "title":  "DesignQualityReportV1",
+    "$ref":  "#/$defs/DesignQualityReportV1",
+    "$defs":  {
+                  "DesignCritiqueStatusV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "passed",
+                                                              "failed"
+                                                          ]
+                                             },
+                  "DesignQualityReportV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "schema_version",
+                                                                 "report_id",
+                                                                 "organization_id",
+                                                                 "artifact_sha256",
+                                                                 "hard_critique_sha256",
+                                                                 "soft_critique_sha256",
+                                                                 "structural_conformance_sha256",
+                                                                 "status",
+                                                                 "report_sha256"
+                                                             ],
+                                                "properties":  {
+                                                                   "schema_version":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                   "report_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                                   "organization_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                   "artifact_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                                   "hard_critique_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                   "soft_critique_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                   "render_evidence_sha256":  {
+                                                                                                  "oneOf":  [
+                                                                                                                {
+                                                                                                                    "type":  "string",
+                                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                    "maxLength":  71
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "type":  "null"
+                                                                                                                }
+                                                                                                            ]
+                                                                                              },
+                                                                   "structural_conformance_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                   "status":  {
+                                                                                  "$ref":  "#/$defs/DesignCritiqueStatusV1"
+                                                                              },
+                                                                   "report_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     }
+                                                               }
+                                            }
+              }
+}

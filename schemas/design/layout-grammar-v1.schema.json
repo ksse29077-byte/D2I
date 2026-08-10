@@ -1,0 +1,194 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/layout-grammar-v1.schema.json",
+    "title":  "LayoutGrammarV1",
+    "$ref":  "#/$defs/LayoutGrammarV1",
+    "$defs":  {
+                  "CommonDesignRoleV1":  {
+                                             "type":  "string",
+                                             "enum":  [
+                                                          "artifact_title",
+                                                          "artifact_subtitle",
+                                                          "section_title",
+                                                          "heading1",
+                                                          "heading2",
+                                                          "body",
+                                                          "caption",
+                                                          "footnote",
+                                                          "kpi_value",
+                                                          "kpi_label",
+                                                          "table_header",
+                                                          "table_body",
+                                                          "table_total",
+                                                          "chart_title",
+                                                          "chart_label",
+                                                          "image_caption",
+                                                          "warning",
+                                                          "emphasis",
+                                                          "muted"
+                                                      ]
+                                         },
+                  "DesignDistributionV1":  {
+                                               "type":  "object",
+                                               "additionalProperties":  false,
+                                               "required":  [
+                                                                "minimum_millionths",
+                                                                "q1_millionths",
+                                                                "median_millionths",
+                                                                "q3_millionths",
+                                                                "maximum_millionths"
+                                                            ],
+                                               "properties":  {
+                                                                  "minimum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                  "q1_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "median_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                  "q3_millionths":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                  "maximum_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         }
+                                                              }
+                                           },
+                  "NormalizedDesignRectV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "left_millionths",
+                                                                  "top_millionths",
+                                                                  "width_millionths",
+                                                                  "height_millionths"
+                                                              ],
+                                                 "properties":  {
+                                                                    "left_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                    "top_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "width_millionths":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                    "height_millionths":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          }
+                                                                }
+                                             },
+                  "LayoutSlotRuleV1":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "slot_id",
+                                                            "semantic_role",
+                                                            "allowed_region",
+                                                            "required"
+                                                        ],
+                                           "properties":  {
+                                                              "slot_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                              "semantic_role":  {
+                                                                                    "$ref":  "#/$defs/CommonDesignRoleV1"
+                                                                                },
+                                                              "allowed_region":  {
+                                                                                     "$ref":  "#/$defs/NormalizedDesignRectV1"
+                                                                                 },
+                                                              "required":  {
+                                                                               "type":  "boolean"
+                                                                           }
+                                                          }
+                                       },
+                  "LayoutGrammarV1":  {
+                                          "type":  "object",
+                                          "additionalProperties":  false,
+                                          "required":  [
+                                                           "schema_version",
+                                                           "grammar_id",
+                                                           "organization_id",
+                                                           "artifact_class",
+                                                           "layout_family_id",
+                                                           "slots",
+                                                           "grid_column_count",
+                                                           "outer_margin",
+                                                           "grammar_sha256"
+                                                       ],
+                                          "properties":  {
+                                                             "schema_version":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                             "grammar_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                             "organization_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                             "artifact_class":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  2048
+                                                                                },
+                                                             "layout_family_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                             "slots":  {
+                                                                           "type":  "array",
+                                                                           "maxItems":  4096,
+                                                                           "items":  {
+                                                                                         "$ref":  "#/$defs/LayoutSlotRuleV1"
+                                                                                     }
+                                                                       },
+                                                             "grid_column_count":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0,
+                                                                                       "maximum":  65535
+                                                                                   },
+                                                             "outer_margin":  {
+                                                                                  "$ref":  "#/$defs/DesignDistributionV1"
+                                                                              },
+                                                             "grammar_sha256":  {
+                                                                                    "type":  "string",
+                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                    "maxLength":  71
+                                                                                }
+                                                         }
+                                      }
+              }
+}

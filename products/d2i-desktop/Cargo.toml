@@ -28,6 +28,7 @@ d2i-office-capability = { path = "../../crates/d2i-office-capability" }
 d2i-document-capability = { path = "../../crates/d2i-document-capability" }
 d2i-spreadsheet-capability = { path = "../../crates/d2i-spreadsheet-capability" }
 d2i-presentation-capability = { path = "../../crates/d2i-presentation-capability" }
+d2i-design-intelligence = { path = "../../crates/d2i-design-intelligence" }
 d2i-case-learning = { path = "../../crates/d2i-case-learning" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }

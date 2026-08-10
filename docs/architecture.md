@@ -742,3 +742,37 @@ OFFICE-300-compatible query, four actual Qwen calls, 13 PPTX mutations, four
 PowerPoint COM mutations including an actual chart, five rendered slides,
 fresh reopen after every operation, protected audit, replay, signed
 certification, and zero residual PowerPoint, Excel, WFP, and profile state.
+
+## Organization-Scoped Design Intelligence
+
+OFFICE-450 compiles approved PPTX/HWPX/DOCX artifact structure into an
+organization-scoped, artifact-class-scoped Design Pack. Corpus approval and
+data classification are checked before extraction. Features contain normalized
+geometry, semantic design roles, distributions, density, and content-minimized
+exemplar references; they do not contain full source prose, raw XML, font
+binaries, paths, scripts, or credentials.
+
+Gold exemplars receive stronger deterministic weight than ordinary approved
+or legacy material. Family discovery is stable and content-addressed. A
+candidate remains quarantined until holdout validation and a separate signed
+organization approval produce an immutable production pack. Feedback creates
+another quarantined candidate and never mutates a promoted pack in place.
+
+At runtime, exact organization and artifact-class binding select a pack and a
+content-minimized exemplar. Typography and layout solvers choose only policy
+ranges, approved fallbacks, and closed slot operations. Table, chart, image,
+logo, and color roles remain structured backend inputs. OFFICE-300 typed facts
+remain truth authority; design may emphasize an authoritative fact but cannot
+create one. Qwen receives only claim references, length, language, tone, and
+bounded semantic choices. Raw coordinates, colors, font families, font sizes,
+PPTX/HWPX/DOCX XML, COM, and mutation authority are forbidden at the model
+boundary.
+
+The hard critic enforces truth and non-negotiable geometry/brand constraints;
+the soft critic measures style distance against the selected family holdout
+envelope. Refinement is capped at five rounds and uses a closed operation enum.
+PPTX quality requires the existing private-desktop PowerPoint PNG render path;
+HWPX quality uses the existing Rust-native structural reopen. Both retain
+exact WFP, protected audit, immutable generations, replay, and zero-residual
+cleanup from prior Office tracks. See ADR 0042 and
+`docs/office/design-intelligence-v1.md`.

@@ -720,5 +720,46 @@ audit, signed certification, structural quality, rendering, and zero residual
 PowerPoint, Excel, worker, WFP, profile, lock, temporary package, activation,
 or credential state.
 
-OFFICE-400 is complete; the first active task is
-`D2I-OFFICE-500 - PDF and Document Interchange`, which has not started.
+OFFICE-400 and OFFICE-450 are complete. `D2I-OFFICE-500 - PDF and Document
+Interchange` is the first active task and has not started.
+
+## OFFICE-450 Organizational Design Intelligence (Complete)
+
+The current implementation adds the platform-neutral
+`d2i-design-intelligence` crate, 50 generated strict Draft 2020-12 schemas,
+organization/artifact-class corpus and feature contracts, deterministic
+Gold-weighted family and grammar compilation, content-minimized exemplar
+retrieval, signed immutable pack approval, typography/layout solvers, hard and
+soft critics, closed five-round refinement, visual-claim integrity, 128 x 100
+replay, Completion, certification, and an inspection-only verifier CLI.
+
+Desktop reuses the existing OFFICE-200/400 semantic snapshots to extract
+normalized PPTX and HWPX/DOCX design features without raw XML or source prose.
+The new official runner separates non-admin `All` from elevated product
+`Completion`. `All`, schema drift, Design crate tests, Desktop extraction tests,
+and OFFICE-100 through OFFICE-400 regressions pass. One actual pinned
+Qwen3-4B/llama.cpp call passes with an 11.029-second measured runtime,
+2,615,492,608-byte peak Job memory, and zero raw corpus, XML, coordinate,
+color, font, font-size, or layout-execution authority.
+
+The elevated Completion compiles two isolated organizations across 40 PPTX,
+10 HWPX, and 10 DOCX artifacts into 480 normalized features, five families,
+five rules, and 272 content-minimized exemplars. Its 34 training and 26 holdout
+artifacts include 48 held-out PPTX units and 10 held-out HWPX documents. Exact
+mapping, family top-1, and layout accuracy are each 1,000,000 ppm. The live
+path creates two five-slide PPTX files, renders all ten slides through pinned
+private-desktop PowerPoint, mutates and freshly reopens two HWPX documents,
+passes cross-organization rejection, crash windows A-L, and 128 x 100 replay,
+then removes every owned process, profile, WFP object, package, key, and lock.
+
+The pre-roadmap-transition certification records completion report hash
+`sha256:c395fff8932c9339883da49957fcaa1a2ce7f5f89262534f7608653c0afe44f9`,
+certification hash
+`sha256:79d51c037238a216543b5a2a303f303135d0f36303827fe7cd72cd43829f20e9`,
+replay hash
+`sha256:f6fe89586f519edfe6fc1dc1a3258d269776d5fde522fbb5e528a900a203ebff`,
+and protected-audit terminal hash
+`sha256:2c7b2181c52d0f2a553a06bcac08e27c7d8d1d2b3610e95e00638e27749c123c`.
+The final post-roadmap source tree is sealed by a separate Completion run;
+its terminal hashes are reported with the release commit rather than embedded
+back into the hashed source tree.

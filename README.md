@@ -274,8 +274,8 @@ calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
-EDGE-100 and OFFICE-100 through OFFICE-400 are also complete. The next active
-task is `D2I-OFFICE-500 - PDF and Document Interchange`.
+EDGE-100 and OFFICE-100 through OFFICE-450 are also complete. The first active
+task is `D2I-OFFICE-500 - PDF and Document Interchange`; it has not started.
 
 Run the OFFICE-300 deterministic spreadsheet contracts, package security,
 query/context slicing, worker, and predecessor regressions with:
@@ -310,6 +310,22 @@ sixteen OFFICE-300 typed facts to Qwen, then lowers only a bounded slide plan.
 Actual PowerPoint chart work runs on a private Windows desktop with exact
 PowerPoint/Excel WFP denial, fresh reopen, PNG rendering, signed certification,
 and zero owned residual state.
+
+Run the OFFICE-450 organization-scoped design contracts, schema drift,
+PPTX/HWPX feature extraction, deterministic grammar/solver/critic, replay,
+and predecessor regressions with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/run-design-intelligence-v1.ps1 `
+  -Mode All
+```
+
+Product `Completion` additionally requires sealed OFFICE-400 evidence, pinned
+Qwen3-4B/llama.cpp, installed signed PowerPoint/chart Excel, and one elevated
+session for temporary exact WFP isolation. Qwen receives only bounded verified
+facts and language/semantic options; typography, geometry, color, layout,
+rendering, and final quality remain deterministic D2I authority.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:

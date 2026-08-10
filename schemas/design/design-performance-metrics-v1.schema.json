@@ -1,0 +1,66 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/design-performance-metrics-v1.schema.json",
+    "title":  "DesignPerformanceMetricsV1",
+    "$ref":  "#/$defs/DesignPerformanceMetricsV1",
+    "$defs":  {
+                  "DesignPerformanceMetricsV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "corpus_parse_microseconds",
+                                                                      "feature_extraction_microseconds",
+                                                                      "grammar_compile_microseconds",
+                                                                      "exemplar_retrieval_microseconds",
+                                                                      "solver_microseconds",
+                                                                      "render_microseconds",
+                                                                      "critic_microseconds",
+                                                                      "refinement_microseconds",
+                                                                      "model_microseconds",
+                                                                      "peak_worker_memory_bytes"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "corpus_parse_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                        "feature_extraction_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                        "grammar_compile_microseconds":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                        "exemplar_retrieval_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                        "solver_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "render_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "critic_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "refinement_microseconds":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                        "model_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                        "peak_worker_memory_bytes":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     }
+                                                                    }
+                                                 }
+              }
+}

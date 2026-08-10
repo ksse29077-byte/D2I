@@ -49,6 +49,10 @@ jobs:
       - name: Check root formatting
         if: steps.change.outputs.classification != 'module_only'
         run: cargo fmt --all -- --check
+      - name: Check Design Intelligence schema drift
+        if: steps.change.outputs.classification != 'module_only'
+        shell: pwsh
+        run: ./scripts/office/generate-design-intelligence-schemas.ps1 -Check
       - name: Lint root workspace
         if: steps.change.outputs.classification != 'module_only'
         run: cargo clippy --workspace --all-targets --all-features -- -D warnings

@@ -30,7 +30,7 @@ resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
 one-step limited autonomy, signed control and human-exception handling, and a
 bounded General Office duty cycle while preserving Policy, activation, and
 KRN as the only action path. Track W, EDGE-100, and OFFICE-100 through
-OFFICE-400 are complete. Track O has priority over remaining physical
+OFFICE-450 are complete. Track O has priority over remaining physical
 execution-plane expansion. The active next task is
 `D2I-OFFICE-500 - PDF and Document Interchange`.
 
@@ -76,6 +76,14 @@ facts, never PPTX/XML/workbook bytes, raw geometry, paths, chart formulas, or
 COM. The actual pinned Qwen/llama.cpp, installed PowerPoint/chart Excel,
 temporary exact WFP, certification, replay, audit, and zero-residual Completion
 gates passed.
+
+OFFICE-450 adds a platform-neutral design compiler and a Desktop extraction
+and quality layer over existing OFFICE-200/300/400 authorities. PPTX/HWPX/DOCX
+parsers emit normalized, content-minimized features; Design Packs are
+organization-scoped, approval-signed, immutable, and non-executable. Qwen may
+render language or choose among bounded semantic options only. Existing
+private-desktop PowerPoint, exact temporary WFP, fresh reopen, protected Office
+store, and structural verification remain the only live evidence path.
 
 OFFICE-200 adds a Desktop-owned trusted document dispatcher, separate bounded
 HWPX and DOCX package workers, and a hidden interactive-current-user Word COM

@@ -1,0 +1,134 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/design/template-family-v1.schema.json",
+    "title":  "TemplateFamilyV1",
+    "$ref":  "#/$defs/TemplateFamilyV1",
+    "$defs":  {
+                  "DesignPackMaturityV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "template_lock",
+                                                            "family_learned",
+                                                            "organization_learned"
+                                                        ]
+                                           },
+                  "TemplateFamilyV1":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "schema_version",
+                                                            "organization_id",
+                                                            "artifact_class",
+                                                            "family_id",
+                                                            "family_version",
+                                                            "eligible_exemplar_refs",
+                                                            "layout_role_ids",
+                                                            "typography_grammar_ref",
+                                                            "color_grammar_ref",
+                                                            "spacing_grammar_ref",
+                                                            "table_grammar_ref",
+                                                            "chart_grammar_ref",
+                                                            "image_grammar_ref",
+                                                            "maturity",
+                                                            "confidence_millionths",
+                                                            "family_sha256"
+                                                        ],
+                                           "properties":  {
+                                                              "schema_version":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                              "organization_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                              "artifact_class":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  2048
+                                                                                 },
+                                                              "family_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                              "family_version":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  2048
+                                                                                 },
+                                                              "eligible_exemplar_refs":  {
+                                                                                             "type":  "array",
+                                                                                             "maxItems":  4096,
+                                                                                             "items":  {
+                                                                                                           "type":  "string",
+                                                                                                           "minLength":  1,
+                                                                                                           "maxLength":  2048
+                                                                                                       }
+                                                                                         },
+                                                              "layout_role_ids":  {
+                                                                                      "type":  "array",
+                                                                                      "maxItems":  4096,
+                                                                                      "items":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  1,
+                                                                                                    "maxLength":  2048
+                                                                                                }
+                                                                                  },
+                                                              "typography_grammar_ref":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                              "color_grammar_ref":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                              "spacing_grammar_ref":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                              "table_grammar_ref":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                              "chart_grammar_ref":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                              "image_grammar_ref":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                              "maturity":  {
+                                                                               "$ref":  "#/$defs/DesignPackMaturityV1"
+                                                                           },
+                                                              "confidence_millionths":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                              "family_sha256":  {
+                                                                                    "type":  "string",
+                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                    "maxLength":  71
+                                                                                }
+                                                          }
+                                       }
+              }
+}
