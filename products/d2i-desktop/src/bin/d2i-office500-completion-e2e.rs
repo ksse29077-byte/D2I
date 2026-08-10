@@ -8,15 +8,16 @@ mod windows_e2e {
     };
     use d2i_document_capability::DocumentStyleRoleV1;
     use d2i_pdf_interchange::{
-        pdf_canonical_sha256, DocumentInterchangeManifestV1, FinalArtifactPairStateV1,
-        FinalArtifactPairV1, PdfExportBackendApprovalV1, PdfExportBackendDescriptorV1,
-        PdfExportBackendKindV1, PdfExportBindingV1, PdfExportProfileV1, PdfExportReceiptV1,
-        PdfExportRequestV1, PdfFailureCodeV1, PdfFinalizationIntentV1, PdfFinalizationSealV1,
-        PdfGeometryVerificationV1, PdfInterchangeProfileV1, PdfPageSelectionPolicyV1,
-        PdfPerformanceMetricsV1, PdfPostExportVerificationV1, PdfResidualMetricsV1,
-        PdfSecurityMetricsV1, PdfSourceFormatV1, PdfVerificationStatusV1,
-        PdfVisualFidelityReportV1, PdfWorkCertificationV1, PdfWorkCompletionReportV1,
-        PdfWorkReplayReportV1, SubmissionArtifactManifestV1, ZERO_HASH,
+        pdf_canonical_sha256, verify_pdf_recovery_matrix_v1, DocumentInterchangeManifestV1,
+        FinalArtifactPairStateV1, FinalArtifactPairV1, PdfExportBackendApprovalV1,
+        PdfExportBackendDescriptorV1, PdfExportBackendKindV1, PdfExportBindingV1,
+        PdfExportProfileV1, PdfExportReceiptV1, PdfExportRequestV1, PdfFailureCodeV1,
+        PdfFinalizationIntentV1, PdfFinalizationSealV1, PdfGeometryVerificationV1,
+        PdfInterchangeProfileV1, PdfPageSelectionPolicyV1, PdfPerformanceMetricsV1,
+        PdfPostExportVerificationV1, PdfResidualMetricsV1, PdfSecurityMetricsV1, PdfSourceFormatV1,
+        PdfVerificationStatusV1, PdfVisualFidelityReportV1, PdfWorkCertificationV1,
+        PdfWorkCompletionReportV1, PdfWorkReplayReportV1, SubmissionArtifactManifestV1,
+        MAX_EXTERNAL_PDF_BYTES, ZERO_HASH,
     };
     use d2i_presentation_capability::default_presentation_resource_limits;
     use d2i_spreadsheet_capability::default_spreadsheet_resource_limits;
@@ -27,8 +28,8 @@ mod windows_e2e {
         installed_powerpoint_process_ids, installed_process_ids_by_name,
         installed_word_process_ids, is_reparse_point, provision_appcontainer_profile,
         remove_wfp_loopback_policy, spawn_zero_capability_appcontainer_in_job,
-        verify_wfp_loopback_policy_with_verifier_network_denial, WindowsAppContainerPathAccess,
-        WindowsJob, WindowsJobLimits,
+        validate_pdf_password_status, verify_wfp_loopback_policy_with_verifier_network_denial,
+        WindowsAppContainerPathAccess, WindowsJob, WindowsJobLimits,
     };
     use ed25519_dalek::SigningKey;
     use serde::{Deserialize, Serialize};
@@ -95,6 +96,14 @@ mod windows_e2e {
         approval: PdfExportBackendApprovalV1,
         request: PdfExportRequestV1,
         binding: PdfExportBindingV1,
+    }
+
+    #[derive(Debug, Clone, Copy)]
+    struct ExternalPdfBoundaryCounts {
+        render_only: u32,
+        malformed_rejected: u32,
+        password_rejected: u32,
+        oversize_rejected: u32,
     }
 
     #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -229,13 +238,15 @@ mod windows_e2e {
             &pairs[0].pair_sha256,
             "passed",
         )?;
-        let external_pdf_render_only_cases = render_external_pdf_case(&arguments, &exports[0].pdf)?;
+        let external_pdf = verify_external_pdf_boundaries(&arguments, &exports[0].pdf, now)?;
         append_audit(
             &mut audit,
-            "external-pdf-render-only",
+            "external-pdf-boundaries",
             &exports[0].export.output_pdf_sha256,
             "passed",
         )?;
+        let crash_windows_verified =
+            verify_pdf_recovery_matrix_v1().map_err(|error| error.to_string())?;
         let replay = replay_report()?;
         replay.validate_gate().map_err(|error| error.to_string())?;
         write_json(&arguments.output_root.join("replay-report.json"), &replay)?;
@@ -281,7 +292,10 @@ mod windows_e2e {
             pdf_load_count: u32::try_from(exports.len()).map_err(|error| error.to_string())?,
             rendered_page_count,
             powerpoint_fidelity_comparisons,
-            external_pdf_render_only_cases,
+            external_pdf_render_only_cases: external_pdf.render_only,
+            external_pdf_malformed_rejections: external_pdf.malformed_rejected,
+            external_pdf_password_rejections: external_pdf.password_rejected,
+            external_pdf_oversize_rejections: external_pdf.oversize_rejected,
             actual_qwen_invocation_count: model.model_invocation_count,
             final_artifact_pair_count: u32::try_from(pairs.len())
                 .map_err(|error| error.to_string())?,
@@ -293,7 +307,7 @@ mod windows_e2e {
             pdfa_exporter_requested_cases: count_pdfa_exporter_flags(&exports),
             pdfa_external_conformance_verified_cases: 0,
             hwpx_pdf_export_status: PdfVerificationStatusV1::RequiresLicensedHancomRenderBackend,
-            crash_windows_verified: 13,
+            crash_windows_verified,
             replay_report_sha256: replay.report_sha256.clone(),
             protected_audit_terminal_sha256: final_audit_terminal,
             security: PdfSecurityMetricsV1::default(),
@@ -620,6 +634,7 @@ mod windows_e2e {
             &render_root,
             &render_report,
             false,
+            None,
         )?;
         let render: PdfRenderWorkerEvidenceV1 = read_json(&render_report)?;
         if render.external_untrusted
@@ -918,6 +933,7 @@ mod windows_e2e {
         evidence_root: &Path,
         evidence_report: &Path,
         external: bool,
+        expected_failure: Option<&str>,
     ) -> Result<u64, String> {
         let program_data = std::env::var_os("ProgramData")
             .map(PathBuf::from)
@@ -1045,12 +1061,20 @@ mod windows_e2e {
                         .wait_timeout(Duration::from_secs(120))
                         .map_err(|error| error.to_string())?
                     {
-                        Some(0) => Ok(()),
+                        Some(0) if expected_failure.is_none() => Ok(false),
+                        Some(0) => Err(
+                            "PDF render AppContainer succeeded when failure was required"
+                                .to_owned(),
+                        ),
                         Some(code) => {
                             let detail = fs::read_to_string(&report)
                                 .unwrap_or_else(|_| "failure report unavailable".to_owned());
                             let detail = detail.chars().take(2_048).collect::<String>();
-                            Err(format!("PDF render AppContainer exited {code}: {detail}"))
+                            if expected_failure.is_some_and(|expected| detail.contains(expected)) {
+                                Ok(true)
+                            } else {
+                                Err(format!("PDF render AppContainer exited {code}: {detail}"))
+                            }
                         }
                         None => {
                             child.terminate().map_err(|error| error.to_string())?;
@@ -1060,7 +1084,7 @@ mod windows_e2e {
                 })();
                 let memory = job.memory_accounting().map_err(|error| error.to_string());
                 let job_cleanup = job.terminate().map_err(|error| error.to_string());
-                child_operation?;
+                let failed_as_expected = child_operation?;
                 job_cleanup?;
                 let verified = verify_wfp_loopback_policy_with_verifier_network_denial(
                     &worker_copy,
@@ -1071,6 +1095,9 @@ mod windows_e2e {
                 .map_err(|error| error.to_string())?;
                 if verified != policy {
                     return Err("PDF render WFP policy differs after worker exit".to_owned());
+                }
+                if failed_as_expected {
+                    return memory.map(|value| value.peak_job_memory_bytes);
                 }
                 if !report.is_file() {
                     return Err("PDF render worker report is absent".to_owned());
@@ -1533,7 +1560,11 @@ mod windows_e2e {
         }
     }
 
-    fn render_external_pdf_case(arguments: &Arguments, pdf: &Path) -> Result<u32, String> {
+    fn verify_external_pdf_boundaries(
+        arguments: &Arguments,
+        pdf: &Path,
+        now: u64,
+    ) -> Result<ExternalPdfBoundaryCounts, String> {
         let external = arguments.output_root.join("pdf/external-untrusted.pdf");
         fs::copy(pdf, &external).map_err(|error| error.to_string())?;
         let render_root = arguments.output_root.join("renders/external-untrusted");
@@ -1545,6 +1576,7 @@ mod windows_e2e {
             &render_root,
             &report,
             true,
+            None,
         )?;
         let evidence: PdfRenderWorkerEvidenceV1 = read_json(&report)?;
         if !evidence.external_untrusted
@@ -1554,7 +1586,46 @@ mod windows_e2e {
         {
             return Err("external PDF was not confined to render-only status".to_owned());
         }
-        Ok(1)
+        let malformed = arguments.output_root.join("pdf/external-malformed.pdf");
+        fs::write(&malformed, b"%PDF-1.7\nnot-a-valid-pdf\n%%EOF")
+            .map_err(|error| error.to_string())?;
+        let malformed_render = arguments.output_root.join("renders/external-malformed");
+        fs::create_dir(&malformed_render).map_err(|error| error.to_string())?;
+        let malformed_report = arguments
+            .output_root
+            .join("reports/external-malformed.json");
+        let malformed_result = run_render_worker_sandboxed(
+            &arguments.render_worker,
+            &malformed,
+            &malformed_render,
+            &malformed_report,
+            true,
+            Some("PdfDocument load failed"),
+        );
+        let malformed_cleanup = fs::remove_file(&malformed).map_err(|error| error.to_string());
+        let render_cleanup = fs::remove_dir(&malformed_render).map_err(|error| error.to_string());
+        malformed_result?;
+        malformed_cleanup?;
+        render_cleanup?;
+        if malformed_report.exists() {
+            return Err("malformed PDF failure report escaped its sandbox".to_owned());
+        }
+        if validate_pdf_password_status(true).is_ok() {
+            return Err("password-protected PDF status was accepted".to_owned());
+        }
+        if evidence
+            .render_request
+            .validate_limits(MAX_EXTERNAL_PDF_BYTES.saturating_add(1), now)
+            .is_ok()
+        {
+            return Err("oversized external PDF passed preflight".to_owned());
+        }
+        Ok(ExternalPdfBoundaryCounts {
+            render_only: 1,
+            malformed_rejected: 1,
+            password_rejected: 1,
+            oversize_rejected: 1,
+        })
     }
 
     fn replay_report() -> Result<PdfWorkReplayReportV1, String> {

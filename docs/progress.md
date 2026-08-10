@@ -771,6 +771,10 @@ fixed-format exporters, a zero-capability AppContainer Windows.Data.Pdf
 renderer, source/PDF immutable pairs, signed backend approvals, exact one-shot
 bindings, finalization seals, interchange/submission manifests, protected
 audit, crash windows A-M, and 128 x 100 deterministic replay.
+Crash A-M are derived from a closed durable-state recovery matrix rather than
+a declared count: ambiguous export outcomes require inspection, partial render
+resume requires an exact PDF hash and verified page checkpoint, and a changed
+source generation prohibits the finalization seal.
 
 The certified reference flow creates and exports two DOCX, two XLSX, and two
 five-slide PPTX sources. Every PDF is freshly loaded and independently rendered
@@ -787,6 +791,10 @@ selection. Its raw PDF, page image, extracted PDF fact, and execution-authority
 counters remain zero. External PDF intake is render-only, PDF/A request and
 exporter flag remain distinct from external conformance, and HWPX-to-PDF reports
 `requires_licensed_hancom_render_backend`.
+The external-PDF boundary also executes a malformed PDF AppContainer loader
+rejection and independently verifies the no-password and pre-load oversize
+fail-closed branches; none of these failures promote facts or retain sandbox
+state.
 
 OFFICE-100 through OFFICE-500 are complete. `D2I-OFFICE-600 - Browser Research
 and Controlled Download` is the first active task and is not implemented by

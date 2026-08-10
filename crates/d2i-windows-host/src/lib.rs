@@ -22,7 +22,8 @@ pub use excel_automation::{
 #[cfg(windows)]
 pub use pdf_render::{
     fingerprint_png_with_windows_imaging, render_pdf_with_windows_data_pdf,
-    WindowsImageFingerprintV1, WindowsPdfPageRenderReceiptV1, WindowsPdfRenderReceiptV1,
+    validate_pdf_password_status, WindowsImageFingerprintV1, WindowsPdfPageRenderReceiptV1,
+    WindowsPdfRenderReceiptV1,
 };
 #[cfg(windows)]
 pub use powerpoint_automation::{

@@ -111,11 +111,7 @@ pub fn render_pdf_with_windows_data_pdf(
     let password_protected = document.IsPasswordProtected().map_err(|error| {
         WindowsHostError::new(format!("PDF password status query failed: {error}"))
     })?;
-    if password_protected {
-        return Err(WindowsHostError::new(
-            "password-protected PDF is unsupported",
-        ));
-    }
+    validate_pdf_password_status(password_protected)?;
     let page_count = document
         .PageCount()
         .map_err(|error| WindowsHostError::new(format!("PDF page count failed: {error}")))?;
@@ -230,6 +226,15 @@ pub fn render_pdf_with_windows_data_pdf(
         total_rendered_pixels,
         pages,
     })
+}
+
+pub fn validate_pdf_password_status(password_protected: bool) -> Result<(), WindowsHostError> {
+    if password_protected {
+        return Err(WindowsHostError::new(
+            "password-protected PDF is unsupported",
+        ));
+    }
+    Ok(())
 }
 
 fn read_stream(stream: &InMemoryRandomAccessStream) -> Result<Vec<u8>, WindowsHostError> {
@@ -422,12 +427,41 @@ fn validated_absolute_regular_file(path: &Path, label: &str) -> Result<PathBuf, 
 
 #[cfg(test)]
 mod geometry_tests {
-    use super::dips_to_millipoints;
+    use super::{
+        dips_to_millipoints, render_pdf_with_windows_data_pdf, validate_pdf_password_status,
+    };
+    use std::fs;
 
     #[test]
     fn converts_windows_pdf_dips_to_millipoints() {
         assert_eq!(dips_to_millipoints(960.0).ok(), Some(720_000));
         assert_eq!(dips_to_millipoints(720.0).ok(), Some(540_000));
         assert!(dips_to_millipoints(0.0).is_err());
+    }
+
+    #[test]
+    fn malformed_pdf_loader_and_password_status_fail_closed() {
+        let unique = format!(
+            "d2i-office500-malformed-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|value| value.as_nanos())
+                .unwrap_or_default()
+        );
+        let root = std::env::temp_dir().join(unique);
+        let output = root.join("render");
+        fs::create_dir_all(&output).unwrap_or_else(|error| panic!("fixture directory: {error}"));
+        let malformed = root.join("malformed.pdf");
+        fs::write(&malformed, b"%PDF-1.7\nnot-a-valid-pdf\n%%EOF")
+            .unwrap_or_else(|error| panic!("fixture write: {error}"));
+        let result = render_pdf_with_windows_data_pdf(&malformed, &output, 1, 10_000_000, 1_600);
+        assert!(result.is_err());
+        assert!(fs::read_dir(&output)
+            .map(|entries| entries.count() == 0)
+            .unwrap_or(false));
+        assert!(validate_pdf_password_status(true).is_err());
+        assert!(validate_pdf_password_status(false).is_ok());
+        fs::remove_dir_all(&root).unwrap_or_else(|error| panic!("fixture cleanup: {error}"));
     }
 }

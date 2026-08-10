@@ -24,6 +24,336 @@ pub const MAX_RENDER_PIXELS: u64 = 500_000_000;
 pub const REQUIRED_REPLAY_SCENARIOS: u32 = 128;
 pub const REQUIRED_REPLAY_RUNS: u32 = 100;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PdfRecoveryStageV1 {
+    BeforeActivation,
+    OfficeOpenBeforeExport,
+    ExportOutcomeUnknown,
+    PdfObserved,
+    PdfHashDurable,
+    ExportReceiptDurable,
+    PartialRenderDurable,
+    RenderComplete,
+    VerificationDurable,
+    PairDurable,
+    SealDurable,
+    ManifestDurable,
+    SourceGenerationChanged,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PdfRecoveryActionV1 {
+    NoSideEffect,
+    CloseOfficeWithoutExport,
+    InspectAmbiguousExport,
+    RecoverExistingPdf,
+    ResumeRender,
+    ResumeRemainingRenderPages,
+    RecomputeVisualReport,
+    RepairPairMetadata,
+    RepairFinalizationSeal,
+    RepairSubmissionManifest,
+    RepairCaseProjection,
+    ProhibitSeal,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PdfRecoveryEvidenceV1 {
+    pub stage: PdfRecoveryStageV1,
+    pub exact_pdf_hash_available: bool,
+    pub render_checkpoint_verified: bool,
+    pub source_generation_matches: bool,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PdfRecoveryDecisionV1 {
+    pub action: PdfRecoveryActionV1,
+    pub blind_export_replay_allowed: bool,
+    pub inspect_existing_pdf: bool,
+    pub resume_render: bool,
+    pub metadata_only: bool,
+    pub seal_allowed: bool,
+}
+
+/// Selects the only recovery action allowed by one durable finalization state.
+pub fn decide_pdf_recovery_v1(
+    evidence: PdfRecoveryEvidenceV1,
+) -> Result<PdfRecoveryDecisionV1, PdfInterchangeError> {
+    use PdfRecoveryActionV1 as Action;
+    use PdfRecoveryStageV1 as Stage;
+
+    let requires_pdf_hash = matches!(
+        evidence.stage,
+        Stage::PdfObserved
+            | Stage::PdfHashDurable
+            | Stage::ExportReceiptDurable
+            | Stage::PartialRenderDurable
+            | Stage::RenderComplete
+            | Stage::VerificationDurable
+            | Stage::PairDurable
+            | Stage::SealDurable
+            | Stage::ManifestDurable
+            | Stage::SourceGenerationChanged
+    );
+    if requires_pdf_hash && !evidence.exact_pdf_hash_available {
+        return Err(integrity("PDF recovery requires an exact durable PDF hash"));
+    }
+    if evidence.stage == Stage::PartialRenderDurable && !evidence.render_checkpoint_verified {
+        return Err(integrity(
+            "partial PDF render recovery requires a verified page checkpoint",
+        ));
+    }
+    if evidence.stage == Stage::SourceGenerationChanged {
+        if evidence.source_generation_matches {
+            return Err(integrity(
+                "source-change recovery requires a changed source generation",
+            ));
+        }
+    } else if !evidence.source_generation_matches {
+        return Err(integrity(
+            "PDF recovery evidence is stale for the source generation",
+        ));
+    }
+
+    let (action, inspect_existing_pdf, resume_render, metadata_only, seal_allowed) = match evidence
+        .stage
+    {
+        Stage::BeforeActivation => (Action::NoSideEffect, false, false, false, false),
+        Stage::OfficeOpenBeforeExport => {
+            (Action::CloseOfficeWithoutExport, false, false, false, false)
+        }
+        Stage::ExportOutcomeUnknown => (Action::InspectAmbiguousExport, true, false, false, false),
+        Stage::PdfObserved | Stage::PdfHashDurable => {
+            (Action::RecoverExistingPdf, true, false, false, false)
+        }
+        Stage::ExportReceiptDurable => (Action::ResumeRender, true, true, false, false),
+        Stage::PartialRenderDurable => {
+            (Action::ResumeRemainingRenderPages, true, true, false, false)
+        }
+        Stage::RenderComplete => (Action::RecomputeVisualReport, true, false, true, false),
+        Stage::VerificationDurable => (Action::RepairPairMetadata, true, false, true, false),
+        Stage::PairDurable => (Action::RepairFinalizationSeal, true, false, true, true),
+        Stage::SealDurable => (Action::RepairSubmissionManifest, true, false, true, true),
+        Stage::ManifestDurable => (Action::RepairCaseProjection, true, false, true, true),
+        Stage::SourceGenerationChanged => (Action::ProhibitSeal, true, false, true, false),
+    };
+    Ok(PdfRecoveryDecisionV1 {
+        action,
+        blind_export_replay_allowed: false,
+        inspect_existing_pdf,
+        resume_render,
+        metadata_only,
+        seal_allowed,
+    })
+}
+
+/// Verifies the closed A-M recovery matrix and returns its exact case count.
+pub fn verify_pdf_recovery_matrix_v1() -> Result<u32, PdfInterchangeError> {
+    use PdfRecoveryActionV1 as Action;
+    use PdfRecoveryStageV1 as Stage;
+
+    let cases = [
+        (
+            Stage::BeforeActivation,
+            false,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::NoSideEffect,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: false,
+                resume_render: false,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::OfficeOpenBeforeExport,
+            false,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::CloseOfficeWithoutExport,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: false,
+                resume_render: false,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::ExportOutcomeUnknown,
+            false,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::InspectAmbiguousExport,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::PdfObserved,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RecoverExistingPdf,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::PdfHashDurable,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RecoverExistingPdf,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::ExportReceiptDurable,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::ResumeRender,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: true,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::PartialRenderDurable,
+            true,
+            true,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::ResumeRemainingRenderPages,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: true,
+                metadata_only: false,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::RenderComplete,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RecomputeVisualReport,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: true,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::VerificationDurable,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RepairPairMetadata,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: true,
+                seal_allowed: false,
+            },
+        ),
+        (
+            Stage::PairDurable,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RepairFinalizationSeal,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: true,
+                seal_allowed: true,
+            },
+        ),
+        (
+            Stage::SealDurable,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RepairSubmissionManifest,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: true,
+                seal_allowed: true,
+            },
+        ),
+        (
+            Stage::ManifestDurable,
+            true,
+            false,
+            true,
+            PdfRecoveryDecisionV1 {
+                action: Action::RepairCaseProjection,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: true,
+                seal_allowed: true,
+            },
+        ),
+        (
+            Stage::SourceGenerationChanged,
+            true,
+            false,
+            false,
+            PdfRecoveryDecisionV1 {
+                action: Action::ProhibitSeal,
+                blind_export_replay_allowed: false,
+                inspect_existing_pdf: true,
+                resume_render: false,
+                metadata_only: true,
+                seal_allowed: false,
+            },
+        ),
+    ];
+    for (stage, exact_pdf_hash_available, render_checkpoint_verified, source_matches, expected) in
+        cases
+    {
+        let decision = decide_pdf_recovery_v1(PdfRecoveryEvidenceV1 {
+            stage,
+            exact_pdf_hash_available,
+            render_checkpoint_verified,
+            source_generation_matches: source_matches,
+        })?;
+        if decision != expected {
+            return Err(integrity(format!(
+                "PDF recovery matrix decision drifted at {stage:?}: actual {decision:?}, expected {expected:?}"
+            )));
+        }
+    }
+    u32::try_from(cases.len()).map_err(|error| invalid(format!("recovery case count: {error}")))
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PdfInterchangeError {
     Invalid(String),
@@ -471,6 +801,9 @@ impl PdfWorkCompletionReportV1 {
             && self.rendered_page_count >= 15
             && self.powerpoint_fidelity_comparisons >= 5
             && self.external_pdf_render_only_cases >= 1
+            && self.external_pdf_malformed_rejections >= 1
+            && self.external_pdf_password_rejections >= 1
+            && self.external_pdf_oversize_rejections >= 1
             && self.actual_qwen_invocation_count >= 1
             && self.final_artifact_pair_count >= 6
             && self.submission_manifest_count >= 6

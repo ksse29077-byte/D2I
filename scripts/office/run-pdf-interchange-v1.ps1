@@ -285,7 +285,11 @@ function Invoke-Completion {
         $finished.rendered_page_count -lt 15 -or $finished.word_pdf_exports -lt 2 -or
         $finished.excel_pdf_exports -lt 2 -or $finished.powerpoint_pdf_exports -lt 2 -or
         $finished.pdf_load_count -lt 6 -or $finished.powerpoint_fidelity_comparisons -lt 5 -or
-        $finished.external_pdf_render_only_cases -lt 1 -or $finished.actual_qwen_invocation_count -lt 1 -or
+        $finished.external_pdf_render_only_cases -lt 1 -or
+        $finished.external_pdf_malformed_rejections -lt 1 -or
+        $finished.external_pdf_password_rejections -lt 1 -or
+        $finished.external_pdf_oversize_rejections -lt 1 -or
+        $finished.actual_qwen_invocation_count -lt 1 -or
         $finished.final_artifact_pair_count -lt 6 -or $finished.submission_manifest_count -lt 6 -or
         $finished.stale_pair_count -lt 1 -or $finished.superseded_pair_count -lt 1 -or
         $finished.pdfa_requested_cases -lt 1 -or $finished.pdfa_exporter_requested_cases -lt 1 -or
@@ -327,8 +331,14 @@ switch ($Mode) {
     'ExternalPdf' { Invoke-ContractFilter 'office500-external' 'hwpx_requires_licensed_backend_and_external_pdf_is_render_only' }
     'Manifest' { Invoke-ContractFilter 'office500-manifest' 'source_change_supersedes_pair_and_removes_submission_readiness' }
     'Model' { Invoke-Model }
-    'Negative' { Invoke-Contract }
-    'CrashRecovery' { Invoke-ContractFilter 'office500-recovery' 'replay_requires_exact_128_by_100' }
+    'Negative' {
+        Invoke-Contract
+        Invoke-Cargo 'office500-negative-windows-pdf' @(
+            'test', '--locked', '-p', 'd2i-windows-host', '--all-features',
+            'malformed_pdf_loader_and_password_status_fail_closed'
+        )
+    }
+    'CrashRecovery' { Invoke-ContractFilter 'office500-recovery' 'recovery_matrix_verifies_all_thirteen_without_blind_export' }
     'Replay' { Invoke-ContractFilter 'office500-replay' 'replay_requires_exact_128_by_100' }
     'Regression' { Invoke-Regression }
     'RunnerSelfTest' { Invoke-RunnerSelfTest }

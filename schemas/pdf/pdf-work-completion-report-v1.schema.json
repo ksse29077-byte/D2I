@@ -487,6 +487,9 @@
                                                                      "rendered_page_count",
                                                                      "powerpoint_fidelity_comparisons",
                                                                      "external_pdf_render_only_cases",
+                                                                     "external_pdf_malformed_rejections",
+                                                                     "external_pdf_password_rejections",
+                                                                     "external_pdf_oversize_rejections",
                                                                      "actual_qwen_invocation_count",
                                                                      "final_artifact_pair_count",
                                                                      "submission_manifest_count",
@@ -574,6 +577,21 @@
                                                                                                               "minimum":  0,
                                                                                                               "maximum":  4294967295
                                                                                                           },
+                                                                       "external_pdf_malformed_rejections":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0,
+                                                                                                                 "maximum":  4294967295
+                                                                                                             },
+                                                                       "external_pdf_password_rejections":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0,
+                                                                                                                "maximum":  4294967295
+                                                                                                            },
+                                                                       "external_pdf_oversize_rejections":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0,
+                                                                                                                "maximum":  4294967295
+                                                                                                            },
                                                                        "actual_qwen_invocation_count":  {
                                                                                                             "type":  "integer",
                                                                                                             "minimum":  0,

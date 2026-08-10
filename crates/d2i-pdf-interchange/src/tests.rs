@@ -298,6 +298,37 @@ fn replay_requires_exact_128_by_100() {
 }
 
 #[test]
+fn recovery_matrix_verifies_all_thirteen_without_blind_export() {
+    let verified = verify_pdf_recovery_matrix_v1()
+        .unwrap_or_else(|error| panic!("recovery matrix verification failed: {error}"));
+    assert_eq!(verified, 13);
+    let partial = decide_pdf_recovery_v1(PdfRecoveryEvidenceV1 {
+        stage: PdfRecoveryStageV1::PartialRenderDurable,
+        exact_pdf_hash_available: true,
+        render_checkpoint_verified: false,
+        source_generation_matches: true,
+    });
+    assert!(partial.is_err());
+    let missing_hash = decide_pdf_recovery_v1(PdfRecoveryEvidenceV1 {
+        stage: PdfRecoveryStageV1::PdfObserved,
+        exact_pdf_hash_available: false,
+        render_checkpoint_verified: false,
+        source_generation_matches: true,
+    });
+    assert!(missing_hash.is_err());
+    let changed = decide_pdf_recovery_v1(PdfRecoveryEvidenceV1 {
+        stage: PdfRecoveryStageV1::SourceGenerationChanged,
+        exact_pdf_hash_available: true,
+        render_checkpoint_verified: false,
+        source_generation_matches: false,
+    })
+    .unwrap_or_else(|error| panic!("source-change decision failed: {error}"));
+    assert_eq!(changed.action, PdfRecoveryActionV1::ProhibitSeal);
+    assert!(!changed.seal_allowed);
+    assert!(!changed.blind_export_replay_allowed);
+}
+
+#[test]
 fn profile_ids_are_closed_and_stable() {
     assert_eq!(
         PdfInterchangeProfileV1::SubmissionStatic.profile_id(),
