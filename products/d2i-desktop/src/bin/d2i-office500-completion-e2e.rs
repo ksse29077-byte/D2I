@@ -26,10 +26,11 @@ mod windows_e2e {
         grant_appcontainer_path_access, harden_path_for_current_user, host_identity,
         install_wfp_loopback_policy_with_verifier_network_denial, installed_excel_process_ids,
         installed_powerpoint_process_ids, installed_process_ids_by_name,
-        installed_word_process_ids, is_reparse_point, provision_appcontainer_profile,
-        remove_wfp_loopback_policy, spawn_zero_capability_appcontainer_in_job,
-        validate_pdf_password_status, verify_wfp_loopback_policy_with_verifier_network_denial,
-        WindowsAppContainerPathAccess, WindowsJob, WindowsJobLimits,
+        installed_word_process_ids, is_reparse_point, process_peak_working_set_bytes,
+        provision_appcontainer_profile, remove_wfp_loopback_policy,
+        spawn_zero_capability_appcontainer_in_job, validate_pdf_password_status,
+        verify_wfp_loopback_policy_with_verifier_network_denial, WindowsAppContainerPathAccess,
+        WindowsJob, WindowsJobLimits,
     };
     use ed25519_dalek::SigningKey;
     use serde::{Deserialize, Serialize};
@@ -84,6 +85,7 @@ mod windows_e2e {
         pdf: PathBuf,
         export: NativePdfExportWorkerEvidenceV1,
         render: PdfRenderWorkerEvidenceV1,
+        peak_export_worker_memory_bytes: u64,
         peak_render_worker_memory_bytes: u64,
         authorization: ExportAuthorization,
     }
@@ -265,15 +267,22 @@ mod windows_e2e {
         let performance = PdfPerformanceMetricsV1 {
             source_preflight_microseconds,
             export_microseconds,
-            pdf_load_microseconds: exports.len() as u64,
+            pdf_load_microseconds: exports
+                .iter()
+                .map(|value| value.render.pdf_load_microseconds)
+                .sum(),
             render_microseconds: exports
                 .iter()
-                .map(|value| value.render.render_result.rendered_total_pixels / 1_000)
+                .map(|value| value.render.render_microseconds)
                 .sum(),
             fidelity_microseconds,
             finalization_microseconds,
             model_microseconds: model.elapsed_microseconds,
-            peak_export_worker_memory_bytes: 0,
+            peak_export_worker_memory_bytes: exports
+                .iter()
+                .map(|value| value.peak_export_worker_memory_bytes)
+                .max()
+                .unwrap_or_default(),
             peak_render_worker_memory_bytes: exports
                 .iter()
                 .map(|value| value.peak_render_worker_memory_bytes)
@@ -613,7 +622,8 @@ mod windows_e2e {
             activation_ledger,
             pdfa_requested,
         )?;
-        run_native_export_worker(application, worker, &worker_arguments)?;
+        let peak_export_worker_memory_bytes =
+            run_native_export_worker(application, worker, &worker_arguments)?;
         let export: NativePdfExportWorkerEvidenceV1 = read_json(&report)?;
         if export.output_pdf_sha256 != file_sha256(&pdf)?
             || !export.private_desktop
@@ -653,6 +663,7 @@ mod windows_e2e {
             pdf,
             export,
             render,
+            peak_export_worker_memory_bytes,
             peak_render_worker_memory_bytes,
             authorization,
         })
@@ -867,7 +878,7 @@ mod windows_e2e {
         application: &Path,
         worker: &Path,
         arguments: &[String],
-    ) -> Result<(), String> {
+    ) -> Result<u64, String> {
         let identity = host_identity().map_err(|error| error.to_string())?;
         let profile_name = format!(
             "d2i.office500.export.{}.{}",
@@ -888,7 +899,7 @@ mod windows_e2e {
                 return Err(error.to_string());
             }
         };
-        let operation: Result<(), String> = (|| {
+        let operation: Result<u64, String> = (|| {
             let verified = verify_wfp_loopback_policy_with_verifier_network_denial(
                 application,
                 worker,
@@ -899,13 +910,33 @@ mod windows_e2e {
             if verified != policy {
                 return Err("native export WFP policy differs before worker start".to_owned());
             }
-            let status = Command::new(worker)
+            let mut child = Command::new(worker)
                 .args(arguments)
                 .creation_flags(CREATE_NO_WINDOW)
-                .status()
+                .spawn()
                 .map_err(|error| error.to_string())?;
+            let deadline = Instant::now() + Duration::from_secs(120);
+            let mut peak_worker_memory_bytes = 0_u64;
+            let status = loop {
+                peak_worker_memory_bytes = peak_worker_memory_bytes.max(
+                    process_peak_working_set_bytes(child.id())
+                        .map_err(|error| error.to_string())?,
+                );
+                if let Some(status) = child.try_wait().map_err(|error| error.to_string())? {
+                    break status;
+                }
+                if Instant::now() >= deadline {
+                    let _ = child.kill();
+                    let _ = child.wait();
+                    return Err("native export worker timed out".to_owned());
+                }
+                std::thread::sleep(Duration::from_millis(10));
+            };
             if !status.success() {
                 return Err(format!("native export worker failed: {status}"));
+            }
+            if peak_worker_memory_bytes == 0 {
+                return Err("native export worker memory measurement is absent".to_owned());
             }
             let verified = verify_wfp_loopback_policy_with_verifier_network_denial(
                 application,
@@ -917,14 +948,15 @@ mod windows_e2e {
             if verified != policy {
                 return Err("native export WFP policy differs after worker exit".to_owned());
             }
-            Ok(())
+            Ok(peak_worker_memory_bytes)
         })();
         let remove =
             remove_wfp_loopback_policy(&profile.profile_sid).map_err(|error| error.to_string());
         let delete = delete_appcontainer_profile(&profile_name).map_err(|error| error.to_string());
-        operation?;
+        let peak_worker_memory_bytes = operation?;
         remove?;
-        delete
+        delete?;
+        Ok(peak_worker_memory_bytes)
     }
 
     fn run_render_worker_sandboxed(

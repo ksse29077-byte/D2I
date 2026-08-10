@@ -3,9 +3,9 @@
 use d2i_windows_host::{
     appcontainer_profile, delete_appcontainer_profile, grant_appcontainer_child_query_to_verifier,
     grant_current_process_query_to_verifier, harden_path_for_current_user,
-    inspect_verifier_process, path_security_descriptor, process_parent_id, protect_current_user,
-    provision_appcontainer_profile, spawn_zero_capability_appcontainer, unprotect_current_user,
-    WindowsJobLimits,
+    inspect_verifier_process, path_security_descriptor, process_parent_id,
+    process_peak_working_set_bytes, protect_current_user, provision_appcontainer_profile,
+    spawn_zero_capability_appcontainer, unprotect_current_user, WindowsJobLimits,
 };
 use std::fmt::Debug;
 use std::path::{Path, PathBuf};
@@ -33,6 +33,12 @@ fn model_job_memory_bound_accepts_eight_gib_and_rejects_more() {
     }
     .validate()
     .is_err());
+}
+
+#[test]
+fn live_process_peak_working_set_is_measured() {
+    let bytes = ok(process_peak_working_set_bytes(std::process::id()));
+    assert!(bytes > 0);
 }
 
 struct Profile(String);

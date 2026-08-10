@@ -2,6 +2,7 @@ use super::{is_reparse_point, WindowsHostError};
 use sha2::{Digest, Sha256};
 use std::fs;
 use std::path::{Component, Path, PathBuf};
+use std::time::{Duration, Instant};
 use windows::Data::Pdf::{PdfDocument, PdfPageRenderOptions, PdfPageRotation};
 use windows::Graphics::Imaging::{BitmapDecoder, BitmapPixelFormat};
 use windows::Storage::Streams::{DataReader, DataWriter, InMemoryRandomAccessStream};
@@ -30,6 +31,8 @@ pub struct WindowsPdfRenderReceiptV1 {
     pub page_count: u32,
     pub password_protected: bool,
     pub total_rendered_pixels: u64,
+    pub pdf_load_microseconds: u64,
+    pub render_microseconds: u64,
     pub pages: Vec<WindowsPdfPageRenderReceiptV1>,
 }
 
@@ -105,6 +108,7 @@ pub fn render_pdf_with_windows_data_pdf(
     let pdf = fs::read(&pdf_path)
         .map_err(|error| WindowsHostError::new(format!("PDF read failed: {error}")))?;
     let stream = stream_from_bytes(&pdf, "PDF", 512 * 1024 * 1024)?;
+    let load_started = Instant::now();
     let document = PdfDocument::LoadFromStreamAsync(&stream)
         .and_then(|operation| operation.join())
         .map_err(|error| WindowsHostError::new(format!("PdfDocument load failed: {error}")))?;
@@ -115,6 +119,7 @@ pub fn render_pdf_with_windows_data_pdf(
     let page_count = document
         .PageCount()
         .map_err(|error| WindowsHostError::new(format!("PDF page count failed: {error}")))?;
+    let pdf_load_microseconds = duration_microseconds(load_started.elapsed());
     if page_count == 0 || page_count > maximum_pages {
         return Err(WindowsHostError::new(
             "PDF page count exceeds its bounded profile",
@@ -125,6 +130,7 @@ pub fn render_pdf_with_windows_data_pdf(
             .map_err(|_| WindowsHostError::new("PDF page count conversion failed"))?,
     );
     let mut total_rendered_pixels = 0_u64;
+    let render_started = Instant::now();
     for page_index in 0..page_count {
         let page = document.GetPage(page_index).map_err(|error| {
             WindowsHostError::new(format!("PDF page {page_index} open failed: {error}"))
@@ -224,8 +230,14 @@ pub fn render_pdf_with_windows_data_pdf(
         page_count,
         password_protected,
         total_rendered_pixels,
+        pdf_load_microseconds,
+        render_microseconds: duration_microseconds(render_started.elapsed()),
         pages,
     })
+}
+
+fn duration_microseconds(duration: Duration) -> u64 {
+    u64::try_from(duration.as_micros()).unwrap_or(u64::MAX)
 }
 
 pub fn validate_pdf_password_status(password_protected: bool) -> Result<(), WindowsHostError> {
@@ -428,15 +440,23 @@ fn validated_absolute_regular_file(path: &Path, label: &str) -> Result<PathBuf, 
 #[cfg(test)]
 mod geometry_tests {
     use super::{
-        dips_to_millipoints, render_pdf_with_windows_data_pdf, validate_pdf_password_status,
+        dips_to_millipoints, duration_microseconds, render_pdf_with_windows_data_pdf,
+        validate_pdf_password_status,
     };
     use std::fs;
+    use std::time::Duration;
 
     #[test]
     fn converts_windows_pdf_dips_to_millipoints() {
         assert_eq!(dips_to_millipoints(960.0).ok(), Some(720_000));
         assert_eq!(dips_to_millipoints(720.0).ok(), Some(540_000));
         assert!(dips_to_millipoints(0.0).is_err());
+    }
+
+    #[test]
+    fn converts_elapsed_time_to_bounded_microseconds() {
+        assert_eq!(duration_microseconds(Duration::from_micros(7)), 7);
+        assert_eq!(duration_microseconds(Duration::ZERO), 0);
     }
 
     #[test]

@@ -296,6 +296,11 @@ function Invoke-Completion {
         $finished.pdfa_external_conformance_verified_cases -ne 0 -or
         $finished.hwpx_pdf_export_status -ne 'requires_licensed_hancom_render_backend' -or
         $finished.crash_windows_verified -lt 13 -or
+        $finished.performance.pdf_load_microseconds -lt 1 -or
+        $finished.performance.render_microseconds -lt 1 -or
+        $finished.performance.peak_export_worker_memory_bytes -lt 1 -or
+        $finished.performance.peak_render_worker_memory_bytes -lt 1 -or
+        $finished.performance.peak_model_worker_memory_bytes -lt 1 -or
         -not $finished.pdf_interchange_evidence -or -not $finished.word_pdf_export_evidence -or
         -not $finished.excel_pdf_export_evidence -or -not $finished.powerpoint_pdf_export_evidence -or
         -not $finished.independent_pdf_render_evidence -or

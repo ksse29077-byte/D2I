@@ -795,6 +795,9 @@ The external-PDF boundary also executes a malformed PDF AppContainer loader
 rejection and independently verifies the no-password and pre-load oversize
 fail-closed branches; none of these failures promote facts or retain sandbox
 state.
+Completion performance evidence uses measured Windows.Data.Pdf load/render
+durations and live Windows peak working-set counters for export, render, and
+model workers; count- or pixel-derived timing placeholders fail the gate.
 
 OFFICE-100 through OFFICE-500 are complete. `D2I-OFFICE-600 - Browser Research
 and Controlled Download` is the first active task and is not implemented by

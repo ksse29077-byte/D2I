@@ -360,6 +360,11 @@ pub fn process_image_path(process_id: u32) -> Result<PathBuf, WindowsHostError> 
     platform::process_image_path(process_id)
 }
 
+/// Returns the peak working-set bytes observed for a live process.
+pub fn process_peak_working_set_bytes(process_id: u32) -> Result<u64, WindowsHostError> {
+    platform::process_peak_working_set_bytes(process_id)
+}
+
 /// Resolves the Windows session that owns a process.
 pub fn process_session_id(process_id: u32) -> Result<u32, WindowsHostError> {
     platform::process_session_id(process_id)
@@ -451,6 +456,7 @@ mod platform {
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION, JOB_OBJECT_LIMIT_ACTIVE_PROCESS,
         JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE, JOB_OBJECT_LIMIT_PROCESS_MEMORY,
     };
+    use windows::Win32::System::ProcessStatus::{K32GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS};
     use windows::Win32::System::RemoteDesktop::ProcessIdToSessionId;
     use windows::Win32::System::SystemInformation::GetTickCount64;
     use windows::Win32::System::SystemInformation::OSVERSIONINFOW;
@@ -460,8 +466,9 @@ mod platform {
         QueryFullProcessImageNameW, ResumeThread, TerminateProcess, UpdateProcThreadAttribute,
         WaitForSingleObject, CREATE_NO_WINDOW, CREATE_SUSPENDED, CREATE_UNICODE_ENVIRONMENT,
         EXTENDED_STARTUPINFO_PRESENT, LPPROC_THREAD_ATTRIBUTE_LIST, PROCESS_ACCESS_RIGHTS,
-        PROCESS_INFORMATION, PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION,
-        PROCESS_TERMINATE, PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES, STARTUPINFOEXW,
+        PROCESS_INFORMATION, PROCESS_NAME_WIN32, PROCESS_QUERY_INFORMATION,
+        PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_TERMINATE, PROCESS_VM_READ,
+        PROC_THREAD_ATTRIBUTE_SECURITY_CAPABILITIES, STARTUPINFOEXW,
     };
 
     pub(super) fn create_job(limits: WindowsJobLimits) -> Result<WindowsJob, WindowsHostError> {
@@ -1210,6 +1217,41 @@ mod platform {
         result
     }
 
+    pub(super) fn process_peak_working_set_bytes(process_id: u32) -> Result<u64, WindowsHostError> {
+        if process_id == 0 {
+            return Err(WindowsHostError::new("process id must be nonzero"));
+        }
+        let handle = {
+            // SAFETY: access is read-only and handle inheritance is disabled.
+            unsafe {
+                OpenProcess(
+                    PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                    false,
+                    process_id,
+                )
+            }
+        }
+        .map_err(|error| WindowsHostError::new(format!("OpenProcess failed: {error}")))?;
+        let result = (|| {
+            let mut counters = PROCESS_MEMORY_COUNTERS::default();
+            let size = u32::try_from(size_of::<PROCESS_MEMORY_COUNTERS>())
+                .map_err(|_| WindowsHostError::new("process memory counter size overflow"))?;
+            // SAFETY: the process handle is valid for query/read access and counters is writable.
+            let query_result = unsafe { K32GetProcessMemoryInfo(handle, &raw mut counters, size) };
+            if !query_result.as_bool() {
+                return Err(WindowsHostError::new(format!(
+                    "K32GetProcessMemoryInfo failed: {}",
+                    std::io::Error::last_os_error()
+                )));
+            }
+            u64::try_from(counters.PeakWorkingSetSize)
+                .map_err(|_| WindowsHostError::new("peak working set overflow"))
+        })();
+        // SAFETY: handle is owned by this function and has not been closed.
+        let _ = unsafe { CloseHandle(handle) };
+        result
+    }
+
     pub(super) fn process_session_id(process_id: u32) -> Result<u32, WindowsHostError> {
         if process_id == 0 {
             return Err(WindowsHostError::new("process id must be nonzero"));
@@ -1759,6 +1801,12 @@ mod platform {
     pub(super) fn job_memory_accounting(
         _job: &WindowsJob,
     ) -> Result<WindowsJobMemoryAccounting, WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn process_peak_working_set_bytes(
+        _process_id: u32,
+    ) -> Result<u64, WindowsHostError> {
         Err(unavailable())
     }
 

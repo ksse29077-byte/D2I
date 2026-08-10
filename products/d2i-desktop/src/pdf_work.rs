@@ -37,6 +37,8 @@ pub struct PdfRenderWorkerEvidenceV1 {
     pub visual_fingerprints: Vec<PdfVisualFingerprintV1>,
     pub document_snapshot: PdfDocumentSnapshotV1,
     pub render_result: PdfRenderResultV1,
+    pub pdf_load_microseconds: u64,
+    pub render_microseconds: u64,
     pub evidence_sha256: String,
 }
 
@@ -236,6 +238,8 @@ fn run_pdf_render_worker() -> Result<(), String> {
         request.destination_width_pixels,
     )
     .map_err(|error| error.to_string())?;
+    let pdf_load_microseconds = receipt.pdf_load_microseconds;
+    let render_microseconds = receipt.render_microseconds;
     let mut pages = Vec::with_capacity(receipt.pages.len());
     let mut visual_fingerprints = Vec::with_capacity(receipt.pages.len());
     for page in receipt.pages {
@@ -339,6 +343,8 @@ fn run_pdf_render_worker() -> Result<(), String> {
         visual_fingerprints,
         document_snapshot: snapshot,
         render_result: result,
+        pdf_load_microseconds,
+        render_microseconds,
         evidence_sha256: ZERO_HASH.to_owned(),
     };
     evidence.evidence_sha256 = evidence_hash(&evidence)?;

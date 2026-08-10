@@ -815,6 +815,11 @@ impl PdfWorkCompletionReportV1 {
             && self.hwpx_pdf_export_status
                 == PdfVerificationStatusV1::RequiresLicensedHancomRenderBackend
             && self.crash_windows_verified >= 13
+            && self.performance.pdf_load_microseconds > 0
+            && self.performance.render_microseconds > 0
+            && self.performance.peak_export_worker_memory_bytes > 0
+            && self.performance.peak_render_worker_memory_bytes > 0
+            && self.performance.peak_model_worker_memory_bytes > 0
             && self.security == PdfSecurityMetricsV1::default()
             && self.residual == PdfResidualMetricsV1::default()
             && self.pdf_interchange_evidence

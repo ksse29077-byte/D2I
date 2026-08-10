@@ -128,7 +128,8 @@ foreach ($name in $structs.Keys) {
         '$defs' = $reachableDefinitions
     }
     $path = Join-Path $generatedRoot "$(Convert-Kebab $name)-v1.schema.json"
-    [IO.File]::WriteAllText($path, (($document | ConvertTo-Json -Depth 100) + "`n"), [Text.UTF8Encoding]::new($false))
+    $json = ($document | ConvertTo-Json -Depth 100).Replace("`r`n", "`n")
+    [IO.File]::WriteAllText($path, ($json + "`n"), [Text.UTF8Encoding]::new($false))
 }
 
 if ($Check) {
