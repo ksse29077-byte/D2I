@@ -8,6 +8,7 @@ use d2i_office_capability::{
 use d2i_policy_admission::{AdapterKindV1, CognitiveActivationAdmissionV1};
 use ed25519_dalek::VerifyingKey;
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 use std::fs::{self, OpenOptions};
 use std::io::{Read, Write};
@@ -21,6 +22,7 @@ use std::os::windows::process::CommandExt;
 pub const OFFICE_WORKSPACE_STORE_SCHEMA_VERSION: u32 = 1;
 const MAX_WORKER_BYTES: usize = 2 * 1024 * 1024;
 const MAX_STORE_BYTES: u64 = 128 * 1024 * 1024;
+pub const MAX_IMPORTED_ARTIFACT_BYTES: u64 = 256 * 1024 * 1024;
 const WORKER_TIMEOUT_MS: u64 = 10_000;
 const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 
@@ -748,7 +750,7 @@ pub fn artifact_reference_from_file(
         working_copy_state,
     } = input;
     let path = resolve_workspace_path(root, relative_path, false)?;
-    let bytes = read_bounded_file(&path, 64 * 1024 * 1024)?;
+    let (content_sha256, byte_length) = sha256_file_bounded(&path, MAX_IMPORTED_ARTIFACT_BYTES)?;
     let extension = path
         .extension()
         .and_then(|value| value.to_str())
@@ -769,8 +771,8 @@ pub fn artifact_reference_from_file(
         relative_path_token: relative_path.to_owned(),
         artifact_class: artifact_class.to_owned(),
         file_format_id: extension,
-        content_sha256: sha256_bytes(&bytes),
-        byte_length: bytes.len() as u64,
+        content_sha256,
+        byte_length,
         creation_generation: 1,
         current_generation: generation,
         source_artifact_id,
@@ -783,6 +785,109 @@ pub fn artifact_reference_from_file(
     }
     .seal()
     .map_err(|error| error.to_string())
+}
+
+/// Copies a previously validated artifact into an existing Workspace directory and
+/// commits the destination with a no-overwrite atomic move. The source path never
+/// enters the returned cognitive artifact.
+#[allow(clippy::too_many_arguments)]
+pub fn import_external_artifact_atomic(
+    root: &Path,
+    workspace_id: &str,
+    artifact_id: &str,
+    source: &Path,
+    destination_relative_path: &str,
+    expected_source_sha256: &str,
+    generation: u64,
+    maximum_bytes: u64,
+) -> Result<OfficeArtifactReferenceV1, String> {
+    validate_id(workspace_id, "import workspace_id").map_err(|error| error.to_string())?;
+    validate_id(artifact_id, "import artifact_id").map_err(|error| error.to_string())?;
+    validate_hash(expected_source_sha256, "import source hash")
+        .map_err(|error| error.to_string())?;
+    if generation == 0 || maximum_bytes == 0 || maximum_bytes > MAX_IMPORTED_ARTIFACT_BYTES {
+        return Err("external artifact import bounds are invalid".to_owned());
+    }
+    let source_metadata = fs::symlink_metadata(source).map_err(|error| error.to_string())?;
+    if !source_metadata.is_file()
+        || source_metadata.file_type().is_symlink()
+        || source_metadata.len() == 0
+        || source_metadata.len() > maximum_bytes
+    {
+        return Err("external import source is not a bounded regular file".to_owned());
+    }
+    #[cfg(windows)]
+    if d2i_windows_host::is_reparse_point(source).map_err(|error| error.to_string())? {
+        return Err("external import source cannot be a reparse point".to_owned());
+    }
+
+    let destination = resolve_workspace_path(root, destination_relative_path, true)?;
+    if destination.exists() {
+        return Err("external artifact destination already exists".to_owned());
+    }
+    let parent = destination
+        .parent()
+        .ok_or_else(|| "external artifact destination parent is missing".to_owned())?;
+    reject_reparse_path(root, parent)?;
+    let marker = artifact_id
+        .bytes()
+        .filter(u8::is_ascii_alphanumeric)
+        .take(24)
+        .map(char::from)
+        .collect::<String>();
+    let temporary = parent.join(format!(".{marker}.import.tmp"));
+    let result = (|| {
+        let mut input = fs::File::open(source).map_err(|error| error.to_string())?;
+        let mut output = OpenOptions::new()
+            .create_new(true)
+            .write(true)
+            .open(&temporary)
+            .map_err(|error| error.to_string())?;
+        let mut hasher = Sha256::new();
+        let mut total = 0_u64;
+        let mut buffer = [0_u8; 64 * 1024];
+        loop {
+            let read = input.read(&mut buffer).map_err(|error| error.to_string())?;
+            if read == 0 {
+                break;
+            }
+            total = total.saturating_add(read as u64);
+            if total > maximum_bytes {
+                return Err("external import exceeded its byte limit".to_owned());
+            }
+            hasher.update(&buffer[..read]);
+            output
+                .write_all(&buffer[..read])
+                .map_err(|error| error.to_string())?;
+        }
+        output.sync_all().map_err(|error| error.to_string())?;
+        drop(output);
+        let copied_sha256 = format!("sha256:{}", hex_encode(&hasher.finalize()));
+        if copied_sha256 != expected_source_sha256 {
+            return Err("external import source changed during copy".to_owned());
+        }
+        d2i_windows_host::atomic_move(&temporary, &destination, false)
+            .map_err(|error| error.to_string())?;
+        let artifact = artifact_reference_from_file(ArtifactReferenceInputV1 {
+            root,
+            workspace_id,
+            artifact_id,
+            relative_path: destination_relative_path,
+            generation,
+            source_artifact_id: None,
+            parent_version_id: None,
+            immutable_original: true,
+            working_copy_state: WorkingCopyStateV1::Original,
+        })?;
+        if artifact.content_sha256 != expected_source_sha256 || artifact.byte_length != total {
+            return Err("external import post-commit identity differs".to_owned());
+        }
+        Ok(artifact)
+    })();
+    if result.is_err() && temporary.exists() {
+        let _ = fs::remove_file(&temporary);
+    }
+    result
 }
 
 pub fn office_file_worker_main() -> Result<(), String> {
@@ -1133,6 +1238,36 @@ fn read_bounded_file(path: &Path, maximum: u64) -> Result<Vec<u8>, String> {
         return Err("workspace artifact is not a bounded regular file".to_owned());
     }
     fs::read(path).map_err(|error| error.to_string())
+}
+
+fn sha256_file_bounded(path: &Path, maximum: u64) -> Result<(String, u64), String> {
+    let metadata = fs::symlink_metadata(path).map_err(|error| error.to_string())?;
+    if !metadata.is_file()
+        || metadata.file_type().is_symlink()
+        || metadata.len() == 0
+        || metadata.len() > maximum
+    {
+        return Err("workspace artifact is not a bounded regular file".to_owned());
+    }
+    let mut file = fs::File::open(path).map_err(|error| error.to_string())?;
+    let mut hasher = Sha256::new();
+    let mut total = 0_u64;
+    let mut buffer = [0_u8; 64 * 1024];
+    loop {
+        let read = file.read(&mut buffer).map_err(|error| error.to_string())?;
+        if read == 0 {
+            break;
+        }
+        total = total.saturating_add(read as u64);
+        if total > maximum {
+            return Err("workspace artifact exceeded its byte limit".to_owned());
+        }
+        hasher.update(&buffer[..read]);
+    }
+    if total != metadata.len() {
+        return Err("workspace artifact changed while hashing".to_owned());
+    }
+    Ok((format!("sha256:{}", hex_encode(&hasher.finalize())), total))
 }
 
 fn atomic_write_new(path: &Path, bytes: &[u8], marker: &str) -> Result<(), String> {

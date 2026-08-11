@@ -1,0 +1,75 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-disclosure-policy-v1.schema.json",
+    "title":  "ResearchDisclosurePolicyV1",
+    "$ref":  "#/$defs/ResearchDisclosurePolicyV1",
+    "$defs":  {
+                  "DisclosureClassV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "public",
+                                                         "internal",
+                                                         "confidential",
+                                                         "restricted"
+                                                     ]
+                                        },
+                  "ResearchDisclosurePolicyV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "policy_id",
+                                                                      "organization_id",
+                                                                      "maximum_external_class",
+                                                                      "approved_declassification_rule_ids",
+                                                                      "blocked_term_hashes",
+                                                                      "policy_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "policy_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "maximum_external_class":  {
+                                                                                                       "$ref":  "#/$defs/DisclosureClassV1"
+                                                                                                   },
+                                                                        "approved_declassification_rule_ids":  {
+                                                                                                                   "type":  "array",
+                                                                                                                   "maxItems":  4096,
+                                                                                                                   "items":  {
+                                                                                                                                 "type":  "string",
+                                                                                                                                 "minLength":  0,
+                                                                                                                                 "maxLength":  262144
+                                                                                                                             }
+                                                                                                               },
+                                                                        "blocked_term_hashes":  {
+                                                                                                    "type":  "array",
+                                                                                                    "maxItems":  4096,
+                                                                                                    "items":  {
+                                                                                                                  "type":  "string",
+                                                                                                                  "minLength":  0,
+                                                                                                                  "maxLength":  262144
+                                                                                                              }
+                                                                                                },
+                                                                        "policy_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          }
+                                                                    }
+                                                 }
+              }
+}

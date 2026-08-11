@@ -1,0 +1,223 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-report-v1.schema.json",
+    "title":  "ResearchReportV1",
+    "$ref":  "#/$defs/ResearchReportV1",
+    "$defs":  {
+                  "ResearchClaimKindV1":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "direct_evidence",
+                                                           "deterministic_derived",
+                                                           "model_inference",
+                                                           "conflicting",
+                                                           "unresolved"
+                                                       ]
+                                          },
+                  "ResearchConflictV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "conflict_id",
+                                                              "question_key",
+                                                              "evidence_ids",
+                                                              "descriptions",
+                                                              "unresolved",
+                                                              "conflict_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "conflict_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                "question_key":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  0,
+                                                                                     "maxLength":  262144
+                                                                                 },
+                                                                "evidence_ids":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  0,
+                                                                                                   "maxLength":  262144
+                                                                                               }
+                                                                                 },
+                                                                "descriptions":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  0,
+                                                                                                   "maxLength":  262144
+                                                                                               }
+                                                                                 },
+                                                                "unresolved":  {
+                                                                                   "type":  "boolean"
+                                                                               },
+                                                                "conflict_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    }
+                                                            }
+                                         },
+                  "ResearchClaimV1":  {
+                                          "type":  "object",
+                                          "additionalProperties":  false,
+                                          "required":  [
+                                                           "claim_id",
+                                                           "claim_kind",
+                                                           "statement",
+                                                           "evidence_ids",
+                                                           "derived_from",
+                                                           "confidence_millionths",
+                                                           "claim_sha256"
+                                                       ],
+                                          "properties":  {
+                                                             "claim_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                             "claim_kind":  {
+                                                                                "$ref":  "#/$defs/ResearchClaimKindV1"
+                                                                            },
+                                                             "statement":  {
+                                                                               "type":  "string",
+                                                                               "minLength":  0,
+                                                                               "maxLength":  262144
+                                                                           },
+                                                             "evidence_ids":  {
+                                                                                  "type":  "array",
+                                                                                  "maxItems":  4096,
+                                                                                  "items":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  0,
+                                                                                                "maxLength":  262144
+                                                                                            }
+                                                                              },
+                                                             "derived_from":  {
+                                                                                  "type":  "array",
+                                                                                  "maxItems":  4096,
+                                                                                  "items":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  0,
+                                                                                                "maxLength":  262144
+                                                                                            }
+                                                                              },
+                                                             "confidence_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                             "claim_sha256":  {
+                                                                                  "type":  "string",
+                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                  "maxLength":  71
+                                                                              }
+                                                         }
+                                      },
+                  "ResearchReportV1":  {
+                                           "type":  "object",
+                                           "additionalProperties":  false,
+                                           "required":  [
+                                                            "schema_version",
+                                                            "report_id",
+                                                            "organization_id",
+                                                            "case_id",
+                                                            "brief_sha256",
+                                                            "evidence_bundle_sha256",
+                                                            "sufficiency_report_sha256",
+                                                            "claims",
+                                                            "conflicts",
+                                                            "unknowns",
+                                                            "uncited_claim_count",
+                                                            "unsupported_number_count",
+                                                            "report_sha256"
+                                                        ],
+                                           "properties":  {
+                                                              "schema_version":  {
+                                                                                     "type":  "integer",
+                                                                                     "minimum":  0,
+                                                                                     "maximum":  4294967295
+                                                                                 },
+                                                              "report_id":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  1,
+                                                                                "maxLength":  512,
+                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                            },
+                                                              "organization_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                              "case_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                              "brief_sha256":  {
+                                                                                   "type":  "string",
+                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                   "maxLength":  71
+                                                                               },
+                                                              "evidence_bundle_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                              "sufficiency_report_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                              "claims":  {
+                                                                             "type":  "array",
+                                                                             "maxItems":  4096,
+                                                                             "items":  {
+                                                                                           "$ref":  "#/$defs/ResearchClaimV1"
+                                                                                       }
+                                                                         },
+                                                              "conflicts":  {
+                                                                                "type":  "array",
+                                                                                "maxItems":  4096,
+                                                                                "items":  {
+                                                                                              "$ref":  "#/$defs/ResearchConflictV1"
+                                                                                          }
+                                                                            },
+                                                              "unknowns":  {
+                                                                               "type":  "array",
+                                                                               "maxItems":  4096,
+                                                                               "items":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  0,
+                                                                                             "maxLength":  262144
+                                                                                         }
+                                                                           },
+                                                              "uncited_claim_count":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                              "unsupported_number_count":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                              "report_sha256":  {
+                                                                                    "type":  "string",
+                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                    "maxLength":  71
+                                                                                }
+                                                          }
+                                       }
+              }
+}

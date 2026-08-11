@@ -1,0 +1,65 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/search-portal-profile-v1.schema.json",
+    "title":  "SearchPortalProfileV1",
+    "$ref":  "#/$defs/SearchPortalProfileV1",
+    "$defs":  {
+                  "SearchPortalProfileV1":  {
+                                                "type":  "object",
+                                                "additionalProperties":  false,
+                                                "required":  [
+                                                                 "schema_version",
+                                                                 "profile_id",
+                                                                 "organization_id",
+                                                                 "endpoint_protected_ref",
+                                                                 "fixed_query_parameter_names",
+                                                                 "result_limit",
+                                                                 "profile_sha256"
+                                                             ],
+                                                "properties":  {
+                                                                   "schema_version":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                                   "profile_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                   "organization_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                   "endpoint_protected_ref":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                   "fixed_query_parameter_names":  {
+                                                                                                       "type":  "array",
+                                                                                                       "maxItems":  4096,
+                                                                                                       "items":  {
+                                                                                                                     "type":  "string",
+                                                                                                                     "minLength":  0,
+                                                                                                                     "maxLength":  262144
+                                                                                                                 }
+                                                                                                   },
+                                                                   "result_limit":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                   "profile_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      }
+                                                               }
+                                            }
+              }
+}

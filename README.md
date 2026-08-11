@@ -348,6 +348,26 @@ separate zero-capability AppContainer uses `Windows.Data.Pdf` for bounded PNG
 rendering. PDF remains a fixed projection of the verified editable source and
 cannot replace typed facts or source lineage.
 
+Run the OFFICE-600 public browser-research contracts, strict schemas, safe
+snapshot projection, evidence/sufficiency gates, controlled-download security,
+recovery, replay, and predecessor regressions with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/run-browser-research-v1.ps1 `
+  -Mode All `
+  -Fresh
+```
+
+Product `Completion` additionally requires sealed OFFICE-500 evidence, pinned
+Qwen3-4B/llama.cpp, version-matched signed Edge/EdgeDriver, two approved public
+HTTPS origins, one approved small public download, and one elevated session for
+temporary exact WFP isolation. Edge remains loopback-only; only the one-shot
+network worker receives external GET/HEAD authority. External HTML is projected
+into D2I-owned safe snapshots and downloads pass quarantine, Attachment Services,
+format validation, and atomic Workspace promotion. See ADR 0044 and
+`docs/office/browser-research-v1.md`.
+
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:
 
@@ -463,6 +483,7 @@ cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo build --workspace --release
+cargo audit
 ```
 
 These commands cover the Core workspace. Standalone modules are covered by

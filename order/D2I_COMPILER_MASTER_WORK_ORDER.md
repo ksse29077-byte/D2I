@@ -96,6 +96,16 @@ one verified editable source generation; it is not typed-fact authority.
 External PDFs remain render-only, HWPX-to-PDF remains licensed-backend-gated,
 and PDF/A request remains distinct from conformance certification.
 
+OFFICE-600 is governed by ADR 0044 and
+`docs/office/browser-research-v1.md`. It changes no Compiler IR, package format,
+or runtime ABI. Edge remains WFP loopback-only and observes only D2I-owned safe
+snapshots. A signed one-shot network worker is the sole public HTTPS GET/HEAD
+authority after disclosure, URL, source, DNS, SSRF, redirect, and TLS admission.
+Research completion requires fetched hash-bound citations and deterministic
+sufficiency. Downloads bypass the browser and require quarantine, Windows
+Attachment Services, format-specific validation, and atomic Workspace promotion.
+Models receive neither raw web/URL/download data nor execution authority.
+
 ## Product Context
 
 D2I는 조직의 Domain, Role, Authority, Application Semantics,

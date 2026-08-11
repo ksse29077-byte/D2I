@@ -1,0 +1,126 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-network-worker-authorization-v1.schema.json",
+    "title":  "ResearchNetworkWorkerAuthorizationV1",
+    "$ref":  "#/$defs/ResearchNetworkWorkerAuthorizationV1",
+    "$defs":  {
+                  "ResearchHttpMethodV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "get",
+                                                            "head"
+                                                        ]
+                                           },
+                  "ResearchNetworkWorkerOperationV1":  {
+                                                           "type":  "string",
+                                                           "enum":  [
+                                                                        "admit_url",
+                                                                        "fetch_page",
+                                                                        "download_artifact"
+                                                                    ]
+                                                       },
+                  "ResearchNetworkWorkerAuthorizationV1":  {
+                                                               "type":  "object",
+                                                               "additionalProperties":  false,
+                                                               "required":  [
+                                                                                "schema_version",
+                                                                                "authorization_id",
+                                                                                "organization_id",
+                                                                                "case_id",
+                                                                                "request_sha256",
+                                                                                "worker_executable_sha256",
+                                                                                "operation",
+                                                                                "method",
+                                                                                "maximum_response_bytes",
+                                                                                "issued_at_unix_ms",
+                                                                                "expires_at_unix_ms",
+                                                                                "nonce_id",
+                                                                                "signer_id",
+                                                                                "signing_key_id",
+                                                                                "signature_hex",
+                                                                                "authorization_sha256"
+                                                                            ],
+                                                               "properties":  {
+                                                                                  "schema_version":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                                  "authorization_id":  {
+                                                                                                           "type":  "string",
+                                                                                                           "minLength":  1,
+                                                                                                           "maxLength":  512,
+                                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                       },
+                                                                                  "organization_id":  {
+                                                                                                          "type":  "string",
+                                                                                                          "minLength":  1,
+                                                                                                          "maxLength":  512,
+                                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                      },
+                                                                                  "case_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                                  "request_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                                  "worker_executable_sha256":  {
+                                                                                                                   "type":  "string",
+                                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                   "maxLength":  71
+                                                                                                               },
+                                                                                  "operation":  {
+                                                                                                    "$ref":  "#/$defs/ResearchNetworkWorkerOperationV1"
+                                                                                                },
+                                                                                  "method":  {
+                                                                                                 "$ref":  "#/$defs/ResearchHttpMethodV1"
+                                                                                             },
+                                                                                  "maximum_response_bytes":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                                  "issued_at_unix_ms":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0
+                                                                                                        },
+                                                                                  "expires_at_unix_ms":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                                  "nonce_id":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  1,
+                                                                                                   "maxLength":  512,
+                                                                                                   "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                               },
+                                                                                  "signer_id":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  1,
+                                                                                                    "maxLength":  512,
+                                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                },
+                                                                                  "signing_key_id":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  1,
+                                                                                                         "maxLength":  512,
+                                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                     },
+                                                                                  "signature_hex":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^[0-9a-f]{128}$",
+                                                                                                        "maxLength":  128
+                                                                                                    },
+                                                                                  "authorization_sha256":  {
+                                                                                                               "type":  "string",
+                                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                               "maxLength":  71
+                                                                                                           }
+                                                                              }
+                                                           }
+              }
+}

@@ -1,0 +1,121 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-security-metrics-v1.schema.json",
+    "title":  "ResearchSecurityMetricsV1",
+    "$ref":  "#/$defs/ResearchSecurityMetricsV1",
+    "$defs":  {
+                  "ResearchSecurityMetricsV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "external_browser_egress",
+                                                                     "external_model_egress",
+                                                                     "unauthorized_network_worker_request",
+                                                                     "ssrf_success",
+                                                                     "private_address_connect",
+                                                                     "dns_rebinding_accept",
+                                                                     "https_downgrade_accept",
+                                                                     "redirect_escape",
+                                                                     "query_secret_leak",
+                                                                     "prompt_injection_authority_change",
+                                                                     "unbounded_crawl",
+                                                                     "browser_download",
+                                                                     "forbidden_file_promotion",
+                                                                     "mime_magic_mismatch_accept",
+                                                                     "macro_file_promotion",
+                                                                     "workspace_escape",
+                                                                     "credential_leak",
+                                                                     "raw_web_to_model",
+                                                                     "false_research_completion",
+                                                                     "false_download_completion",
+                                                                     "critical_error"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "external_browser_egress":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                       "external_model_egress":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "unauthorized_network_worker_request":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                       "ssrf_success":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                                       "private_address_connect":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                       "dns_rebinding_accept":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                       "https_downgrade_accept":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0
+                                                                                                  },
+                                                                       "redirect_escape":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "query_secret_leak":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                       "prompt_injection_authority_change":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                       "unbounded_crawl":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "browser_download":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "forbidden_file_promotion":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                       "mime_magic_mismatch_accept":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                       "macro_file_promotion":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                       "workspace_escape":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "credential_leak":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "raw_web_to_model":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "false_research_completion":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                       "false_download_completion":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                       "critical_error":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          }
+                                                                   }
+                                                }
+              }
+}

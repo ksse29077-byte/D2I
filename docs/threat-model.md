@@ -787,3 +787,40 @@ visual metrics that do not prove subjective perfection, and absent licensed
 Hancom and external PDF/A/accessibility validators. V1 makes no PDF editing,
 password handling, OCR, reconstruction, digital-signing, PDF/A certification,
 or PDF/UA claim.
+
+## OFFICE-600 Browser Research and Controlled Download Threats
+
+OFFICE-600 treats queries, URLs, DNS answers, redirects, headers, HTML, search
+snippets, page text, links, evidence candidates, filenames, downloads, model
+output, and parser results as untrusted. Primary threats are internal-data query
+exfiltration, SSRF, metadata access, mixed DNS and DNS rebinding, redirect pivot
+or downgrade, authentication/cookie leakage, header/body/compression resource
+attacks, active HTML execution, prompt injection, browser auto-download, raw web
+or URL exposure to a model, false claims, malicious Office/PDF/image payloads,
+filename traversal or ADS, MIME spoofing, macros/external relationships, archive
+bombs, Workspace escape, and false completion after partial download or parsing.
+
+Mitigations are a public-only disclosure gate, strict and bounded contracts,
+protected raw URLs, HTTPS-only admission, fresh all-address DNS and observed
+remote-address equality, manual redirect admission, fixed no-auth/no-cookie
+WinHTTP, and a one-shot exact-worker binding. Edge remains WFP loopback-only and
+receives only a new D2I-owned CSP-restricted projection with stable link IDs.
+Search snippets are non-evidence hints; evidence is fetched, hashed, bounded,
+deduplicated, cited, number-checked, conflict-aware, and sufficiency-gated.
+External text cannot modify Role, Policy, network, download, promotion, or Case
+authority.
+
+Downloads bypass the browser and enter a D2I quarantine by atomic rename.
+Attachment Services, post-Save re-observation, extension/MIME/magic agreement,
+format-specific parser checks, package expansion limits, macro and external-link
+denial, semantic naming, symlink/reparse rejection, streamed hashing, and atomic
+no-overwrite import jointly gate promotion. Crash A-N and zero-residual checks
+prevent blind replay and orphaned partial, process, socket, WFP, AppContainer,
+browser-profile, quarantine, or Workspace-lock state.
+
+Residual risks are WinHTTP/Schannel, Windows Attachment Services, Edge/WebDriver,
+and format-parser defects; local signing-key custody; DNS and public-site
+availability; and source credibility beyond approved policy. V1 excludes
+authenticated sites, user cookies, JavaScript-heavy interaction, POST/forms,
+CAPTCHA bypass, generic crawling, automatic OCR, archives, executables, scripts,
+macro-enabled Office files, and online B_Core integration.

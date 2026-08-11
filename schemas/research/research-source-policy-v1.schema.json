@@ -1,0 +1,120 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-source-policy-v1.schema.json",
+    "title":  "ResearchSourcePolicyV1",
+    "$ref":  "#/$defs/ResearchSourcePolicyV1",
+    "$defs":  {
+                  "DownloadClassV1":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "pdf",
+                                                       "docx",
+                                                       "hwpx",
+                                                       "xlsx",
+                                                       "pptx",
+                                                       "txt",
+                                                       "csv",
+                                                       "png",
+                                                       "jpeg",
+                                                       "unknown"
+                                                   ]
+                                      },
+                  "ResearchSourcePolicyV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "policy_id",
+                                                                  "organization_id",
+                                                                  "preferred_origins",
+                                                                  "allowed_origins",
+                                                                  "blocked_origins",
+                                                                  "internal_host_suffixes",
+                                                                  "primary_source_ids",
+                                                                  "retention_seconds",
+                                                                  "allowed_download_classes",
+                                                                  "policy_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "policy_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                    "organization_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                    "preferred_origins":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        }
+                                                                                          },
+                                                                    "allowed_origins":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "string",
+                                                                                                          "minLength":  0,
+                                                                                                          "maxLength":  262144
+                                                                                                      }
+                                                                                        },
+                                                                    "blocked_origins":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "string",
+                                                                                                          "minLength":  0,
+                                                                                                          "maxLength":  262144
+                                                                                                      }
+                                                                                        },
+                                                                    "internal_host_suffixes":  {
+                                                                                                   "type":  "array",
+                                                                                                   "maxItems":  4096,
+                                                                                                   "items":  {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  0,
+                                                                                                                 "maxLength":  262144
+                                                                                                             }
+                                                                                               },
+                                                                    "primary_source_ids":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  0,
+                                                                                                             "maxLength":  262144
+                                                                                                         }
+                                                                                           },
+                                                                    "retention_seconds":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                    "allowed_download_classes":  {
+                                                                                                     "type":  "array",
+                                                                                                     "maxItems":  4096,
+                                                                                                     "items":  {
+                                                                                                                   "$ref":  "#/$defs/DownloadClassV1"
+                                                                                                               }
+                                                                                                 },
+                                                                    "policy_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      }
+                                                                }
+                                             }
+              }
+}

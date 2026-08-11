@@ -1,0 +1,109 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-disclosure-decision-v1.schema.json",
+    "title":  "ResearchDisclosureDecisionV1",
+    "$ref":  "#/$defs/ResearchDisclosureDecisionV1",
+    "$defs":  {
+                  "DisclosureClassV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "public",
+                                                         "internal",
+                                                         "confidential",
+                                                         "restricted"
+                                                     ]
+                                        },
+                  "DisclosureDecisionCodeV1":  {
+                                                   "type":  "string",
+                                                   "enum":  [
+                                                                "allowed",
+                                                                "declassified",
+                                                                "blocked"
+                                                            ]
+                                               },
+                  "ResearchDisclosureDecisionV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "schema_version",
+                                                                        "decision_id",
+                                                                        "organization_id",
+                                                                        "case_id",
+                                                                        "policy_sha256",
+                                                                        "input_class",
+                                                                        "output_class",
+                                                                        "result",
+                                                                        "reason_code",
+                                                                        "query_sha256",
+                                                                        "decision_sha256"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "schema_version":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                          "decision_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                          "organization_id":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  1,
+                                                                                                  "maxLength":  512,
+                                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                              },
+                                                                          "case_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                          "policy_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                          "input_class":  {
+                                                                                              "$ref":  "#/$defs/DisclosureClassV1"
+                                                                                          },
+                                                                          "output_class":  {
+                                                                                               "$ref":  "#/$defs/DisclosureClassV1"
+                                                                                           },
+                                                                          "applied_declassification_rule_id":  {
+                                                                                                                   "oneOf":  [
+                                                                                                                                 {
+                                                                                                                                     "type":  "string",
+                                                                                                                                     "minLength":  1,
+                                                                                                                                     "maxLength":  512,
+                                                                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                                                 },
+                                                                                                                                 {
+                                                                                                                                     "type":  "null"
+                                                                                                                                 }
+                                                                                                                             ]
+                                                                                                               },
+                                                                          "result":  {
+                                                                                         "$ref":  "#/$defs/DisclosureDecisionCodeV1"
+                                                                                     },
+                                                                          "reason_code":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  0,
+                                                                                              "maxLength":  262144
+                                                                                          },
+                                                                          "query_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                          "decision_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              }
+                                                                      }
+                                                   }
+              }
+}

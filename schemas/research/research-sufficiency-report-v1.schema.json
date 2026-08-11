@@ -1,0 +1,122 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-sufficiency-report-v1.schema.json",
+    "title":  "ResearchSufficiencyReportV1",
+    "$ref":  "#/$defs/ResearchSufficiencyReportV1",
+    "$defs":  {
+                  "ResearchSufficiencyStatusV1":  {
+                                                      "type":  "string",
+                                                      "enum":  [
+                                                                   "sufficient",
+                                                                   "insufficient_evidence"
+                                                               ]
+                                                  },
+                  "ResearchSufficiencyReportV1":  {
+                                                      "type":  "object",
+                                                      "additionalProperties":  false,
+                                                      "required":  [
+                                                                       "schema_version",
+                                                                       "report_id",
+                                                                       "organization_id",
+                                                                       "case_id",
+                                                                       "brief_sha256",
+                                                                       "evidence_bundle_sha256",
+                                                                       "question_coverage_millionths",
+                                                                       "source_count",
+                                                                       "fresh_source_count",
+                                                                       "preferred_source_count",
+                                                                       "unresolved_conflict_count",
+                                                                       "unknown_count",
+                                                                       "budget_exhausted",
+                                                                       "status",
+                                                                       "reason_codes",
+                                                                       "report_sha256"
+                                                                   ],
+                                                      "properties":  {
+                                                                         "schema_version":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "report_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                         "organization_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                         "case_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                         "brief_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                         "evidence_bundle_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                         "question_coverage_millionths":  {
+                                                                                                              "type":  "integer",
+                                                                                                              "minimum":  0,
+                                                                                                              "maximum":  4294967295
+                                                                                                          },
+                                                                         "source_count":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                         "fresh_source_count":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                         "preferred_source_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                         "unresolved_conflict_count":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                         "unknown_count":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                         "budget_exhausted":  {
+                                                                                                  "type":  "boolean"
+                                                                                              },
+                                                                         "status":  {
+                                                                                        "$ref":  "#/$defs/ResearchSufficiencyStatusV1"
+                                                                                    },
+                                                                         "reason_codes":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        }
+                                                                                          },
+                                                                         "report_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           }
+                                                                     }
+                                                  }
+              }
+}

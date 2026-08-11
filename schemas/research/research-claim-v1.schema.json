@@ -1,0 +1,75 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-claim-v1.schema.json",
+    "title":  "ResearchClaimV1",
+    "$ref":  "#/$defs/ResearchClaimV1",
+    "$defs":  {
+                  "ResearchClaimKindV1":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "direct_evidence",
+                                                           "deterministic_derived",
+                                                           "model_inference",
+                                                           "conflicting",
+                                                           "unresolved"
+                                                       ]
+                                          },
+                  "ResearchClaimV1":  {
+                                          "type":  "object",
+                                          "additionalProperties":  false,
+                                          "required":  [
+                                                           "claim_id",
+                                                           "claim_kind",
+                                                           "statement",
+                                                           "evidence_ids",
+                                                           "derived_from",
+                                                           "confidence_millionths",
+                                                           "claim_sha256"
+                                                       ],
+                                          "properties":  {
+                                                             "claim_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                             "claim_kind":  {
+                                                                                "$ref":  "#/$defs/ResearchClaimKindV1"
+                                                                            },
+                                                             "statement":  {
+                                                                               "type":  "string",
+                                                                               "minLength":  0,
+                                                                               "maxLength":  262144
+                                                                           },
+                                                             "evidence_ids":  {
+                                                                                  "type":  "array",
+                                                                                  "maxItems":  4096,
+                                                                                  "items":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  0,
+                                                                                                "maxLength":  262144
+                                                                                            }
+                                                                              },
+                                                             "derived_from":  {
+                                                                                  "type":  "array",
+                                                                                  "maxItems":  4096,
+                                                                                  "items":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  0,
+                                                                                                "maxLength":  262144
+                                                                                            }
+                                                                              },
+                                                             "confidence_millionths":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                             "claim_sha256":  {
+                                                                                  "type":  "string",
+                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                  "maxLength":  71
+                                                                              }
+                                                         }
+                                      }
+              }
+}

@@ -1,0 +1,119 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/browser-research-session-v1.schema.json",
+    "title":  "BrowserResearchSessionV1",
+    "$ref":  "#/$defs/BrowserResearchSessionV1",
+    "$defs":  {
+                  "BrowserResearchSessionV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "session_id",
+                                                                    "organization_id",
+                                                                    "case_id",
+                                                                    "role_id",
+                                                                    "edge_executable_sha256",
+                                                                    "edge_driver_executable_sha256",
+                                                                    "edge_version",
+                                                                    "edge_driver_version",
+                                                                    "wfp_loopback_evidence_sha256",
+                                                                    "snapshot_server_origin_id",
+                                                                    "research_brief_sha256",
+                                                                    "maximum_pages",
+                                                                    "maximum_links",
+                                                                    "downloads_denied",
+                                                                    "forms_disabled",
+                                                                    "session_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "session_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                      "organization_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                      "case_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                      "role_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                      "edge_executable_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                      "edge_driver_executable_sha256":  {
+                                                                                                            "type":  "string",
+                                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                            "maxLength":  71
+                                                                                                        },
+                                                                      "edge_version":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  0,
+                                                                                           "maxLength":  262144
+                                                                                       },
+                                                                      "edge_driver_version":  {
+                                                                                                  "type":  "string",
+                                                                                                  "minLength":  0,
+                                                                                                  "maxLength":  262144
+                                                                                              },
+                                                                      "wfp_loopback_evidence_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                      "snapshot_server_origin_id":  {
+                                                                                                        "type":  "string",
+                                                                                                        "minLength":  1,
+                                                                                                        "maxLength":  512,
+                                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                    },
+                                                                      "research_brief_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                      "maximum_pages":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                      "maximum_links":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                      "downloads_denied":  {
+                                                                                               "type":  "boolean"
+                                                                                           },
+                                                                      "forms_disabled":  {
+                                                                                             "type":  "boolean"
+                                                                                         },
+                                                                      "session_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         }
+                                                                  }
+                                               }
+              }
+}

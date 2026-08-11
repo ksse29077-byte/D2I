@@ -1,0 +1,108 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-url-admission-decision-v1.schema.json",
+    "title":  "ResearchUrlAdmissionDecisionV1",
+    "$ref":  "#/$defs/ResearchUrlAdmissionDecisionV1",
+    "$defs":  {
+                  "UrlAdmissionResultV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "admitted",
+                                                            "rejected"
+                                                        ]
+                                           },
+                  "ResearchUrlAdmissionDecisionV1":  {
+                                                         "type":  "object",
+                                                         "additionalProperties":  false,
+                                                         "required":  [
+                                                                          "schema_version",
+                                                                          "decision_id",
+                                                                          "organization_id",
+                                                                          "case_id",
+                                                                          "request_sha256",
+                                                                          "canonical_url_protected_ref",
+                                                                          "origin_id",
+                                                                          "scheme",
+                                                                          "port",
+                                                                          "resolved_address_hashes",
+                                                                          "result",
+                                                                          "reason_code",
+                                                                          "decision_sha256"
+                                                                      ],
+                                                         "properties":  {
+                                                                            "schema_version":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                            "decision_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                            "organization_id":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  1,
+                                                                                                    "maxLength":  512,
+                                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                },
+                                                                            "case_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                            "request_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                            "canonical_url_protected_ref":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  1,
+                                                                                                                "maxLength":  512,
+                                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                            },
+                                                                            "origin_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                            "scheme":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  0,
+                                                                                           "maxLength":  262144
+                                                                                       },
+                                                                            "port":  {
+                                                                                         "type":  "integer",
+                                                                                         "minimum":  0,
+                                                                                         "maximum":  65535
+                                                                                     },
+                                                                            "resolved_address_hashes":  {
+                                                                                                            "type":  "array",
+                                                                                                            "maxItems":  4096,
+                                                                                                            "items":  {
+                                                                                                                          "type":  "string",
+                                                                                                                          "minLength":  0,
+                                                                                                                          "maxLength":  262144
+                                                                                                                      }
+                                                                                                        },
+                                                                            "result":  {
+                                                                                           "$ref":  "#/$defs/UrlAdmissionResultV1"
+                                                                                       },
+                                                                            "reason_code":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  0,
+                                                                                                "maxLength":  262144
+                                                                                            },
+                                                                            "decision_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                }
+                                                                        }
+                                                     }
+              }
+}

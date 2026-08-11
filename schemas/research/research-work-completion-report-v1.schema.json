@@ -1,0 +1,554 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-work-completion-report-v1.schema.json",
+    "title":  "ResearchWorkCompletionReportV1",
+    "$ref":  "#/$defs/ResearchWorkCompletionReportV1",
+    "$defs":  {
+                  "ResearchSecurityMetricsV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "external_browser_egress",
+                                                                     "external_model_egress",
+                                                                     "unauthorized_network_worker_request",
+                                                                     "ssrf_success",
+                                                                     "private_address_connect",
+                                                                     "dns_rebinding_accept",
+                                                                     "https_downgrade_accept",
+                                                                     "redirect_escape",
+                                                                     "query_secret_leak",
+                                                                     "prompt_injection_authority_change",
+                                                                     "unbounded_crawl",
+                                                                     "browser_download",
+                                                                     "forbidden_file_promotion",
+                                                                     "mime_magic_mismatch_accept",
+                                                                     "macro_file_promotion",
+                                                                     "workspace_escape",
+                                                                     "credential_leak",
+                                                                     "raw_web_to_model",
+                                                                     "false_research_completion",
+                                                                     "false_download_completion",
+                                                                     "critical_error"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "external_browser_egress":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                       "external_model_egress":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "unauthorized_network_worker_request":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                       "ssrf_success":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                                       "private_address_connect":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                       "dns_rebinding_accept":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                       "https_downgrade_accept":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0
+                                                                                                  },
+                                                                       "redirect_escape":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "query_secret_leak":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                       "prompt_injection_authority_change":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                       "unbounded_crawl":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "browser_download":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "forbidden_file_promotion":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                       "mime_magic_mismatch_accept":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                       "macro_file_promotion":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                       "workspace_escape":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "credential_leak":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "raw_web_to_model":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "false_research_completion":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                       "false_download_completion":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                       "critical_error":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          }
+                                                                   }
+                                                },
+                  "ResearchResidualMetricsV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "edge_processes",
+                                                                     "edge_driver_processes",
+                                                                     "snapshot_servers",
+                                                                     "network_workers",
+                                                                     "model_workers",
+                                                                     "appcontainer_profiles",
+                                                                     "wfp_temporary_objects",
+                                                                     "open_sockets",
+                                                                     "quarantine_temp_files",
+                                                                     "partial_downloads",
+                                                                     "workspace_locks",
+                                                                     "browser_profiles",
+                                                                     "cookies",
+                                                                     "download_directory_files"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "edge_processes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                       "edge_driver_processes":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "snapshot_servers":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "network_workers":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "model_workers":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                                       "appcontainer_profiles":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "wfp_temporary_objects":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "open_sockets":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                                       "quarantine_temp_files":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "partial_downloads":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                       "workspace_locks":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "browser_profiles":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "cookies":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0
+                                                                                   },
+                                                                       "download_directory_files":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    }
+                                                                   }
+                                                },
+                  "ResearchPerformanceMetricsV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "disclosure_gate_microseconds",
+                                                                        "url_admission_microseconds",
+                                                                        "dns_microseconds",
+                                                                        "connect_microseconds",
+                                                                        "tls_microseconds",
+                                                                        "ttfb_microseconds",
+                                                                        "transfer_microseconds",
+                                                                        "html_parse_microseconds",
+                                                                        "snapshot_compile_microseconds",
+                                                                        "evidence_ranking_microseconds",
+                                                                        "context_slicing_microseconds",
+                                                                        "model_microseconds",
+                                                                        "browser_startup_microseconds",
+                                                                        "webdriver_observation_microseconds",
+                                                                        "download_microseconds",
+                                                                        "attachment_trust_microseconds",
+                                                                        "format_validation_microseconds",
+                                                                        "workspace_promotion_microseconds",
+                                                                        "peak_network_worker_memory_bytes",
+                                                                        "peak_parser_memory_bytes",
+                                                                        "peak_edge_memory_bytes",
+                                                                        "peak_model_memory_bytes"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "disclosure_gate_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                          "url_admission_microseconds":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                          "dns_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                          "connect_microseconds":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                          "tls_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                          "ttfb_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                          "transfer_microseconds":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                          "html_parse_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                          "snapshot_compile_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                          "evidence_ranking_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                          "context_slicing_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                          "model_microseconds":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                          "browser_startup_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                          "webdriver_observation_microseconds":  {
+                                                                                                                     "type":  "integer",
+                                                                                                                     "minimum":  0
+                                                                                                                 },
+                                                                          "download_microseconds":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                          "attachment_trust_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                          "format_validation_microseconds":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                          "workspace_promotion_microseconds":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                          "peak_network_worker_memory_bytes":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                          "peak_parser_memory_bytes":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0
+                                                                                                       },
+                                                                          "peak_edge_memory_bytes":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                          "peak_model_memory_bytes":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      }
+                                                                      }
+                                                   },
+                  "ResearchWorkCompletionReportV1":  {
+                                                         "type":  "object",
+                                                         "additionalProperties":  false,
+                                                         "required":  [
+                                                                          "schema_version",
+                                                                          "report_id",
+                                                                          "source_tree_sha256",
+                                                                          "predecessor_finished_sha256",
+                                                                          "research_case_count",
+                                                                          "routine_case_count",
+                                                                          "security_negative_case_count",
+                                                                          "external_request_count",
+                                                                          "external_origin_count",
+                                                                          "redirect_count",
+                                                                          "external_bytes_received",
+                                                                          "tls_failure_count",
+                                                                          "ssrf_rejection_count",
+                                                                          "discovered_link_count",
+                                                                          "fetched_source_count",
+                                                                          "snapshot_page_count",
+                                                                          "evidence_excerpt_count",
+                                                                          "conflict_count",
+                                                                          "unknown_count",
+                                                                          "actual_qwen_invocation_count",
+                                                                          "model_free_case_count",
+                                                                          "actual_download_count",
+                                                                          "promoted_artifact_count",
+                                                                          "rejected_download_count",
+                                                                          "crash_window_count",
+                                                                          "replay_report_sha256",
+                                                                          "protected_audit_record_count",
+                                                                          "protected_audit_terminal_sha256",
+                                                                          "security",
+                                                                          "residual",
+                                                                          "performance",
+                                                                          "browser_loopback_only_evidence",
+                                                                          "network_worker_sole_egress_evidence",
+                                                                          "safe_snapshot_evidence",
+                                                                          "evidence_grounding_evidence",
+                                                                          "controlled_download_evidence",
+                                                                          "attachment_trust_evidence",
+                                                                          "format_validation_evidence",
+                                                                          "workspace_promotion_evidence",
+                                                                          "model_free_research_evidence",
+                                                                          "routine_human_touch_zero",
+                                                                          "complete",
+                                                                          "finished_sha256"
+                                                                      ],
+                                                         "properties":  {
+                                                                            "schema_version":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                            "report_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                            "source_tree_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                            "predecessor_finished_sha256":  {
+                                                                                                                "type":  "string",
+                                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                "maxLength":  71
+                                                                                                            },
+                                                                            "research_case_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                            "routine_case_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                            "security_negative_case_count":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0,
+                                                                                                                 "maximum":  4294967295
+                                                                                                             },
+                                                                            "external_request_count":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                            "external_origin_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                            "redirect_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                            "external_bytes_received":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0
+                                                                                                        },
+                                                                            "tls_failure_count":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                            "ssrf_rejection_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                            "discovered_link_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                            "fetched_source_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                            "snapshot_page_count":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0,
+                                                                                                        "maximum":  4294967295
+                                                                                                    },
+                                                                            "evidence_excerpt_count":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0,
+                                                                                                           "maximum":  4294967295
+                                                                                                       },
+                                                                            "conflict_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                            "unknown_count":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0,
+                                                                                                  "maximum":  4294967295
+                                                                                              },
+                                                                            "actual_qwen_invocation_count":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0,
+                                                                                                                 "maximum":  4294967295
+                                                                                                             },
+                                                                            "model_free_case_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                            "actual_download_count":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                            "promoted_artifact_count":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        },
+                                                                            "rejected_download_count":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "minimum":  0,
+                                                                                                            "maximum":  4294967295
+                                                                                                        },
+                                                                            "crash_window_count":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  4294967295
+                                                                                                   },
+                                                                            "replay_report_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                            "protected_audit_record_count":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                            "protected_audit_terminal_sha256":  {
+                                                                                                                    "type":  "string",
+                                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                    "maxLength":  71
+                                                                                                                },
+                                                                            "security":  {
+                                                                                             "$ref":  "#/$defs/ResearchSecurityMetricsV1"
+                                                                                         },
+                                                                            "residual":  {
+                                                                                             "$ref":  "#/$defs/ResearchResidualMetricsV1"
+                                                                                         },
+                                                                            "performance":  {
+                                                                                                "$ref":  "#/$defs/ResearchPerformanceMetricsV1"
+                                                                                            },
+                                                                            "browser_loopback_only_evidence":  {
+                                                                                                                   "type":  "boolean"
+                                                                                                               },
+                                                                            "network_worker_sole_egress_evidence":  {
+                                                                                                                        "type":  "boolean"
+                                                                                                                    },
+                                                                            "safe_snapshot_evidence":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                            "evidence_grounding_evidence":  {
+                                                                                                                "type":  "boolean"
+                                                                                                            },
+                                                                            "controlled_download_evidence":  {
+                                                                                                                 "type":  "boolean"
+                                                                                                             },
+                                                                            "attachment_trust_evidence":  {
+                                                                                                              "type":  "boolean"
+                                                                                                          },
+                                                                            "format_validation_evidence":  {
+                                                                                                               "type":  "boolean"
+                                                                                                           },
+                                                                            "workspace_promotion_evidence":  {
+                                                                                                                 "type":  "boolean"
+                                                                                                             },
+                                                                            "model_free_research_evidence":  {
+                                                                                                                 "type":  "boolean"
+                                                                                                             },
+                                                                            "routine_human_touch_zero":  {
+                                                                                                             "type":  "boolean"
+                                                                                                         },
+                                                                            "complete":  {
+                                                                                             "type":  "boolean"
+                                                                                         },
+                                                                            "finished_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                }
+                                                                        }
+                                                     }
+              }
+}

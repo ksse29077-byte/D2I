@@ -1,0 +1,99 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/browser-snapshot-manifest-v1.schema.json",
+    "title":  "BrowserSnapshotManifestV1",
+    "$ref":  "#/$defs/BrowserSnapshotManifestV1",
+    "$defs":  {
+                  "BrowserSnapshotManifestV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "schema_version",
+                                                                     "manifest_id",
+                                                                     "organization_id",
+                                                                     "case_id",
+                                                                     "browser_session_sha256",
+                                                                     "snapshot_sha256",
+                                                                     "safe_projection_sha256",
+                                                                     "observed_page_count",
+                                                                     "external_navigation_count",
+                                                                     "browser_download_count",
+                                                                     "browser_form_submit_count",
+                                                                     "manifest_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "schema_version":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "manifest_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                       "organization_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                       "case_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                       "browser_session_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                       "snapshot_sha256":  {
+                                                                                               "type":  "array",
+                                                                                               "maxItems":  4096,
+                                                                                               "items":  {
+                                                                                                             "type":  "string",
+                                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                             "maxLength":  71
+                                                                                                         }
+                                                                                           },
+                                                                       "safe_projection_sha256":  {
+                                                                                                      "type":  "array",
+                                                                                                      "maxItems":  4096,
+                                                                                                      "items":  {
+                                                                                                                    "type":  "string",
+                                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                    "maxLength":  71
+                                                                                                                }
+                                                                                                  },
+                                                                       "observed_page_count":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0,
+                                                                                                   "maximum":  4294967295
+                                                                                               },
+                                                                       "external_navigation_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                       "browser_download_count":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "minimum":  0,
+                                                                                                      "maximum":  4294967295
+                                                                                                  },
+                                                                       "browser_form_submit_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                       "manifest_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           }
+                                                                   }
+                                                }
+              }
+}

@@ -1,6 +1,8 @@
 //! Narrow Win32 FFI wrappers used by the isolated desktop worker.
 
 #[cfg(windows)]
+mod attachment_trust;
+#[cfg(windows)]
 mod excel_automation;
 #[cfg(windows)]
 mod office_private_desktop;
@@ -11,8 +13,14 @@ mod powerpoint_automation;
 mod verifier_broker;
 mod wfp;
 #[cfg(windows)]
+mod winhttp_research;
+#[cfg(windows)]
 mod word_automation;
 
+#[cfg(windows)]
+pub use attachment_trust::{
+    check_attachment_trust, WindowsAttachmentTrustDecision, WindowsAttachmentTrustObservation,
+};
 #[cfg(windows)]
 pub use excel_automation::{
     execute_excel_spreadsheet_operation, export_excel_workbook_pdf, installed_excel_process_ids,
@@ -44,6 +52,11 @@ pub use wfp::{
     install_wfp_loopback_policy, install_wfp_loopback_policy_with_verifier_network_denial,
     remove_wfp_loopback_policy, verify_wfp_loopback_policy,
     verify_wfp_loopback_policy_with_verifier_network_denial, WindowsWfpLoopbackPolicyIdentity,
+};
+#[cfg(windows)]
+pub use winhttp_research::{
+    winhttp_research_request, WindowsResearchHttpMethod, WindowsWinHttpRequest,
+    WindowsWinHttpResponse,
 };
 #[cfg(windows)]
 pub use word_automation::{
@@ -247,6 +260,12 @@ pub fn appcontainer_profile(
 /// Deletes a per-user AppContainer profile.
 pub fn delete_appcontainer_profile(profile_name: &str) -> Result<(), WindowsHostError> {
     platform::delete_appcontainer_profile(profile_name)
+}
+
+/// Ensures that a per-user AppContainer profile is absent and verifies removal
+/// through bounded create/delete round trips rather than deterministic SID derivation.
+pub fn ensure_appcontainer_profile_deleted(profile_name: &str) -> Result<(), WindowsHostError> {
+    platform::ensure_appcontainer_profile_deleted(profile_name)
 }
 
 /// Grants a profile SID explicit access to a file or directory.
@@ -688,6 +707,44 @@ mod platform {
         unsafe { DeleteAppContainerProfile(PCWSTR(name.as_ptr())) }.map_err(|error| {
             WindowsHostError::new(format!("DeleteAppContainerProfile failed: {error}"))
         })
+    }
+
+    pub(super) fn ensure_appcontainer_profile_deleted(
+        profile_name: &str,
+    ) -> Result<(), WindowsHostError> {
+        validate_profile_name(profile_name)?;
+        let name = wide_string(profile_name)?;
+        let display = wide_string(&format!("D2I {profile_name}"))?;
+        let description = wide_string("D2I zero-capability process sandbox")?;
+        // SAFETY: name is a valid NUL-terminated AppContainer profile name.
+        unsafe { DeleteAppContainerProfile(PCWSTR(name.as_ptr())) }.map_err(|error| {
+            WindowsHostError::new(format!("DeleteAppContainerProfile failed: {error}"))
+        })?;
+        for _ in 0..2 {
+            // SAFETY: all strings are NUL-terminated and no capabilities are supplied.
+            let sid = unsafe {
+                CreateAppContainerProfile(
+                    PCWSTR(name.as_ptr()),
+                    PCWSTR(display.as_ptr()),
+                    PCWSTR(description.as_ptr()),
+                    None,
+                )
+            }
+            .map_err(|error| {
+                WindowsHostError::new(format!(
+                    "AppContainer profile deletion was not observable: {error}"
+                ))
+            })?;
+            // SAFETY: CreateAppContainerProfile returns a SID released with FreeSid.
+            let _ = unsafe { FreeSid(sid) };
+            // SAFETY: name remains a valid NUL-terminated profile name.
+            unsafe { DeleteAppContainerProfile(PCWSTR(name.as_ptr())) }.map_err(|error| {
+                WindowsHostError::new(format!(
+                    "AppContainer profile verification cleanup failed: {error}"
+                ))
+            })?;
+        }
+        Ok(())
     }
 
     pub(super) fn grant_appcontainer_path_access(
@@ -1833,6 +1890,12 @@ mod platform {
     }
 
     pub(super) fn delete_appcontainer_profile(_profile_name: &str) -> Result<(), WindowsHostError> {
+        Err(unavailable())
+    }
+
+    pub(super) fn ensure_appcontainer_profile_deleted(
+        _profile_name: &str,
+    ) -> Result<(), WindowsHostError> {
         Err(unavailable())
     }
 

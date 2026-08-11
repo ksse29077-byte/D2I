@@ -1,0 +1,269 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-page-snapshot-v1.schema.json",
+    "title":  "ResearchPageSnapshotV1",
+    "$ref":  "#/$defs/ResearchPageSnapshotV1",
+    "$defs":  {
+                  "SourcePolicyClassV1":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "preferred",
+                                                           "allowed",
+                                                           "blocked",
+                                                           "unclassified_external"
+                                                       ]
+                                          },
+                  "ResearchSegmentRoleV1":  {
+                                                "type":  "string",
+                                                "enum":  [
+                                                             "title",
+                                                             "heading",
+                                                             "paragraph",
+                                                             "list_item",
+                                                             "table_cell",
+                                                             "link_label"
+                                                         ]
+                                            },
+                  "ResearchLinkRelationV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "navigation",
+                                                              "download",
+                                                              "reference",
+                                                              "unknown"
+                                                          ]
+                                             },
+                  "ResearchSegmentV1":  {
+                                            "type":  "object",
+                                            "additionalProperties":  false,
+                                            "required":  [
+                                                             "segment_id",
+                                                             "role",
+                                                             "text",
+                                                             "source_reference",
+                                                             "segment_sha256"
+                                                         ],
+                                            "properties":  {
+                                                               "segment_id":  {
+                                                                                  "type":  "string",
+                                                                                  "minLength":  1,
+                                                                                  "maxLength":  512,
+                                                                                  "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                              },
+                                                               "role":  {
+                                                                            "$ref":  "#/$defs/ResearchSegmentRoleV1"
+                                                                        },
+                                                               "heading_level":  {
+                                                                                     "oneOf":  [
+                                                                                                   {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0,
+                                                                                                       "maximum":  255
+                                                                                                   },
+                                                                                                   {
+                                                                                                       "type":  "null"
+                                                                                                   }
+                                                                                               ]
+                                                                                 },
+                                                               "text":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  0,
+                                                                            "maxLength":  262144
+                                                                        },
+                                                               "source_reference":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  0,
+                                                                                        "maxLength":  262144
+                                                                                    },
+                                                               "segment_sha256":  {
+                                                                                      "type":  "string",
+                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                      "maxLength":  71
+                                                                                  }
+                                                           }
+                                        },
+                  "ResearchLinkV1":  {
+                                         "type":  "object",
+                                         "additionalProperties":  false,
+                                         "required":  [
+                                                          "link_id",
+                                                          "display_text",
+                                                          "target_url_protected_ref",
+                                                          "target_origin_hint",
+                                                          "relation",
+                                                          "source_snapshot_sha256",
+                                                          "link_sha256"
+                                                      ],
+                                         "properties":  {
+                                                            "link_id":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                        },
+                                                            "display_text":  {
+                                                                                 "type":  "string",
+                                                                                 "minLength":  0,
+                                                                                 "maxLength":  262144
+                                                                             },
+                                                            "target_url_protected_ref":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                            "target_origin_hint":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  0,
+                                                                                       "maxLength":  262144
+                                                                                   },
+                                                            "relation":  {
+                                                                             "$ref":  "#/$defs/ResearchLinkRelationV1"
+                                                                         },
+                                                            "source_snapshot_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                            "link_sha256":  {
+                                                                                "type":  "string",
+                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                "maxLength":  71
+                                                                            }
+                                                        }
+                                     },
+                  "ResearchPageSnapshotV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "snapshot_id",
+                                                                  "source_id",
+                                                                  "organization_id",
+                                                                  "case_id",
+                                                                  "requested_url_sha256",
+                                                                  "final_url_protected_ref",
+                                                                  "origin_id",
+                                                                  "http_status",
+                                                                  "content_type",
+                                                                  "retrieved_at_unix_ms",
+                                                                  "freshness_expires_at_unix_ms",
+                                                                  "raw_body_sha256",
+                                                                  "extracted_content_sha256",
+                                                                  "title",
+                                                                  "segments",
+                                                                  "links",
+                                                                  "source_policy_class",
+                                                                  "generation",
+                                                                  "snapshot_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "snapshot_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                    "source_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                    "organization_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                    "case_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                    "requested_url_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                    "final_url_protected_ref":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  1,
+                                                                                                    "maxLength":  512,
+                                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                },
+                                                                    "origin_id":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1,
+                                                                                      "maxLength":  512,
+                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                  },
+                                                                    "http_status":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  65535
+                                                                                    },
+                                                                    "content_type":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  0,
+                                                                                         "maxLength":  262144
+                                                                                     },
+                                                                    "retrieved_at_unix_ms":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                    "freshness_expires_at_unix_ms":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                    "raw_body_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                    "extracted_content_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                    "title":  {
+                                                                                  "type":  "string",
+                                                                                  "minLength":  0,
+                                                                                  "maxLength":  262144
+                                                                              },
+                                                                    "segments":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "$ref":  "#/$defs/ResearchSegmentV1"
+                                                                                               }
+                                                                                 },
+                                                                    "links":  {
+                                                                                  "type":  "array",
+                                                                                  "maxItems":  4096,
+                                                                                  "items":  {
+                                                                                                "$ref":  "#/$defs/ResearchLinkV1"
+                                                                                            }
+                                                                              },
+                                                                    "source_policy_class":  {
+                                                                                                "$ref":  "#/$defs/SourcePolicyClassV1"
+                                                                                            },
+                                                                    "generation":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0
+                                                                                   },
+                                                                    "snapshot_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                }
+                                             }
+              }
+}

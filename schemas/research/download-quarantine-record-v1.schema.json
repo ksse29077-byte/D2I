@@ -1,0 +1,85 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/download-quarantine-record-v1.schema.json",
+    "title":  "DownloadQuarantineRecordV1",
+    "$ref":  "#/$defs/DownloadQuarantineRecordV1",
+    "$defs":  {
+                  "DownloadQuarantineRecordV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "record_id",
+                                                                      "organization_id",
+                                                                      "case_id",
+                                                                      "workspace_id",
+                                                                      "quarantine_artifact_id",
+                                                                      "download_receipt_sha256",
+                                                                      "pre_trust_sha256",
+                                                                      "file_bytes",
+                                                                      "created_at_unix_ms",
+                                                                      "record_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "record_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "case_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                        "workspace_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                        "quarantine_artifact_id":  {
+                                                                                                       "type":  "string",
+                                                                                                       "minLength":  1,
+                                                                                                       "maxLength":  512,
+                                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                   },
+                                                                        "download_receipt_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                        "pre_trust_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                        "file_bytes":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0
+                                                                                       },
+                                                                        "created_at_unix_ms":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                        "record_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          }
+                                                                    }
+                                                 }
+              }
+}

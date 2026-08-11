@@ -36,6 +36,8 @@ mod presentation_dispatch;
 mod presentation_file_worker;
 mod presentation_package;
 mod presentation_work;
+#[cfg(windows)]
+mod research_download;
 mod role_instance;
 mod role_operations;
 mod semantic_experience;
@@ -226,12 +228,13 @@ pub use local_model_provider::{
 };
 pub use office_workspace::{
     artifact_reference_from_file, classify_workspace_operation_recovery,
-    create_workspace_root_binding, execute_file_worker_request, initialize_office_workspace_store,
-    observe_artifacts, office_file_worker_main, recover_office_workspace_store,
-    ArtifactReferenceInputV1, OfficeFileWorkerOperationV1, OfficeFileWorkerRequestV1,
-    OfficeFileWorkerResponseV1, OfficeWorkspaceAuthorityContextV1, OfficeWorkspaceDispatchV1,
-    OfficeWorkspaceKrnDispatcherV1, OfficeWorkspaceStore, OfficeWorkspaceStoreRecordV1,
-    OfficeWorkspaceStoreVerificationV1, WorkspaceRecoveryDispositionV1, WorkspaceRecoveryProbeV1,
+    create_workspace_root_binding, execute_file_worker_request, import_external_artifact_atomic,
+    initialize_office_workspace_store, observe_artifacts, office_file_worker_main,
+    recover_office_workspace_store, ArtifactReferenceInputV1, OfficeFileWorkerOperationV1,
+    OfficeFileWorkerRequestV1, OfficeFileWorkerResponseV1, OfficeWorkspaceAuthorityContextV1,
+    OfficeWorkspaceDispatchV1, OfficeWorkspaceKrnDispatcherV1, OfficeWorkspaceStore,
+    OfficeWorkspaceStoreRecordV1, OfficeWorkspaceStoreVerificationV1,
+    WorkspaceRecoveryDispositionV1, WorkspaceRecoveryProbeV1, MAX_IMPORTED_ARTIFACT_BYTES,
     OFFICE_WORKSPACE_STORE_SCHEMA_VERSION,
 };
 #[cfg(windows)]
@@ -264,6 +267,12 @@ pub use presentation_file_worker::{
 pub use presentation_work::{
     presentation_capability_id, presentation_operation, validate_resolved_presentation_operation,
     ResolvedPresentationOperationV1,
+};
+#[cfg(windows)]
+pub use research_download::{
+    create_download_quarantine_record_v1, promote_quarantined_download_v1,
+    run_attachment_trust_report_v1, validate_quarantined_download_v1,
+    ResearchDownloadPromotionOutcomeV1,
 };
 pub use role_instance::{
     initialize_role_instance_ledger, verify_role_instance_ledger, RoleInstanceLedgerEventKindV1,
@@ -367,7 +376,8 @@ pub use windows_wfp_broker_runtime::{
     WindowsWfpBrokerRuntimeVerification,
 };
 pub use windows_wfp_self_test::{
-    run_windows_wfp_browser_egress_self_test, WindowsWfpBrowserEgressSelfTestReport,
+    run_windows_loopback_snapshot_observation, run_windows_wfp_browser_egress_self_test,
+    WindowsLoopbackSnapshotObservationV1, WindowsWfpBrowserEgressSelfTestReport,
     WindowsWfpConnectionEvent, WindowsWfpConnectionOutcome, WindowsWfpNetworkProbe,
     WindowsWfpProbeDisposition, WindowsWfpProbeServerTelemetry, WindowsWfpSelfTestCleanup,
 };

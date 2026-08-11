@@ -94,6 +94,16 @@ page geometry and deterministic visual fingerprints, never facts or mutation
 authority. Final readiness binds source generation, profile, backend, receipt,
 independent render, provenance, signed seal, and submission manifest.
 
+OFFICE-600 adds a distinct Research Network Plane without widening Desktop,
+Edge, EdgeDriver, model, parser, or Office network authority. The exact signed
+one-shot worker receives one public HTTPS GET/HEAD operation over private stdin;
+every URL and redirect is freshly disclosure-, source-, DNS-, SSRF-, and
+remote-address-admitted. Raw external HTML is never rendered. Desktop compiles
+typed evidence and stable link IDs into a closed loopback projection for the
+existing read-only WebDriver path. Controlled files remain quarantined until
+Attachment Services, fresh hashing, existing format parsers, and an atomic
+Workspace import all agree on exact lineage. Model output remains proposal-only.
+
 OFFICE-200 adds a Desktop-owned trusted document dispatcher, separate bounded
 HWPX and DOCX package workers, and a hidden interactive-current-user Word COM
 worker. Cognitive artifacts contain semantic operation and node IDs, never

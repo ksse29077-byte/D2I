@@ -4,6 +4,8 @@ use crate::{
     DesktopError, WindowsEdgeDriverPin, WindowsWfpBrowserEgressObservation,
     WindowsWfpBrowserEgressPolicy,
 };
+use d2i_browser_research::ZERO_HASH as RESEARCH_ZERO_HASH;
+use d2i_windows_host::{installed_process_ids_by_name, process_peak_working_set_bytes};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::{BTreeMap, BTreeSet};
@@ -131,6 +133,66 @@ pub struct WindowsWfpBrowserEgressSelfTestReport {
     pub ipv6_telemetry: WindowsWfpProbeServerTelemetry,
     pub cleanup: WindowsWfpSelfTestCleanup,
     pub passed: bool,
+}
+
+/// Read-only proof that pinned Edge observed only bounded loopback snapshots.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct WindowsLoopbackSnapshotObservationV1 {
+    pub schema_version: u32,
+    pub observation_id: String,
+    pub observed_page_count: u32,
+    pub requested_url_hashes: Vec<String>,
+    pub observed_url_hashes: Vec<String>,
+    pub title_hashes: Vec<String>,
+    pub page_source_hashes: Vec<String>,
+    pub external_navigation_count: u32,
+    pub browser_download_count: u32,
+    pub browser_form_submit_count: u32,
+    pub elapsed_microseconds: u64,
+    pub peak_edge_memory_bytes: u64,
+    pub cleanup: WindowsWfpSelfTestCleanup,
+    pub complete: bool,
+    pub observation_sha256: String,
+}
+
+impl WindowsLoopbackSnapshotObservationV1 {
+    pub fn validate(&self) -> Result<(), DesktopError> {
+        validate_hash(
+            &self.observation_sha256,
+            "loopback snapshot observation hash",
+        )?;
+        let count = usize::try_from(self.observed_page_count).map_err(|_| {
+            DesktopError::Invalid("loopback snapshot page count overflow".to_owned())
+        })?;
+        if self.schema_version != 1
+            || !(1..=24).contains(&count)
+            || self.requested_url_hashes.len() != count
+            || self.observed_url_hashes.len() != count
+            || self.title_hashes.len() != count
+            || self.page_source_hashes.len() != count
+            || self.external_navigation_count != 0
+            || self.browser_download_count != 0
+            || self.browser_form_submit_count != 0
+            || self.elapsed_microseconds == 0
+            || self.peak_edge_memory_bytes == 0
+            || !self.cleanup.browser_session_closed
+            || !self.cleanup.edge_driver_exited
+            || !self.cleanup.temporary_profile_removed
+            || !self.complete
+        {
+            return Err(DesktopError::Integrity(
+                "loopback snapshot browser observation is incomplete".to_owned(),
+            ));
+        }
+        let expected = hash_loopback_observation(self)?;
+        if expected != self.observation_sha256 {
+            return Err(DesktopError::Integrity(
+                "loopback snapshot observation hash differs".to_owned(),
+            ));
+        }
+        Ok(())
+    }
 }
 
 impl WindowsWfpBrowserEgressSelfTestReport {
@@ -530,6 +592,119 @@ pub fn run_windows_wfp_browser_egress_self_test(
     };
     report.validate()?;
     Ok(report)
+}
+
+/// Starts a fresh pinned Edge profile, observes each closed loopback page once,
+/// then removes the session, driver, and profile before returning evidence.
+pub fn run_windows_loopback_snapshot_observation(
+    pin: &WindowsEdgeDriverPin,
+    page_urls: &[String],
+    timeout_ms: u64,
+) -> Result<WindowsLoopbackSnapshotObservationV1, DesktopError> {
+    pin.verify()?;
+    if page_urls.is_empty() || page_urls.len() > 24 || !(1_000..=30_000).contains(&timeout_ms) {
+        return Err(DesktopError::Invalid(
+            "loopback snapshot observation bounds differ".to_owned(),
+        ));
+    }
+    for url in page_urls {
+        validate_loopback_snapshot_url(url)?;
+    }
+    let started = Instant::now();
+    let baseline_edge_processes = installed_process_ids_by_name(&["msedge.exe"])
+        .map_err(|error| DesktopError::AdapterUnavailable(error.to_string()))?
+        .into_iter()
+        .collect::<BTreeSet<_>>();
+    let nonce = random_nonce()?;
+    let non_loopback = discover_non_loopback_ipv4()?;
+    let mut edge =
+        ManagedEdgeDriver::start(pin, &format!("snapshot-{nonce}"), non_loopback, timeout_ms)?;
+    edge.create_session(pin)?;
+    let mut peak_edge_memory_bytes = sample_new_edge_peak_memory(&baseline_edge_processes)?;
+    let mut requested_url_hashes = Vec::with_capacity(page_urls.len());
+    let mut observed_url_hashes = Vec::with_capacity(page_urls.len());
+    let mut title_hashes = Vec::with_capacity(page_urls.len());
+    let mut page_source_hashes = Vec::with_capacity(page_urls.len());
+    for url in page_urls {
+        edge.navigate(url)?;
+        let (observed_url, title, source) = edge.observe_page(timeout_ms)?;
+        peak_edge_memory_bytes =
+            peak_edge_memory_bytes.max(sample_new_edge_peak_memory(&baseline_edge_processes)?);
+        validate_loopback_snapshot_url(&observed_url)?;
+        if source.is_empty() || source.len() > 1024 * 1024 {
+            return Err(DesktopError::Integrity(
+                "Edge snapshot source is empty or exceeds one MiB".to_owned(),
+            ));
+        }
+        requested_url_hashes.push(sha256_bytes(url.as_bytes()));
+        observed_url_hashes.push(sha256_bytes(observed_url.as_bytes()));
+        title_hashes.push(sha256_bytes(title.as_bytes()));
+        page_source_hashes.push(sha256_bytes(source.as_bytes()));
+    }
+    let cleanup = edge.shutdown()?;
+    let mut report = WindowsLoopbackSnapshotObservationV1 {
+        schema_version: 1,
+        observation_id: format!("browser-snapshot:{nonce}"),
+        observed_page_count: u32::try_from(page_urls.len())
+            .map_err(|_| DesktopError::Invalid("snapshot page count overflow".to_owned()))?,
+        requested_url_hashes,
+        observed_url_hashes,
+        title_hashes,
+        page_source_hashes,
+        external_navigation_count: 0,
+        browser_download_count: 0,
+        browser_form_submit_count: 0,
+        elapsed_microseconds: u64::try_from(started.elapsed().as_micros()).unwrap_or(u64::MAX),
+        peak_edge_memory_bytes,
+        cleanup,
+        complete: true,
+        observation_sha256: RESEARCH_ZERO_HASH.to_owned(),
+    };
+    report.observation_sha256 = hash_loopback_observation(&report)?;
+    report.validate()?;
+    Ok(report)
+}
+
+fn sample_new_edge_peak_memory(baseline: &BTreeSet<u32>) -> Result<u64, DesktopError> {
+    let current = installed_process_ids_by_name(&["msedge.exe"])
+        .map_err(|error| DesktopError::AdapterUnavailable(error.to_string()))?;
+    Ok(current
+        .into_iter()
+        .filter(|process_id| !baseline.contains(process_id))
+        .filter_map(|process_id| process_peak_working_set_bytes(process_id).ok())
+        .max()
+        .unwrap_or(0))
+}
+
+fn validate_loopback_snapshot_url(value: &str) -> Result<(), DesktopError> {
+    let parsed = url::Url::parse(value)
+        .map_err(|_| DesktopError::Invalid("snapshot URL cannot be parsed".to_owned()))?;
+    if parsed.scheme() != "http"
+        || parsed.username() != ""
+        || parsed.password().is_some()
+        || !parsed.host().is_some_and(|host| match host {
+            url::Host::Ipv4(address) => address.is_loopback(),
+            url::Host::Ipv6(address) => address.is_loopback(),
+            url::Host::Domain(_) => false,
+        })
+        || parsed.port().is_none()
+        || parsed.query().is_some()
+        || parsed.fragment().is_some()
+    {
+        return Err(DesktopError::AccessDenied(
+            "Edge snapshot URL must be an explicit loopback HTTP route".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+fn hash_loopback_observation(
+    report: &WindowsLoopbackSnapshotObservationV1,
+) -> Result<String, DesktopError> {
+    let mut value =
+        serde_json::to_value(report).map_err(|error| DesktopError::Json(error.to_string()))?;
+    value["observation_sha256"] = Value::String(RESEARCH_ZERO_HASH.to_owned());
+    hash_value(&value)
 }
 
 fn validate_probe(probe: &WindowsWfpNetworkProbe) -> Result<(), DesktopError> {
@@ -1662,6 +1837,66 @@ impl ManagedEdgeDriver {
             if Instant::now() >= deadline {
                 return Err(DesktopError::Integrity(
                     "Edge page source did not contain the response nonce".to_owned(),
+                ));
+            }
+            thread::sleep(Duration::from_millis(25));
+        }
+    }
+
+    fn observe_page(&self, timeout_ms: u64) -> Result<(String, String, String), DesktopError> {
+        let session_id = self.session_id()?;
+        let deadline = Instant::now() + Duration::from_millis(timeout_ms);
+        loop {
+            let url = crate::windows_worker::webdriver_request(
+                &self.endpoint,
+                self.timeout_ms.min(2_000),
+                "GET",
+                &format!("/session/{session_id}/url"),
+                None,
+            )
+            .ok()
+            .and_then(|value| {
+                value
+                    .get("value")
+                    .and_then(Value::as_str)
+                    .map(str::to_owned)
+            });
+            let source = crate::windows_worker::webdriver_request(
+                &self.endpoint,
+                self.timeout_ms.min(2_000),
+                "GET",
+                &format!("/session/{session_id}/source"),
+                None,
+            )
+            .ok()
+            .and_then(|value| {
+                value
+                    .get("value")
+                    .and_then(Value::as_str)
+                    .map(str::to_owned)
+            });
+            let title = crate::windows_worker::webdriver_request(
+                &self.endpoint,
+                self.timeout_ms.min(2_000),
+                "GET",
+                &format!("/session/{session_id}/title"),
+                None,
+            )
+            .ok()
+            .and_then(|value| {
+                value
+                    .get("value")
+                    .and_then(Value::as_str)
+                    .map(str::to_owned)
+            });
+            if let (Some(url), Some(title), Some(source)) = (url, title, source) {
+                if !source.is_empty() {
+                    return Ok((url, title, source));
+                }
+            }
+            if Instant::now() >= deadline {
+                return Err(DesktopError::Integrity(
+                    "Edge loopback snapshot observation timed out".to_owned(),
                 ));
             }
             thread::sleep(Duration::from_millis(25));

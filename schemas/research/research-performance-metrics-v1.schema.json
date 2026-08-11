@@ -1,0 +1,126 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-performance-metrics-v1.schema.json",
+    "title":  "ResearchPerformanceMetricsV1",
+    "$ref":  "#/$defs/ResearchPerformanceMetricsV1",
+    "$defs":  {
+                  "ResearchPerformanceMetricsV1":  {
+                                                       "type":  "object",
+                                                       "additionalProperties":  false,
+                                                       "required":  [
+                                                                        "disclosure_gate_microseconds",
+                                                                        "url_admission_microseconds",
+                                                                        "dns_microseconds",
+                                                                        "connect_microseconds",
+                                                                        "tls_microseconds",
+                                                                        "ttfb_microseconds",
+                                                                        "transfer_microseconds",
+                                                                        "html_parse_microseconds",
+                                                                        "snapshot_compile_microseconds",
+                                                                        "evidence_ranking_microseconds",
+                                                                        "context_slicing_microseconds",
+                                                                        "model_microseconds",
+                                                                        "browser_startup_microseconds",
+                                                                        "webdriver_observation_microseconds",
+                                                                        "download_microseconds",
+                                                                        "attachment_trust_microseconds",
+                                                                        "format_validation_microseconds",
+                                                                        "workspace_promotion_microseconds",
+                                                                        "peak_network_worker_memory_bytes",
+                                                                        "peak_parser_memory_bytes",
+                                                                        "peak_edge_memory_bytes",
+                                                                        "peak_model_memory_bytes"
+                                                                    ],
+                                                       "properties":  {
+                                                                          "disclosure_gate_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                          "url_admission_microseconds":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "minimum":  0
+                                                                                                         },
+                                                                          "dns_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                          "connect_microseconds":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                          "tls_microseconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                          "ttfb_microseconds":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                          "transfer_microseconds":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                          "html_parse_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                          "snapshot_compile_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                          "evidence_ranking_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                          "context_slicing_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                          "model_microseconds":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                          "browser_startup_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                          "webdriver_observation_microseconds":  {
+                                                                                                                     "type":  "integer",
+                                                                                                                     "minimum":  0
+                                                                                                                 },
+                                                                          "download_microseconds":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                          "attachment_trust_microseconds":  {
+                                                                                                                "type":  "integer",
+                                                                                                                "minimum":  0
+                                                                                                            },
+                                                                          "format_validation_microseconds":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                          "workspace_promotion_microseconds":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                          "peak_network_worker_memory_bytes":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                          "peak_parser_memory_bytes":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0
+                                                                                                       },
+                                                                          "peak_edge_memory_bytes":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                          "peak_model_memory_bytes":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      }
+                                                                      }
+                                                   }
+              }
+}

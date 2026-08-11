@@ -365,3 +365,17 @@ audit, finalization seal, and submission manifest jointly gate readiness. PDF
 is a fixed projection rather than truth; source mutation supersedes the pair.
 External PDFs remain bounded render-only untrusted input, HWPX-to-PDF remains
 licensed-backend-gated, and PDF/A request is not a conformance claim.
+
+OFFICE-600 adds bounded public research without giving the browser or model
+Internet authority. A signed one-shot network worker performs admitted HTTPS
+GET/HEAD requests after public-only disclosure, strict URL/source policy, fresh
+DNS, SSRF, redirect, TLS, and connected-address gates. D2I parses external HTML
+as data and renders a new safe loopback snapshot for read-only Edge observation.
+Fetched evidence is deduplicated, cited, number-grounded, conflict-aware, and
+sufficiency-gated before a report can close.
+
+Files use a separate controlled-download path: quarantine, Windows Attachment
+Services, fresh hash observation, format-specific validation, macro and external
+relationship denial, and atomic Workspace promotion. Search snippets, page
+instructions, model output, TLS, and parser success cannot independently grant
+fact, network, download, promotion, or completion authority.

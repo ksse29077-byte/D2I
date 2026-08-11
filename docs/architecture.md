@@ -825,3 +825,30 @@ manifest are produced only after all gates pass; any source change supersedes
 the pair. External PDFs remain render-only untrusted input. HWPX-to-PDF remains
 `requires_licensed_hancom_render_backend`. See ADR 0043 and
 `docs/office/pdf-interchange-v1.md`.
+
+## Network-Isolated Browser Research
+
+OFFICE-600 preserves the browser's existing loopback-only WFP boundary and
+introduces one external authority: a signed one-shot Research Network Worker.
+The worker accepts only one admitted public HTTPS GET/HEAD request with fixed
+headers and byte/time/redirect limits. Disclosure, source policy, strict URL
+parsing, fresh all-address DNS admission, manual redirect admission, Schannel,
+and observed remote-address matching precede every response receipt. The main
+Desktop process, Edge, EdgeDriver, model, parsers, and Office workers do not gain
+ambient Internet authority.
+
+External HTML is parsed without network and compiled into typed segments, link
+IDs, and a D2I-owned safe HTML projection. An ephemeral closed-route loopback
+server lets Edge perform read-only WebDriver observation without external
+navigation, scripts, forms, frames, fonts, images, service workers, or downloads.
+Fetched snapshots become evidence only through hash-bound excerpts; duplicate
+bodies are removed and deterministic freshness, coverage, source, conflict,
+unknown, and budget gates decide sufficiency. Models see bounded evidence text
+and stable IDs only.
+
+Controlled downloads use the network worker and a D2I quarantine. Windows
+Attachment Services, post-trust rehash, MIME/extension/magic agreement,
+format-specific OFFICE-200/300/400/500 validation, macro/external-relationship
+denial, and atomic Workspace import all bind to one source snapshot and link.
+Promoted content remains externally untrusted rather than fact authority. See
+ADR 0044 and the three OFFICE-600 documents under `docs/office`.

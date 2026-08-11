@@ -65,7 +65,7 @@ escalation을 설계하고 법적·비가역·고위험·불확실·정책 충�
 - [x] `D2I-OFFICE-400` PowerPoint Presentation Work
 - [x] `D2I-OFFICE-450` Organizational Design Intelligence and Brand-Consistent Artifact Generation - **complete**
 - [x] `D2I-OFFICE-500` PDF and Document Interchange - **complete**
-- [ ] `D2I-OFFICE-600` Browser Research and Controlled Download - **first active task**
+- [ ] `D2I-OFFICE-600` Browser Research and Controlled Download - **first active; implementation and All pass; elevated WFP/Edge/Qwen stages pass; Attachment Services `Prompt` blocks automatic promotion pending an approved deployment policy that returns `Enable`**
 - [ ] `D2I-OFFICE-700` Email / Messenger / Review and Feedback Loop
 - [ ] `D2I-OFFICE-800` Long-Horizon Multi-App Project Work
 - [ ] `D2I-OFFICE-900` General Office Digital Employee E2E

@@ -1,0 +1,128 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/download-promotion-receipt-v1.schema.json",
+    "title":  "DownloadPromotionReceiptV1",
+    "$ref":  "#/$defs/DownloadPromotionReceiptV1",
+    "$defs":  {
+                  "DownloadPromotionStatusV1":  {
+                                                    "type":  "string",
+                                                    "enum":  [
+                                                                 "promoted",
+                                                                 "rejected",
+                                                                 "already_promoted"
+                                                             ]
+                                                },
+                  "DownloadPromotionReceiptV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "receipt_id",
+                                                                      "organization_id",
+                                                                      "case_id",
+                                                                      "workspace_id",
+                                                                      "quarantine_record_sha256",
+                                                                      "attachment_trust_report_sha256",
+                                                                      "validation_report_sha256",
+                                                                      "final_download_sha256",
+                                                                      "source_snapshot_sha256",
+                                                                      "source_link_id",
+                                                                      "workspace_artifact_id",
+                                                                      "workspace_generation",
+                                                                      "promotion_policy_sha256",
+                                                                      "status",
+                                                                      "promoted_at_unix_ms",
+                                                                      "receipt_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "receipt_id":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1,
+                                                                                           "maxLength":  512,
+                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                       },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "case_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                        "workspace_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                        "quarantine_record_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                        "attachment_trust_report_sha256":  {
+                                                                                                               "type":  "string",
+                                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                               "maxLength":  71
+                                                                                                           },
+                                                                        "validation_report_sha256":  {
+                                                                                                         "type":  "string",
+                                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                         "maxLength":  71
+                                                                                                     },
+                                                                        "final_download_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                        "source_snapshot_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                        "source_link_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                        "workspace_artifact_id":  {
+                                                                                                      "type":  "string",
+                                                                                                      "minLength":  1,
+                                                                                                      "maxLength":  512,
+                                                                                                      "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                  },
+                                                                        "workspace_generation":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                        "promotion_policy_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                        "status":  {
+                                                                                       "$ref":  "#/$defs/DownloadPromotionStatusV1"
+                                                                                   },
+                                                                        "promoted_at_unix_ms":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "receipt_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           }
+                                                                    }
+                                                 }
+              }
+}

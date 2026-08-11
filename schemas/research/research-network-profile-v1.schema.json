@@ -1,0 +1,147 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-network-profile-v1.schema.json",
+    "title":  "ResearchNetworkProfileV1",
+    "$ref":  "#/$defs/ResearchNetworkProfileV1",
+    "$defs":  {
+                  "ResearchProxyModeV1":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "direct"
+                                                       ]
+                                          },
+                  "ResearchNetworkProfileV1":  {
+                                                   "type":  "object",
+                                                   "additionalProperties":  false,
+                                                   "required":  [
+                                                                    "schema_version",
+                                                                    "profile_id",
+                                                                    "allowed_schemes",
+                                                                    "allowed_ports",
+                                                                    "max_redirects",
+                                                                    "max_request_bytes",
+                                                                    "max_response_headers",
+                                                                    "max_response_bytes",
+                                                                    "max_total_bytes",
+                                                                    "connect_timeout_milliseconds",
+                                                                    "receive_timeout_milliseconds",
+                                                                    "origin_budget",
+                                                                    "request_budget",
+                                                                    "max_pages",
+                                                                    "max_links_per_page",
+                                                                    "max_extracted_text_bytes",
+                                                                    "max_evidence_excerpts",
+                                                                    "max_model_evidence_bytes",
+                                                                    "max_link_depth",
+                                                                    "proxy_mode",
+                                                                    "network_profile_sha256"
+                                                                ],
+                                                   "properties":  {
+                                                                      "schema_version":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "profile_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                      "allowed_schemes":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        }
+                                                                                          },
+                                                                      "allowed_ports":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  65535
+                                                                                                      }
+                                                                                        },
+                                                                      "max_redirects":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                      "max_request_bytes":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                      "max_response_headers":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                      "max_response_bytes":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                      "max_total_bytes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                      "connect_timeout_milliseconds":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0
+                                                                                                       },
+                                                                      "receive_timeout_milliseconds":  {
+                                                                                                           "type":  "integer",
+                                                                                                           "minimum":  0
+                                                                                                       },
+                                                                      "origin_budget":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                      "request_budget":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "max_pages":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  4294967295
+                                                                                    },
+                                                                      "max_links_per_page":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0,
+                                                                                                 "maximum":  4294967295
+                                                                                             },
+                                                                      "max_extracted_text_bytes":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                      "max_evidence_excerpts":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                      "max_model_evidence_bytes":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                      "max_link_depth":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0,
+                                                                                             "maximum":  4294967295
+                                                                                         },
+                                                                      "proxy_mode":  {
+                                                                                         "$ref":  "#/$defs/ResearchProxyModeV1"
+                                                                                     },
+                                                                      "network_profile_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 }
+                                                                  }
+                                               }
+              }
+}

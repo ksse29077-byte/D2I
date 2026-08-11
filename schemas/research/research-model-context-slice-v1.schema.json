@@ -1,0 +1,137 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-model-context-slice-v1.schema.json",
+    "title":  "ResearchModelContextSliceV1",
+    "$ref":  "#/$defs/ResearchModelContextSliceV1",
+    "$defs":  {
+                  "EvidenceTrustClassV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "untrusted_external_research"
+                                                        ]
+                                           },
+                  "ResearchModelContextSliceV1":  {
+                                                      "type":  "object",
+                                                      "additionalProperties":  false,
+                                                      "required":  [
+                                                                       "schema_version",
+                                                                       "organization_id",
+                                                                       "case_id",
+                                                                       "brief_sha256",
+                                                                       "trust_class",
+                                                                       "source_ids",
+                                                                       "evidence_ids",
+                                                                       "bounded_excerpts",
+                                                                       "conflict_ids",
+                                                                       "unknowns",
+                                                                       "raw_html_count",
+                                                                       "raw_url_count",
+                                                                       "download_byte_count",
+                                                                       "network_authority_count",
+                                                                       "workspace_promotion_authority_count",
+                                                                       "context_sha256"
+                                                                   ],
+                                                      "properties":  {
+                                                                         "schema_version":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "organization_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                         "case_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                         "brief_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                         "trust_class":  {
+                                                                                             "$ref":  "#/$defs/EvidenceTrustClassV1"
+                                                                                         },
+                                                                         "source_ids":  {
+                                                                                            "type":  "array",
+                                                                                            "maxItems":  4096,
+                                                                                            "items":  {
+                                                                                                          "type":  "string",
+                                                                                                          "minLength":  0,
+                                                                                                          "maxLength":  262144
+                                                                                                      }
+                                                                                        },
+                                                                         "evidence_ids":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        }
+                                                                                          },
+                                                                         "bounded_excerpts":  {
+                                                                                                  "type":  "array",
+                                                                                                  "maxItems":  4096,
+                                                                                                  "items":  {
+                                                                                                                "type":  "string",
+                                                                                                                "minLength":  0,
+                                                                                                                "maxLength":  262144
+                                                                                                            }
+                                                                                              },
+                                                                         "conflict_ids":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        }
+                                                                                          },
+                                                                         "unknowns":  {
+                                                                                          "type":  "array",
+                                                                                          "maxItems":  4096,
+                                                                                          "items":  {
+                                                                                                        "type":  "string",
+                                                                                                        "minLength":  0,
+                                                                                                        "maxLength":  262144
+                                                                                                    }
+                                                                                      },
+                                                                         "raw_html_count":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "raw_url_count":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                         "download_byte_count":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                         "network_authority_count":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0,
+                                                                                                         "maximum":  4294967295
+                                                                                                     },
+                                                                         "workspace_promotion_authority_count":  {
+                                                                                                                     "type":  "integer",
+                                                                                                                     "minimum":  0,
+                                                                                                                     "maximum":  4294967295
+                                                                                                                 },
+                                                                         "context_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            }
+                                                                     }
+                                                  }
+              }
+}

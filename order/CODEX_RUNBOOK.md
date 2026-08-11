@@ -144,6 +144,18 @@ application, at least 15 rendered pages, five PPT comparisons, immutable
 source/PDF pairs, signed manifests/certification, 128 x 100 replay, and zero
 owned residual state.
 
+Run OFFICE-600 deterministic public-research and controlled-download gates with
+`scripts/office/run-browser-research-v1.ps1 -Mode All -Fresh`. Product
+Completion requires pinned Qwen3-4B/llama.cpp, sealed OFFICE-500 evidence,
+version-matched signed Edge/EdgeDriver, `-ReuseVerifiedPredecessorEvidence`, two
+approved public HTTPS origins, one approved small file, and one elevated session
+for exact temporary WFP policy. Edge observes only D2I-owned loopback snapshots;
+the one-shot network worker is the sole external egress. Completion requires 24
+Cases, five browser snapshot observations, actual Attachment Services and format
+validation, at least one atomic Workspace promotion, crash windows A-N, 128 x
+100 logical replay, signed certification, and zero security/residual counters.
+`All` never substitutes for this external product proof.
+
 ## Track X - Execution Plane Expansion
 
 - `D2I-EDGE-100` Enterprise API / ERP / MES / CMMS planes - **complete**

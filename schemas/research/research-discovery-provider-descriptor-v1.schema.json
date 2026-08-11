@@ -1,0 +1,64 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-discovery-provider-descriptor-v1.schema.json",
+    "title":  "ResearchDiscoveryProviderDescriptorV1",
+    "$ref":  "#/$defs/ResearchDiscoveryProviderDescriptorV1",
+    "$defs":  {
+                  "DiscoveryProviderKindV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "seed_url_set",
+                                                               "configured_search_portal",
+                                                               "enterprise_search_adapter"
+                                                           ]
+                                              },
+                  "ResearchDiscoveryProviderDescriptorV1":  {
+                                                                "type":  "object",
+                                                                "additionalProperties":  false,
+                                                                "required":  [
+                                                                                 "schema_version",
+                                                                                 "provider_id",
+                                                                                 "organization_id",
+                                                                                 "provider_kind",
+                                                                                 "profile_sha256",
+                                                                                 "evidence_only_after_fetch",
+                                                                                 "descriptor_sha256"
+                                                                             ],
+                                                                "properties":  {
+                                                                                   "schema_version":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0,
+                                                                                                          "maximum":  4294967295
+                                                                                                      },
+                                                                                   "provider_id":  {
+                                                                                                       "type":  "string",
+                                                                                                       "minLength":  1,
+                                                                                                       "maxLength":  512,
+                                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                   },
+                                                                                   "organization_id":  {
+                                                                                                           "type":  "string",
+                                                                                                           "minLength":  1,
+                                                                                                           "maxLength":  512,
+                                                                                                           "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                       },
+                                                                                   "provider_kind":  {
+                                                                                                         "$ref":  "#/$defs/DiscoveryProviderKindV1"
+                                                                                                     },
+                                                                                   "profile_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                                   "evidence_only_after_fetch":  {
+                                                                                                                     "type":  "boolean"
+                                                                                                                 },
+                                                                                   "descriptor_sha256":  {
+                                                                                                             "type":  "string",
+                                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                             "maxLength":  71
+                                                                                                         }
+                                                                               }
+                                                            }
+              }
+}

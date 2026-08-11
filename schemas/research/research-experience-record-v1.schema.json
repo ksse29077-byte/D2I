@@ -1,0 +1,127 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-experience-record-v1.schema.json",
+    "title":  "ResearchExperienceRecordV1",
+    "$ref":  "#/$defs/ResearchExperienceRecordV1",
+    "$defs":  {
+                  "ResearchExperienceCaseKindV1":  {
+                                                       "type":  "string",
+                                                       "enum":  [
+                                                                    "seed_url_research",
+                                                                    "two_hop_link_follow",
+                                                                    "three_source_evidence_bundle",
+                                                                    "stale_refresh",
+                                                                    "same_body_dedup",
+                                                                    "conflicting_sources",
+                                                                    "insufficient_evidence",
+                                                                    "model_free_research",
+                                                                    "model_assisted_synthesis",
+                                                                    "local_snapshot_browser_observation",
+                                                                    "controlled_txt_download",
+                                                                    "controlled_pdf_download",
+                                                                    "office_format_validation",
+                                                                    "workspace_promotion",
+                                                                    "ssrf_rejection",
+                                                                    "url_attack_rejection",
+                                                                    "redirect_attack_rejection",
+                                                                    "http_bound_rejection",
+                                                                    "prompt_injection_rejection",
+                                                                    "query_leakage_rejection",
+                                                                    "malicious_download_rejection",
+                                                                    "filename_attack_rejection",
+                                                                    "mime_magic_rejection",
+                                                                    "browser_model_egress_rejection"
+                                                                ]
+                                                   },
+                  "ResearchExperienceOutcomeV1":  {
+                                                      "type":  "string",
+                                                      "enum":  [
+                                                                   "routine_complete",
+                                                                   "negative_rejected"
+                                                               ]
+                                                  },
+                  "ResearchExperienceRecordV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "experience_id",
+                                                                      "organization_id",
+                                                                      "case_id",
+                                                                      "brief_sha256",
+                                                                      "evidence_bundle_sha256",
+                                                                      "sufficiency_report_sha256",
+                                                                      "report_sha256",
+                                                                      "case_kind",
+                                                                      "outcome",
+                                                                      "model_used",
+                                                                      "operation_count",
+                                                                      "experience_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "experience_id":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  1,
+                                                                                              "maxLength":  512,
+                                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                          },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "case_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                        "brief_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         },
+                                                                        "evidence_bundle_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                        "sufficiency_report_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                        "report_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                        "case_kind":  {
+                                                                                          "$ref":  "#/$defs/ResearchExperienceCaseKindV1"
+                                                                                      },
+                                                                        "outcome":  {
+                                                                                        "$ref":  "#/$defs/ResearchExperienceOutcomeV1"
+                                                                                    },
+                                                                        "model_used":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                                        "operation_count":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                        "experience_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              }
+                                                                    }
+                                                 }
+              }
+}

@@ -1,0 +1,150 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-fetch-receipt-v1.schema.json",
+    "title":  "ResearchFetchReceiptV1",
+    "$ref":  "#/$defs/ResearchFetchReceiptV1",
+    "$defs":  {
+                  "FetchResultCodeV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "success",
+                                                         "authentication_required",
+                                                         "rejected",
+                                                         "timeout",
+                                                         "network_error",
+                                                         "resource_limit",
+                                                         "tls_error",
+                                                         "dns_rebind_or_route_mismatch",
+                                                         "redirect_rejected",
+                                                         "unsupported_encoding"
+                                                     ]
+                                        },
+                  "ResearchHttpMetadataV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "status_code",
+                                                                  "content_type",
+                                                                  "total_header_bytes",
+                                                                  "content_encoding",
+                                                                  "certificate_thumbprint_sha256",
+                                                                  "remote_address_sha256",
+                                                                  "metadata_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "status_code":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  65535
+                                                                                    },
+                                                                    "content_type":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  0,
+                                                                                         "maxLength":  262144
+                                                                                     },
+                                                                    "declared_content_length":  {
+                                                                                                    "oneOf":  [
+                                                                                                                  {
+                                                                                                                      "type":  "integer",
+                                                                                                                      "minimum":  0
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "type":  "null"
+                                                                                                                  }
+                                                                                                              ]
+                                                                                                },
+                                                                    "total_header_bytes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                    "content_encoding":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  0,
+                                                                                             "maxLength":  262144
+                                                                                         },
+                                                                    "certificate_thumbprint_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                    "remote_address_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                    "metadata_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                }
+                                             },
+                  "ResearchFetchReceiptV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "receipt_id",
+                                                                  "request_sha256",
+                                                                  "http_metadata",
+                                                                  "bytes_received",
+                                                                  "body_sha256",
+                                                                  "redirect_chain_sha256",
+                                                                  "elapsed_microseconds",
+                                                                  "result",
+                                                                  "receipt_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "receipt_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                    "request_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                                    "http_metadata":  {
+                                                                                          "$ref":  "#/$defs/ResearchHttpMetadataV1"
+                                                                                      },
+                                                                    "bytes_received":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0
+                                                                                       },
+                                                                    "body_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    },
+                                                                    "redirect_chain_sha256":  {
+                                                                                                  "type":  "array",
+                                                                                                  "maxItems":  4096,
+                                                                                                  "items":  {
+                                                                                                                "type":  "string",
+                                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                "maxLength":  71
+                                                                                                            }
+                                                                                              },
+                                                                    "elapsed_microseconds":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                    "result":  {
+                                                                                   "$ref":  "#/$defs/FetchResultCodeV1"
+                                                                               },
+                                                                    "receipt_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       }
+                                                                }
+                                             }
+              }
+}

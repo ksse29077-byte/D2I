@@ -1,0 +1,59 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-conflict-v1.schema.json",
+    "title":  "ResearchConflictV1",
+    "$ref":  "#/$defs/ResearchConflictV1",
+    "$defs":  {
+                  "ResearchConflictV1":  {
+                                             "type":  "object",
+                                             "additionalProperties":  false,
+                                             "required":  [
+                                                              "conflict_id",
+                                                              "question_key",
+                                                              "evidence_ids",
+                                                              "descriptions",
+                                                              "unresolved",
+                                                              "conflict_sha256"
+                                                          ],
+                                             "properties":  {
+                                                                "conflict_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                "question_key":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  0,
+                                                                                     "maxLength":  262144
+                                                                                 },
+                                                                "evidence_ids":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  0,
+                                                                                                   "maxLength":  262144
+                                                                                               }
+                                                                                 },
+                                                                "descriptions":  {
+                                                                                     "type":  "array",
+                                                                                     "maxItems":  4096,
+                                                                                     "items":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  0,
+                                                                                                   "maxLength":  262144
+                                                                                               }
+                                                                                 },
+                                                                "unresolved":  {
+                                                                                   "type":  "boolean"
+                                                                               },
+                                                                "conflict_sha256":  {
+                                                                                        "type":  "string",
+                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                        "maxLength":  71
+                                                                                    }
+                                                            }
+                                         }
+              }
+}

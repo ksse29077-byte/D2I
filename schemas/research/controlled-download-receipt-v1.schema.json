@@ -1,0 +1,77 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/controlled-download-receipt-v1.schema.json",
+    "title":  "ControlledDownloadReceiptV1",
+    "$ref":  "#/$defs/ControlledDownloadReceiptV1",
+    "$defs":  {
+                  "ControlledDownloadReceiptV1":  {
+                                                      "type":  "object",
+                                                      "additionalProperties":  false,
+                                                      "required":  [
+                                                                       "schema_version",
+                                                                       "receipt_id",
+                                                                       "request_sha256",
+                                                                       "fetch_receipt_sha256",
+                                                                       "quarantine_artifact_id",
+                                                                       "untrusted_filename_sha256",
+                                                                       "sanitized_filename",
+                                                                       "bytes_received",
+                                                                       "pre_trust_sha256",
+                                                                       "receipt_sha256"
+                                                                   ],
+                                                      "properties":  {
+                                                                         "schema_version":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "receipt_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                         "request_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                                         "fetch_receipt_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                         "quarantine_artifact_id":  {
+                                                                                                        "type":  "string",
+                                                                                                        "minLength":  1,
+                                                                                                        "maxLength":  512,
+                                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                    },
+                                                                         "untrusted_filename_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                         "sanitized_filename":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  0,
+                                                                                                    "maxLength":  262144
+                                                                                                },
+                                                                         "bytes_received":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                         "pre_trust_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                         "receipt_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            }
+                                                                     }
+                                                  }
+              }
+}

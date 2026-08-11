@@ -1,0 +1,98 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/controlled-download-intent-v1.schema.json",
+    "title":  "ControlledDownloadIntentV1",
+    "$ref":  "#/$defs/ControlledDownloadIntentV1",
+    "$defs":  {
+                  "ControlledDownloadSourceKindV1":  {
+                                                         "type":  "string",
+                                                         "enum":  [
+                                                                      "observed_research_link",
+                                                                      "organization_approved_artifact",
+                                                                      "signed_operator_input"
+                                                                  ]
+                                                     },
+                  "DownloadClassV1":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "pdf",
+                                                       "docx",
+                                                       "hwpx",
+                                                       "xlsx",
+                                                       "pptx",
+                                                       "txt",
+                                                       "csv",
+                                                       "png",
+                                                       "jpeg",
+                                                       "unknown"
+                                                   ]
+                                      },
+                  "ControlledDownloadIntentV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "intent_id",
+                                                                      "organization_id",
+                                                                      "case_id",
+                                                                      "source_kind",
+                                                                      "source_snapshot_sha256",
+                                                                      "source_link_id",
+                                                                      "expected_class",
+                                                                      "maximum_bytes",
+                                                                      "intent_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "intent_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "case_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                        "source_kind":  {
+                                                                                            "$ref":  "#/$defs/ControlledDownloadSourceKindV1"
+                                                                                        },
+                                                                        "source_snapshot_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                        "source_link_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                        "expected_class":  {
+                                                                                               "$ref":  "#/$defs/DownloadClassV1"
+                                                                                           },
+                                                                        "maximum_bytes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                        "intent_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          }
+                                                                    }
+                                                 }
+              }
+}

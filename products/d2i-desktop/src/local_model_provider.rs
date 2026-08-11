@@ -9,10 +9,10 @@ use d2i_intelligence_provider::{
 };
 use d2i_situation_model::{canonical_json_bytes, SituationUnknownKindV1};
 use d2i_windows_host::{
-    delete_appcontainer_profile, grant_appcontainer_path_access, harden_path_for_current_user,
-    is_reparse_point, provision_appcontainer_profile, secure_random_bytes,
-    spawn_zero_capability_appcontainer_in_job_with_environment, WindowsAppContainerPathAccess,
-    WindowsJob, WindowsJobLimits,
+    ensure_appcontainer_profile_deleted, grant_appcontainer_path_access,
+    harden_path_for_current_user, is_reparse_point, provision_appcontainer_profile,
+    secure_random_bytes, spawn_zero_capability_appcontainer_in_job_with_environment,
+    WindowsAppContainerPathAccess, WindowsJob, WindowsJobLimits,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -1307,7 +1307,7 @@ impl LocalModelInvocationCleanup {
 
 impl Drop for LocalModelInvocationCleanup {
     fn drop(&mut self) {
-        let _ = delete_appcontainer_profile(&self.profile_name);
+        let _ = ensure_appcontainer_profile_deleted(&self.profile_name);
         let root = std::fs::canonicalize(&self.work_root);
         let directory = std::fs::canonicalize(&self.work_directory);
         if let (Ok(root), Ok(directory)) = (root, directory) {

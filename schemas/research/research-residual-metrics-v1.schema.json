@@ -1,0 +1,86 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-residual-metrics-v1.schema.json",
+    "title":  "ResearchResidualMetricsV1",
+    "$ref":  "#/$defs/ResearchResidualMetricsV1",
+    "$defs":  {
+                  "ResearchResidualMetricsV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "edge_processes",
+                                                                     "edge_driver_processes",
+                                                                     "snapshot_servers",
+                                                                     "network_workers",
+                                                                     "model_workers",
+                                                                     "appcontainer_profiles",
+                                                                     "wfp_temporary_objects",
+                                                                     "open_sockets",
+                                                                     "quarantine_temp_files",
+                                                                     "partial_downloads",
+                                                                     "workspace_locks",
+                                                                     "browser_profiles",
+                                                                     "cookies",
+                                                                     "download_directory_files"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "edge_processes":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0
+                                                                                          },
+                                                                       "edge_driver_processes":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "snapshot_servers":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "network_workers":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "model_workers":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                                       "appcontainer_profiles":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "wfp_temporary_objects":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "open_sockets":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0
+                                                                                        },
+                                                                       "quarantine_temp_files":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "minimum":  0
+                                                                                                 },
+                                                                       "partial_downloads":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  0
+                                                                                             },
+                                                                       "workspace_locks":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                       "browser_profiles":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0
+                                                                                            },
+                                                                       "cookies":  {
+                                                                                       "type":  "integer",
+                                                                                       "minimum":  0
+                                                                                   },
+                                                                       "download_directory_files":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    }
+                                                                   }
+                                                }
+              }
+}

@@ -1,0 +1,85 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/controlled-download-request-v1.schema.json",
+    "title":  "ControlledDownloadRequestV1",
+    "$ref":  "#/$defs/ControlledDownloadRequestV1",
+    "$defs":  {
+                  "ControlledDownloadRequestV1":  {
+                                                      "type":  "object",
+                                                      "additionalProperties":  false,
+                                                      "required":  [
+                                                                       "schema_version",
+                                                                       "request_id",
+                                                                       "organization_id",
+                                                                       "case_id",
+                                                                       "intent_sha256",
+                                                                       "url_admission_decision_sha256",
+                                                                       "network_profile_sha256",
+                                                                       "worker_executable_sha256",
+                                                                       "quarantine_artifact_id",
+                                                                       "deadline_unix_ms",
+                                                                       "request_sha256"
+                                                                   ],
+                                                      "properties":  {
+                                                                         "schema_version":  {
+                                                                                                "type":  "integer",
+                                                                                                "minimum":  0,
+                                                                                                "maximum":  4294967295
+                                                                                            },
+                                                                         "request_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                         "organization_id":  {
+                                                                                                 "type":  "string",
+                                                                                                 "minLength":  1,
+                                                                                                 "maxLength":  512,
+                                                                                                 "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                             },
+                                                                         "case_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                         "intent_sha256":  {
+                                                                                               "type":  "string",
+                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                               "maxLength":  71
+                                                                                           },
+                                                                         "url_admission_decision_sha256":  {
+                                                                                                               "type":  "string",
+                                                                                                               "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                               "maxLength":  71
+                                                                                                           },
+                                                                         "network_profile_sha256":  {
+                                                                                                        "type":  "string",
+                                                                                                        "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                        "maxLength":  71
+                                                                                                    },
+                                                                         "worker_executable_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                         "quarantine_artifact_id":  {
+                                                                                                        "type":  "string",
+                                                                                                        "minLength":  1,
+                                                                                                        "maxLength":  512,
+                                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                                    },
+                                                                         "deadline_unix_ms":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  0
+                                                                                              },
+                                                                         "request_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            }
+                                                                     }
+                                                  }
+              }
+}

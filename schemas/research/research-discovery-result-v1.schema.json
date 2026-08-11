@@ -1,0 +1,89 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-discovery-result-v1.schema.json",
+    "title":  "ResearchDiscoveryResultV1",
+    "$ref":  "#/$defs/ResearchDiscoveryResultV1",
+    "$defs":  {
+                  "ResearchDiscoveryResultV1":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "schema_version",
+                                                                     "result_id",
+                                                                     "organization_id",
+                                                                     "case_id",
+                                                                     "provider_descriptor_sha256",
+                                                                     "source_candidate_ids",
+                                                                     "source_candidate_protected_refs",
+                                                                     "snippet_hashes",
+                                                                     "evidence_eligible",
+                                                                     "result_sha256"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "schema_version":  {
+                                                                                              "type":  "integer",
+                                                                                              "minimum":  0,
+                                                                                              "maximum":  4294967295
+                                                                                          },
+                                                                       "result_id":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  1,
+                                                                                         "maxLength":  512,
+                                                                                         "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                     },
+                                                                       "organization_id":  {
+                                                                                               "type":  "string",
+                                                                                               "minLength":  1,
+                                                                                               "maxLength":  512,
+                                                                                               "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                           },
+                                                                       "case_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                       "provider_descriptor_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                       "source_candidate_ids":  {
+                                                                                                    "type":  "array",
+                                                                                                    "maxItems":  4096,
+                                                                                                    "items":  {
+                                                                                                                  "type":  "string",
+                                                                                                                  "minLength":  0,
+                                                                                                                  "maxLength":  262144
+                                                                                                              }
+                                                                                                },
+                                                                       "source_candidate_protected_refs":  {
+                                                                                                               "type":  "array",
+                                                                                                               "maxItems":  4096,
+                                                                                                               "items":  {
+                                                                                                                             "type":  "string",
+                                                                                                                             "minLength":  0,
+                                                                                                                             "maxLength":  262144
+                                                                                                                         }
+                                                                                                           },
+                                                                       "snippet_hashes":  {
+                                                                                              "type":  "array",
+                                                                                              "maxItems":  4096,
+                                                                                              "items":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        }
+                                                                                          },
+                                                                       "evidence_eligible":  {
+                                                                                                 "type":  "boolean"
+                                                                                             },
+                                                                       "result_sha256":  {
+                                                                                             "type":  "string",
+                                                                                             "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                             "maxLength":  71
+                                                                                         }
+                                                                   }
+                                                }
+              }
+}

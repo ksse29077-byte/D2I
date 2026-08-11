@@ -1,0 +1,137 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/download-validation-report-v1.schema.json",
+    "title":  "DownloadValidationReportV1",
+    "$ref":  "#/$defs/DownloadValidationReportV1",
+    "$defs":  {
+                  "DownloadClassV1":  {
+                                          "type":  "string",
+                                          "enum":  [
+                                                       "pdf",
+                                                       "docx",
+                                                       "hwpx",
+                                                       "xlsx",
+                                                       "pptx",
+                                                       "txt",
+                                                       "csv",
+                                                       "png",
+                                                       "jpeg",
+                                                       "unknown"
+                                                   ]
+                                      },
+                  "DownloadValidationStatusV1":  {
+                                                     "type":  "string",
+                                                     "enum":  [
+                                                                  "passed",
+                                                                  "rejected",
+                                                                  "human_exception",
+                                                                  "unsupported"
+                                                              ]
+                                                 },
+                  "DownloadValidationReportV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "report_id",
+                                                                      "organization_id",
+                                                                      "case_id",
+                                                                      "final_download_sha256",
+                                                                      "expected_class",
+                                                                      "detected_class",
+                                                                      "declared_content_type",
+                                                                      "sanitized_filename",
+                                                                      "extension_matches",
+                                                                      "mime_matches",
+                                                                      "magic_matches",
+                                                                      "macro_free",
+                                                                      "package_safe",
+                                                                      "parser_verified",
+                                                                      "status",
+                                                                      "reason_codes",
+                                                                      "report_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "report_id":  {
+                                                                                          "type":  "string",
+                                                                                          "minLength":  1,
+                                                                                          "maxLength":  512,
+                                                                                          "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                      },
+                                                                        "organization_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                        "case_id":  {
+                                                                                        "type":  "string",
+                                                                                        "minLength":  1,
+                                                                                        "maxLength":  512,
+                                                                                        "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                    },
+                                                                        "final_download_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                        "expected_class":  {
+                                                                                               "$ref":  "#/$defs/DownloadClassV1"
+                                                                                           },
+                                                                        "detected_class":  {
+                                                                                               "$ref":  "#/$defs/DownloadClassV1"
+                                                                                           },
+                                                                        "declared_content_type":  {
+                                                                                                      "type":  "string",
+                                                                                                      "minLength":  0,
+                                                                                                      "maxLength":  262144
+                                                                                                  },
+                                                                        "sanitized_filename":  {
+                                                                                                   "type":  "string",
+                                                                                                   "minLength":  0,
+                                                                                                   "maxLength":  262144
+                                                                                               },
+                                                                        "extension_matches":  {
+                                                                                                  "type":  "boolean"
+                                                                                              },
+                                                                        "mime_matches":  {
+                                                                                             "type":  "boolean"
+                                                                                         },
+                                                                        "magic_matches":  {
+                                                                                              "type":  "boolean"
+                                                                                          },
+                                                                        "macro_free":  {
+                                                                                           "type":  "boolean"
+                                                                                       },
+                                                                        "package_safe":  {
+                                                                                             "type":  "boolean"
+                                                                                         },
+                                                                        "parser_verified":  {
+                                                                                                "type":  "boolean"
+                                                                                            },
+                                                                        "status":  {
+                                                                                       "$ref":  "#/$defs/DownloadValidationStatusV1"
+                                                                                   },
+                                                                        "reason_codes":  {
+                                                                                             "type":  "array",
+                                                                                             "maxItems":  4096,
+                                                                                             "items":  {
+                                                                                                           "type":  "string",
+                                                                                                           "minLength":  0,
+                                                                                                           "maxLength":  262144
+                                                                                                       }
+                                                                                         },
+                                                                        "report_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          }
+                                                                    }
+                                                 }
+              }
+}

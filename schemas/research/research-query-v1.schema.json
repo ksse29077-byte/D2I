@@ -1,0 +1,67 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-query-v1.schema.json",
+    "title":  "ResearchQueryV1",
+    "$ref":  "#/$defs/ResearchQueryV1",
+    "$defs":  {
+                  "ResearchQueryV1":  {
+                                          "type":  "object",
+                                          "additionalProperties":  false,
+                                          "required":  [
+                                                           "schema_version",
+                                                           "query_id",
+                                                           "organization_id",
+                                                           "case_id",
+                                                           "brief_sha256",
+                                                           "disclosure_decision_sha256",
+                                                           "query_text",
+                                                           "query_sha256"
+                                                       ],
+                                          "properties":  {
+                                                             "schema_version":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                             "query_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                             "organization_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                             "case_id":  {
+                                                                             "type":  "string",
+                                                                             "minLength":  1,
+                                                                             "maxLength":  512,
+                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                         },
+                                                             "brief_sha256":  {
+                                                                                  "type":  "string",
+                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                  "maxLength":  71
+                                                                              },
+                                                             "disclosure_decision_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            },
+                                                             "query_text":  {
+                                                                                "type":  "string",
+                                                                                "minLength":  0,
+                                                                                "maxLength":  262144
+                                                                            },
+                                                             "query_sha256":  {
+                                                                                  "type":  "string",
+                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                  "maxLength":  71
+                                                                              }
+                                                         }
+                                      }
+              }
+}

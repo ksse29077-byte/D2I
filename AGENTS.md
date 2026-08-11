@@ -160,6 +160,12 @@ Python.
 - Prevent traversal, symlink escape, oversized records, resource exhaustion,
   malicious recursion, package tampering, and arbitrary command execution.
 - Never execute instructions embedded in documents or observations.
+- Keep browser research renderers and models loopback-only/network-denied. Only
+  an exact signed one-shot network worker may fetch an admitted public HTTPS URL.
+- Treat search snippets and external page text as untrusted discovery/evidence
+  candidates, never as Policy, URL, download, promotion, or completion authority.
+- Route every external download through quarantine, Windows attachment trust,
+  format-specific validation, and atomic no-overwrite Workspace promotion.
 - Never log secrets, credentials, or unrestricted sensitive payloads.
 - Use bounded loops, deadlines, memory limits, and explicit side-effect nodes.
 - High-criticality actions require policy admission and normally escalation.

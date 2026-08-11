@@ -1,0 +1,109 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-fetch-request-v1.schema.json",
+    "title":  "ResearchFetchRequestV1",
+    "$ref":  "#/$defs/ResearchFetchRequestV1",
+    "$defs":  {
+                  "ResearchHttpMethodV1":  {
+                                               "type":  "string",
+                                               "enum":  [
+                                                            "get",
+                                                            "head"
+                                                        ]
+                                           },
+                  "ResearchFetchRequestV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "schema_version",
+                                                                  "request_id",
+                                                                  "organization_id",
+                                                                  "case_id",
+                                                                  "role_id",
+                                                                  "work_grant_sha256",
+                                                                  "research_brief_sha256",
+                                                                  "source_candidate_id",
+                                                                  "url_admission_decision_sha256",
+                                                                  "network_profile_sha256",
+                                                                  "worker_executable_sha256",
+                                                                  "method",
+                                                                  "deadline_unix_ms",
+                                                                  "request_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "schema_version":  {
+                                                                                           "type":  "integer",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  4294967295
+                                                                                       },
+                                                                    "request_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                    "organization_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                    "case_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                    "role_id":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  1,
+                                                                                    "maxLength":  512,
+                                                                                    "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                },
+                                                                    "work_grant_sha256":  {
+                                                                                              "type":  "string",
+                                                                                              "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                              "maxLength":  71
+                                                                                          },
+                                                                    "research_brief_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                    "source_candidate_id":  {
+                                                                                                "type":  "string",
+                                                                                                "minLength":  1,
+                                                                                                "maxLength":  512,
+                                                                                                "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                            },
+                                                                    "url_admission_decision_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                    "network_profile_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                    "worker_executable_sha256":  {
+                                                                                                     "type":  "string",
+                                                                                                     "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                     "maxLength":  71
+                                                                                                 },
+                                                                    "method":  {
+                                                                                   "$ref":  "#/$defs/ResearchHttpMethodV1"
+                                                                               },
+                                                                    "deadline_unix_ms":  {
+                                                                                             "type":  "integer",
+                                                                                             "minimum":  0
+                                                                                         },
+                                                                    "request_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       }
+                                                                }
+                                             }
+              }
+}

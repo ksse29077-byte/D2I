@@ -1,0 +1,67 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-link-v1.schema.json",
+    "title":  "ResearchLinkV1",
+    "$ref":  "#/$defs/ResearchLinkV1",
+    "$defs":  {
+                  "ResearchLinkRelationV1":  {
+                                                 "type":  "string",
+                                                 "enum":  [
+                                                              "navigation",
+                                                              "download",
+                                                              "reference",
+                                                              "unknown"
+                                                          ]
+                                             },
+                  "ResearchLinkV1":  {
+                                         "type":  "object",
+                                         "additionalProperties":  false,
+                                         "required":  [
+                                                          "link_id",
+                                                          "display_text",
+                                                          "target_url_protected_ref",
+                                                          "target_origin_hint",
+                                                          "relation",
+                                                          "source_snapshot_sha256",
+                                                          "link_sha256"
+                                                      ],
+                                         "properties":  {
+                                                            "link_id":  {
+                                                                            "type":  "string",
+                                                                            "minLength":  1,
+                                                                            "maxLength":  512,
+                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                        },
+                                                            "display_text":  {
+                                                                                 "type":  "string",
+                                                                                 "minLength":  0,
+                                                                                 "maxLength":  262144
+                                                                             },
+                                                            "target_url_protected_ref":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                            "target_origin_hint":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  0,
+                                                                                       "maxLength":  262144
+                                                                                   },
+                                                            "relation":  {
+                                                                             "$ref":  "#/$defs/ResearchLinkRelationV1"
+                                                                         },
+                                                            "source_snapshot_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       },
+                                                            "link_sha256":  {
+                                                                                "type":  "string",
+                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                "maxLength":  71
+                                                                            }
+                                                        }
+                                     }
+              }
+}

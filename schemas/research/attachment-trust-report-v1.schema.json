@@ -1,0 +1,112 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/attachment-trust-report-v1.schema.json",
+    "title":  "AttachmentTrustReportV1",
+    "$ref":  "#/$defs/AttachmentTrustReportV1",
+    "$defs":  {
+                  "AttachmentTrustDecisionV1":  {
+                                                    "type":  "string",
+                                                    "enum":  [
+                                                                 "enable",
+                                                                 "prompt",
+                                                                 "disable",
+                                                                 "unavailable"
+                                                             ]
+                                                },
+                  "AttachmentTrustReportV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "schema_version",
+                                                                   "report_id",
+                                                                   "organization_id",
+                                                                   "case_id",
+                                                                   "quarantine_record_sha256",
+                                                                   "source_snapshot_sha256",
+                                                                   "source_link_id",
+                                                                   "decision",
+                                                                   "check_policy_hresult",
+                                                                   "save_hresult",
+                                                                   "file_exists_after_save",
+                                                                   "file_bytes_after_save",
+                                                                   "final_download_sha256",
+                                                                   "file_mutated_by_trust_provider",
+                                                                   "report_sha256"
+                                                               ],
+                                                  "properties":  {
+                                                                     "schema_version":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "report_id":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  1,
+                                                                                       "maxLength":  512,
+                                                                                       "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                   },
+                                                                     "organization_id":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  1,
+                                                                                             "maxLength":  512,
+                                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                         },
+                                                                     "case_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                                     "quarantine_record_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                     "source_snapshot_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                     "source_link_id":  {
+                                                                                            "type":  "string",
+                                                                                            "minLength":  1,
+                                                                                            "maxLength":  512,
+                                                                                            "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                        },
+                                                                     "decision":  {
+                                                                                      "$ref":  "#/$defs/AttachmentTrustDecisionV1"
+                                                                                  },
+                                                                     "check_policy_hresult":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  -9223372036854775808,
+                                                                                                  "maximum":  9223372036854775807
+                                                                                              },
+                                                                     "save_hresult":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  -9223372036854775808,
+                                                                                          "maximum":  9223372036854775807
+                                                                                      },
+                                                                     "file_exists_after_save":  {
+                                                                                                    "type":  "boolean"
+                                                                                                },
+                                                                     "file_bytes_after_save":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                                     "final_download_sha256":  {
+                                                                                                   "type":  "string",
+                                                                                                   "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                   "maxLength":  71
+                                                                                               },
+                                                                     "file_mutated_by_trust_provider":  {
+                                                                                                            "type":  "boolean"
+                                                                                                        },
+                                                                     "report_sha256":  {
+                                                                                           "type":  "string",
+                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                           "maxLength":  71
+                                                                                       }
+                                                                 }
+                                              }
+              }
+}

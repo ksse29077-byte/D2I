@@ -1,0 +1,68 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-http-metadata-v1.schema.json",
+    "title":  "ResearchHttpMetadataV1",
+    "$ref":  "#/$defs/ResearchHttpMetadataV1",
+    "$defs":  {
+                  "ResearchHttpMetadataV1":  {
+                                                 "type":  "object",
+                                                 "additionalProperties":  false,
+                                                 "required":  [
+                                                                  "status_code",
+                                                                  "content_type",
+                                                                  "total_header_bytes",
+                                                                  "content_encoding",
+                                                                  "certificate_thumbprint_sha256",
+                                                                  "remote_address_sha256",
+                                                                  "metadata_sha256"
+                                                              ],
+                                                 "properties":  {
+                                                                    "status_code":  {
+                                                                                        "type":  "integer",
+                                                                                        "minimum":  0,
+                                                                                        "maximum":  65535
+                                                                                    },
+                                                                    "content_type":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  0,
+                                                                                         "maxLength":  262144
+                                                                                     },
+                                                                    "declared_content_length":  {
+                                                                                                    "oneOf":  [
+                                                                                                                  {
+                                                                                                                      "type":  "integer",
+                                                                                                                      "minimum":  0
+                                                                                                                  },
+                                                                                                                  {
+                                                                                                                      "type":  "null"
+                                                                                                                  }
+                                                                                                              ]
+                                                                                                },
+                                                                    "total_header_bytes":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0
+                                                                                           },
+                                                                    "content_encoding":  {
+                                                                                             "type":  "string",
+                                                                                             "minLength":  0,
+                                                                                             "maxLength":  262144
+                                                                                         },
+                                                                    "certificate_thumbprint_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                    "remote_address_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                    "metadata_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        }
+                                                                }
+                                             }
+              }
+}

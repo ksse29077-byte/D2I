@@ -1,0 +1,109 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/research-brief-v1.schema.json",
+    "title":  "ResearchBriefV1",
+    "$ref":  "#/$defs/ResearchBriefV1",
+    "$defs":  {
+                  "DisclosureClassV1":  {
+                                            "type":  "string",
+                                            "enum":  [
+                                                         "public",
+                                                         "internal",
+                                                         "confidential",
+                                                         "restricted"
+                                                     ]
+                                        },
+                  "ResearchBriefV1":  {
+                                          "type":  "object",
+                                          "additionalProperties":  false,
+                                          "required":  [
+                                                           "schema_version",
+                                                           "brief_id",
+                                                           "case_id",
+                                                           "organization_id",
+                                                           "research_question",
+                                                           "research_scope",
+                                                           "freshness_requirement_seconds",
+                                                           "minimum_source_count",
+                                                           "preferred_source_policy_ids",
+                                                           "excluded_source_policy_ids",
+                                                           "allowed_disclosure_class",
+                                                           "download_allowed",
+                                                           "brief_sha256"
+                                                       ],
+                                          "properties":  {
+                                                             "schema_version":  {
+                                                                                    "type":  "integer",
+                                                                                    "minimum":  0,
+                                                                                    "maximum":  4294967295
+                                                                                },
+                                                             "brief_id":  {
+                                                                              "type":  "string",
+                                                                              "minLength":  1,
+                                                                              "maxLength":  512,
+                                                                              "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                          },
+                                                             "case_id":  {
+                                                                             "type":  "string",
+                                                                             "minLength":  1,
+                                                                             "maxLength":  512,
+                                                                             "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                         },
+                                                             "organization_id":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1,
+                                                                                     "maxLength":  512,
+                                                                                     "pattern":  "^[A-Za-z0-9._:/-]+$"
+                                                                                 },
+                                                             "research_question":  {
+                                                                                       "type":  "string",
+                                                                                       "minLength":  0,
+                                                                                       "maxLength":  262144
+                                                                                   },
+                                                             "research_scope":  {
+                                                                                    "type":  "string",
+                                                                                    "minLength":  0,
+                                                                                    "maxLength":  262144
+                                                                                },
+                                                             "freshness_requirement_seconds":  {
+                                                                                                   "type":  "integer",
+                                                                                                   "minimum":  0
+                                                                                               },
+                                                             "minimum_source_count":  {
+                                                                                          "type":  "integer",
+                                                                                          "minimum":  0,
+                                                                                          "maximum":  4294967295
+                                                                                      },
+                                                             "preferred_source_policy_ids":  {
+                                                                                                 "type":  "array",
+                                                                                                 "maxItems":  4096,
+                                                                                                 "items":  {
+                                                                                                               "type":  "string",
+                                                                                                               "minLength":  0,
+                                                                                                               "maxLength":  262144
+                                                                                                           }
+                                                                                             },
+                                                             "excluded_source_policy_ids":  {
+                                                                                                "type":  "array",
+                                                                                                "maxItems":  4096,
+                                                                                                "items":  {
+                                                                                                              "type":  "string",
+                                                                                                              "minLength":  0,
+                                                                                                              "maxLength":  262144
+                                                                                                          }
+                                                                                            },
+                                                             "allowed_disclosure_class":  {
+                                                                                              "$ref":  "#/$defs/DisclosureClassV1"
+                                                                                          },
+                                                             "download_allowed":  {
+                                                                                      "type":  "boolean"
+                                                                                  },
+                                                             "brief_sha256":  {
+                                                                                  "type":  "string",
+                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                  "maxLength":  71
+                                                                              }
+                                                         }
+                                      }
+              }
+}

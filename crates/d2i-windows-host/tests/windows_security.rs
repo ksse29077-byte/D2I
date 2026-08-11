@@ -1,11 +1,12 @@
 #![cfg(windows)]
 
 use d2i_windows_host::{
-    appcontainer_profile, delete_appcontainer_profile, grant_appcontainer_child_query_to_verifier,
-    grant_current_process_query_to_verifier, harden_path_for_current_user,
-    inspect_verifier_process, path_security_descriptor, process_parent_id,
-    process_peak_working_set_bytes, protect_current_user, provision_appcontainer_profile,
-    spawn_zero_capability_appcontainer, unprotect_current_user, WindowsJobLimits,
+    appcontainer_profile, delete_appcontainer_profile, ensure_appcontainer_profile_deleted,
+    grant_appcontainer_child_query_to_verifier, grant_current_process_query_to_verifier,
+    harden_path_for_current_user, inspect_verifier_process, path_security_descriptor,
+    process_parent_id, process_peak_working_set_bytes, protect_current_user,
+    provision_appcontainer_profile, spawn_zero_capability_appcontainer, unprotect_current_user,
+    WindowsJobLimits,
 };
 use std::fmt::Debug;
 use std::path::{Path, PathBuf};
@@ -139,4 +140,12 @@ fn zero_capability_appcontainer_process_has_reviewed_sid() {
     );
     assert_eq!(ok(process_parent_id(child.id())), std::process::id());
     assert_eq!(ok(child.wait_timeout(Duration::from_secs(10))), Some(23));
+}
+
+#[test]
+fn appcontainer_profile_cleanup_is_idempotent_and_absence_checked() {
+    let profile_name = format!("D2I.Test.Cleanup.{}", std::process::id());
+    ok(provision_appcontainer_profile(&profile_name));
+    ok(ensure_appcontainer_profile_deleted(&profile_name));
+    ok(ensure_appcontainer_profile_deleted(&profile_name));
 }
