@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/learning/b-core-package-descriptor-v1.schema.json",
+  "title": "D2I External B_Core Package Descriptor v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package_id",
+    "package_manifest_sha256",
+    "source_commit",
+    "source_branch",
+    "source_license",
+    "file_count",
+    "verified_file_count",
+    "core_abi_version",
+    "semantic_state_version",
+    "capability_contract_version",
+    "clean_reconstruction_pass",
+    "full_workspace_all_targets_all_features_tests_pass",
+    "public_semantic_experience_ingest",
+    "sealed_artifacts_authoritative"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "package_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "package_manifest_sha256": { "$ref": "#/$defs/hash" },
+    "source_commit": { "type": "string", "pattern": "^[0-9a-fA-F]{40}$" },
+    "source_branch": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "source_license": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "file_count": { "type": "integer", "minimum": 1 },
+    "verified_file_count": { "type": "integer", "minimum": 0 },
+    "core_abi_version": { "type": "integer", "minimum": 1 },
+    "semantic_state_version": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "capability_contract_version": { "type": "integer", "minimum": 1 },
+    "clean_reconstruction_pass": { "type": "boolean" },
+    "full_workspace_all_targets_all_features_tests_pass": { "type": "boolean" },
+    "public_semantic_experience_ingest": { "type": "boolean" },
+    "sealed_artifacts_authoritative": { "type": "boolean" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

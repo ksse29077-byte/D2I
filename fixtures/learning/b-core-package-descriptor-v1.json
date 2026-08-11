@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "package_id": "B_Core_PORTABLE_682306c_WIN64",
+  "package_manifest_sha256": "sha256:e00556cc68f82cc238a9b40c4028455f7d2b9ec3ed6d80e687f10d811350ad70",
+  "source_commit": "682306c474073452070733ecb92d57c1df220103",
+  "source_branch": "codex/b-core-code-graft-04-fullstack-ops",
+  "source_license": "UNLICENSED",
+  "file_count": 4373,
+  "verified_file_count": 4373,
+  "core_abi_version": 1,
+  "semantic_state_version": "SEMANTIC-STATE-SEM8-1",
+  "capability_contract_version": 1,
+  "clean_reconstruction_pass": false,
+  "full_workspace_all_targets_all_features_tests_pass": false,
+  "public_semantic_experience_ingest": false,
+  "sealed_artifacts_authoritative": true
+}

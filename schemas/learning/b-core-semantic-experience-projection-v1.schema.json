@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/learning/b-core-semantic-experience-projection-v1.schema.json",
+  "title": "D2I B_Core Semantic Experience Projection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_semantic_experience_sha256",
+    "target_core_abi_version",
+    "target_semantic_state_version",
+    "sem31_contract",
+    "sem32_shape",
+    "event_operator",
+    "event_target",
+    "visible_state_delta",
+    "public_ingest_available",
+    "production_eligible",
+    "projection_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "source_semantic_experience_sha256": { "$ref": "#/$defs/hash" },
+    "target_core_abi_version": { "type": "integer", "minimum": 1 },
+    "target_semantic_state_version": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "sem31_contract": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "sem32_shape": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "event_operator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace_code", "axis_code", "value_code"],
+      "properties": {
+        "namespace_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "axis_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "value_code": { "type": "integer", "minimum": 0, "maximum": 4294967295 }
+      }
+    },
+    "event_target": { "type": "integer", "minimum": 0 },
+    "visible_state_delta": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entity",
+          "domain_code",
+          "axis_code",
+          "before_value_code",
+          "after_value_code"
+        ],
+        "properties": {
+          "entity": { "type": "integer", "minimum": 0 },
+          "domain_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+          "axis_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+          "before_value_code": { "type": ["integer", "null"] },
+          "after_value_code": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "public_ingest_available": { "const": false },
+    "production_eligible": { "const": false },
+    "projection_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

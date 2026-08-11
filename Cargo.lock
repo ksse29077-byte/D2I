@@ -405,6 +405,7 @@ dependencies = [
  "d2i-role-contract",
  "d2i-role-operations",
  "d2i-runtime-api",
+ "d2i-semantic-experience",
  "d2i-shadow-mode",
  "d2i-situation-model",
  "d2i-spreadsheet-capability",
@@ -669,6 +670,17 @@ version = "0.9.0"
 dependencies = [
  "planus",
  "serde",
+]
+
+[[package]]
+name = "d2i-semantic-experience"
+version = "0.9.0"
+dependencies = [
+ "d2i-cognitive-ir",
+ "jsonschema",
+ "serde",
+ "serde_json",
+ "sha2",
 ]
 
 [[package]]

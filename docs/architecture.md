@@ -345,6 +345,31 @@ credential/session risks. Their GUI, DOM, function, shell, and code actions
 remain inert until a future deterministic transition normalizer is implemented
 and reviewed.
 
+Verified PC transitions use a narrower D2I-owned semantic compilation path:
+
+```text
+trusted ObservationSnapshot
+  -> trusted action execution receipt
+  -> independent fresh ObservationSnapshot
+  -> Verification v2 plus protected delta
+  -> explicit bounded context slice
+  -> typed/hash-only SemanticExperienceV1
+  -> quarantined offline evaluation boundary
+```
+
+`d2i-semantic-experience` preserves safe boolean/integer causality while
+canonical-hashing all textual or compound content and rejecting raw secrets.
+The Desktop bridge has no adapter or activation handle and must revalidate the
+entire proof chain before compilation. Experiences grant no execution,
+promotion, or production mutation authority.
+
+External world-model cores remain replaceable providers behind a documented
+versioned ingest boundary. The current B_Core artifact is descriptor-pinned but
+not linked or executed: its public dockable ABI has no semantic-experience
+ingest operation, its source is `UNLICENSED`, and its supplied manifest marks
+clean reconstruction and full-workspace tests as failed. A SEM31/SEM32-shaped
+numeric projection is therefore research-only and fail-closed for production.
+
 Phase 9 adds:
 
 ```text

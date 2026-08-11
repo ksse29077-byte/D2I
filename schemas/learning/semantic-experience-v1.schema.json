@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://d2i.local/schemas/learning/semantic-experience-v1.schema.json",
+  "title": "D2I Semantic Experience v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experience_id",
+    "organization_binding_sha256",
+    "role_binding_sha256",
+    "case_binding_sha256",
+    "source_observation",
+    "source_facts",
+    "action",
+    "fresh_observation",
+    "fresh_facts",
+    "visible_delta",
+    "outcome",
+    "verification_result_sha256",
+    "verified_action_result_sha256",
+    "evidence_hashes",
+    "disposition",
+    "authority",
+    "semantic_experience_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "experience_id": { "$ref": "#/$defs/id" },
+    "organization_binding_sha256": { "$ref": "#/$defs/hash" },
+    "role_binding_sha256": { "$ref": "#/$defs/hash" },
+    "case_binding_sha256": { "$ref": "#/$defs/hash" },
+    "source_observation": { "$ref": "#/$defs/observation" },
+    "source_facts": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/fact" }
+    },
+    "action": { "$ref": "#/$defs/action" },
+    "fresh_observation": { "$ref": "#/$defs/observation" },
+    "fresh_facts": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/fact" }
+    },
+    "visible_delta": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/delta" }
+    },
+    "outcome": {
+      "enum": ["passed", "failed", "inconclusive", "unsupported", "unsafe"]
+    },
+    "verification_result_sha256": { "$ref": "#/$defs/hash" },
+    "verified_action_result_sha256": { "$ref": "#/$defs/hash" },
+    "evidence_hashes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/hash" }
+    },
+    "disposition": { "const": "quarantined_offline_only" },
+    "authority": { "const": "no_execution_authority" },
+    "semantic_experience_sha256": { "$ref": "#/$defs/hash" }
+  },
+  "allOf": [
+    {
+      "anyOf": [
+        { "properties": { "source_facts": { "minItems": 1 } } },
+        { "properties": { "fresh_facts": { "minItems": 1 } } }
+      ]
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "observation_id_sha256",
+        "state_sha256",
+        "sequence",
+        "target_binding_sha256"
+      ],
+      "properties": {
+        "source": {
+          "enum": ["fixture", "uia", "web_driver", "file_metadata", "process"]
+        },
+        "observation_id_sha256": { "$ref": "#/$defs/hash" },
+        "state_sha256": { "$ref": "#/$defs/hash" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "target_binding_sha256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "value": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "boolean" },
+            "value": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "integer" },
+            "value": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "canonical_sha256"],
+          "properties": {
+            "kind": { "const": "categorical" },
+            "canonical_sha256": { "$ref": "#/$defs/hash" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": { "kind": { "const": "null" } }
+        }
+      ]
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity_code",
+        "entity_identity_sha256",
+        "namespace_code",
+        "axis_code",
+        "axis_identity_sha256",
+        "value",
+        "trust_classes"
+      ],
+      "properties": {
+        "entity_code": { "type": "integer", "minimum": 0 },
+        "entity_identity_sha256": { "$ref": "#/$defs/hash" },
+        "namespace_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "axis_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "axis_identity_sha256": { "$ref": "#/$defs/hash" },
+        "value": { "$ref": "#/$defs/value" },
+        "trust_classes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "authenticated_instruction",
+              "approved_control",
+              "verified_operational_state",
+              "observed_state",
+              "untrusted_content",
+              "fixture"
+            ]
+          }
+        }
+      }
+    },
+    "delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_code", "namespace_code", "axis_code", "before", "after"],
+      "properties": {
+        "entity_code": { "type": "integer", "minimum": 0 },
+        "namespace_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "axis_code": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "before": { "oneOf": [{ "$ref": "#/$defs/value" }, { "type": "null" }] },
+        "after": { "oneOf": [{ "$ref": "#/$defs/value" }, { "type": "null" }] }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_receipt_sha256",
+        "execution_id_sha256",
+        "capability_code",
+        "operator_code",
+        "target_code",
+        "interventional",
+        "completed_at_unix_ms"
+      ],
+      "properties": {
+        "execution_receipt_sha256": { "$ref": "#/$defs/hash" },
+        "execution_id_sha256": { "$ref": "#/$defs/hash" },
+        "capability_code": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "operator_code": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "target_code": { "type": "integer", "minimum": 0 },
+        "interventional": { "const": true },
+        "completed_at_unix_ms": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

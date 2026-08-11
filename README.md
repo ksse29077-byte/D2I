@@ -101,6 +101,11 @@ isolated Windows UI Automation, WebDriver, file-write, and process adapters.
   evaluation/review records, and zero-production-mutation export bundles.
   `products/d2i-desktop` owns their protected current-user store, ledger,
   index, crash repair, and actual memory-aware Qwen/KRN product evidence.
+- `crates/d2i-semantic-experience`: deterministic bounded compilation of
+  verified PC state transitions into typed/hash-only, quarantined experiences.
+  External world cores receive no raw UI/Web content or execution authority;
+  the current B_Core projection remains inert until a documented public ingest
+  ABI, approved license, and clean build/test evidence exist.
 - `crates/d2i-windows-host`: narrow Windows Job Object, token/AppContainer,
   current-user DPAPI, protected DACL, process identity/version, reparse-point,
   atomic-move, and WFP loopback-egress boundary.

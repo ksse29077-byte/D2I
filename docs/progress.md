@@ -1,6 +1,6 @@
 # D2I Progress Snapshot
 
-Date: 2026-08-09
+Date: 2026-08-11
 
 ## Current Completed Scope
 
@@ -15,6 +15,13 @@ Date: 2026-08-09
 - Cognitive IR v1 and model-free `CognitiveExecutor` baseline.
 - Cognitive Module Contract v1, Rust Module SDK, deterministic fixture runner,
   Conformance Suite, starter template, and `RuleBasedWorkReporter`.
+- D2I-owned Semantic Experience v1 compiler for bounded verified PC
+  transitions, with canonical hash-only text/compound values, typed boolean and
+  integer facts, explicit context slicing, secret rejection, and no execution
+  authority. The external B_Core package is manifest-pinned and fully
+  file-hash-verified but remains production-disabled because its public ABI has
+  no experience ingest, its license is `UNLICENSED`, and its supplied clean
+  reconstruction/full-workspace gates are false.
 
 ## Cognitive Core Status
 

@@ -10,31 +10,33 @@ use d2i_cognitive_ir::{
 };
 use d2i_desktop::{
     activate_certified_windows_binding, analyze_observation_delta, bind_actual_source_observation,
-    certify_windows_binding, initialize_windows_activation_ledger,
-    initialize_windows_deployment_audit, project_windows_activation,
-    to_verification_bound_execution_v2, trusted_execution_sha256,
+    certify_windows_binding, compile_verified_desktop_semantic_experience,
+    initialize_windows_activation_ledger, initialize_windows_deployment_audit,
+    project_windows_activation, to_verification_bound_execution_v2, trusted_execution_sha256,
     verify_signed_windows_certification, verify_windows_activation_ledger,
     verify_windows_deployment_audit, AlternateCapabilityGroupV1,
     CognitiveRecoveryCoordinatorStateV1, CognitiveRecoveryCoordinatorV1,
     CognitiveTrustedExecutionCoordinator, CognitiveVerificationCoordinatorV2,
-    ConcreteWindowsRuntimeBindingProbe, DeterministicPostconditionVerifierV2,
-    EphemeralActionPayload, EscalationRequestV1, EscalationSeverityV1, ExecutionStatus,
-    FreshObservationProofV1, FreshObservationWorkerExitStatusV1, FreshRecoveryCycleEvidenceV1,
-    FreshRecoveryCycleRequestV1, GoalProgress, IgnoredVolatileTargetV1, ObservationLimits,
-    PolicyReadyActionV1, PostconditionVerifierV2, ProtectedInvariantSeverityV1,
-    ProtectedInvariantV1, RecommendedNextActionCodeV1, RecoveryBudgetV1, RecoveryDecisionContextV1,
+    ConcreteWindowsRuntimeBindingProbe, DesktopSemanticExperienceBindingV1,
+    DeterministicPostconditionVerifierV2, EphemeralActionPayload, EscalationRequestV1,
+    EscalationSeverityV1, ExecutionStatus, FreshObservationProofV1,
+    FreshObservationWorkerExitStatusV1, FreshRecoveryCycleEvidenceV1, FreshRecoveryCycleRequestV1,
+    GoalProgress, IgnoredVolatileTargetV1, ObservationLimits, PolicyReadyActionV1,
+    PostconditionVerifierV2, ProtectedInvariantSeverityV1, ProtectedInvariantV1,
+    RecommendedNextActionCodeV1, RecoveryBudgetV1, RecoveryDecisionContextV1,
     RecoveryDecisionKindV1, RecoveryFailureClassV1, RecoveryHistoryEntryV1,
     RecoveryHistoryOutcomeV1, RecoveryHistoryV1, RecoveryPolicyProfileV1, RecoveryReasonCodeV1,
     RecoveryStageV1, RecoveryTriggerV1, RecoveryVerificationVerdictV1, ReobservationRequestV1,
-    RequiredAuthorityClassV1, SafeStateSummaryCodeV1, TrustedExecutionBindingRequestV1,
-    TrustedExecutionSessionV1, TrustedExecutionStatusV1, TrustedReadOnlyObservationConfiguration,
-    TrustedTargetResolverInput, VerificationConsumptionLedgerV1, VerificationGuardFieldV1,
-    VerificationGuardProfileV1, VerificationGuardTargetV1, VerificationRequestV2,
-    VerificationSpecAdapterV1, VerificationVerdictV2, WindowsActivationAdmission,
+    RequiredAuthorityClassV1, SafeStateSummaryCodeV1, SemanticExperienceAuthorityV1,
+    SemanticExperienceDispositionV1, TrustedExecutionBindingRequestV1, TrustedExecutionSessionV1,
+    TrustedExecutionStatusV1, TrustedReadOnlyObservationConfiguration, TrustedTargetResolverInput,
+    VerificationConsumptionLedgerV1, VerificationGuardFieldV1, VerificationGuardProfileV1,
+    VerificationGuardTargetV1, VerificationRequestV2, VerificationSpecAdapterV1,
+    VerificationVerdictV2, VerifiedDesktopSemanticExperienceRequestV1, WindowsActivationAdmission,
     WindowsAdapterConfiguration, WindowsAdapterKind, WindowsRuntimeBindingProbe,
     WindowsRuntimeManifest, WindowsUiAutomationAdapter, WindowsUiaObservationProvider,
     WindowsUiaObservationTarget, COGNITIVE_REOBSERVE_VERIFIER_V2_SCHEMA, RECOVERY_SCHEMA_VERSION,
-    TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
+    SEMANTIC_EXPERIENCE_V1_SCHEMA, TRUSTED_ACTION_EXECUTION_SCHEMA_VERSION,
 };
 use d2i_policy_admission::{
     admit_action, evaluate_policy, ActivationEligibilityContextV1, AdapterKindV1,
@@ -2388,7 +2390,7 @@ fn live_execution_is_freshly_reobserved_and_verified() {
     assert!(delta.protected_invariant_violations.is_empty(), "{delta:?}");
     assert!(delta.unexpected_changes.is_empty(), "{delta:?}");
     assert!(delta.security_relevant_changes.is_empty(), "{delta:?}");
-    let _ = ok(verifier.build_verification_request());
+    let verification_request = ok(verifier.build_verification_request()).clone();
     let verification_result = ok(verifier.verify(now_ms + 9_000)).clone();
     assert_eq!(
         verification_result.action_verdict,
@@ -2404,6 +2406,55 @@ fn live_execution_is_freshly_reobserved_and_verified() {
     assert_reobserve_schema(&terminal);
     assert_eq!(terminal.action_verdict, VerificationVerdictV2::Passed);
     assert_eq!(terminal.goal_progress, GoalProgress::Complete);
+    let semantic_binding = DesktopSemanticExperienceBindingV1 {
+        organization_binding_sha256: digest("organization-1"),
+        role_binding_sha256: digest("general-office-role"),
+        case_binding_sha256: digest("case-live-uia"),
+    };
+    let semantic_request = || VerifiedDesktopSemanticExperienceRequestV1 {
+        binding: &semantic_binding,
+        execution_receipt: &receipt,
+        bound_execution: &execution,
+        reobservation_request: &reobservation_request,
+        fresh_observation_proof: &fresh_proof,
+        verification_request: &verification_request,
+        verification_result: &verification_result,
+        guard_profile: &guard,
+        observation_delta: &delta,
+        verified_action_result: &terminal,
+    };
+    let semantic_experience = ok(compile_verified_desktop_semantic_experience(
+        semantic_request(),
+    ));
+    let repeated_experience = ok(compile_verified_desktop_semantic_experience(
+        semantic_request(),
+    ));
+    assert_eq!(semantic_experience, repeated_experience);
+    assert_eq!(
+        semantic_experience.disposition,
+        SemanticExperienceDispositionV1::QuarantinedOfflineOnly
+    );
+    assert_eq!(
+        semantic_experience.authority,
+        SemanticExperienceAuthorityV1::NoExecutionAuthority
+    );
+    assert_eq!(semantic_experience.visible_delta.len(), 1);
+    let semantic_json = ok(serde_json::to_string(&semantic_experience));
+    assert!(!semantic_json.contains(payload_text));
+    let semantic_schema: Value = ok(serde_json::from_str(SEMANTIC_EXPERIENCE_V1_SCHEMA));
+    let semantic_validator = ok(JSONSchema::options()
+        .with_draft(Draft::Draft202012)
+        .compile(&semantic_schema));
+    assert!(semantic_validator.is_valid(&ok(serde_json::to_value(&semantic_experience))));
+    let mut tampered_terminal = terminal.clone();
+    tampered_terminal.result_sha256 = digest("tampered-verified-action");
+    assert!(compile_verified_desktop_semantic_experience(
+        VerifiedDesktopSemanticExperienceRequestV1 {
+            verified_action_result: &tampered_terminal,
+            ..semantic_request()
+        }
+    )
+    .is_err());
     drop(verifier);
     assert!(consumption.is_terminal(&receipt.receipt_sha256));
     assert!(!process_exists(fresh_worker_id));

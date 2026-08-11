@@ -31,6 +31,7 @@ d2i-presentation-capability = { path = "../../crates/d2i-presentation-capability
 d2i-design-intelligence = { path = "../../crates/d2i-design-intelligence" }
 d2i-pdf-interchange = { path = "../../crates/d2i-pdf-interchange" }
 d2i-case-learning = { path = "../../crates/d2i-case-learning" }
+d2i-semantic-experience = { path = "../../crates/d2i-semantic-experience" }
 d2i-runtime-api = { path = "../../crates/d2i-runtime-api" }
 d2i-trusted-action-execution = { path = "../../crates/d2i-trusted-action-execution" }
 d2i-windows-host = { path = "../../crates/d2i-windows-host" }

@@ -38,6 +38,7 @@ mod presentation_package;
 mod presentation_work;
 mod role_instance;
 mod role_operations;
+mod semantic_experience;
 mod shadow_mode;
 mod spreadsheet_dispatch;
 mod spreadsheet_file_worker;
@@ -163,6 +164,13 @@ pub use d2i_cognitive_recovery::{
     ReplanResultV1, RequiredAuthorityClassV1, SafeStateSummaryCodeV1,
     COGNITIVE_RECOVERY_CONTROL_V1_SCHEMA, MAX_RECOVERY_CYCLES, RECOVERY_SCHEMA_VERSION,
 };
+pub use d2i_semantic_experience::{
+    project_bcore_semantic_experience, BcoreCompatibilityBlockerV1, BcoreCompatibilityReportV1,
+    BcorePackageDescriptorV1, BcoreSemanticExperienceProjectionV1, SemanticExperienceAuthorityV1,
+    SemanticExperienceDispositionV1, SemanticExperienceOutcomeV1, SemanticExperienceV1,
+    BCORE_PACKAGE_DESCRIPTOR_V1_FIXTURE, BCORE_PACKAGE_DESCRIPTOR_V1_SCHEMA,
+    BCORE_SEMANTIC_EXPERIENCE_PROJECTION_V1_SCHEMA, SEMANTIC_EXPERIENCE_V1_SCHEMA,
+};
 pub use d2i_trusted_action_execution::{
     canonical_sha256 as trusted_execution_sha256, expected_input as trusted_expected_input,
     grounded_target_binding_sha256, operation_kind as trusted_operation_kind, BoundDesktopActionV1,
@@ -265,6 +273,10 @@ pub use role_operations::{
     initialize_role_operations_store, verify_role_operations_store, RoleOperationsArtifactV1,
     RoleOperationsStoreRecordKindV1, RoleOperationsStoreRecordV1, RoleOperationsStoreV1,
     RoleOperationsStoreVerificationV1,
+};
+pub use semantic_experience::{
+    compile_verified_desktop_semantic_experience, DesktopSemanticExperienceBindingV1,
+    VerifiedDesktopSemanticExperienceRequestV1,
 };
 pub use shadow_mode::{
     collect_shadow_fixture_observation, initialize_shadow_store, plan_shadow_recovery,

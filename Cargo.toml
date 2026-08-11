@@ -27,6 +27,7 @@ members = [
     "crates/d2i-adaptive-planner",
     "crates/d2i-episodic-memory",
     "crates/d2i-case-learning",
+    "crates/d2i-semantic-experience",
     "crates/d2i-role-operations",
     "crates/d2i-shadow-mode",
     "crates/d2i-limited-autonomy",
