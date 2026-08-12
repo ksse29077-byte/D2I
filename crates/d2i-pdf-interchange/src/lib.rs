@@ -977,6 +977,15 @@ impl PdfWorkCertificationV1 {
         verify_signature(key, &payload, &self.signature_hex)
     }
 
+    /// Verifies immutable certification provenance without treating it as a current authority.
+    ///
+    /// This validates the original bounded TTL, canonical hash, and signature at the signed
+    /// issuance instant. Callers must separately bind the certification to its archived
+    /// completion report and must not use this result as an activation or execution token.
+    pub fn verify_archived(&self, key: &VerifyingKey) -> Result<(), PdfInterchangeError> {
+        self.verify(key, self.issued_at_unix_ms)
+    }
+
     fn validate_content(&self) -> Result<(), PdfInterchangeError> {
         if self.schema_version != 1
             || self.issued_at_unix_ms == 0

@@ -19,13 +19,13 @@ fn main() {
         }
         [kind, action, input_flag, path, key_flag, key_path]
             if kind == "certification"
-                && action == "verify"
+                && matches!(action.as_str(), "verify" | "verify-archived")
                 && input_flag == "--input"
                 && key_flag == "--public-key" =>
         {
-            verify_certification(path, key_path)
+            verify_certification(path, key_path, action == "verify-archived")
         }
-        _ => Err("usage: d2i-pdf-interchange completion|replay verify --input <file> | certification verify --input <file> --public-key <hex-file>".to_owned()),
+        _ => Err("usage: d2i-pdf-interchange completion|replay verify --input <file> | certification verify|verify-archived --input <file> --public-key <hex-file>".to_owned()),
     };
     if let Err(error) = result {
         eprintln!("{error}");
@@ -47,7 +47,7 @@ fn verify_replay(path: &str) -> Result<(), String> {
     report.validate_gate().map_err(|error| error.to_string())
 }
 
-fn verify_certification(path: &str, key_path: &str) -> Result<(), String> {
+fn verify_certification(path: &str, key_path: &str, archived: bool) -> Result<(), String> {
     let bytes = std::fs::read(path).map_err(|error| error.to_string())?;
     let certification: PdfWorkCertificationV1 =
         parse_pdf_json_strict(&bytes).map_err(|error| error.to_string())?;
@@ -62,6 +62,11 @@ fn verify_certification(path: &str, key_path: &str) -> Result<(), String> {
         bytes[index] = u8::from_str_radix(part, 16).map_err(|error| error.to_string())?;
     }
     let key = VerifyingKey::from_bytes(&bytes).map_err(|error| error.to_string())?;
+    if archived {
+        return certification
+            .verify_archived(&key)
+            .map_err(|error| error.to_string());
+    }
     let now = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map_err(|error| error.to_string())?

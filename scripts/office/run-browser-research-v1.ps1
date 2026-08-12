@@ -142,10 +142,14 @@ function Assert-Predecessor {
         'completion', 'verify', '--input', $finishedPath
     )
     Invoke-NativeStep 'office600-verify-predecessor-certification' (Join-Path $cargoTargetRoot 'release/d2i-pdf-interchange.exe') @(
-        'certification', 'verify', '--input', $certificationPath, '--public-key', $publicKeyPath
+        'certification', 'verify-archived', '--input', $certificationPath, '--public-key', $publicKeyPath
     )
     $finished = Get-Content -Raw -LiteralPath $finishedPath -Encoding UTF8 | ConvertFrom-Json
-    if (-not $finished.complete) { throw 'OFFICE-500 predecessor is not complete.' }
+    $certification = Get-Content -Raw -LiteralPath $certificationPath -Encoding UTF8 | ConvertFrom-Json
+    if (-not $finished.complete -or
+        $certification.completion_report_sha256 -ne $finished.finished_sha256) {
+        throw 'OFFICE-500 predecessor is not complete or its certification binding differs.'
+    }
     return [string]$finished.finished_sha256
 }
 

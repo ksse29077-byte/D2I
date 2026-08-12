@@ -65,6 +65,15 @@ Services, five WebDriver snapshot observations, at least two pinned Qwen calls,
 one model-free Case, 24 total Cases, crash windows A-N, 128 by 100 logical replay,
 signed certification, and zero security and residual counters.
 
+The OFFICE-500 certification has two deliberately separate verification modes.
+Current verification enforces wall-clock TTL and remains required wherever the
+certificate could grant current authority. OFFICE-600 predecessor admission uses
+archival verification because the predecessor is immutable lineage, not an
+activation or execution token. Archival verification still enforces the signed
+TTL structure, canonical hash, public-key signature, and exact binding from the
+certification's `completion_report_sha256` to the sealed report's
+`finished_sha256`; it neither extends nor renews the expired authority.
+
 `Prompt` remains a hard failure. Product runtime code never modifies
 Attachment Manager policy. The administrator-only deployment qualification
 validates the installed ADMX, snapshots exact user-scoped value types and raw

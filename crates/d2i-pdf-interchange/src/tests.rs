@@ -261,6 +261,43 @@ fn backend_approval_is_signed_bounded_and_expires() {
 }
 
 #[test]
+fn archived_certification_preserves_provenance_without_restoring_authority() {
+    let key = SigningKey::from_bytes(&[10_u8; 32]);
+    let other = SigningKey::from_bytes(&[11_u8; 32]);
+    let certification = PdfWorkCertificationV1 {
+        schema_version: 1,
+        certification_id: "certification.office500.test".to_owned(),
+        completion_report_sha256: hash("completion"),
+        predecessor_finished_sha256: hash("predecessor"),
+        model_artifact_sha256: hash("model"),
+        runtime_artifact_sha256: hash("runtime"),
+        word_executable_sha256: hash("word"),
+        excel_executable_sha256: hash("excel"),
+        powerpoint_executable_sha256: hash("powerpoint"),
+        pdf_render_worker_sha256: hash("renderer"),
+        evidence_ids: vec!["evidence.office500.test".to_owned()],
+        issued_at_unix_ms: 1_000,
+        expires_at_unix_ms: 2_000,
+        signer_id: "signer.office500.test".to_owned(),
+        signing_key_id: "key.office500.test".to_owned(),
+        signature_hex: String::new(),
+        certification_sha256: ZERO_HASH.to_owned(),
+    }
+    .sign(&key)
+    .unwrap_or_else(|error| panic!("certification sign failed: {error}"));
+
+    assert!(certification.verify(&key.verifying_key(), 2_000).is_err());
+    assert!(certification.verify_archived(&key.verifying_key()).is_ok());
+    assert!(certification
+        .verify_archived(&other.verifying_key())
+        .is_err());
+
+    let mut mutated = certification;
+    mutated.completion_report_sha256 = hash("different-completion");
+    assert!(mutated.verify_archived(&key.verifying_key()).is_err());
+}
+
+#[test]
 fn unknown_fields_and_forbidden_runtime_tokens_fail_closed() {
     let mut value =
         serde_json::to_value(pair()).unwrap_or_else(|error| panic!("serialize failed: {error}"));
