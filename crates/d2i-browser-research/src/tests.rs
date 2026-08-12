@@ -989,3 +989,19 @@ fn closeout_certification_binds_qualification_restore_and_source_tree() {
     mutated.restored_policy_sha256 = policy_hash("mutated-restore");
     assert!(mutated.verify(&key.verifying_key(), 1_001).is_err());
 }
+
+#[test]
+fn security_metric_names_are_not_mistaken_for_authority_payloads() {
+    let residual = serde_json::to_vec(&ResearchResidualMetricsV1::default())
+        .unwrap_or_else(|error| panic!("serialize residual metrics: {error}"));
+    assert!(parse_json_strict::<ResearchResidualMetricsV1>(&residual).is_ok());
+
+    let security = serde_json::to_vec(&ResearchSecurityMetricsV1::default())
+        .unwrap_or_else(|error| panic!("serialize security metrics: {error}"));
+    assert!(parse_json_strict::<ResearchSecurityMetricsV1>(&security).is_ok());
+
+    assert!(parse_json_strict::<serde_json::Value>(br#"{"cookies":"session=secret"}"#).is_err());
+    assert!(
+        parse_json_strict::<serde_json::Value>(br#"{"credential":{"token":"secret"}}"#).is_err()
+    );
+}

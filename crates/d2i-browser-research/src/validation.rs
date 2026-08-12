@@ -156,15 +156,17 @@ fn validate_value(value: &Value, depth: usize) -> Result<(), ResearchError> {
         Value::Object(values) => {
             for (field, value) in values {
                 let lower = field.to_ascii_lowercase();
-                if lower.contains("password")
+                let authority_bearing_name = lower.contains("password")
                     || lower.contains("credential")
                     || lower.contains("cookie")
                     || lower.contains("authorization_header")
                     || lower == "raw_html"
                     || lower == "raw_url"
                     || lower == "command"
-                    || lower == "headers"
-                {
+                    || lower == "headers";
+                let authority_bearing_value =
+                    matches!(value, Value::String(_) | Value::Array(_) | Value::Object(_));
+                if authority_bearing_name && authority_bearing_value {
                     return Err(ResearchError::AccessDenied(format!(
                         "forbidden authority-bearing field: {field}"
                     )));
