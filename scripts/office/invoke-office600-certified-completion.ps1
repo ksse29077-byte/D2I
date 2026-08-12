@@ -419,7 +419,8 @@ if ($Mode -eq 'SelfTest') {
 
 if (-not [Environment]::UserInteractive) { throw 'interactive_session_required' }
 if (-not (Get-IsElevated)) { throw 'administrator_token_required' }
-if ((git -C $repoRoot status --porcelain).Count -ne 0) { throw 'Completion requires a clean committed worktree.' }
+$worktreeStatus = @(git -C $repoRoot status --porcelain)
+if ($worktreeStatus.Count -ne 0) { throw 'Completion requires a clean committed worktree.' }
 
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $userSid = $identity.User.Value
