@@ -18,9 +18,9 @@ Reporting, SLA and Escalation`, `D2I-WORK-800 - Open Digital Employee Shadow
 Mode`, and `D2I-WORK-900 - Limited Autonomy and Human-by-Exception Operation`
 are complete
 as additive platform-neutral contracts with Desktop-owned protected persistent
-runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-500 are
+runtime boundaries. Track W, EDGE-100, and OFFICE-100 through OFFICE-600 are
 complete. Track O has priority over the remaining physical execution planes.
-The active next task is `D2I-OFFICE-600 - Browser Research and Controlled Download`.
+The active next task is `D2I-OFFICE-700 - Email / Messenger / Review and Feedback Loop`.
 
 WORK-700 is governed by ADR 0034 and
 `docs/workforce/role-reporting-sla-escalation-v1.md`. It preserves immutable
@@ -105,6 +105,10 @@ Research completion requires fetched hash-bound citations and deterministic
 sufficiency. Downloads bypass the browser and require quarantine, Windows
 Attachment Services, format-specific validation, and atomic Workspace promotion.
 Models receive neither raw web/URL/download data nor execution authority.
+Its signed closeout uses an administrator-only deployment qualification that
+temporarily permits automatic promotion for `.txt` only, proves CSV/PDF remain
+`Prompt`, and restores exact user policy before publication. Product runtime
+code has no Attachment Manager policy mutation authority.
 
 ## Product Context
 

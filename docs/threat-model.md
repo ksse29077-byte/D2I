@@ -818,6 +818,16 @@ no-overwrite import jointly gate promotion. Crash A-N and zero-residual checks
 prevent blind replay and orphaned partial, process, socket, WFP, AppContainer,
 browser-profile, quarantine, or Workspace-lock state.
 
+Attachment policy qualification is a deployment-only privileged operation,
+never product runtime authority. It trusts only the installed ADMX mapping,
+binds the interactive SID, snapshots raw registry types and bytes, rejects
+High/Moderate `.txt` precedence, and replaces Low Risk with `.txt` only for the
+bounded Completion transaction. TXT must be Enable while CSV/PDF remain Prompt.
+Security UI automation, zone removal, Unblock-File, SmartScreen/Defender
+disablement, and changes to zone preservation or antivirus notification are
+forbidden. Exact restoration is verified before a separate signed closeout is
+valid; policy widening or restore drift is a terminal failure.
+
 Residual risks are WinHTTP/Schannel, Windows Attachment Services, Edge/WebDriver,
 and format-parser defects; local signing-key custody; DNS and public-site
 availability; and source credibility beyond approved policy. V1 excludes

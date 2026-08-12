@@ -32,7 +32,15 @@ pub fn check_attachment_trust(
     local_path: &Path,
     source_url: &str,
 ) -> Result<WindowsAttachmentTrustObservation, WindowsHostError> {
-    validate_inputs(local_path, source_url)?;
+    check_attachment_trust_with_referrer(local_path, source_url, source_url)
+}
+
+pub fn check_attachment_trust_with_referrer(
+    local_path: &Path,
+    source_url: &str,
+    referrer_url: &str,
+) -> Result<WindowsAttachmentTrustObservation, WindowsHostError> {
+    validate_inputs(local_path, source_url, referrer_url)?;
     let canonical = fs::canonicalize(local_path).map_err(|error| {
         WindowsHostError::new(format!("attachment path resolve failed: {error}"))
     })?;
@@ -68,6 +76,7 @@ pub fn check_attachment_trust(
         .ok_or_else(|| WindowsHostError::new("attachment filename is not Unicode"))?;
     let filename = wide_null(filename_value);
     let source = wide_null(source_url);
+    let referrer = wide_null(referrer_url);
     let title = wide_null("D2I controlled download");
     // SAFETY: all COM strings are NUL-terminated and live for each call.
     unsafe {
@@ -86,6 +95,9 @@ pub fn check_attachment_trust(
         attachment
             .SetSource(PCWSTR(source.as_ptr()))
             .map_err(|error| com_error("SetSource", error))?;
+        attachment
+            .SetReferrer(PCWSTR(referrer.as_ptr()))
+            .map_err(|error| com_error("SetReferrer", error))?;
     }
     let interface = Interface::as_raw(&attachment);
     let vtable = Interface::vtable(&attachment);
@@ -144,11 +156,18 @@ impl Drop for ComInitialization {
     }
 }
 
-fn validate_inputs(local_path: &Path, source_url: &str) -> Result<(), WindowsHostError> {
+fn validate_inputs(
+    local_path: &Path,
+    source_url: &str,
+    referrer_url: &str,
+) -> Result<(), WindowsHostError> {
     if !local_path.is_absolute()
         || source_url.len() > 4096
+        || referrer_url.len() > 4096
         || !source_url.starts_with("https://")
+        || !referrer_url.starts_with("https://")
         || source_url.chars().any(char::is_control)
+        || referrer_url.chars().any(char::is_control)
     {
         return Err(WindowsHostError::new(
             "attachment trust input must be an absolute file and public HTTPS source",

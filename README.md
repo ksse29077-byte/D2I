@@ -279,8 +279,8 @@ calculates evidence-covered Role KPIs, creates non-authoritative reports,
 publishes to protected internal inboxes, and tracks exactly-once escalation,
 acknowledgement, and resolution. It adds no external delivery or background
 service. WORK-700, WORK-800, and WORK-900 are complete; Track W is complete.
-EDGE-100 and OFFICE-100 through OFFICE-500 are also complete. The first active
-task is `D2I-OFFICE-600 - Browser Research and Controlled Download`.
+EDGE-100 and OFFICE-100 through OFFICE-600 are also complete. The first active
+task is `D2I-OFFICE-700 - Email / Messenger / Review and Feedback Loop`.
 
 Run the OFFICE-300 deterministic spreadsheet contracts, package security,
 query/context slicing, worker, and predecessor regressions with:
@@ -361,12 +361,24 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 Product `Completion` additionally requires sealed OFFICE-500 evidence, pinned
 Qwen3-4B/llama.cpp, version-matched signed Edge/EdgeDriver, two approved public
-HTTPS origins, one approved small public download, and one elevated session for
-temporary exact WFP isolation. Edge remains loopback-only; only the one-shot
-network worker receives external GET/HEAD authority. External HTML is projected
-into D2I-owned safe snapshots and downloads pass quarantine, Attachment Services,
-format validation, and atomic Workspace promotion. See ADR 0045 and
-`docs/office/browser-research-v1.md`.
+HTTPS origins, one approved small public TXT download, and one elevated session
+for temporary exact WFP isolation. Run the administrator-only certified wrapper:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts/office/invoke-office600-certified-completion.ps1 `
+  -Mode Completion `
+  -Runtime C:\path\to\llama-cli.exe `
+  -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
+  -Office500EvidenceRoot C:\path\to\sealed-office500
+```
+
+It validates local ADMX mapping, temporarily stages user-scoped `.txt` Low
+Risk inclusion, proves TXT `Enable` and CSV/PDF `Prompt`, runs Completion, and
+restores the exact original registry state before signed closeout. Edge remains
+loopback-only; only the one-shot network worker receives external GET/HEAD
+authority. Product runtime code never changes Attachment Manager policy. See
+ADR 0045 and `docs/office/browser-research-v1.md`.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,
 observation fixture, replay, and predecessor regression with:

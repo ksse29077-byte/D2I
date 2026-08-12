@@ -72,8 +72,8 @@ The active order is:
    `D2I-WORK-900` (complete).
 3. `D2I-EDGE-100`, Enterprise API Execution Plane (complete).
 4. Track O, General Office Capability Expansion: `D2I-OFFICE-100` through
-   `D2I-OFFICE-900` (`D2I-OFFICE-100` through `D2I-OFFICE-500` complete;
-   `D2I-OFFICE-600` first active).
+   `D2I-OFFICE-900` (`D2I-OFFICE-100` through `D2I-OFFICE-600` complete;
+   `D2I-OFFICE-700` first active).
 5. Remaining Track X: `D2I-EDGE-200` through `D2I-EDGE-400`.
 
 Work only on the explicitly requested task. Detect the completed baseline and

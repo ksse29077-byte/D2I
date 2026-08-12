@@ -24,11 +24,16 @@ download-allowed brief and source policy
 or a missing file cannot promote. Attachment Services is one trust signal; it
 does not replace format validation.
 
-`Prompt` is an explicit human-exception outcome. Completion never changes
-Attachment Manager zones or low-risk file policy, suppresses a security
-warning, invokes a prompt automatically, or rewrites the source URL to obtain
-`Enable`. Failure evidence retains only the structured trust result while all
-owned quarantine and network temporary directories are removed.
+`Prompt` is an explicit human-exception outcome. Product runtime code never
+changes Attachment Manager policy, suppresses a security warning, invokes a
+prompt automatically, or rewrites the source URL to obtain `Enable`. The
+administrator-only Completion qualification may temporarily stage the
+installed ADMX user-scoped Low Risk inclusion as `.txt` only. It requires TXT
+`Enable` while CSV and PDF remain `Prompt`, then restores the exact original
+registry types and bytes. Zone preservation, antivirus notification,
+SmartScreen, and the remaining Attachment Manager policy stay unchanged.
+Failure evidence retains only the structured trust result while all owned
+quarantine and network temporary directories are removed.
 
 ## Format Gates
 

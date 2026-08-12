@@ -19,7 +19,8 @@ mod word_automation;
 
 #[cfg(windows)]
 pub use attachment_trust::{
-    check_attachment_trust, WindowsAttachmentTrustDecision, WindowsAttachmentTrustObservation,
+    check_attachment_trust, check_attachment_trust_with_referrer, WindowsAttachmentTrustDecision,
+    WindowsAttachmentTrustObservation,
 };
 #[cfg(windows)]
 pub use excel_automation::{

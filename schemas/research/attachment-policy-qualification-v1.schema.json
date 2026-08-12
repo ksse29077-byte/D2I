@@ -1,0 +1,186 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/attachment-policy-qualification-v1.schema.json",
+    "title":  "AttachmentPolicyQualificationV1",
+    "$ref":  "#/$defs/AttachmentPolicyQualificationV1",
+    "$defs":  {
+                  "AttachmentPolicyDecisionV1":  {
+                                                     "type":  "string",
+                                                     "enum":  [
+                                                                  "enable",
+                                                                  "prompt",
+                                                                  "disable"
+                                                              ]
+                                                 },
+                  "AttachmentPolicyScopeV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "user"
+                                                           ]
+                                              },
+                  "AttachmentPolicyQualificationStatusV1":  {
+                                                                "type":  "string",
+                                                                "enum":  [
+                                                                             "qualified",
+                                                                             "rejected"
+                                                                         ]
+                                                            },
+                  "AttachmentPolicyQualificationV1":  {
+                                                          "type":  "object",
+                                                          "additionalProperties":  false,
+                                                          "required":  [
+                                                                           "schema_version",
+                                                                           "user_sid",
+                                                                           "elevated",
+                                                                           "admx_sha256",
+                                                                           "policy_scope",
+                                                                           "completion_low_risk_extensions",
+                                                                           "txt_checkpolicy",
+                                                                           "csv_checkpolicy",
+                                                                           "pdf_checkpolicy",
+                                                                           "higher_precedence_txt_conflict",
+                                                                           "original_policy_sha256",
+                                                                           "staged_policy_sha256",
+                                                                           "restored_policy_sha256",
+                                                                           "restored_exactly",
+                                                                           "policy_stage_microseconds",
+                                                                           "txt_checkpolicy_microseconds",
+                                                                           "csv_checkpolicy_microseconds",
+                                                                           "pdf_checkpolicy_microseconds",
+                                                                           "policy_restore_microseconds",
+                                                                           "qualification_total_microseconds",
+                                                                           "attachment_prompt_bypass_count",
+                                                                           "attachment_policy_scope_broadening_count",
+                                                                           "zone_information_bypass_count",
+                                                                           "security_ui_auto_approval_count",
+                                                                           "csv_automatic_promotion_count",
+                                                                           "pdf_automatic_promotion_count",
+                                                                           "temporary_attachment_policy_count",
+                                                                           "qualification_status",
+                                                                           "qualification_sha256"
+                                                                       ],
+                                                          "properties":  {
+                                                                             "schema_version":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0,
+                                                                                                    "maximum":  4294967295
+                                                                                                },
+                                                                             "user_sid":  {
+                                                                                              "type":  "string",
+                                                                                              "minLength":  0,
+                                                                                              "maxLength":  262144
+                                                                                          },
+                                                                             "elevated":  {
+                                                                                              "type":  "boolean"
+                                                                                          },
+                                                                             "admx_sha256":  {
+                                                                                                 "type":  "string",
+                                                                                                 "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                 "maxLength":  71
+                                                                                             },
+                                                                             "policy_scope":  {
+                                                                                                  "$ref":  "#/$defs/AttachmentPolicyScopeV1"
+                                                                                              },
+                                                                             "completion_low_risk_extensions":  {
+                                                                                                                    "type":  "array",
+                                                                                                                    "maxItems":  4096,
+                                                                                                                    "items":  {
+                                                                                                                                  "type":  "string",
+                                                                                                                                  "minLength":  0,
+                                                                                                                                  "maxLength":  262144
+                                                                                                                              }
+                                                                                                                },
+                                                                             "txt_checkpolicy":  {
+                                                                                                     "$ref":  "#/$defs/AttachmentPolicyDecisionV1"
+                                                                                                 },
+                                                                             "csv_checkpolicy":  {
+                                                                                                     "$ref":  "#/$defs/AttachmentPolicyDecisionV1"
+                                                                                                 },
+                                                                             "pdf_checkpolicy":  {
+                                                                                                     "$ref":  "#/$defs/AttachmentPolicyDecisionV1"
+                                                                                                 },
+                                                                             "higher_precedence_txt_conflict":  {
+                                                                                                                    "type":  "boolean"
+                                                                                                                },
+                                                                             "original_policy_sha256":  {
+                                                                                                            "type":  "string",
+                                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                            "maxLength":  71
+                                                                                                        },
+                                                                             "staged_policy_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      },
+                                                                             "restored_policy_sha256":  {
+                                                                                                            "type":  "string",
+                                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                            "maxLength":  71
+                                                                                                        },
+                                                                             "restored_exactly":  {
+                                                                                                      "type":  "boolean"
+                                                                                                  },
+                                                                             "policy_stage_microseconds":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "minimum":  0
+                                                                                                           },
+                                                                             "txt_checkpolicy_microseconds":  {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0
+                                                                                                              },
+                                                                             "csv_checkpolicy_microseconds":  {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0
+                                                                                                              },
+                                                                             "pdf_checkpolicy_microseconds":  {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0
+                                                                                                              },
+                                                                             "policy_restore_microseconds":  {
+                                                                                                                 "type":  "integer",
+                                                                                                                 "minimum":  0
+                                                                                                             },
+                                                                             "qualification_total_microseconds":  {
+                                                                                                                      "type":  "integer",
+                                                                                                                      "minimum":  0
+                                                                                                                  },
+                                                                             "attachment_prompt_bypass_count":  {
+                                                                                                                    "type":  "integer",
+                                                                                                                    "minimum":  0
+                                                                                                                },
+                                                                             "attachment_policy_scope_broadening_count":  {
+                                                                                                                              "type":  "integer",
+                                                                                                                              "minimum":  0
+                                                                                                                          },
+                                                                             "zone_information_bypass_count":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                             "security_ui_auto_approval_count":  {
+                                                                                                                     "type":  "integer",
+                                                                                                                     "minimum":  0
+                                                                                                                 },
+                                                                             "csv_automatic_promotion_count":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                             "pdf_automatic_promotion_count":  {
+                                                                                                                   "type":  "integer",
+                                                                                                                   "minimum":  0
+                                                                                                               },
+                                                                             "temporary_attachment_policy_count":  {
+                                                                                                                       "type":  "integer",
+                                                                                                                       "minimum":  0
+                                                                                                                   },
+                                                                             "qualification_status":  {
+                                                                                                          "$ref":  "#/$defs/AttachmentPolicyQualificationStatusV1"
+                                                                                                      },
+                                                                             "qualification_sha256":  {
+                                                                                                          "type":  "string",
+                                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                          "maxLength":  71
+                                                                                                      }
+                                                                         }
+                                                      }
+              }
+}

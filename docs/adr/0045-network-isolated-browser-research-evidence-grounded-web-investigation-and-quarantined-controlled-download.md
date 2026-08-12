@@ -56,7 +56,7 @@ and an atomic no-overwrite Workspace import. Promoted artifacts retain an
 
 ## Contracts and Verification
 
-`d2i-browser-research` owns 42 strict Draft 2020-12 contracts and their schema
+`d2i-browser-research` owns 46 strict Draft 2020-12 contracts and their schema
 generator. The Desktop runner separates deterministic `All` from elevated
 `Completion`. Completion requires sealed OFFICE-500 evidence, pinned and signed
 Edge/EdgeDriver, exact WFP evidence, actual approved public HTTPS requests over
@@ -64,6 +64,18 @@ at least two origins, one external controlled download, actual Attachment
 Services, five WebDriver snapshot observations, at least two pinned Qwen calls,
 one model-free Case, 24 total Cases, crash windows A-N, 128 by 100 logical replay,
 signed certification, and zero security and residual counters.
+
+`Prompt` remains a hard failure. Product runtime code never modifies
+Attachment Manager policy. The administrator-only deployment qualification
+validates the installed ADMX, snapshots exact user-scoped value types and raw
+bytes, rejects High/Moderate `.txt` precedence conflicts, and temporarily
+stages Low Risk inclusion as `.txt` only. Fresh COM probes must return TXT
+`Enable`, CSV `Prompt`, and PDF `Prompt`. Completion then restores the exact
+original policy in `finally` and signs a closeout certification binding the
+qualification, execution certification, user SID, ADMX hash, and source tree.
+Restore failure invalidates certification and forbids publication. Zone
+preservation, antivirus notification, SmartScreen, and security UI policy are
+not changed.
 
 ## Alternatives
 

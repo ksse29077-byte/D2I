@@ -806,16 +806,14 @@ Completion performance evidence uses measured Windows.Data.Pdf load/render
 durations and live Windows peak working-set counters for export, render, and
 model workers; count- or pixel-derived timing placeholders fail the gate.
 
-OFFICE-100 through OFFICE-500 are complete. `D2I-OFFICE-600 - Browser Research
-and Controlled Download` is the first active task. Its implementation candidate
-is described below; terminal status remains open until elevated Completion and
-the sealed predecessor chain pass. Final source-tree, completion, replay,
-certification, and protected-audit hashes belong in sealed terminal evidence,
-not in the source tree they hash.
+OFFICE-100 through OFFICE-600 are complete. `D2I-OFFICE-700 - Email / Messenger
+/ Review and Feedback Loop` is the first active task. Final source-tree,
+completion, replay, certification, qualification, and protected-audit hashes
+belong in sealed terminal evidence, not in the source tree they hash.
 
-## OFFICE-600 Browser Research and Controlled Download (Completion Pending)
+## OFFICE-600 Browser Research and Controlled Download (Complete)
 
-The implementation candidate adds `d2i-browser-research`, 42 generated strict
+OFFICE-600 adds `d2i-browser-research`, 46 generated strict
 Draft 2020-12 schemas, a signed one-shot WinHTTP network worker, public-only
 disclosure and URL/SSRF/DNS-rebinding gates, manual redirects, network-denied
 HTML extraction, D2I-owned loopback snapshots, evidence deduplication and
@@ -831,18 +829,17 @@ HTML, URL, download, PDF, image, credential, network-authority, or
 Workspace-promotion exposure. Exact performance measurements remain in the
 run-specific model report.
 
-Product Completion remains intentionally open. The sealed OFFICE-500 evidence,
-actual public fetch, exact WFP object verification, Edge 151.0.4129.72 with the
-version-matched Microsoft-signed EdgeDriver, IPv4/IPv6 loopback, external Edge
-negative probes, and five-page WebDriver observation pass. The current machine
-returns `IAttachmentExecute::CheckPolicy = S_FALSE (Prompt)` for the tested
-approved public TXT, CSV, PDF, PNG, JPEG, DOCX, XLSX, and PPTX canaries,
-including existing Trusted Sites. OFFICE-600 correctly creates a human
-exception and refuses automatic promotion; changing Windows zones, low-risk
-file policy, or auto-accepting the prompt is forbidden. Protected audit now
-records both the passing stages and this fail-closed terminal result, and owned
-network/quarantine/parser/format temporary paths are removed on success and
-failure. A deployment policy that legitimately returns `Enable` for the
-approved canary is still required before the 24-Case terminal report, crash
-A-N, 128 x 100 replay, certification, full workspace gates, rebase, and direct
-main push can complete. OFFICE-700 remains inactive.
+Product Completion uses a deployment-only qualification wrapper rather than
+widening product runtime authority. It validates installed
+`AttachmentManager.admx`, binds the interactive user SID, snapshots registry
+types and raw bytes, rejects High/Moderate `.txt` conflicts, and temporarily
+stages only `.txt` in the user Low Risk list. Fresh COM probes require TXT
+`Enable` and CSV/PDF `Prompt`; other controlled formats remain parser-supported
+but are not automatic-promotion Completion canaries. The official elevated
+runner then verifies sealed OFFICE-500 evidence, public HTTPS research, exact
+WFP objects, Edge/EdgeDriver loopback isolation, WebDriver observation, Qwen,
+model-free research, TXT quarantine/trust/validation/promotion, crash A-N,
+128 x 100 replay, protected audit, and zero security/residual metrics. Exact
+policy restoration is verified before a separate signed closeout binds the
+qualification and execution certification. Product code never edits policy,
+clicks security UI, removes zones, or disables SmartScreen/Defender.

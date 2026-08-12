@@ -79,7 +79,7 @@ Certified product gate:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass `
-  -File scripts/office/run-browser-research-v1.ps1 `
+  -File scripts/office/invoke-office600-certified-completion.ps1 `
   -Mode Completion `
   -Runtime C:\path\to\llama-cli.exe `
   -Model C:\path\to\Qwen3-4B-Q4_K_M.gguf `
@@ -87,17 +87,16 @@ powershell -NoProfile -ExecutionPolicy Bypass `
   -Edge C:\path\to\msedge.exe `
   -EdgeDriver C:\path\to\msedgedriver.exe `
   -ExternalCanaryUrl https://approved.example/public `
-  -ExternalDownloadCanaryUrl https://approved.example/file.pdf `
-  -ReuseVerifiedPredecessorEvidence `
-  -Fresh
+  -ExternalDownloadCanaryUrl https://approved.example/file.txt
 ```
 
 `All` is intentionally offline and non-admin. Completion is the only gate that
 uses external Internet and temporary elevated WFP state.
-The deployment machine must have an organizational Attachment Manager policy
-under which the approved canary receives `CheckPolicy = Enable`; `Prompt`
-creates a human exception and cannot be auto-clicked or treated as successful
-promotion.
+The administrator-only deployment qualification validates the installed ADMX,
+temporarily stages user-scoped `.txt` Low Risk inclusion, and requires TXT
+`Enable`, CSV `Prompt`, and PDF `Prompt`. It restores the original policy
+exactly before closeout certification. Product runtime code has no policy
+mutation authority; `Prompt` remains denied for automatic promotion.
 
 ## Dependencies
 

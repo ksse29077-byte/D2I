@@ -30,9 +30,9 @@ resumable exact-bound Completion checkpoints. WORK-900 adds evidence-gated,
 one-step limited autonomy, signed control and human-exception handling, and a
 bounded General Office duty cycle while preserving Policy, activation, and
 KRN as the only action path. Track W, EDGE-100, and OFFICE-100 through
-OFFICE-500 are complete. Track O has priority over remaining physical
+OFFICE-600 are complete. Track O has priority over remaining physical
 execution-plane expansion. The active next task is
-`D2I-OFFICE-600 - Browser Research and Controlled Download`.
+`D2I-OFFICE-700 - Email / Messenger / Review and Feedback Loop`.
 
 WORK-700 adds a one-shot platform-neutral Role Operations engine and a Desktop
 current-user/SYSTEM DACL-protected content-addressed store. It consumes only
@@ -103,6 +103,10 @@ typed evidence and stable link IDs into a closed loopback projection for the
 existing read-only WebDriver path. Controlled files remain quarantined until
 Attachment Services, fresh hashing, existing format parsers, and an atomic
 Workspace import all agree on exact lineage. Model output remains proposal-only.
+The OFFICE-600 closeout wrapper is deployment-only: it verifies local ADMX,
+temporarily stages user-scoped `.txt` Low Risk inclusion, requires TXT Enable
+and CSV/PDF Prompt, then restores exact policy before signing. No product
+runtime process can modify Attachment Manager policy.
 
 OFFICE-200 adds a Desktop-owned trusted document dispatcher, separate bounded
 HWPX and DOCX package workers, and a hidden interactive-current-user Word COM

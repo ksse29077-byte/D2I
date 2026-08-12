@@ -8,6 +8,12 @@
                                                     "type":  "object",
                                                     "additionalProperties":  false,
                                                     "required":  [
+                                                                     "attachment_prompt_bypass",
+                                                                     "attachment_policy_scope_broadening",
+                                                                     "zone_information_bypass",
+                                                                     "security_ui_auto_approval",
+                                                                     "csv_automatic_promotion",
+                                                                     "pdf_automatic_promotion",
                                                                      "external_browser_egress",
                                                                      "external_model_egress",
                                                                      "unauthorized_network_worker_request",
@@ -31,6 +37,30 @@
                                                                      "critical_error"
                                                                  ],
                                                     "properties":  {
+                                                                       "attachment_prompt_bypass":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "minimum":  0
+                                                                                                    },
+                                                                       "attachment_policy_scope_broadening":  {
+                                                                                                                  "type":  "integer",
+                                                                                                                  "minimum":  0
+                                                                                                              },
+                                                                       "zone_information_bypass":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                       "security_ui_auto_approval":  {
+                                                                                                         "type":  "integer",
+                                                                                                         "minimum":  0
+                                                                                                     },
+                                                                       "csv_automatic_promotion":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
+                                                                       "pdf_automatic_promotion":  {
+                                                                                                       "type":  "integer",
+                                                                                                       "minimum":  0
+                                                                                                   },
                                                                        "external_browser_egress":  {
                                                                                                        "type":  "integer",
                                                                                                        "minimum":  0

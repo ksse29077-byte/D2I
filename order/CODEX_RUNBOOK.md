@@ -66,8 +66,8 @@ Use `scripts/workforce/run-limited-autonomy-human-exception-v1.ps1` with
 `-Mode All` for deterministic checks and `-Mode Completion` with the pinned
 runtime/model, WORK-800 root, and `-ReuseVerifiedPredecessorEvidence` for the
 actual product gate. `-Resume` reuses only exact, cleaned safe checkpoints;
-`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-500 are complete.
-The first active task is `D2I-OFFICE-600 - Browser Research and Controlled Download`.
+`-Fresh` discards them. EDGE-100 and OFFICE-100 through OFFICE-600 are complete.
+The first active task is `D2I-OFFICE-700 - Email / Messenger / Review and Feedback Loop`.
 
 ## Track O - General Office Capability Expansion
 
@@ -77,8 +77,9 @@ The first active task is `D2I-OFFICE-600 - Browser Research and Controlled Downl
 - `D2I-OFFICE-400` PowerPoint presentation work - **complete**
 - `D2I-OFFICE-450` organizational design intelligence - **complete**
 - `D2I-OFFICE-500` PDF and document interchange - **complete**
-- `D2I-OFFICE-600` Browser research and controlled download - **first active task**
-- `D2I-OFFICE-500` through `D2I-OFFICE-900` complete the general office loop
+- `D2I-OFFICE-600` Browser research and controlled download - **complete**
+- `D2I-OFFICE-700` Email / messenger / review and feedback loop - **first active task**
+- `D2I-OFFICE-700` through `D2I-OFFICE-900` complete the general office loop
 
 Run OFFICE-100 deterministic gates with
 `scripts/office/run-office-capability-workspace-v1.ps1 -Mode All`. Completion
@@ -155,6 +156,16 @@ Cases, five browser snapshot observations, actual Attachment Services and format
 validation, at least one atomic Workspace promotion, crash windows A-N, 128 x
 100 logical replay, signed certification, and zero security/residual counters.
 `All` never substitutes for this external product proof.
+
+Run final OFFICE-600 product certification only from an already elevated,
+interactive, same-user session with
+`scripts/office/invoke-office600-certified-completion.ps1 -Mode Completion`.
+The wrapper validates installed Attachment Manager ADMX, snapshots exact user
+policy bytes and types, rejects High/Moderate `.txt` conflicts, stages Low Risk
+as `.txt` only, requires TXT `Enable` and CSV/PDF `Prompt`, invokes the official
+Completion runner, restores exact policy state, and signs the combined
+closeout. It never starts its own elevation prompt. Restore mismatch forbids
+certification and publication.
 
 ## Track X - Execution Plane Expansion
 

@@ -1,0 +1,133 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/attachment-policy-snapshot-v1.schema.json",
+    "title":  "AttachmentPolicySnapshotV1",
+    "$ref":  "#/$defs/AttachmentPolicySnapshotV1",
+    "$defs":  {
+                  "AttachmentPolicySnapshotV1":  {
+                                                     "type":  "object",
+                                                     "additionalProperties":  false,
+                                                     "required":  [
+                                                                      "schema_version",
+                                                                      "user_sid",
+                                                                      "admx_sha256",
+                                                                      "association_key_exists",
+                                                                      "low_risk_value_exists",
+                                                                      "low_risk_value_type",
+                                                                      "low_risk_value_bytes_base64",
+                                                                      "low_risk_value_sha256",
+                                                                      "moderate_risk_value_exists",
+                                                                      "moderate_risk_value_type",
+                                                                      "moderate_risk_value_bytes_base64",
+                                                                      "moderate_risk_value_sha256",
+                                                                      "high_risk_value_exists",
+                                                                      "high_risk_value_type",
+                                                                      "high_risk_value_bytes_base64",
+                                                                      "high_risk_value_sha256",
+                                                                      "policy_state_sha256",
+                                                                      "captured_at_unix_ms",
+                                                                      "snapshot_sha256"
+                                                                  ],
+                                                     "properties":  {
+                                                                        "schema_version":  {
+                                                                                               "type":  "integer",
+                                                                                               "minimum":  0,
+                                                                                               "maximum":  4294967295
+                                                                                           },
+                                                                        "user_sid":  {
+                                                                                         "type":  "string",
+                                                                                         "minLength":  0,
+                                                                                         "maxLength":  262144
+                                                                                     },
+                                                                        "admx_sha256":  {
+                                                                                            "type":  "string",
+                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                            "maxLength":  71
+                                                                                        },
+                                                                        "association_key_exists":  {
+                                                                                                       "type":  "boolean"
+                                                                                                   },
+                                                                        "low_risk_value_exists":  {
+                                                                                                      "type":  "boolean"
+                                                                                                  },
+                                                                        "low_risk_value_type":  {
+                                                                                                    "type":  "string",
+                                                                                                    "minLength":  0,
+                                                                                                    "maxLength":  262144
+                                                                                                },
+                                                                        "low_risk_value_bytes_base64":  {
+                                                                                                            "type":  "string",
+                                                                                                            "minLength":  0,
+                                                                                                            "maxLength":  262144
+                                                                                                        },
+                                                                        "low_risk_value_sha256":  {
+                                                                                                      "type":  "string",
+                                                                                                      "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                      "maxLength":  71
+                                                                                                  },
+                                                                        "moderate_risk_value_exists":  {
+                                                                                                           "type":  "boolean"
+                                                                                                       },
+                                                                        "moderate_risk_value_type":  {
+                                                                                                         "type":  "string",
+                                                                                                         "minLength":  0,
+                                                                                                         "maxLength":  262144
+                                                                                                     },
+                                                                        "moderate_risk_value_bytes_base64":  {
+                                                                                                                 "type":  "string",
+                                                                                                                 "minLength":  0,
+                                                                                                                 "maxLength":  262144
+                                                                                                             },
+                                                                        "moderate_risk_value_sha256":  {
+                                                                                                           "type":  "string",
+                                                                                                           "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                           "maxLength":  71
+                                                                                                       },
+                                                                        "high_risk_value_exists":  {
+                                                                                                       "type":  "boolean"
+                                                                                                   },
+                                                                        "high_risk_value_type":  {
+                                                                                                     "type":  "string",
+                                                                                                     "minLength":  0,
+                                                                                                     "maxLength":  262144
+                                                                                                 },
+                                                                        "high_risk_value_bytes_base64":  {
+                                                                                                             "type":  "string",
+                                                                                                             "minLength":  0,
+                                                                                                             "maxLength":  262144
+                                                                                                         },
+                                                                        "high_risk_value_sha256":  {
+                                                                                                       "type":  "string",
+                                                                                                       "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                       "maxLength":  71
+                                                                                                   },
+                                                                        "attachments_policy_sha256":  {
+                                                                                                          "oneOf":  [
+                                                                                                                        {
+                                                                                                                            "type":  "string",
+                                                                                                                            "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                                            "maxLength":  71
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "type":  "null"
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                      },
+                                                                        "policy_state_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                        "captured_at_unix_ms":  {
+                                                                                                    "type":  "integer",
+                                                                                                    "minimum":  0
+                                                                                                },
+                                                                        "snapshot_sha256":  {
+                                                                                                "type":  "string",
+                                                                                                "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                "maxLength":  71
+                                                                                            }
+                                                                    }
+                                                 }
+              }
+}

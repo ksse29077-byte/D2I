@@ -205,8 +205,8 @@ state.
 - `D2I-OFFICE-400`: PowerPoint presentation work. **Complete**
 - `D2I-OFFICE-450`: Organizational design intelligence and brand-consistent artifact generation. **Complete**
 - `D2I-OFFICE-500`: PDF and document interchange. **Complete**
-- `D2I-OFFICE-600`: Browser research and controlled download. **First active**
-- `D2I-OFFICE-700`: Email, messenger, review, and feedback loop.
+- `D2I-OFFICE-600`: Browser research and controlled download. **Complete**
+- `D2I-OFFICE-700`: Email, messenger, review, and feedback loop. **First active**
 - `D2I-OFFICE-800`: Long-horizon multi-application project work.
 - `D2I-OFFICE-900`: General Office Digital Employee E2E.
 
@@ -379,3 +379,11 @@ Services, fresh hash observation, format-specific validation, macro and external
 relationship denial, and atomic Workspace promotion. Search snippets, page
 instructions, model output, TLS, and parser success cannot independently grant
 fact, network, download, promotion, or completion authority.
+
+The certified Completion profile is intentionally narrower than general format
+validation: only a public bounded TXT canary is automatically promoted. An
+administrator-only deployment wrapper validates the installed ADMX, stages
+user-scoped `.txt` Low Risk inclusion, proves TXT `Enable` while CSV/PDF remain
+`Prompt`, runs the full external/WFP/browser/model gate, restores the exact
+original policy, and signs the combined evidence. Product runtime code cannot
+modify Attachment Manager policy or approve security UI.

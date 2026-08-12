@@ -146,6 +146,27 @@ pub enum AttachmentTrustDecisionV1 {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+pub enum AttachmentPolicyDecisionV1 {
+    Enable,
+    Prompt,
+    Disable,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AttachmentPolicyScopeV1 {
+    User,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AttachmentPolicyQualificationStatusV1 {
+    Qualified,
+    Rejected,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum DownloadValidationStatusV1 {
     Passed,
     Rejected,
@@ -866,6 +887,12 @@ pub struct ResearchExperienceRecordV1 {
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ResearchSecurityMetricsV1 {
+    pub attachment_prompt_bypass: u64,
+    pub attachment_policy_scope_broadening: u64,
+    pub zone_information_bypass: u64,
+    pub security_ui_auto_approval: u64,
+    pub csv_automatic_promotion: u64,
+    pub pdf_automatic_promotion: u64,
     pub external_browser_egress: u64,
     pub external_model_egress: u64,
     pub unauthorized_network_worker_request: u64,
@@ -1010,6 +1037,108 @@ pub struct ResearchWorkCertificationV1 {
     pub model_artifact_sha256: String,
     pub runtime_artifact_sha256: String,
     pub evidence_ids: Vec<String>,
+    pub issued_at_unix_ms: u64,
+    pub expires_at_unix_ms: u64,
+    pub signer_id: String,
+    pub signing_key_id: String,
+    pub signature_hex: String,
+    pub certification_sha256: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AttachmentPolicySnapshotV1 {
+    pub schema_version: u32,
+    pub user_sid: String,
+    pub admx_sha256: String,
+    pub association_key_exists: bool,
+    pub low_risk_value_exists: bool,
+    pub low_risk_value_type: String,
+    pub low_risk_value_bytes_base64: String,
+    pub low_risk_value_sha256: String,
+    pub moderate_risk_value_exists: bool,
+    pub moderate_risk_value_type: String,
+    pub moderate_risk_value_bytes_base64: String,
+    pub moderate_risk_value_sha256: String,
+    pub high_risk_value_exists: bool,
+    pub high_risk_value_type: String,
+    pub high_risk_value_bytes_base64: String,
+    pub high_risk_value_sha256: String,
+    pub attachments_policy_sha256: Option<String>,
+    pub policy_state_sha256: String,
+    pub captured_at_unix_ms: u64,
+    pub snapshot_sha256: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AttachmentPolicyProbeV1 {
+    pub schema_version: u32,
+    pub user_sid: String,
+    pub elevated: bool,
+    pub admx_sha256: String,
+    pub policy_scope: AttachmentPolicyScopeV1,
+    pub completion_low_risk_extensions: Vec<String>,
+    pub txt_checkpolicy: AttachmentPolicyDecisionV1,
+    pub csv_checkpolicy: AttachmentPolicyDecisionV1,
+    pub pdf_checkpolicy: AttachmentPolicyDecisionV1,
+    pub higher_precedence_txt_conflict: bool,
+    pub original_policy_sha256: String,
+    pub staged_policy_sha256: String,
+    pub txt_checkpolicy_microseconds: u64,
+    pub csv_checkpolicy_microseconds: u64,
+    pub pdf_checkpolicy_microseconds: u64,
+    pub probe_sha256: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AttachmentPolicyQualificationV1 {
+    pub schema_version: u32,
+    pub user_sid: String,
+    pub elevated: bool,
+    pub admx_sha256: String,
+    pub policy_scope: AttachmentPolicyScopeV1,
+    pub completion_low_risk_extensions: Vec<String>,
+    pub txt_checkpolicy: AttachmentPolicyDecisionV1,
+    pub csv_checkpolicy: AttachmentPolicyDecisionV1,
+    pub pdf_checkpolicy: AttachmentPolicyDecisionV1,
+    pub higher_precedence_txt_conflict: bool,
+    pub original_policy_sha256: String,
+    pub staged_policy_sha256: String,
+    pub restored_policy_sha256: String,
+    pub restored_exactly: bool,
+    pub policy_stage_microseconds: u64,
+    pub txt_checkpolicy_microseconds: u64,
+    pub csv_checkpolicy_microseconds: u64,
+    pub pdf_checkpolicy_microseconds: u64,
+    pub policy_restore_microseconds: u64,
+    pub qualification_total_microseconds: u64,
+    pub attachment_prompt_bypass_count: u64,
+    pub attachment_policy_scope_broadening_count: u64,
+    pub zone_information_bypass_count: u64,
+    pub security_ui_auto_approval_count: u64,
+    pub csv_automatic_promotion_count: u64,
+    pub pdf_automatic_promotion_count: u64,
+    pub temporary_attachment_policy_count: u64,
+    pub qualification_status: AttachmentPolicyQualificationStatusV1,
+    pub qualification_sha256: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ResearchWorkCloseoutCertificationV1 {
+    pub schema_version: u32,
+    pub certification_id: String,
+    pub completion_report_sha256: String,
+    pub execution_certification_sha256: String,
+    pub attachment_policy_qualification_sha256: String,
+    pub user_sid: String,
+    pub admx_sha256: String,
+    pub original_policy_sha256: String,
+    pub staged_policy_sha256: String,
+    pub restored_policy_sha256: String,
+    pub source_tree_sha256: String,
     pub issued_at_unix_ms: u64,
     pub expires_at_unix_ms: u64,
     pub signer_id: String,

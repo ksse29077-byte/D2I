@@ -642,6 +642,9 @@ mod windows_e2e {
                 return Err("external canary URL must be HTTPS port 443".to_owned());
             }
         }
+        if class_from_url(&arguments.external_download_url)? != DownloadClassV1::Txt {
+            return Err("certified Completion download canary must be TXT".to_owned());
+        }
         Ok(())
     }
 

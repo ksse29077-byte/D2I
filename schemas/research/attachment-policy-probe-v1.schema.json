@@ -1,0 +1,115 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://schemas.d2i.local/research/attachment-policy-probe-v1.schema.json",
+    "title":  "AttachmentPolicyProbeV1",
+    "$ref":  "#/$defs/AttachmentPolicyProbeV1",
+    "$defs":  {
+                  "AttachmentPolicyDecisionV1":  {
+                                                     "type":  "string",
+                                                     "enum":  [
+                                                                  "enable",
+                                                                  "prompt",
+                                                                  "disable"
+                                                              ]
+                                                 },
+                  "AttachmentPolicyScopeV1":  {
+                                                  "type":  "string",
+                                                  "enum":  [
+                                                               "user"
+                                                           ]
+                                              },
+                  "AttachmentPolicyProbeV1":  {
+                                                  "type":  "object",
+                                                  "additionalProperties":  false,
+                                                  "required":  [
+                                                                   "schema_version",
+                                                                   "user_sid",
+                                                                   "elevated",
+                                                                   "admx_sha256",
+                                                                   "policy_scope",
+                                                                   "completion_low_risk_extensions",
+                                                                   "txt_checkpolicy",
+                                                                   "csv_checkpolicy",
+                                                                   "pdf_checkpolicy",
+                                                                   "higher_precedence_txt_conflict",
+                                                                   "original_policy_sha256",
+                                                                   "staged_policy_sha256",
+                                                                   "txt_checkpolicy_microseconds",
+                                                                   "csv_checkpolicy_microseconds",
+                                                                   "pdf_checkpolicy_microseconds",
+                                                                   "probe_sha256"
+                                                               ],
+                                                  "properties":  {
+                                                                     "schema_version":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  0,
+                                                                                            "maximum":  4294967295
+                                                                                        },
+                                                                     "user_sid":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  0,
+                                                                                      "maxLength":  262144
+                                                                                  },
+                                                                     "elevated":  {
+                                                                                      "type":  "boolean"
+                                                                                  },
+                                                                     "admx_sha256":  {
+                                                                                         "type":  "string",
+                                                                                         "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                         "maxLength":  71
+                                                                                     },
+                                                                     "policy_scope":  {
+                                                                                          "$ref":  "#/$defs/AttachmentPolicyScopeV1"
+                                                                                      },
+                                                                     "completion_low_risk_extensions":  {
+                                                                                                            "type":  "array",
+                                                                                                            "maxItems":  4096,
+                                                                                                            "items":  {
+                                                                                                                          "type":  "string",
+                                                                                                                          "minLength":  0,
+                                                                                                                          "maxLength":  262144
+                                                                                                                      }
+                                                                                                        },
+                                                                     "txt_checkpolicy":  {
+                                                                                             "$ref":  "#/$defs/AttachmentPolicyDecisionV1"
+                                                                                         },
+                                                                     "csv_checkpolicy":  {
+                                                                                             "$ref":  "#/$defs/AttachmentPolicyDecisionV1"
+                                                                                         },
+                                                                     "pdf_checkpolicy":  {
+                                                                                             "$ref":  "#/$defs/AttachmentPolicyDecisionV1"
+                                                                                         },
+                                                                     "higher_precedence_txt_conflict":  {
+                                                                                                            "type":  "boolean"
+                                                                                                        },
+                                                                     "original_policy_sha256":  {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                    "maxLength":  71
+                                                                                                },
+                                                                     "staged_policy_sha256":  {
+                                                                                                  "type":  "string",
+                                                                                                  "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                                  "maxLength":  71
+                                                                                              },
+                                                                     "txt_checkpolicy_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                     "csv_checkpolicy_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                     "pdf_checkpolicy_microseconds":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "minimum":  0
+                                                                                                      },
+                                                                     "probe_sha256":  {
+                                                                                          "type":  "string",
+                                                                                          "pattern":  "^sha256:[0-9a-f]{64}$",
+                                                                                          "maxLength":  71
+                                                                                      }
+                                                                 }
+                                              }
+              }
+}

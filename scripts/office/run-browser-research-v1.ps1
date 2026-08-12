@@ -15,7 +15,7 @@ param(
     [string]$Edge,
     [string]$EdgeDriver,
     [string]$ExternalCanaryUrl = 'https://www.microsoft.com/robots.txt',
-    [string]$ExternalDownloadCanaryUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    [string]$ExternalDownloadCanaryUrl = 'https://www.w3.org/robots.txt',
     [string]$OutputRoot,
     [switch]$ReuseVerifiedPredecessorEvidence,
     [switch]$Fresh,
@@ -194,6 +194,11 @@ function Invoke-RunnerSelfTest {
     if ($closedModes.Count -ne 31 -or ($closedModes | Sort-Object -Unique).Count -ne 31) {
         throw 'Runner mode allowlist is not closed and unique.'
     }
+    Invoke-NativeStep 'office600-policy-wrapper-self-test' 'powershell' @(
+        '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File',
+        (Join-Path $repoRoot 'scripts/office/invoke-office600-certified-completion.ps1'),
+        '-Mode', 'SelfTest', '-OutputRoot', (Join-Path $OutputRoot '.policy-wrapper-self-test')
+    )
 }
 
 function Invoke-Model {

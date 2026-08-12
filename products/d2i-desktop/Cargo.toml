@@ -94,6 +94,10 @@ name = "d2i-office600-completion-e2e"
 path = "src/bin/d2i-office600-completion-e2e.rs"
 
 [[bin]]
+name = "d2i-office600-policy-qualification"
+path = "src/bin/d2i-office600-policy-qualification.rs"
+
+[[bin]]
 name = "d2i-wfp-verifier-broker"
 path = "src/bin/d2i-wfp-verifier-broker.rs"
 

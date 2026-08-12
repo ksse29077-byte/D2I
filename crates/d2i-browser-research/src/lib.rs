@@ -95,6 +95,10 @@ impl_sealed_contract!(ResearchExperienceRecordV1, experience_sha256);
 impl_sealed_contract!(ResearchWorkReplayReportV1, report_sha256);
 impl_sealed_contract!(ResearchWorkCompletionReportV1, finished_sha256);
 impl_sealed_contract!(ResearchWorkCertificationV1, certification_sha256);
+impl_sealed_contract!(AttachmentPolicySnapshotV1, snapshot_sha256);
+impl_sealed_contract!(AttachmentPolicyProbeV1, probe_sha256);
+impl_sealed_contract!(AttachmentPolicyQualificationV1, qualification_sha256);
+impl_sealed_contract!(ResearchWorkCloseoutCertificationV1, certification_sha256);
 
 pub const REQUIRED_REPLAY_SCENARIOS: u32 = 128;
 pub const REQUIRED_REPLAY_RUNS: u32 = 100;
@@ -386,6 +390,320 @@ impl ResearchWorkCertificationV1 {
             ));
         }
         Ok(())
+    }
+}
+
+impl AttachmentPolicySnapshotV1 {
+    pub fn validate_gate(&self) -> Result<(), ResearchError> {
+        self.validate_seal()?;
+        validate_attachment_policy_identity(&self.user_sid, &self.admx_sha256)?;
+        for hash in [
+            &self.low_risk_value_sha256,
+            &self.moderate_risk_value_sha256,
+            &self.high_risk_value_sha256,
+            &self.policy_state_sha256,
+        ] {
+            validate_hash(hash, "attachment policy snapshot hash")?;
+        }
+        if let Some(hash) = &self.attachments_policy_sha256 {
+            validate_hash(hash, "attachments policy hash")?;
+        }
+        for (exists, value_type, bytes, expected_hash) in [
+            (
+                self.low_risk_value_exists,
+                self.low_risk_value_type.as_str(),
+                self.low_risk_value_bytes_base64.as_str(),
+                self.low_risk_value_sha256.as_str(),
+            ),
+            (
+                self.moderate_risk_value_exists,
+                self.moderate_risk_value_type.as_str(),
+                self.moderate_risk_value_bytes_base64.as_str(),
+                self.moderate_risk_value_sha256.as_str(),
+            ),
+            (
+                self.high_risk_value_exists,
+                self.high_risk_value_type.as_str(),
+                self.high_risk_value_bytes_base64.as_str(),
+                self.high_risk_value_sha256.as_str(),
+            ),
+        ] {
+            if !matches!(
+                value_type,
+                "none"
+                    | "reg_sz"
+                    | "reg_expand_sz"
+                    | "reg_binary"
+                    | "reg_dword"
+                    | "reg_multi_sz"
+                    | "reg_qword"
+                    | "reg_none"
+            ) || exists == (value_type == "none")
+                || !exists && !bytes.is_empty()
+            {
+                return Err(ResearchError::Integrity(
+                    "attachment policy value snapshot differs".to_owned(),
+                ));
+            }
+            let decoded = decode_base64_bounded(bytes, 65_536)?;
+            if sha256_bytes(&decoded) != expected_hash {
+                return Err(ResearchError::Integrity(
+                    "attachment policy raw value hash differs".to_owned(),
+                ));
+            }
+        }
+        if self.schema_version != 1 || self.captured_at_unix_ms == 0 {
+            return Err(ResearchError::Invalid(
+                "attachment policy snapshot bounds differ".to_owned(),
+            ));
+        }
+        Ok(())
+    }
+}
+
+impl AttachmentPolicyProbeV1 {
+    pub fn validate_gate(&self) -> Result<(), ResearchError> {
+        self.validate_seal()?;
+        validate_attachment_policy_identity(&self.user_sid, &self.admx_sha256)?;
+        for hash in [&self.original_policy_sha256, &self.staged_policy_sha256] {
+            validate_hash(hash, "attachment policy probe hash")?;
+        }
+        validate_attachment_policy_decisions(
+            self.elevated,
+            &self.completion_low_risk_extensions,
+            self.txt_checkpolicy,
+            self.csv_checkpolicy,
+            self.pdf_checkpolicy,
+            self.higher_precedence_txt_conflict,
+        )?;
+        if self.schema_version != 1 || self.original_policy_sha256 == self.staged_policy_sha256 {
+            return Err(ResearchError::Integrity(
+                "attachment policy probe state differs".to_owned(),
+            ));
+        }
+        Ok(())
+    }
+}
+
+impl AttachmentPolicyQualificationV1 {
+    pub fn validate_gate(&self) -> Result<(), ResearchError> {
+        self.validate_seal()?;
+        validate_attachment_policy_identity(&self.user_sid, &self.admx_sha256)?;
+        for hash in [
+            &self.original_policy_sha256,
+            &self.staged_policy_sha256,
+            &self.restored_policy_sha256,
+        ] {
+            validate_hash(hash, "attachment policy qualification hash")?;
+        }
+        validate_attachment_policy_decisions(
+            self.elevated,
+            &self.completion_low_risk_extensions,
+            self.txt_checkpolicy,
+            self.csv_checkpolicy,
+            self.pdf_checkpolicy,
+            self.higher_precedence_txt_conflict,
+        )?;
+        if self.schema_version != 1
+            || self.qualification_status != AttachmentPolicyQualificationStatusV1::Qualified
+            || !self.restored_exactly
+            || self.original_policy_sha256 != self.restored_policy_sha256
+            || self.original_policy_sha256 == self.staged_policy_sha256
+            || self.qualification_total_microseconds
+                < self
+                    .policy_stage_microseconds
+                    .saturating_add(self.policy_restore_microseconds)
+            || [
+                self.attachment_prompt_bypass_count,
+                self.attachment_policy_scope_broadening_count,
+                self.zone_information_bypass_count,
+                self.security_ui_auto_approval_count,
+                self.csv_automatic_promotion_count,
+                self.pdf_automatic_promotion_count,
+                self.temporary_attachment_policy_count,
+            ]
+            .iter()
+            .any(|count| *count != 0)
+        {
+            return Err(ResearchError::Integrity(
+                "attachment policy qualification gates differ".to_owned(),
+            ));
+        }
+        Ok(())
+    }
+}
+
+impl ResearchWorkCloseoutCertificationV1 {
+    pub fn sign(mut self, key: &ed25519_dalek::SigningKey) -> Result<Self, ResearchError> {
+        use ed25519_dalek::Signer;
+
+        self.signature_hex = "00".repeat(64);
+        self.certification_sha256 = ZERO_HASH.to_owned();
+        self.validate_content()?;
+        let payload = signature_payload(&self, &["signature_hex", "certification_sha256"])?;
+        self.signature_hex = hex_encode(&key.sign(&payload).to_bytes());
+        self.seal()
+    }
+
+    pub fn verify(
+        &self,
+        key: &ed25519_dalek::VerifyingKey,
+        now_unix_ms: u64,
+    ) -> Result<(), ResearchError> {
+        use ed25519_dalek::{Signature, Verifier};
+
+        self.validate_content()?;
+        self.validate_seal()?;
+        if now_unix_ms < self.issued_at_unix_ms || now_unix_ms >= self.expires_at_unix_ms {
+            return Err(ResearchError::AccessDenied(
+                "OFFICE-600 closeout certification is not currently valid".to_owned(),
+            ));
+        }
+        let signature = Signature::from_bytes(&hex_decode_signature(&self.signature_hex)?);
+        key.verify(
+            &signature_payload(self, &["signature_hex", "certification_sha256"])?,
+            &signature,
+        )
+        .map_err(|_| {
+            ResearchError::Integrity("closeout certification signature differs".to_owned())
+        })
+    }
+
+    fn validate_content(&self) -> Result<(), ResearchError> {
+        for value in [
+            &self.certification_id,
+            &self.signer_id,
+            &self.signing_key_id,
+        ] {
+            validate_id(value, "OFFICE-600 closeout certification identity")?;
+        }
+        validate_attachment_policy_identity(&self.user_sid, &self.admx_sha256)?;
+        for hash in [
+            &self.completion_report_sha256,
+            &self.execution_certification_sha256,
+            &self.attachment_policy_qualification_sha256,
+            &self.original_policy_sha256,
+            &self.staged_policy_sha256,
+            &self.restored_policy_sha256,
+            &self.source_tree_sha256,
+        ] {
+            validate_hash(hash, "OFFICE-600 closeout certification hash")?;
+        }
+        if self.schema_version != 1
+            || self.issued_at_unix_ms == 0
+            || self.expires_at_unix_ms <= self.issued_at_unix_ms
+            || self.expires_at_unix_ms - self.issued_at_unix_ms > 86_400_000
+            || self.original_policy_sha256 != self.restored_policy_sha256
+            || self.original_policy_sha256 == self.staged_policy_sha256
+            || self.signature_hex.len() != 128
+            || !self
+                .signature_hex
+                .bytes()
+                .all(|value| value.is_ascii_hexdigit() && !value.is_ascii_uppercase())
+        {
+            return Err(ResearchError::Invalid(
+                "OFFICE-600 closeout certification bounds differ".to_owned(),
+            ));
+        }
+        Ok(())
+    }
+}
+
+fn validate_attachment_policy_identity(
+    user_sid: &str,
+    admx_sha256: &str,
+) -> Result<(), ResearchError> {
+    if !user_sid.starts_with("S-1-") || user_sid.len() > 184 {
+        return Err(ResearchError::Invalid(
+            "attachment policy user SID differs".to_owned(),
+        ));
+    }
+    validate_hash(admx_sha256, "AttachmentManager ADMX hash")
+}
+
+fn validate_attachment_policy_decisions(
+    elevated: bool,
+    extensions: &[String],
+    txt: AttachmentPolicyDecisionV1,
+    csv: AttachmentPolicyDecisionV1,
+    pdf: AttachmentPolicyDecisionV1,
+    higher_precedence_conflict: bool,
+) -> Result<(), ResearchError> {
+    if !elevated
+        || extensions != [".txt"]
+        || txt != AttachmentPolicyDecisionV1::Enable
+        || csv != AttachmentPolicyDecisionV1::Prompt
+        || pdf != AttachmentPolicyDecisionV1::Prompt
+        || higher_precedence_conflict
+    {
+        return Err(ResearchError::AccessDenied(
+            "Attachment Services qualification scope differs".to_owned(),
+        ));
+    }
+    Ok(())
+}
+
+fn decode_base64_bounded(value: &str, maximum_bytes: usize) -> Result<Vec<u8>, ResearchError> {
+    if value.len() % 4 != 0 || value.len() > maximum_bytes.saturating_add(2) / 3 * 4 {
+        return Err(ResearchError::Resource(
+            "attachment policy raw value exceeds its bound".to_owned(),
+        ));
+    }
+    let mut output = Vec::with_capacity(value.len() / 4 * 3);
+    for (chunk_index, chunk) in value.as_bytes().chunks_exact(4).enumerate() {
+        let final_chunk = chunk_index + 1 == value.len() / 4;
+        let padding = if chunk[3] == b'=' {
+            if chunk[2] == b'=' {
+                2
+            } else {
+                1
+            }
+        } else {
+            0
+        };
+        if (!final_chunk && padding != 0)
+            || chunk[..4 - padding].contains(&b'=')
+            || chunk[4 - padding..].iter().any(|byte| *byte != b'=')
+        {
+            return Err(ResearchError::Invalid(
+                "attachment policy raw value is not canonical base64".to_owned(),
+            ));
+        }
+        let mut values = [0_u8; 4];
+        for (index, byte) in chunk[..4 - padding].iter().enumerate() {
+            values[index] = decode_base64_symbol(*byte)?;
+        }
+        if padding == 2 && values[1] & 0x0f != 0 || padding == 1 && values[2] & 0x03 != 0 {
+            return Err(ResearchError::Invalid(
+                "attachment policy raw value has noncanonical padding".to_owned(),
+            ));
+        }
+        output.push(values[0] << 2 | values[1] >> 4);
+        if padding < 2 {
+            output.push(values[1] << 4 | values[2] >> 2);
+        }
+        if padding == 0 {
+            output.push(values[2] << 6 | values[3]);
+        }
+    }
+    if output.len() > maximum_bytes {
+        return Err(ResearchError::Resource(
+            "attachment policy raw value exceeds its decoded bound".to_owned(),
+        ));
+    }
+    Ok(output)
+}
+
+fn decode_base64_symbol(value: u8) -> Result<u8, ResearchError> {
+    match value {
+        b'A'..=b'Z' => Ok(value - b'A'),
+        b'a'..=b'z' => Ok(value - b'a' + 26),
+        b'0'..=b'9' => Ok(value - b'0' + 52),
+        b'+' => Ok(62),
+        b'/' => Ok(63),
+        _ => Err(ResearchError::Invalid(
+            "attachment policy raw value is not base64".to_owned(),
+        )),
     }
 }
 

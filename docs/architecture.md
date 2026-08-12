@@ -852,3 +852,13 @@ format-specific OFFICE-200/300/400/500 validation, macro/external-relationship
 denial, and atomic Workspace import all bind to one source snapshot and link.
 Promoted content remains externally untrusted rather than fact authority. See
 ADR 0045 and the three OFFICE-600 documents under `docs/office`.
+
+Final trust qualification is not product runtime authority. An
+administrator-only, interactive, same-user deployment wrapper validates the
+installed Attachment Manager ADMX, snapshots exact user policy bytes and
+types, rejects High/Moderate `.txt` conflicts, and stages Low Risk inclusion as
+`.txt` only. Fresh Attachment Services probes must yield TXT Enable and CSV/PDF
+Prompt. The wrapper runs the existing Completion runner, restores exact policy
+state in `finally`, then signs a closeout binding the qualification, execution
+certification, user SID, ADMX hash, and source tree. Restore failure leaves
+OFFICE-600 incomplete and forbids publication.

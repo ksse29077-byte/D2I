@@ -812,3 +812,180 @@ fn loopback_get(url: &str) -> String {
         .unwrap_or_else(|error| panic!("loopback response: {error}"));
     response
 }
+
+fn policy_hash(label: &str) -> String {
+    sha256_bytes(label.as_bytes())
+}
+
+fn qualified_attachment_policy() -> AttachmentPolicyQualificationV1 {
+    AttachmentPolicyQualificationV1 {
+        schema_version: 1,
+        user_sid: "S-1-5-21-1-2-3-1001".to_owned(),
+        elevated: true,
+        admx_sha256: policy_hash("admx"),
+        policy_scope: AttachmentPolicyScopeV1::User,
+        completion_low_risk_extensions: vec![".txt".to_owned()],
+        txt_checkpolicy: AttachmentPolicyDecisionV1::Enable,
+        csv_checkpolicy: AttachmentPolicyDecisionV1::Prompt,
+        pdf_checkpolicy: AttachmentPolicyDecisionV1::Prompt,
+        higher_precedence_txt_conflict: false,
+        original_policy_sha256: policy_hash("original"),
+        staged_policy_sha256: policy_hash("staged"),
+        restored_policy_sha256: policy_hash("original"),
+        restored_exactly: true,
+        policy_stage_microseconds: 100,
+        txt_checkpolicy_microseconds: 10,
+        csv_checkpolicy_microseconds: 11,
+        pdf_checkpolicy_microseconds: 12,
+        policy_restore_microseconds: 100,
+        qualification_total_microseconds: 400,
+        attachment_prompt_bypass_count: 0,
+        attachment_policy_scope_broadening_count: 0,
+        zone_information_bypass_count: 0,
+        security_ui_auto_approval_count: 0,
+        csv_automatic_promotion_count: 0,
+        pdf_automatic_promotion_count: 0,
+        temporary_attachment_policy_count: 0,
+        qualification_status: AttachmentPolicyQualificationStatusV1::Qualified,
+        qualification_sha256: ZERO_HASH.to_owned(),
+    }
+}
+
+fn attachment_policy_snapshot() -> AttachmentPolicySnapshotV1 {
+    let empty_hash = sha256_bytes(&[]);
+    AttachmentPolicySnapshotV1 {
+        schema_version: 1,
+        user_sid: "S-1-5-21-1-2-3-1001".to_owned(),
+        admx_sha256: policy_hash("admx"),
+        association_key_exists: false,
+        low_risk_value_exists: false,
+        low_risk_value_type: "none".to_owned(),
+        low_risk_value_bytes_base64: String::new(),
+        low_risk_value_sha256: empty_hash.clone(),
+        moderate_risk_value_exists: false,
+        moderate_risk_value_type: "none".to_owned(),
+        moderate_risk_value_bytes_base64: String::new(),
+        moderate_risk_value_sha256: empty_hash.clone(),
+        high_risk_value_exists: false,
+        high_risk_value_type: "none".to_owned(),
+        high_risk_value_bytes_base64: String::new(),
+        high_risk_value_sha256: empty_hash,
+        attachments_policy_sha256: None,
+        policy_state_sha256: policy_hash("policy-state"),
+        captured_at_unix_ms: 1_000,
+        snapshot_sha256: ZERO_HASH.to_owned(),
+    }
+}
+
+#[test]
+fn attachment_policy_snapshot_binds_raw_bytes_type_and_hash() {
+    let snapshot = attachment_policy_snapshot()
+        .seal()
+        .unwrap_or_else(|error| panic!("policy snapshot fixture: {error}"));
+    snapshot
+        .validate_gate()
+        .unwrap_or_else(|error| panic!("policy snapshot: {error}"));
+
+    let mut mismatched = attachment_policy_snapshot();
+    mismatched.low_risk_value_exists = true;
+    mismatched.low_risk_value_type = "reg_sz".to_owned();
+    mismatched.low_risk_value_bytes_base64 = "AA==".to_owned();
+    let mismatched = mismatched
+        .seal()
+        .unwrap_or_else(|error| panic!("policy mismatch fixture: {error}"));
+    assert!(mismatched.validate_gate().is_err());
+
+    let mut malformed = attachment_policy_snapshot();
+    malformed.low_risk_value_exists = true;
+    malformed.low_risk_value_type = "reg_sz".to_owned();
+    malformed.low_risk_value_bytes_base64 = "A===".to_owned();
+    let malformed = malformed
+        .seal()
+        .unwrap_or_else(|error| panic!("policy malformed fixture: {error}"));
+    assert!(malformed.validate_gate().is_err());
+}
+
+#[test]
+fn attachment_policy_qualification_requires_exact_txt_only_scope() {
+    let qualification = qualified_attachment_policy()
+        .seal()
+        .unwrap_or_else(|error| panic!("policy qualification fixture: {error}"));
+    qualification
+        .validate_gate()
+        .unwrap_or_else(|error| panic!("qualified policy: {error}"));
+
+    for mutation in ["txt_prompt", "csv_enable", "pdf_enable", "higher_conflict"] {
+        let mut rejected = qualified_attachment_policy();
+        match mutation {
+            "txt_prompt" => rejected.txt_checkpolicy = AttachmentPolicyDecisionV1::Prompt,
+            "csv_enable" => rejected.csv_checkpolicy = AttachmentPolicyDecisionV1::Enable,
+            "pdf_enable" => rejected.pdf_checkpolicy = AttachmentPolicyDecisionV1::Enable,
+            "higher_conflict" => rejected.higher_precedence_txt_conflict = true,
+            _ => unreachable!(),
+        }
+        let rejected = rejected
+            .seal()
+            .unwrap_or_else(|error| panic!("rejected policy fixture: {error}"));
+        assert!(rejected.validate_gate().is_err(), "mutation={mutation}");
+    }
+}
+
+#[test]
+fn attachment_policy_qualification_rejects_restore_sid_and_scope_drift() {
+    let mut restore_mismatch = qualified_attachment_policy();
+    restore_mismatch.restored_policy_sha256 = policy_hash("different");
+    let restore_mismatch = restore_mismatch
+        .seal()
+        .unwrap_or_else(|error| panic!("restore mismatch fixture: {error}"));
+    assert!(restore_mismatch.validate_gate().is_err());
+
+    let mut wrong_sid = qualified_attachment_policy();
+    wrong_sid.user_sid = "not-a-windows-sid".to_owned();
+    let wrong_sid = wrong_sid
+        .seal()
+        .unwrap_or_else(|error| panic!("wrong SID fixture: {error}"));
+    assert!(wrong_sid.validate_gate().is_err());
+
+    let mut broad = qualified_attachment_policy();
+    broad.completion_low_risk_extensions.push(".csv".to_owned());
+    let broad = broad
+        .seal()
+        .unwrap_or_else(|error| panic!("broad policy fixture: {error}"));
+    assert!(broad.validate_gate().is_err());
+}
+
+#[test]
+fn closeout_certification_binds_qualification_restore_and_source_tree() {
+    let qualification = qualified_attachment_policy()
+        .seal()
+        .unwrap_or_else(|error| panic!("policy qualification fixture: {error}"));
+    let key = SigningKey::from_bytes(&[73_u8; 32]);
+    let certification = ResearchWorkCloseoutCertificationV1 {
+        schema_version: 1,
+        certification_id: "certification.office600.closeout-test".to_owned(),
+        completion_report_sha256: policy_hash("completion"),
+        execution_certification_sha256: policy_hash("execution-certification"),
+        attachment_policy_qualification_sha256: qualification.qualification_sha256,
+        user_sid: qualification.user_sid,
+        admx_sha256: qualification.admx_sha256,
+        original_policy_sha256: qualification.original_policy_sha256,
+        staged_policy_sha256: qualification.staged_policy_sha256,
+        restored_policy_sha256: qualification.restored_policy_sha256,
+        source_tree_sha256: policy_hash("source-tree"),
+        issued_at_unix_ms: 1_000,
+        expires_at_unix_ms: 2_000,
+        signer_id: "signer.office600.closeout-test".to_owned(),
+        signing_key_id: "key.office600.closeout-test".to_owned(),
+        signature_hex: "00".repeat(64),
+        certification_sha256: ZERO_HASH.to_owned(),
+    }
+    .sign(&key)
+    .unwrap_or_else(|error| panic!("closeout certification: {error}"));
+    certification
+        .verify(&key.verifying_key(), 1_001)
+        .unwrap_or_else(|error| panic!("closeout verification: {error}"));
+
+    let mut mutated = certification;
+    mutated.restored_policy_sha256 = policy_hash("mutated-restore");
+    assert!(mutated.verify(&key.verifying_key(), 1_001).is_err());
+}
