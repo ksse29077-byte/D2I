@@ -365,7 +365,7 @@ HTTPS origins, one approved small public download, and one elevated session for
 temporary exact WFP isolation. Edge remains loopback-only; only the one-shot
 network worker receives external GET/HEAD authority. External HTML is projected
 into D2I-owned safe snapshots and downloads pass quarantine, Attachment Services,
-format validation, and atomic Workspace promotion. See ADR 0044 and
+format validation, and atomic Workspace promotion. See ADR 0045 and
 `docs/office/browser-research-v1.md`.
 
 Run the deterministic WORK-800 contracts, schemas, protected store,

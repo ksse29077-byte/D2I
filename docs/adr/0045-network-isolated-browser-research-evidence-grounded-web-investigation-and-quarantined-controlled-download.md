@@ -1,4 +1,4 @@
-# ADR 0044: Network-Isolated Browser Research and Quarantined Controlled Download
+# ADR 0045: Network-Isolated Browser Research and Quarantined Controlled Download
 
 - Status: Accepted
 - Date: 2026-08-11

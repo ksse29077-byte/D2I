@@ -1,16 +1,18 @@
 #![cfg(windows)]
 
 use d2i_windows_host::{
-    appcontainer_profile, delete_appcontainer_profile, ensure_appcontainer_profile_deleted,
-    grant_appcontainer_child_query_to_verifier, grant_current_process_query_to_verifier,
-    harden_path_for_current_user, inspect_verifier_process, path_security_descriptor,
-    process_parent_id, process_peak_working_set_bytes, protect_current_user,
-    provision_appcontainer_profile, spawn_zero_capability_appcontainer, unprotect_current_user,
-    WindowsJobLimits,
+    appcontainer_profile, atomic_move, delete_appcontainer_profile,
+    ensure_appcontainer_profile_deleted, grant_appcontainer_child_query_to_verifier,
+    grant_current_process_query_to_verifier, harden_path_for_current_user,
+    inspect_verifier_process, path_security_descriptor, process_parent_id,
+    process_peak_working_set_bytes, protect_current_user, provision_appcontainer_profile,
+    spawn_zero_capability_appcontainer, unprotect_current_user, WindowsJobLimits,
 };
 use std::fmt::Debug;
+use std::fs::OpenOptions;
+use std::os::windows::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
-use std::time::Duration;
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 fn ok<T, E: Debug>(result: Result<T, E>) -> T {
     match result {
@@ -98,6 +100,71 @@ fn protected_path_security_descriptor_is_stable() {
     let second = ok(path_security_descriptor(&temp.0));
     assert_eq!(first, second);
     assert!(!first.is_empty());
+}
+
+#[test]
+fn atomic_move_retries_only_until_a_transient_destination_lock_is_released() {
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_or(0, |value| value.as_nanos());
+    let root = std::env::temp_dir().join(format!(
+        "d2i-windows-host-atomic-move-{}-{suffix}",
+        std::process::id()
+    ));
+    ok(std::fs::create_dir(&root));
+    let source = root.join("state.new");
+    let destination = root.join("state.json");
+    ok(std::fs::write(&source, b"new-state"));
+    ok(std::fs::write(&destination, b"old-state"));
+
+    let locked = ok(OpenOptions::new()
+        .read(true)
+        .write(true)
+        .share_mode(0)
+        .open(&destination));
+    let release = std::thread::spawn(move || {
+        std::thread::sleep(Duration::from_millis(60));
+        drop(locked);
+    });
+    let started = Instant::now();
+    ok(atomic_move(&source, &destination, true));
+    ok(release.join());
+
+    assert!(started.elapsed() >= Duration::from_millis(40));
+    assert!(!source.exists());
+    assert_eq!(ok(std::fs::read(&destination)), b"new-state");
+    ok(std::fs::remove_dir_all(root));
+}
+
+#[test]
+fn atomic_move_fails_closed_when_destination_lock_persists() {
+    let suffix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_or(0, |value| value.as_nanos());
+    let root = std::env::temp_dir().join(format!(
+        "d2i-windows-host-atomic-move-locked-{}-{suffix}",
+        std::process::id()
+    ));
+    ok(std::fs::create_dir(&root));
+    let source = root.join("state.new");
+    let destination = root.join("state.json");
+    ok(std::fs::write(&source, b"new-state"));
+    ok(std::fs::write(&destination, b"old-state"));
+    let locked = ok(OpenOptions::new()
+        .read(true)
+        .write(true)
+        .share_mode(0)
+        .open(&destination));
+
+    let started = Instant::now();
+    let error = atomic_move(&source, &destination, true);
+    assert!(error.is_err());
+    assert!(started.elapsed() >= Duration::from_millis(300));
+    drop(locked);
+    assert_eq!(ok(std::fs::read(&source)), b"new-state");
+    assert_eq!(ok(std::fs::read(&destination)), b"old-state");
+
+    ok(std::fs::remove_dir_all(root));
 }
 
 #[test]

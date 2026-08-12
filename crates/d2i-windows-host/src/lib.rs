@@ -430,11 +430,11 @@ mod platform {
     use std::path::{Path, PathBuf};
     use std::process::Child;
     use std::time::Duration;
-    use windows::core::{PCWSTR, PWSTR};
+    use windows::core::{HRESULT, PCWSTR, PWSTR};
     use windows::Wdk::System::SystemServices::RtlGetVersion;
     use windows::Win32::Foundation::{
-        CloseHandle, LocalFree, ERROR_SUCCESS, HANDLE, HLOCAL, STILL_ACTIVE, WAIT_OBJECT_0,
-        WAIT_TIMEOUT,
+        CloseHandle, LocalFree, ERROR_ACCESS_DENIED, ERROR_LOCK_VIOLATION, ERROR_SHARING_VIOLATION,
+        ERROR_SUCCESS, HANDLE, HLOCAL, STILL_ACTIVE, WAIT_OBJECT_0, WAIT_TIMEOUT,
     };
     use windows::Win32::Security::Authorization::{
         ConvertSidToStringSidW, ConvertStringSecurityDescriptorToSecurityDescriptorW,
@@ -1464,9 +1464,43 @@ mod platform {
         if replace {
             flags |= MOVEFILE_REPLACE_EXISTING;
         }
-        // SAFETY: both path buffers are NUL-terminated and remain live for the call.
-        unsafe { MoveFileExW(PCWSTR(source.as_ptr()), PCWSTR(destination.as_ptr()), flags) }
-            .map_err(|error| WindowsHostError::new(format!("MoveFileExW failed: {error}")))
+        const RETRY_DELAYS: [Duration; 5] = [
+            Duration::from_millis(10),
+            Duration::from_millis(20),
+            Duration::from_millis(40),
+            Duration::from_millis(80),
+            Duration::from_millis(160),
+        ];
+        let mut attempt = 1;
+        loop {
+            // SAFETY: both path buffers are NUL-terminated and remain live for the call.
+            match unsafe {
+                MoveFileExW(PCWSTR(source.as_ptr()), PCWSTR(destination.as_ptr()), flags)
+            } {
+                Ok(()) => return Ok(()),
+                Err(error)
+                    if attempt <= RETRY_DELAYS.len() && transient_atomic_move_error(&error) =>
+                {
+                    std::thread::sleep(RETRY_DELAYS[attempt - 1]);
+                    attempt += 1;
+                }
+                Err(error) => {
+                    return Err(WindowsHostError::new(format!(
+                        "MoveFileExW failed after {attempt} attempt(s): {error}"
+                    )));
+                }
+            }
+        }
+    }
+
+    fn transient_atomic_move_error(error: &windows::core::Error) -> bool {
+        [
+            ERROR_ACCESS_DENIED,
+            ERROR_SHARING_VIOLATION,
+            ERROR_LOCK_VIOLATION,
+        ]
+        .into_iter()
+        .any(|code| error.code() == HRESULT::from_win32(code.0))
     }
 
     fn current_token_identity() -> Result<(String, u32, String, bool), WindowsHostError> {

@@ -96,7 +96,7 @@ one verified editable source generation; it is not typed-fact authority.
 External PDFs remain render-only, HWPX-to-PDF remains licensed-backend-gated,
 and PDF/A request remains distinct from conformance certification.
 
-OFFICE-600 is governed by ADR 0044 and
+OFFICE-600 is governed by ADR 0045 and
 `docs/office/browser-research-v1.md`. It changes no Compiler IR, package format,
 or runtime ABI. Edge remains WFP loopback-only and observes only D2I-owned safe
 snapshots. A signed one-shot network worker is the sole public HTTPS GET/HEAD

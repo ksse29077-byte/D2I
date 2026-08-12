@@ -851,4 +851,4 @@ Attachment Services, post-trust rehash, MIME/extension/magic agreement,
 format-specific OFFICE-200/300/400/500 validation, macro/external-relationship
 denial, and atomic Workspace import all bind to one source snapshot and link.
 Promoted content remains externally untrusted rather than fact authority. See
-ADR 0044 and the three OFFICE-600 documents under `docs/office`.
+ADR 0045 and the three OFFICE-600 documents under `docs/office`.
